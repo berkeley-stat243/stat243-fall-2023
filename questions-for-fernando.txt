@@ -8,8 +8,14 @@ What is the name of the default global scope (distinguished from the global scop
 
 Is there a notion of a pointer to the enclosing scope in a given scope? How can one see the enclosing scope? Does it have a label/id?
 
-If one has a package with multiple modules (files) what is the most Pythonic way to import the objects in the modules - use `from mypkg.mod import *` in `__init__.py` so one can use `mypkg.foo` or referring to individual modules as mypkg.mymod.foo? I.e., are the files a convenient way to organize code or user-facing structure?
+If one has a package with multiple modules (files) what is the most Pythonic way to import the objects in the modules - (1) use `from mypkg.mod import *` in `__init__.py` so one can use `mypkg.foo` or (2) referring to individual modules as `mypkg.mymod.foo`? I.e., are the files a convenient way to organize code or user-facing structure?
+
+Questions embedded in the unit 5 document:
 
 Is my bullet list (unit5-programming.html#overview-1) of what happens when a function is evaluated in Python correct?
 
 See my questions about closures (unit5-programming.html#closures).
+
+See my question about why `id(x)` doesn't change when using `x.append()`. (unit5-programming.html#pre-allocating-memory)
+
+Also, I tried to illustrate use of the CPU cache by doing calculations row-wise or column-wise using list comprehension but strangely it doesn't matter (unit5-programming.html#cache-aware-programming). Let me know if you ahve any ideas. (
