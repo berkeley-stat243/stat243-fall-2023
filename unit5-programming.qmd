@@ -2368,12 +2368,12 @@ for i in range(10):
         x = 'hi'
     if np.random.normal(size = 1) > 0.5:
         del x
-    x[i] = np.exp(x[i]
+    x[i] = np.exp(x[i])
 ```
 
 There is no way around the fact that because of how dynamic this is, the interpreter needs to check if `x` exists, if it is a vector of sufficient length, if it contains numeric values, and it needs to go retrieve the required value, EVERY TIME the `np.exp()` is executed. Now the code above is unusual, and in most cases, we wouldn't have the `if` statements that modify `x`. So you could imagine a process by which the checking were done on the first iteration and then not needed after that -- that gets into the idea of just-in-time compilation, discussed later. 
 
-The standard Python interpreter is a C function so in some sense everything that happens is running as compiled code, but there are lots more things being done to accomplish a given task using interpreted code than if the task had been written directly in code that is compiled. By analogy, consider talking directly to a person in a language you both know compared to talking to a person via an interpreter who has to translate between two languages. Ultimately, the same information gets communicated (hopefully!) but the number of words spoken and time involved is much greater. 
+The standard Python interpreter (CPython) is a C function so in some sense everything that happens is running as compiled code, but there are lots more things being done to accomplish a given task using interpreted code than if the task had been written directly in code that is compiled. By analogy, consider talking directly to a person in a language you both know compared to talking to a person via an interpreter who has to translate between two languages. Ultimately, the same information gets communicated (hopefully!) but the number of words spoken and time involved is much greater. 
 
 When running more complicated functions, there is often a lot of checking that is part of the function itself. For example scipy's `solve_triangular` function ultimately calls out to the `trtrs` Lapack function, but before doing so, there is a lot of checking that can take time. To that point, the documentation suggests you might set `check_finite=False` to improve performance at the expense of potential problems if the input matrices contain troublesome elements.
 
@@ -2382,7 +2382,7 @@ We can flip the question on its head and ask what operations in an interpreted l
 - operations that call out to compiled C code,
 - linear algebra operations (these call out to compiled C or Fortran code provided by the BLAS and LAPACK software packages), and
 - vectorized calls rather than loops:
-   - vectorized calls generally run loops in compiled C code rather than having the loop run in R, and
+   - vectorized calls generally run loops in compiled C code rather than having the loop run in Python, and
    - that means that the interpreter doesn't have to do all the checking discussed above for every iteration of the loop.
 
 
@@ -2391,7 +2391,7 @@ We can flip the question on its head and ask what operations in an interpreted l
 
 #### Overview
 
-Compilation is the process of turning code in a given language (such a C++) into machine code. Machine code is the code that the processor actually executes. The machine code is stored in the executable file, which is a binary file. The history of programming has seen ever great levels of abstraction, so that humans can write code using syntax that is easier for us to understand, re-use, and develop building blocks that can be put together to do complicated tasks. For example assembly language is a step above machine code. Languages like C and Fortran provide additional abstraction beyond that. The Stastics 750 class at CMU has a [nice overview](https://36-750.github.io/tools/computer-architecture/#how-programs--aka-apps--run) if you want to see more details.
+Compilation is the process of turning code in a given language (such a C++) into machine code. Machine code is the code that the processor actually executes. The machine code is stored in the executable file, which is a binary file. The history of programming has seen ever great levels of abstraction, so that humans can write code using syntax that is easier for us to understand, re-use, and develop building blocks that can be put together to do complicated tasks. For example assembly language is a step above machine code. Languages like C and Fortran provide additional abstraction beyond that. The Statistics 750 class at CMU has a [nice overview](https://36-750.github.io/tools/computer-architecture/#how-programs--aka-apps--run) if you want to see more details.
 
 Note that interpreters such as Python are themselves programs -- the standard Python interpreter (CPython) is a C program that has been compiled. It happens to be a program that processes Python code. The interpreter doesn't turn Python code into machine code, but the interpreter itself is machine code.
 
@@ -2503,7 +2503,7 @@ x = np.exp(3.)
 timeit.timeit(code, setup = 'import numpy as np', number = 100)
 ```
 
-That reports the total time for the 100 replications.
+That reports the **total** time for the 100 replications.
 
 We can run it from the command line. 
 
@@ -2511,7 +2511,7 @@ We can run it from the command line.
 python -m timeit -s 'import numpy' -n 1000 'x = numpy.exp(3.)'
 ```
 
-`timeit` ran the code 1000 times for 5 different repetitions, giving the average time for the 1000 samples for the best of the 5 repetitions.
+`timeit` ran the code 1000 times for 5 different repetitions, giving the **average** time for the 1000 samples for the best of the 5 repetitions.
 
 
 ### Profiling
@@ -2580,7 +2580,6 @@ We'll discuss a variety of these strategies, including:
 - Vectorization and use of fast matrix algebra
 - Consideration of loops vs. map operations
 - Speed of lookup operations, including hashing
-- Effectively using the CPU cache
 
 ### Pre-allocating memory
 
@@ -2630,7 +2629,7 @@ time.time() - t0
 ```
 
 So what's going on? First let's consider what is happening with the use of `np.append`.
-What must be happening in terms of memory use and copying when we append an element.
+What must be happening in terms of memory use and copying when we append an element?
 
 We can avoid that large cost of copying and memory allocation by pre-allocating space for the entire output array. (This is equivalent to variable initialization in compiled languages.)
 
@@ -2661,7 +2660,7 @@ Strangely the id of `x` doesn't seem to change, even though we are allocating ne
 
 ### Vectorization and use of fast matrix algebra
 
-One key way to write efficient R code is to take advantage of R's
+One key way to write efficient Python code is to take advantage of numpy's
 vectorized operations.
 
 ```{python, vectorize, cache=TRUE}
@@ -2672,7 +2671,7 @@ x = np.exp(z)
 print(time.time() - t0)
 
 
-x = np.zeros(n)  # leave out pre-allocation timing to focus on computation
+x = np.zeros(n)  # Leave out pre-allocation timing to focus on computation.
 t0 = time.time()
 for i in range(n):
     x[i] = np.exp(z[i])
@@ -2685,15 +2684,15 @@ So what is different in how Python handles the calculations above that
 explains the huge disparity in efficiency? The vectorized calculation is being done natively
 in C in a for loop. The explicit Python for loop involves executing the for
 loop in Python with repeated calls to C code at each iteration. This involves a lot
-of overhead because of the repeated processing of the R code inside the loop. For example,
+of overhead because of the repeated processing of the Python code inside the loop. For example,
 in each iteration of the loop, Python is checking the types of the variables because it's possible
-that the types might change, as discussed earlier.```
+that the types might change, as discussed earlier.
 
 You can
 usually get a sense for how quickly a Python call will pass things along
 to C or Fortran by looking at the body of the relevant function(s) being called.
 
-Unfortunately seeing the source code in Python often involves going and finding it,
+Unfortunately seeing the source code in Python often involves going and finding it in a file on disk,
 whereas in R, printing a function will show its source code.
 
 Here I found the source code for the scipy `triangular_solve` function, which calls out to a Fortran function `trtrs`, found in the LAPACK library.
@@ -2703,7 +2702,7 @@ Here I found the source code for the scipy `triangular_solve` function, which ca
 cat /usr/local/linux/mambaforge-3.11/lib/python3.11/site-packages/scipy/linalg/_basic.py
 ```
 
-With a bit more digging around we could verify that `trtrs` is a LAPACK funcion by finding this result using `grep:
+With a bit more digging around we could verify that `trtrs` is a LAPACK funcion by doing some grepping:
 
 ```
 ./linalg/_basic.py:    trtrs, = get_lapack_funcs(('trtrs',), (a1, b1))
@@ -2731,16 +2730,16 @@ list(map(math.cos, x))
 **Challenge**: Consider the chi-squared statistic involved in
 a test of independence in a contingency table:
 
-\[
+$$
 \chi^{2}=\sum_{i}\sum_{j}\frac{(y_{ij}-e_{ij})^{2}}{e_{ij}},\,\,\,\, e_{ij}=\frac{y_{i\cdot}y_{\cdot j}}{y_{\cdot\cdot}}
-\]
+$$
 
-where $y_{i\cdot}=\sum_{j}y_{ij}$ and $y_{\cdot j} = \sum_{i} y_{ij}$. Write this in a vectorized way
+where $y_{i\cdot}=\sum_{j}y_{ij}$ and $y_{\cdot j} = \sum_{i} y_{ij}$ and $y_{\cdot\cdot} = \sum_{i} \sum_{j} y_{ij}$. Write this in a vectorized way
 without any loops.  Note that 'vectorized' calculations also work
 with matrices and arrays.
 
-Sometimes we can exploit vectorized mathematical operatinos in
-suprising ways, though sometimes the
+Sometimes we can exploit vectorized mathematical operations in
+surprising ways, though sometimes the
 code is uglier. 
 
 ```{python, vec-tricks, cache=TRUE}
@@ -2748,15 +2747,19 @@ x = np.random.normal(size = n)
 
 ## List comprehension
 timeit.timeit('truncx = [max(0,val) for val in x]', number = 10, globals = {'x':x})
+```
 
+```{python, vec-tricks2, cache=TRUE}
 ## Vectorized slice replacement
 timeit.timeit('truncx = x; truncx[x < 0] = 0', number = 10, globals = {'x':x})
+```
 
+```{python, vec-tricks3, cache=TRUE}
 ## Vectorized math trick
 timeit.timeit('truncx = x * x>0', number = 10, globals = {'x':x})
 ```
 
-We can discuss what has to happen (in terms of calculations, memory allocation, and copying) in the two vectorized approaches to try to understand which is more efficient.
+We'll discuss what has to happen (in terms of calculations, memory allocation, and copying) in the two vectorized approaches to try to understand which is more efficient.
 
 Additional tips:
 
@@ -2765,7 +2768,7 @@ loop over the smallest dimension and use the vectorized calculation
 on the larger dimension(s). For example if you have a 10000 by 10 matrix, try to set
 up your problem so you can loop over the 10 columns rather than the 10000 rows.
  - In general, in Python looping over rows is likely to be faster than looping over columns
-because of Python's row-major ordering (matrices are stored in memory as a long array in which values in a row are adjacent to each other). However how numpy handles this is [more complicated](https://numpy.org/doc/stable/dev/internals.html#multidimensional-array-indexing-order-issues) (see more in Section 4.6 on the cache).
+because of Python's row-major ordering (matrices are stored in memory as a long array in which values in a row are adjacent to each other). However how numpy handles this is [more complicated](https://numpy.org/doc/stable/dev/internals.html#multidimensional-array-indexing-order-issues) (see more in Section 4.6 on the cache), such that it may not matter for numpy calculations.
  - You can use direct arithmetic operations to add/subtract/multiply/divide
 a vector by each column of a matrix, e.g. `A*b` does element-wise multiplication of
 each column of *A* by a vector *b*. If you need to operate
@@ -2773,18 +2776,18 @@ by row, you can do it by transposing the matrix.
 
 Caution: relying on Python's broadcasting rule in the context of vectorized
 operations, such as is done when direct-multiplying a matrix by a
-vector to scale the columns relative to each other, can be dangerous as the code is not transparent
+vector to scale the columns relative to each other, can be dangerous as the code may not be easy for someone to read
 and poses greater dangers of bugs. In some cases you may want to
-first write the code transparently and
+first write the code more directly and
 then compare the more efficient code to make sure the results are the same. It's also a good idea to  comment your code in such cases.
 
 ### Are map operations faster than loops?
 
-Whether looping and map operations are faster will depend in part on whether a substantial part of the work is in the overhead involved in the looping or in the time required by the function
+The potential for inefficiency of looping and map operations in interpreted languages will depend in part on whether a substantial part of the work is in the overhead involved in the looping or in the time required by the function
 evaluation on each of the elements. If you're worried about speed,
 it's a good idea to benchmark `map` or `pandas.apply` against looping.
 
-Here's an example where `map` is not faster than a loop. 
+Here's an example where the bulk of time is in the actual computation and not in the looping itself. Here `map` is not faster than a loop. 
 
 ```{python, map-vs-for}
 import time
@@ -2862,7 +2865,7 @@ timeit.timeit('mat.dot(np.ones(500))', setup = 'import numpy as np', number = 10
 timeit.timeit('np.sum(mat, axis = 1)', setup = 'import numpy as np', number = 1000, globals = {'mat': mat})
 ```
 
-Given the extra computation involved in actually multiplying each number by one, it's surprising that this is faster than numpy sum function. One thing we'd want to know is where the BLAS matrix multiplication call is being done in parallel.
+Given the extra computation involved in actually multiplying each number by one, it's surprising that this is faster than numpy sum function. One thing we'd want to know is whether the BLAS matrix multiplication call is being done in parallel.
 
 On the other hand, big matrix operations can be slow.
 
@@ -2924,7 +2927,7 @@ prodMat2 = X @ D
 
 More generally, sparse matrices and structured matrices (such as block
 diagonal matrices) can generally be worked with MUCH more efficiently
-than treating them as arbitrary matrices. The scipy.sparse package (for both structured and arbitrary
+than treating them as arbitrary matrices. The `scipy.sparse` package (for both structured and arbitrary
 sparse matrices)  can help, as can specialized code available in other languages,
 such as C and Fortran packages.
 
@@ -2944,7 +2947,7 @@ timeit.timeit("x[500]", number = 10**6, globals = {'x':x})
 timeit.timeit("xD['500']", number=10**6, globals = {'xD':xD})
 ```
 
-How is it that Python can look up by key in the dictionary at the same speed as jumping to an index position? It uses hashing, which allows O(1) lookup. In contrast, if one has to look through each key in turn, that is O(n), which is much slower:
+How is it that Python can look up by key in the dictionary at essentially the same speed as jumping to an index position? It uses hashing, which allows O(1) lookup. In contrast, if one has to look through each key in turn, that is O(n), which is much slower:
 
 ```{python}
 timeit.timeit("x[keys.index('500')]", number = 10**6, globals = {'x':x, 'keys':keys})
@@ -2962,7 +2965,7 @@ In addition to main memory (what we usually mean when we talk about RAM), comput
 
 If the next piece of data needed for computation is available in the cache, this is a *cache hit* and the data can be accessed very quickly. However, if the data is not available in the cache, this is a *cache miss* and the speed of access will be a lot slower. *Cache-aware programming* involves writing your code to minimize cache misses. Generally when data is read from memory it will be read in chunks, so values that are contiguous will be read together.
 
-How does this inform one's programming? For example, if you have a matrix of values stored in row-major order, computing on a column will be a lot faster than computing on a column, because the row can be read into the cache from main memory and then accessed in the cache. In contrast, if the matrix is large and therefore won't fit in the cache, when you access the values of a column, you'll have to go to main memory repeatedly to get the values for the row because the values are not stored contiguously.
+How does this inform one's programming? For example, if you have a matrix of values stored in row-major order, computing on a row will be a lot faster than computing on a column, because the row can be read into the cache from main memory and then accessed in the cache. In contrast, if the matrix is large and therefore won't fit in the cache, when you access the values of a column, you'll have to go to main memory repeatedly to get the values for the row because the values are not stored contiguously.
 
 There's a nice example of the importance of the cache at [the bottom of this blog post](https://wrathematics.github.io/2016/10/28/comparing-symmetric-eigenvalue-performance/).
 
@@ -2988,7 +2991,7 @@ timeit.timeit(mean_by_column, number=10)
 timeit.timeit(mean_by_row, number=10)
 ```
 
-The analogous code in R would show a substantial difference, so in this case numpy is more sophisticated thaan R.
+The analogous code in R would show a substantial difference, so in this case numpy is more sophisticated than R.
 
 Suppose we instead do the looping manually to see if it matters if we don't let numpy do any tricks with the looping:
 
@@ -3002,6 +3005,31 @@ timeit.timeit('[np.mean(tA[row,:]) for row in range(tA.shape[0])]',
 Strangely, the row-wise and column-wise operations take the same amount of time.
 I don't know why that is.
 **[Fernando - do you have any ideas?]**
+
+### Loop fusion
+
+Let's consider this (vectorized) code:
+
+```{python}
+x = np.exp(x) + 3*np.sin(x)
+```
+
+This code has some downsides.
+
+  - Think about whether any additional memory has to be allocated.
+  - Think about how many for loops will have to get executed.
+
+Contrast that to running directly as a for loop (e.g., here in Julia or in C/C++):
+
+```{julia, eval=FALSE}
+for i in 1:length(x)
+    x[i] = exp(x[i]) + 3*sin(x[i])
+end
+```
+
+How does that affect the downsides mentioned above?
+
+Combining loops is called 'fusing' and is an [important optimization that Julia can do](https://docs.julialang.org/en/v1/manual/performance-tips/#More-dots:-Fuse-vectorized-operations), as shown in [this demo](https://berkeley-scf.github.io/tutorial-parallelization/parallel-julia#4-loops-and-fused-operations). It’s also a [key optimization done by XLA](https://www.tensorflow.org/xla), a compiler used with Tensorflow, so one approach to getting loop fusion in Python is to use Tensorflow for such calculations within Python rather than simply using numpy.
 
 ### Hashing (including name lookup)
 
@@ -3051,7 +3079,7 @@ computed index value. When the hash table is properly set up, the cost
 of looking up a value does not depend on the number of key-value pairs
 stored.
 
-R uses hashing to look up the value of a variable based on the variable name in a given environment, including the frames of functions and the global environment. This allows R to retrieve objects very quickly.
+Python uses hashing to look up the value  based on the key in a given dictionary, and similarly when looking up variables in namespaces. This allows Python to retrieve objects very quickly.
 
 ### Lazy evaluation
 
