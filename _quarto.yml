@@ -1,0 +1,86 @@
+project:
+  type: website
+
+website:
+  title: "Statistics 243 Fall 2023"
+  page-navigation: true
+  navbar:
+    left:
+      - file: index.qmd
+        text: Home
+      - file: syllabus.md
+        text: Syllabus
+      - file: office_hours.md
+        text: "Office hours"
+      - file: schedule.md
+        text: Schedule
+      - sidebar:units
+      - sidebar:labs
+      - sidebar:howtos
+      - href: https://edstem.org/us/courses/XYZ/discussion/
+        text: "Discussion"
+      - href: https://statistics.berkeley.edu/computing/training/tutorials
+        text: Tutorials
+    right:
+      - icon: github
+        href: https://github.com/berkeley-stat243/stat243-fall-2023
+        aria-label: GitHub
+
+  sidebar:
+    - id: units
+      title: "Units"
+      contents:
+        - file: units/unit1-intro.md
+          text: "Unit 1"
+        - file: units/unit2-dataTech.Rmd
+          text: "Unit 2"
+        - file: units/unit3-bash.Rmd
+          text: "Unit 3"
+        - file: units/unit4-goodPractices.md
+          text: "Unit 4"
+        - file: units/unit5-programming.Rmd
+          text: "Unit 5"
+        - file: units/unit6-parallel.Rmd
+          text: "Unit 6"
+        - file: units/unit7-bigData.Rmd
+          text: "Unit 7"
+        - file: units/unit8-numbers.Rmd
+          text: "Unit 8"
+        - file: units/unit9-sim.Rmd
+          text: "Unit 9"
+        - file: units/unit10-linalg.Rmd
+          text: "Unit 10"
+        - file: units/unit11-optim.Rmd
+          text: "Unit 11"
+    - id: labs
+      title: "Labs"
+      contents:
+    - id: howtos
+      title: "How tos"
+      contents:
+        - file: howtos/accessingPython.md
+          text: Accessing Python
+        - file: howtos/accessingUnixCommandLine.md
+          text: Accessing the Unix Command Line
+        - file: howtos/gitInstall.md
+          text: Installing Git
+        - file: howtos/ps-submission.md
+          text: Problem Set Submissions
+        - text: "---"
+        - section: "Windows"
+          contents:
+            - file: howtos/windowsAndLinux.md
+              text: Installing the Linux Subsystem on Windows
+            - file: howtos/windowsInstall.md
+              text: Using Python on Windows
+
+output:
+  html
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    code-copy: true
+    code-block-background: true
