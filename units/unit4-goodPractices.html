@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Chris Paciorek">
+<meta name="dcterms.date" content="2023-07-26">
+
+<title>Statistics 243 Fall 2023 - Good practices: coding practices, debugging, and reproducible research</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../units/unit5-programming.html" rel="next">
+<link href="../units/unit3-bash.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Statistics 243 Fall 2023</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../syllabus.html">
+ <span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../office_hours.html">
+ <span class="menu-text">Office hours</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../schedule.html">
+ <span class="menu-text">Schedule</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-units" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Units</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-units">    
+        <li>
+    <a class="dropdown-item" href="../units/unit1-intro.html">
+ <span class="dropdown-text">Unit 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit2-dataTech.html">
+ <span class="dropdown-text">Unit 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit3-bash.html">
+ <span class="dropdown-text">Unit 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit4-goodPractices.html">
+ <span class="dropdown-text">Unit 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit5-programming.html">
+ <span class="dropdown-text">Unit 5</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit6-parallel.html">
+ <span class="dropdown-text">Unit 6</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit8-numbers.html">
+ <span class="dropdown-text">Unit 8</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit9-sim.html">
+ <span class="dropdown-text">Unit 9</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit10-linalg.html">
+ <span class="dropdown-text">Unit 10</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-labs" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Labs</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-labs">    
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-how-tos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">How tos</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-how-tos">    
+        <li>
+    <a class="dropdown-item" href="../howtos/accessingPython.html">
+ <span class="dropdown-text">Accessing Python</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/accessingUnixCommandLine.html">
+ <span class="dropdown-text">Accessing the Unix Command Line</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/gitInstall.html">
+ <span class="dropdown-text">Installing Git</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/ps-submission.html">
+ <span class="dropdown-text">Problem Set Submissions</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">Windows</li>
+        <li>
+    <a class="dropdown-item" href="../howtos/windowsAndLinux.html">
+ <span class="dropdown-text">Installing the Linux Subsystem on Windows</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/windowsInstall.html">
+ <span class="dropdown-text">Using Python on Windows</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="https://edstem.org/us/courses/XYZ/discussion/">
+ <span class="menu-text">Discussion</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://statistics.berkeley.edu/computing/training/tutorials">
+ <span class="menu-text">Tutorials</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/berkeley-stat243/stat243-fall-2023"><i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Good practices: coding practices, debugging, and reproducible research</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit1-intro.html" class="sidebar-item-text sidebar-link">Unit 1</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit2-dataTech.html" class="sidebar-item-text sidebar-link">Unit 2</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit3-bash.html" class="sidebar-item-text sidebar-link">Unit 3</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit4-goodPractices.html" class="sidebar-item-text sidebar-link active">Unit 4</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit5-programming.html" class="sidebar-item-text sidebar-link">Unit 5</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit6-parallel.html" class="sidebar-item-text sidebar-link">Unit 6</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit8-numbers.html" class="sidebar-item-text sidebar-link">Unit 8</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit9-sim.html" class="sidebar-item-text sidebar-link">Unit 9</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit10-linalg.html" class="sidebar-item-text sidebar-link">Unit 10</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#good-coding-practices" id="toc-good-coding-practices" class="nav-link active" data-scroll-target="#good-coding-practices">1. Good coding practices</a>
+  <ul class="collapse">
+  <li><a href="#editors" id="toc-editors" class="nav-link" data-scroll-target="#editors">Editors</a></li>
+  <li><a href="#coding-syntax" id="toc-coding-syntax" class="nav-link" data-scroll-target="#coding-syntax">Coding syntax</a></li>
+  <li><a href="#coding-style" id="toc-coding-style" class="nav-link" data-scroll-target="#coding-style">Coding style</a></li>
+  <li><a href="#assertions-and-testing" id="toc-assertions-and-testing" class="nav-link" data-scroll-target="#assertions-and-testing">Assertions and testing</a></li>
+  <li><a href="#version-control" id="toc-version-control" class="nav-link" data-scroll-target="#version-control">Version control</a></li>
+  </ul></li>
+  <li><a href="#debugging-and-recommendations-for-avoiding-bugs" id="toc-debugging-and-recommendations-for-avoiding-bugs" class="nav-link" data-scroll-target="#debugging-and-recommendations-for-avoiding-bugs">2. Debugging and recommendations for avoiding bugs</a>
+  <ul class="collapse">
+  <li><a href="#basic-debugging-strategies" id="toc-basic-debugging-strategies" class="nav-link" data-scroll-target="#basic-debugging-strategies">Basic debugging strategies</a></li>
+  <li><a href="#using-pdb" id="toc-using-pdb" class="nav-link" data-scroll-target="#using-pdb">Using pdb</a>
+  <ul class="collapse">
+  <li><a href="#using-breakpoint" id="toc-using-breakpoint" class="nav-link" data-scroll-target="#using-breakpoint">Using <code>breakpoint</code></a></li>
+  <li><a href="#post-mortem-debugging" id="toc-post-mortem-debugging" class="nav-link" data-scroll-target="#post-mortem-debugging">Post-mortem debugging</a></li>
+  <li><a href="#pdb-commands" id="toc-pdb-commands" class="nav-link" data-scroll-target="#pdb-commands">pdb commands</a></li>
+  <li><a href="#invoking-pdb-on-a-function-or-block-of-code" id="toc-invoking-pdb-on-a-function-or-block-of-code" class="nav-link" data-scroll-target="#invoking-pdb-on-a-function-or-block-of-code">Invoking pdb on a function or block of code</a></li>
+  <li><a href="#invoking-pdb-on-a-module" id="toc-invoking-pdb-on-a-module" class="nav-link" data-scroll-target="#invoking-pdb-on-a-module">Invoking pdb on a module</a></li>
+  </ul></li>
+  <li><a href="#some-common-causes-of-bugs" id="toc-some-common-causes-of-bugs" class="nav-link" data-scroll-target="#some-common-causes-of-bugs">Some common causes of bugs</a></li>
+  <li><a href="#tips-for-avoiding-bugs-and-catching-errors" id="toc-tips-for-avoiding-bugs-and-catching-errors" class="nav-link" data-scroll-target="#tips-for-avoiding-bugs-and-catching-errors">Tips for avoiding bugs and catching errors</a>
+  <ul class="collapse">
+  <li><a href="#practice-defensive-programming" id="toc-practice-defensive-programming" class="nav-link" data-scroll-target="#practice-defensive-programming">Practice defensive programming</a></li>
+  <li><a href="#catch-run-time-errors-with-tryexcept-statements" id="toc-catch-run-time-errors-with-tryexcept-statements" class="nav-link" data-scroll-target="#catch-run-time-errors-with-tryexcept-statements">Catch run-time errors with <code>try/except</code> statements</a></li>
+  <li><a href="#maintain-dimensionality" id="toc-maintain-dimensionality" class="nav-link" data-scroll-target="#maintain-dimensionality">Maintain dimensionality</a></li>
+  <li><a href="#find-and-avoid-global-variables" id="toc-find-and-avoid-global-variables" class="nav-link" data-scroll-target="#find-and-avoid-global-variables">Find and avoid global variables</a></li>
+  <li><a href="#miscellaneous-tips" id="toc-miscellaneous-tips" class="nav-link" data-scroll-target="#miscellaneous-tips">5.5 Miscellaneous tips</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#tips-for-running-analyses" id="toc-tips-for-running-analyses" class="nav-link" data-scroll-target="#tips-for-running-analyses">3. Tips for running analyses</a></li>
+  <li><a href="#reproducible-research" id="toc-reproducible-research" class="nav-link" data-scroll-target="#reproducible-research">4. Reproducible research</a>
+  <ul class="collapse">
+  <li><a href="#some-basic-strategies" id="toc-some-basic-strategies" class="nav-link" data-scroll-target="#some-basic-strategies">Some basic strategies</a></li>
+  <li><a href="#formal-tools" id="toc-formal-tools" class="nav-link" data-scroll-target="#formal-tools">Formal tools</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Good practices: coding practices, debugging, and reproducible research</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Chris Paciorek </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 26, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+
+</div>
+<p><a href="./unit4-goodPractices.pdf" class="btn btn-primary">PDF</a></p>
+<p>Sources:</p>
+<ul>
+<li>The Python <a href="https://peps.python.org/pep-0008">PEP8 Style Guide</a></li>
+<li>Murrell, Introduction to Data Technologies, Ch. 2</li>
+<li><a href="http://www.jstatsoft.org/v42/i02">Journal of Statistical Software vol.&nbsp;42: 19 Ways of Looking at Statistical Software</a></li>
+<li><a href="http://arxiv.org/abs/1210.0530">Wilson et at., Best practices for scientific computing, ArXiv:1210:0530</a></li>
+<li><a href="https://web.stanford.edu/~gentzkow/research/CodeAndData.pdf">Gentzkow and Shapiro tutorial for social scientists</a></li>
+<li><a href="https://github.com/berkeley-stat243/stat243-fall-2014/blob/master/section/millman-perez.pdf">Millman and Perez article about reproducible research</a></li>
+<li><a href="https://california.degruyter.com/view/title/568658?tab_body=toc">Chapter 11 of Transparent and Reproducible Social Science Research</a></li>
+</ul>
+<p>This unit covers good coding/software development practices, debugging (and practices for avoiding bugs), and doing reproducible research. As in later units of the course, the material is generally not specific to Python, but some details and the examples are in Python.</p>
+<section id="good-coding-practices" class="level1">
+<h1>1. Good coding practices</h1>
+<p>Some of these tips apply more to software development and some more to analyses done for specific projects; hopefully it will be clear in most cases.</p>
+<section id="editors" class="level2">
+<h2 class="anchored" data-anchor-id="editors">Editors</h2>
+<p>Use an editor that supports the language you are using (e.g., <em>Atom</em>, <em>Emacs</em>/<em>Aquamacs</em>, <em>Sublime</em>, <em>vim</em>, <em>VSCode</em>, <em>TextMate</em>, <em>WinEdt</em>, or the built-in editor in <em>RStudio</em> [you can use Python from within RStudio]). Some advantages of this can include:</p>
+<ol type="1">
+<li>helpful color coding of different types of syntax and of strings,</li>
+<li>automatic indentation and spacing,</li>
+<li>code can often be run or compiled from within the editor,</li>
+<li>parenthesis matching,</li>
+<li>line numbering (good for finding bugs).</li>
+</ol>
+</section>
+<section id="coding-syntax" class="level2">
+<h2 class="anchored" data-anchor-id="coding-syntax">Coding syntax</h2>
+<p>The PEP 8 style guide is your go-to reference for Python style. I’ve highlighted some details here as well as included some general suggestions of my own.</p>
+<ul>
+<li>Header information: put metainfo on the code into the first few lines of the file as comments. Include who, when, what, how the code fits within a larger program (if appropriate), possibly the versions of Python and key packages that you used.</li>
+<li>Write docstrings for public modules, classes, functions, and methods. For non-public items, a comment after the <code>def</code> line is sufficient to describe the purpose of the item.</li>
+<li>Indentation: Python is strict about indentation of course, which helps to enforce clear indentation more than in other languages. This helps you and others to read and understand the code and can help in detecting errors in your code because it can expose lack of symmetry.
+<ul>
+<li>use 4 spaces per indentation level (avoid tabs if possible).</li>
+</ul></li>
+<li>Whitespace: use it in a variety of places. Some places where it is good to have it are
+<ul>
+<li>around operators (assignment and arithmetic);</li>
+<li>between function arguments;</li>
+<li>between list/tuple elements; and</li>
+<li>between matrix/array indices.</li>
+</ul></li>
+<li>Use blank lines to separate blocks of code with comments to say what the block does.</li>
+<li>Avoid code lines longer than 79 characters and comment/docstring lines longer than 72 characters.</li>
+<li>Use whitespaces or parentheses for clarity even if not needed for order of operations. For example, <code>a/y*x</code> will work but is not easy to read and you can easily induce a bug if you forget the order of ops. Instead, use <code>a/y * x</code>.</li>
+<li>Comments: add lots of comments (but don’t belabor the obvious, such as <code>x = x + 1  # increment x</code>).
+<ul>
+<li>Remember that in a few months, you may not follow your own code any better than a stranger.</li>
+<li>Some key things to document: (1) summarizing a block of code, (2) explaining a very complicated piece of code - recall our complicated regular expressions, and (3) explaining arbitrary constant values.</li>
+<li>Comments should generally be complete sentences.</li>
+</ul></li>
+<li>For software development, break code into separate files (2000-3000 lines per file) with meaningful file names and related functions grouped within a file.</li>
+<li>Being consistent about the naming style for objects and functions is hard, but try to be consistent. PEP8 suggests:
+<ul>
+<li>Class names should be UpperCamelCase.</li>
+<li>Function, method, and variable names should be snake_case, e.g., <code>number_of_its</code> or <code>n_its</code>.</li>
+<li>Non-public methods and variables should have a leading underscore.</li>
+</ul></li>
+<li>Try to have the names be informative without being overly long.</li>
+<li>Don’t overwrite names of objects/functions that already exist in Python. E.g., don’t use <code>len</code>. That said, the namespace system helps with the unavoidable cases where there are name conflicts.</li>
+<li>Use active names for functions (e.g., <code>calc_loglik</code>, <code>calc_log_lik</code> rather than <code>loglik</code> or <code>loglik_calc</code>). The idea is that a function in a programming language is like a verb in regular language (a function <em>does</em> something), so use a verb to name it.</li>
+<li>Learn from others’ code</li>
+</ul>
+<p>This semester, someone will be reading your code - the GSI and and me when we look at your assignments. So to help us in understanding your code and develop good habits, put these ideas into practice in your assignments.</p>
+<p>While not Python examples, the files <a href="goodCode.R">goodCode.R</a> and <a href="badCode.R">badCode.R</a> in the <code>units</code> directory of the class repository provide examples of code written such that it does and does not conform to the general ideas listed above (leaving aside the different syntax of Python and R).</p>
+</section>
+<section id="coding-style" class="level2">
+<h2 class="anchored" data-anchor-id="coding-style">Coding style</h2>
+<p>This is particularly focused on software development, but some of the ideas are useful for data analysis as well.</p>
+<ul>
+<li>Break down tasks into core units</li>
+<li>Write reusable code for core functionality and keep a single copy of the code (using version control or at least with a reasonable backup strategy) so you only need to make changes to a piece of code in one place</li>
+<li>Smaller functions are easier to debug, easier to understand, and can be combined in a modular fashion (like the UNIX utilities)</li>
+<li>Write functions that take data as an argument and not lines of code that operate on specific data objects. Why? Functions allow us to reuse blocks of code easily for later use and for recreating an analysis (reproducible research). It’s more transparent than sourcing a file of code because the inputs and outputs are specified formally, so you don’t have to read through the code to figure out what it does.</li>
+<li>Functions should:
+<ul>
+<li>be modular (having a single task);</li>
+<li>have meaningful name; and</li>
+<li>have a doc string describing their purpose, inputs and outputs.</li>
+</ul></li>
+<li>Write tests for each function (i.e., unit tests)</li>
+<li>Don’t hard code numbers - use variables (e.g., number of iterations, parameter values in simulations), even if you don’t expect to change the value, as this makes the code more readable. For example, the speed of light is a constant in a scientific sense, but best to make it a variable in code: <code>speed_of_light = 3e8</code></li>
+<li>Use lists or tuples to keep disparate parts of related data together</li>
+<li>Practice defensive programming (see also the discussion below on assertions)
+<ul>
+<li>check function inputs and warn users if the code will do something they might not expect or makes particular choices;</li>
+<li>check inputs to <em>if</em>:
+<ul>
+<li>Note that in Python, an expression used as the condition of an <code>if</code> will be equivalent to <code>True</code> unless it is one of <code>False</code>, <code>0</code>, <code>None</code>, or an empty list/tuple/string.</li>
+</ul></li>
+<li>provide reasonable default arguments;</li>
+<li>document the range of valid inputs;</li>
+<li>check that the output produced is valid; and</li>
+<li>stop execution based on checks and give an informative error message.</li>
+</ul></li>
+<li>Try to avoid system-dependent code that only runs on a specific version of an OS or specific OS</li>
+<li>Learn from others’ code</li>
+<li>Consider rewriting your code once you know all the settings and conditions; often analyses and projects meander as we do our work and the initial plan for the code no longer makes sense and the code is no longer designed specifically for the job being done.</li>
+</ul>
+</section>
+<section id="assertions-and-testing" class="level2">
+<h2 class="anchored" data-anchor-id="assertions-and-testing">Assertions and testing</h2>
+<p>Both tests and assertions are critically important for writing robust code that is less likely to contain bugs.</p>
+<p>Assertions are checks in your code that the state of the program is as you expect, including arguments provided by users. Here’s an example of using the <code>assert</code> statement in Python, with a clear assertion message telling the user what the problem is.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>number <span class="op">=</span> <span class="op">-</span><span class="dv">42</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> number <span class="op">&gt;</span> <span class="dv">0</span>, <span class="ss">f"number greater than 0 expected, got: </span><span class="sc">{</span>number<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">## Produces this error:</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">## Traceback (most recent call last):</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">##   File "&lt;stdin&gt;", line 1, in &lt;module&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">## AssertionError: number greater than 0 expected, got: -42</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Various operators/functions are commonly used in assertions, including</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> x <span class="kw">in</span> y</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> x <span class="kw">not</span> <span class="kw">in</span> y</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> x <span class="kw">is</span> y</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> x <span class="kw">is</span> <span class="kw">not</span> y</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">isinstance</span>(x, <span class="op">&lt;</span>some_type<span class="op">&gt;</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">all</span>(x)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="cf">assert</span> <span class="bu">any</span>(x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Tests evaluate whether your code operates correctly. This can include tests that your code provides correct and useful errors when something goes wrong (so that means that a test might be to see if problematic input correctly produces an error). <em>Unit tests</em> are intended to test the behavior of small pieces (units) of code, generally individual functions. Unit tests naturally work well with the ideas above of writing small, modular functions. I recommend the <code>pytest</code> package, which is designed to make it easier to write sets of good tests.</p>
+<p>In lab, we’ll go over assertions and testing in detail.</p>
+</section>
+<section id="version-control" class="level2">
+<h2 class="anchored" data-anchor-id="version-control">Version control</h2>
+<ul>
+<li>Use it! Even for projects that only you are working on.</li>
+<li>Use an issues tracker (e.g., the GitHub issues tracker is quite nice), or at least a simple to-do file, noting changes you’d like to make in the future.</li>
+<li>In addition to good commit messages, it’s a good idea to keep good running notes documenting your projects.</li>
+</ul>
+<p>We’ve already seen Git some and will see it in a lot more detail later in the semester, so I don’t have more to say here.</p>
+</section>
+</section>
+<section id="debugging-and-recommendations-for-avoiding-bugs" class="level1">
+<h1>2. Debugging and recommendations for avoiding bugs</h1>
+<p>Python’s <code>pdb</code> package provides a standard debugger. JupyterLab also has a debugger.</p>
+<section id="basic-debugging-strategies" class="level2">
+<h2 class="anchored" data-anchor-id="basic-debugging-strategies">Basic debugging strategies</h2>
+<p>Here we’ll discuss some basic strategies for finding and fixing bugs. Other useful locations for tips on debugging include:</p>
+<ul>
+<li><a href="https://www.codementor.io/mattgoldspink/how-to-debug-code-efficiently-and-effectively-du107u9jh">Efficient Debugging by Goldspink</a></li>
+<li><a href="https://blog.hartleybrody.com/debugging-code-beginner/">Debugging for Beginners by Brody</a></li>
+</ul>
+<p>Read and think about the error message (the <em>traceback</em>), starting from the bottom of the traceback. Sometimes it’s inscrutable, but often it just needs a bit of deciphering. Looking up a given error message by simply doing a web search with the exact message in double quotes can be a good strategy, or you could look specifically on Stack Overflow.</p>
+<p>Below we’ll see how one can view the stack trace. Usually when an error occurs, it occurs in a function call that is nested in a series of function calls. This series of calls is the <em>call stack</em> and the <em>traceback</em> or <em>stack trace</em> shows that series of calls that led to the error. To debug, you’ll often need to focus on the function being executed at the time the error occurred (which will be at the top of the call stack but the bottom of the traceback) and the arguments passed into that function. However, if the error occurs in a function you didn’t write, the problem will often be with the arguments that your code provided at the last point in the call stack at which code that you wrote was run. Check the arguments that your code passed into that first function that is not a function of yours.</p>
+<p>When running code that produces multiple errors, fix errors from the top down - fix the first error that is reported, because later errors are often caused by the initial error. It’s common to have a string of many errors, which looks daunting, caused by a single initial error.</p>
+<p>Is the bug reproducible - does it always happen in the same way at at the same point? It can help to restart Python and see if the bug persists - this can sometimes help in figuring out if there is a scoping issue and we are using a global variable that we did not mean to.</p>
+<p>If you can’t figure out where the error occurs based on the error messages, a basic strategy is to build up code in pieces (or tear it back in pieces to a simpler version). This allows you to isolate where the error is occurring. You might use a binary search strategy. Figure out which half of the code the error occurs in. Then split the ‘bad’ half in half and figure out which half the error occurs in. Repeat until you’ve isolated the problem.</p>
+<p>If you’ve written your code modularly with lots of functions, you can test individual functions. Often the error will be in what gets passed into and out of each function.</p>
+<p>At the beginning of time (the 1970s?), the standard debugging strategy was to insert print statements in one’s code to see the value of a variable and thereby decipher what could be going wrong. We have better tools nowadays. But sometimes we still need to fall back to inserting print statements.</p>
+<p>Python is a scripting language, so you can usually run your code line by line to figure out what is happening. This can be a decent approach, particularly for simple code. However, when you are trying to find errors that occur within a series of many nested function calls or when the errors involve variable scoping (how Python looks for variables that are not local to a function), or in other complicated situations, using formal debugging tools can be much more effective. Finally, if the error occurs inside of functions provided by Python, rather than ones you write, it can be hard to run the code in those functions line by line.</p>
+</section>
+<section id="using-pdb" class="level2">
+<h2 class="anchored" data-anchor-id="using-pdb">Using pdb</h2>
+<p>We can activate the debugger in various ways:</p>
+<ul>
+<li>by inserting <code>breakpoint()</code> (or equivalently <code>import pdb; pdb.set_trace()</code>) inside a function or module at a location of interest (and then running the function or module)</li>
+<li>by using <code>pdb.pm()</code> after an error (i.e., an <em>exception</em>) has occurred to invoke the browser at the point the error occurred</li>
+<li>by running a function under debugger control with <code>pdb.run()</code></li>
+<li>by starting python with <code>python -m pdb file.py</code> and adding breakpoints</li>
+</ul>
+<section id="using-breakpoint" class="level3">
+<h3 class="anchored" data-anchor-id="using-breakpoint">Using <code>breakpoint</code></h3>
+<p>Let’s define a function that will run a stratified analysis, in this case fitting a regression to each of the strata (groups/clusters) in some data. Our function is in <code>stratified_with_break.py</code>, and it contains <code>breakpoint</code> at the point where we want to invoke the debugger.</p>
+<p>Now I can call the function and will be put into debugging mode just before the next line is called:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> run_with_break <span class="im">as</span> run</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>run.fit(run.data, run.n_cats)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>When I run this, I see this:</p>
+<pre><code>&gt;&gt;&gt; run.fit(data, n_cats)
+&gt; /accounts/vis/paciorek/teaching/243fall22/stat243-fall-2023/units/run_with_break.py(10)fit()
+-&gt; sub = data[data['cats'] == i]
+(Pdb) </code></pre>
+<p>This indicates I am debugging at line 10 of <code>run_with_break.py</code>, which is the line that creates <code>sub</code>, but I haven’t yet created <code>sub</code>.</p>
+<p>I can type <code>n</code> to run that line and go to the next one:</p>
+<pre><code>(Pdb) n
+&gt; /accounts/vis/paciorek/teaching/243fall22/stat243-fall-2023/units/run_with_break.py(11)fit()
+-&gt; model = statsmodels.api.OLS(sub['y'], statsmodels.api.add_constant(sub['x']))</code></pre>
+<p>at which point the debugger is about to execute line 11, which fits the regression.</p>
+<p>I can type <code>c</code> to continue until the next breakpoint:</p>
+<pre><code>(Pdb) c
+&gt; /accounts/vis/paciorek/teaching/243fall22/stat243-fall-2023/units/run_with_break.py(10)fit()
+-&gt; sub = data[data['cats'] == i]</code></pre>
+<p>Now if I print <code>i</code>, I see that it has incremented to <code>1</code>.</p>
+<pre><code>(Pdb) p i
+1</code></pre>
+<p>We could keep hitting <code>n</code> or <code>c</code> until hitting the stratum where an error occurs, but that would be tedious.</p>
+<p>Let’s hit <code>q</code> to quit out of the debugger.</p>
+<pre><code>(Pdb) q
+&gt;&gt;&gt;</code></pre>
+<p>Next let’s see how we can enter debugging mode only at point an error occurs.</p>
+</section>
+<section id="post-mortem-debugging" class="level3">
+<h3 class="anchored" data-anchor-id="post-mortem-debugging">Post-mortem debugging</h3>
+<p>We’ll use a version of the module without the <code>breakpoint()</code> command.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdb</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> run_no_break <span class="im">as</span> run </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>run.fit(run.data, run.n_cats)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>pdb.pm()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>That puts us into debugging mode at the point the error occurred:</p>
+<pre><code>&gt; /usr/local/linux/mambaforge-3.11/lib/python3.11/site-packages/numpy/core/fromnumeric.py(86)_wrapreduction()
+-&gt; return ufunc.reduce(obj, axis, dtype, out, **passkwargs)
+(Pdb)</code></pre>
+<p>which turns out to be in some internal Python function that calls a <code>reduce</code> function, which is where the error occurs (presumably the debugger doesn’t enter this function because it calls compiled code):</p>
+<pre><code>(Pdb) l
+ 81                 if dtype is not None:
+ 82                     return reduction(axis=axis, dtype=dtype, out=out, **passkwargs)
+ 83                 else:
+ 84                     return reduction(axis=axis, out=out, **passkwargs)
+ 85     
+ 86  -&gt;     return ufunc.reduce(obj, axis, dtype, out, **passkwargs)
+ 87     
+ 88     
+ 89     def _take_dispatcher(a, indices, axis=None, out=None, mode=None):
+ 90         return (a, out)
+ 91     </code></pre>
+<p>We can enter <code>u</code> multiple times (it’s only shown once below) to go up in the stack of function calls until we recognize code that we wrote:</p>
+<pre><code>(Pdb) u
+&gt; /accounts/vis/paciorek/teaching/243fall22/stat243-fall-2023/units/run_no_break.py(10)fit()
+-&gt; model = statsmodels.api.OLS(sub['y'], statsmodels.api.add_constant(sub['x']))</code></pre>
+<p>Now let’s use <code>p</code> to print variable values to understand the problem:</p>
+<pre><code>(Pdb)  p i
+29
+(Pdb) p sub
+Empty DataFrame
+Columns: [y, x, cats]
+Index: []</code></pre>
+<p>Ah, so in the 29th stratum there are no data!</p>
+<p>In addition using the IPython magic <code>%debug</code> will put you into the debugger in in post-mortem mode when an error occurs.</p>
+</section>
+<section id="pdb-commands" class="level3">
+<h3 class="anchored" data-anchor-id="pdb-commands">pdb commands</h3>
+<p>Here’s a list of useful pdb commands (some of which we saw above) that you can use once you’ve entered debugging mode.</p>
+<ul>
+<li><code>h</code> or <code>help</code>: shows all the commands</li>
+<li><code>l</code> or <code>list</code>: show the code around where the debugger is currently operating</li>
+<li><code>c</code> or <code>continue</code>: continue running the code until the next breakpoint</li>
+<li><code>p</code> or <code>print</code>: print a variable</li>
+<li><code>n</code> or <code>next</code>: run the current line and go to the next line in the current function</li>
+<li><code>s</code> or <code>step</code>: jump (step) into the function called in the current line (if it’s a Python function)</li>
+<li><code>r</code> or <code>run</code>: exit out of the current function (e.g., if you accidentally stepped into a function) (but note this stops at breakpoints)</li>
+<li><code>unt</code> or <code>until</code>: run until the next line (or <code>unt &lt;number&gt;</code> to run until reaching line number <number>); this is useful for letting a loop run until completion</number></li>
+<li><code>b</code> or <code>break</code>: set a breakpoint</li>
+<li><code>tbreak</code>: one-time breakpoint</li>
+<li><code>where</code>: shows call stack</li>
+<li><code>u</code> (or <code>up</code>) and <code>d</code> (or <code>down</code>): move up and down the call stack</li>
+<li><code>q</code> quit out of the debugger</li>
+<li><code>&lt;return&gt;</code>: runs the previous pdb command again</li>
+</ul>
+</section>
+<section id="invoking-pdb-on-a-function-or-block-of-code" class="level3">
+<h3 class="anchored" data-anchor-id="invoking-pdb-on-a-function-or-block-of-code">Invoking pdb on a function or block of code</h3>
+<p>We can use <code>pdb.run()</code> to run a function under the debugger. We need to make sure to use <code>s</code> as the first pdb command in order to actually step into the function. From there, we can debug as normal as if we had set a breakpoint at the start of the function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> run_with_break <span class="im">as</span> run</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pdb</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>pdb.run(<span class="st">"run.fit(run.data, run.n_cats)"</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>(Pdb) s</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="invoking-pdb-on-a-module" class="level3">
+<h3 class="anchored" data-anchor-id="invoking-pdb-on-a-module">Invoking pdb on a module</h3>
+<p>We can also invoke pdb when we start Python, executing a file (module). Here we’ve added <code>fit(data, n_cats)</code> at the end of <code>run_no_break2.py</code> so that we can have that run under the debugger.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> <span class="at">-m</span> pdb run_no_break2.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<pre><code>&gt; /accounts/vis/paciorek/teaching/243fall22/stat243-fall-2023/units/run_no_break2.py(1)&lt;module&gt;()
+-&gt; import numpy as np
+(Pdb) </code></pre>
+<p>Let’s set a breakpoint at the same place we did with <code>breakpoint()</code> but using a line number (this avoids having to actually modify our code):</p>
+<pre><code>(Pdb) b 9
+Breakpoint 1 at /accounts/vis/paciorek/teaching/243fall22/stat243-fall-2023/units/run_no_break.py:9</code></pre>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>(Pdb) c</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> <span class="op">/</span>accounts<span class="op">/</span>vis<span class="op">/</span>paciorek<span class="op">/</span>teaching<span class="op">/</span><span class="dv">243</span><span class="er">fall22</span><span class="op">/</span>stat243<span class="op">-</span>fall<span class="op">-</span><span class="dv">2023</span><span class="op">/</span>units<span class="op">/</span>run_no_break2.py(<span class="dv">9</span>)fit()</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="op">-&gt;</span> model <span class="op">=</span> statsmodels.api.OLS(sub[<span class="st">'y'</span>], statsmodels.api.add_constant(sub[<span class="st">'x'</span>]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>So we’ve broken at the same point where we manually added <code>breakpoint()</code> in <code>run_with_break.py</code>.</p>
+<p>Or we could have set a breakpoint at the start of the function:</p>
+<pre><code>(Pdb) disable 1
+Disabled breakpoint 1 at /accounts/vis/paciorek/teaching/243fall22/stat243-fall-2023/units/run_no_break2.py:9
+(Pdb) b fit
+Breakpoint 1 at /accounts/vis/paciorek/teaching/243fall22/stat243-fall-2023/units/run_no_break.py:6</code></pre>
+</section>
+</section>
+<section id="some-common-causes-of-bugs" class="level2">
+<h2 class="anchored" data-anchor-id="some-common-causes-of-bugs">Some common causes of bugs</h2>
+<p>Some of these are Python-specific, while others are common to a variety of languages.</p>
+<ul>
+<li><p>Parenthesis mis-matches</p></li>
+<li><p><code>==</code> vs.&nbsp;<code>=</code></p></li>
+<li><p>Comparing real numbers exactly using <code>==</code> is dangerous because numbers on a computer are only represented to limited numerical precision. For example,</p>
+<p>::: {.cell}</p>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span><span class="op">/</span><span class="dv">3</span> <span class="op">==</span> <span class="dv">4</span><span class="op">*</span>(<span class="dv">4</span><span class="op">/</span><span class="dv">12</span><span class="op">-</span><span class="dv">3</span><span class="op">/</span><span class="dv">12</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>::: {.cell-output .cell-output-stdout} <code>False</code> ::: :::</p></li>
+<li><p>You expect a single value but execution of the code gives an array</p></li>
+<li><p>Silent type conversion when you don’t want it, or lack of coercion where you’re expecting it</p></li>
+<li><p>Using the wrong function or variable name</p></li>
+<li><p>Giving unnamed arguments to a function in the wrong order</p></li>
+<li><p>Forgetting to define a variable in the environment of a function and having Python, via lexical scoping, get that variable as a global variable from one of the enclosing scope. At best the types are not compatible and you get an error; at worst, you use a garbage value and the bug is hard to trace. In some cases your code may work fine when you develop the code (if the variable exists in the enclosing environment), but then may not work when you restart Python if the variable no longer exists or is different.</p></li>
+<li><p>Python (usually helpfully) drops matrix and array dimensions that are extraneous. This can sometimes confuse later code that expects an object of a certain dimension. More on this below.</p></li>
+</ul>
+</section>
+<section id="tips-for-avoiding-bugs-and-catching-errors" class="level2">
+<h2 class="anchored" data-anchor-id="tips-for-avoiding-bugs-and-catching-errors">Tips for avoiding bugs and catching errors</h2>
+<section id="practice-defensive-programming" class="level3">
+<h3 class="anchored" data-anchor-id="practice-defensive-programming">Practice defensive programming</h3>
+<p>When writing functions, and software more generally, you’ll want to warn the user or stop execution when there is an error and exit gracefully, giving the user some idea of what happened. Here are some things to consider:</p>
+<ul>
+<li>check function inputs and warn users if the code will do something they might not expect or makes particular choices;</li>
+<li>check inputs to <code>if</code> and the ranges in <code>for</code> loops;</li>
+<li>provide reasonable default arguments;</li>
+<li>document the range of valid inputs;</li>
+<li>check that the output produced is valid; and</li>
+<li>stop execution based on assertions, <code>try</code> or <code>raise</code> with an informative error message.</li>
+</ul>
+<p>Here’s an example of building a robust square root function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> warnings</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> mysqrt(x):</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="kw">not</span> <span class="bu">isinstance</span>(x, <span class="bu">str</span>), <span class="ss">f"what is the square root of '</span><span class="sc">{</span>x<span class="sc">}</span><span class="ss">'?"</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">isinstance</span>(x, <span class="bu">int</span>) <span class="kw">or</span> <span class="bu">isinstance</span>(x, <span class="bu">float</span>):</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> x <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>            warnings.warn(<span class="st">"Input value is negative."</span>, <span class="pp">UserWarning</span>)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="bu">float</span>(<span class="st">'nan'</span>)   <span class="co"># avoid complex number result</span></span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> x<span class="op">**</span><span class="fl">0.5</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"Cannot take the square root of </span><span class="sc">{</span>x<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>mysqrt(<span class="fl">3.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1.760681686165901</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>mysqrt(<span class="op">-</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>nan
+
+&lt;string&gt;:5: UserWarning: Input value is negative.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    mysqrt(<span class="st">'hat'</span>)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> error:</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(error)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>what is the square root of 'hat'?</code></pre>
+</div>
+</div>
+</section>
+<section id="catch-run-time-errors-with-tryexcept-statements" class="level3">
+<h3 class="anchored" data-anchor-id="catch-run-time-errors-with-tryexcept-statements">Catch run-time errors with <code>try/except</code> statements</h3>
+<p>Also, sometimes a function you call will fail, but you want to continue execution. For example, consider the stratified analysis show previously in which you take subsets of your data based on some categorical variable and fit a statistical model for each value of the categorical variable. If some of the subsets have no or very few observations, the statistical model fitting might fail. To do this, you might be using a for loop or <code>apply</code>. You want your code to continue and fit the model for the rest of the cases even if one (or more) of the cases cannot be fit. You can wrap the function call that may fail within the <code>try</code> statement and then your code won’t stop, even when an error occurs. Here’s a toy example.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">2</span>)</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>n_cats <span class="op">=</span> <span class="dv">30</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">80</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.random.normal(size<span class="op">=</span>n)</span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.random.normal(size<span class="op">=</span>n)</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>cats <span class="op">=</span> [np.random.randint(<span class="dv">0</span>, n_cats<span class="op">-</span><span class="dv">1</span>) <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(n)]</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.DataFrame({<span class="st">'y'</span>: y, <span class="st">'x'</span>: x, <span class="st">'cats'</span>: cats})</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a>params <span class="op">=</span> np.full((n_cats, <span class="dv">2</span>), np.nan)</span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(n_cats):</span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>    sub <span class="op">=</span> data[data[<span class="st">'cats'</span>] <span class="op">==</span> i]</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">try</span>:</span>
+<span id="cb27-18"><a href="#cb27-18" aria-hidden="true" tabindex="-1"></a>        model <span class="op">=</span> statsmodels.api.OLS(sub[<span class="st">'y'</span>], statsmodels.api.add_constant(sub[<span class="st">'x'</span>]))</span>
+<span id="cb27-19"><a href="#cb27-19" aria-hidden="true" tabindex="-1"></a>        fit <span class="op">=</span> model.fit()</span>
+<span id="cb27-20"><a href="#cb27-20" aria-hidden="true" tabindex="-1"></a>        params[i, :] <span class="op">=</span> fit.params.values</span>
+<span id="cb27-21"><a href="#cb27-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> error:</span>
+<span id="cb27-22"><a href="#cb27-22" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Regression cannot be fit for stratum </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Regression cannot be fit for stratum 7.
+Regression cannot be fit for stratum 20.
+Regression cannot be fit for stratum 24.
+Regression cannot be fit for stratum 29.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(params)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[ 5.52897442e-01  2.61511154e-01]
+ [ 5.72564369e-01  4.37210543e-02]
+ [-9.91086764e-01  2.84116572e-01]
+ [-6.50606465e-01  4.26310060e-01]
+ [-2.59058826e+00 -2.59058826e+00]
+ [ 8.59455139e-01 -4.64514288e+00]
+ [ 3.82737032e-06  3.82737032e-06]
+ [            nan             nan]
+ [-5.55478634e-01 -1.17864561e-01]
+ [-9.11601460e-02 -5.91519525e-01]
+ [-7.30270153e-01 -1.99976841e-01]
+ [-1.14495705e-01 -3.06421213e-02]
+ [ 4.01648095e-01  9.30890661e-01]
+ [ 7.88388728e-01 -1.45835443e+00]
+ [ 4.08462508e+01  6.89262864e+01]
+ [ 2.95467536e-01  8.80528901e-01]
+ [ 1.04592517e+00  4.55379445e+00]
+ [ 6.99549010e-01 -5.17503241e-01]
+ [-1.75642254e+00 -8.07798224e-01]
+ [-4.49033150e-02  3.53455362e-01]
+ [            nan             nan]
+ [ 2.63097970e-01  2.63097970e-01]
+ [ 1.13328314e+00 -1.39985074e-01]
+ [ 1.17996663e+00  3.68770563e-01]
+ [            nan             nan]
+ [-3.85101497e-03 -3.85101497e-03]
+ [-8.04536124e-01 -5.19470059e-01]
+ [-5.19200779e-01 -1.39952387e-01]
+ [-9.16593858e-01 -2.67613324e-01]
+ [            nan             nan]]</code></pre>
+</div>
+</div>
+<p>The stratum with id 7 had no observations, so that call to do the regression failed, but the loop continued because we ‘caught’ the error with <code>try</code>. In this example, we could have checked the sample size for the subset before doing the regression, but in other contexts, we may not have an easy way to check in advance whether the function call will fail.</p>
+</section>
+<section id="maintain-dimensionality" class="level3">
+<h3 class="anchored" data-anchor-id="maintain-dimensionality">Maintain dimensionality</h3>
+<p>Python (usually helpfully) drops array dimensions that are extraneous. This can sometimes confuse later code that expects an object of a certain dimension. Here’s a work-around:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>mat <span class="op">=</span> np.array([[<span class="dv">1</span>, <span class="dv">2</span>], [<span class="dv">3</span>, <span class="dv">4</span>]])</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>np.<span class="bu">sum</span>(mat, axis<span class="op">=</span><span class="dv">0</span>)         <span class="co"># This sums columns, as desired</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>array([4, 6])</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>row_subset <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>mat2 <span class="op">=</span> mat[row_subset, :]</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>np.<span class="bu">sum</span>(mat2, axis<span class="op">=</span><span class="dv">0</span>)        <span class="co"># This sums the elements, not the columns.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>7</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="bu">len</span>(mat2.shape) <span class="op">!=</span> <span class="dv">2</span>:    <span class="co"># Fix dimensionality.</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    mat2 <span class="op">=</span> mat2.reshape(<span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>np.<span class="bu">sum</span>(mat2, axis<span class="op">=</span><span class="dv">0</span>)   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>array([3, 4])</code></pre>
+</div>
+</div>
+<p>In this simple case it’s obvious that a dimension will be dropped, but in more complicated settings, this can easily occur for some inputs without the coder realizing that it may happen. Not dropping dimensions is much easier than putting checks in to see if dimensions have been dropped and having the code behave differently depending on the dimensionality.</p>
+</section>
+<section id="find-and-avoid-global-variables" class="level3">
+<h3 class="anchored" data-anchor-id="find-and-avoid-global-variables">Find and avoid global variables</h3>
+<p>In general, using global variables (variables that are not created or passed into a function) results in code that is not robust. Results will change if you or a user modifies that global variable, usually without realizing/remembering that a function depends on it.</p>
+<p>One ad hoc strategy is to remove objects you don’t need from Python’s global scope, to avoid accidentally using values from an old object via Python’s scoping rules. You can also run your function in a fresh session to see if it’s unable to find variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> x   <span class="co"># Mimic having a fresh sesson (knowing in this case `x` is global).</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> f(z):</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(x <span class="op">+</span> y <span class="op">+</span> z)</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    f(<span class="dv">2</span>)</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">Exception</span> <span class="im">as</span> error:</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(error)</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>name 'x' is not defined</code></pre>
+</div>
+</div>
+</section>
+<section id="miscellaneous-tips" class="level3">
+<h3 class="anchored" data-anchor-id="miscellaneous-tips">5.5 Miscellaneous tips</h3>
+<ul>
+<li>Use core Python functionality and algorithms already coded. Figure out if a functionality already exists in (or can be adapted from) an Python package (or potentially in a C/Fortran library/package): code that is part of standard mathematical/numerical packages will probably be more efficient and bug-free than anything you would write.</li>
+<li>Code in a modular fashion, making good use of functions, so that you don’t need to debug the same code multiple times. Smaller functions are easier to debug, easier to understand, and can be combined in a modular fashion (like the UNIX utilities).</li>
+<li>Write code for clarity and accuracy first; then worry about efficiency. Write an initial version of the code in the simplest way, without trying to be efficient (e.g., you might use for loops even if you’re coding in Python); then make a second version that employs efficiency tricks and check that both produce the same output.</li>
+<li>Plan out your code in advance, including all special cases/possibilities.</li>
+<li>Write tests for your code early in the process.</li>
+<li>Build up code in pieces, testing along the way. Make big changes in small steps, sequentially checking to see if the code has broken on test case(s).</li>
+<li>Be careful that the conditions of <code>if</code> statements and the sequences of <code>for</code> loops are robust when they involve evaluating R code.</li>
+<li>Don’t hard code numbers - use variables (e.g., number of iterations, parameter values in simulations), even if you don’t expect to change the value, as this makes the code more readable and reduces bugs when you use the same number multiple times; e.g.&nbsp;<code>speed_of_light = 3e8</code> or <code>n_its = 1000</code>.</li>
+</ul>
+<p>In a future Lab, we’ll go over debugging in detail.</p>
+</section>
+</section>
+</section>
+<section id="tips-for-running-analyses" class="level1">
+<h1>3. Tips for running analyses</h1>
+<p>Save your output at intermediate steps (including the random seed state) so you can restart if an error occurs or a computer fails. Using <code>pickle.dump()</code> to write to pickle files works well for this.</p>
+<p>Run your code on a small subset of the problem before setting off a job that runs for hours or days. Make sure that the code works on the small subset and saves what you need properly at the end.</p>
+</section>
+<section id="reproducible-research" class="level1">
+<h1>4. Reproducible research</h1>
+<p>The idea of “reproducible research” has gained a lot of attention in the last decade because of the increasing complexity of research projects, lack of details in the published literature, failures in being able to replicate or reproduce others’ work, fraudulent research, and for other reasons.</p>
+<p>We’ve seen a number of tools that can help with doing reproducible research, including version control systems such as git, the use of scripting such as bash and Python scripts, and literate programming tools such as Quarto and Jupyter notebooks.</p>
+<p><em>Provenance</em> is becoming increasingly important in science. It basically means being able to trace the steps of an analysis back to its origins. <em>Reproducibility</em> and <em>replicability</em> are related concepts:</p>
+<p><em>Reproducibility</em> - the idea is that a second person/group could get the exact same results as an existing analysis if they use the same input data, methods, and code. This can be surprisingly hard as time passes even if you’re the one attempting to reproduce things.</p>
+<p><em>Replicability</em> - the idea is that a second/person could obtain results consistent with an existing analysis when using new data to answer the same scientific question.</p>
+<p>Open question: What is required for something to be reproducible? What about replicable? What are the challenges in doing so?</p>
+<section id="some-basic-strategies" class="level2">
+<h2 class="anchored" data-anchor-id="some-basic-strategies">Some basic strategies</h2>
+<ul>
+<li>Have a directory for each project with subdirectories with meaningful and standardized names: e.g., <code>code</code>, <code>data</code>, <code>paper</code>. The Journal of the American Statistical Association (JASA) has a <a href="https://github.com/jasa-acs/repro-template">template GitHub repository</a> with some suggestions.</li>
+<li>Have a file of code for pre-processing, one or more for analysis, and one for figure/table preparation.
+<ul>
+<li>The pre-processing may involve time-consuming steps. Save the output of the pre-processing as a file that can be read in to the analysis script.</li>
+<li>You may want to name your files something like this, so there is an obvious ordering: “1-prep.py”, “2-analysis.py”, “3-figs.py”.</li>
+<li>Have the code file for the figures produce the <strong>exact</strong> manuscript/report figures, operating on a file (e.g., a pickle file) that contains all the objects necessary to run the figure-producing code; the code producing the pickle file should be in your analysis code file (or somewhere else sensible).</li>
+<li>Alternatively, use Quarto or Jupyter notebooks for your document preparation.</li>
+</ul></li>
+<li>Keep a document describing your running analysis with dates in a text file (i.e., a lab book).</li>
+<li>Note where data were obtained (and when, which can be helpful when publishing) and pre-processing steps in the lab book. Have data version numbers with a file describing the changes and dates (or in lab book). If possible, have all changes to data represented as code that processes the data relative to a fixed baseline dataset.</li>
+<li>Note what code files do what in the lab book.</li>
+<li>Keep track of the details of the system and software you are running your code under, e.g., operating system version, software (e.g., Python,
+<ol start="18" type="A">
+<li>versions, Python or R package versions, etc.</li>
+</ol>
+<ul>
+<li><code>pip list</code> and <code>conda list</code> will show you version numbers for installed packages.</li>
+</ul></li>
+</ul>
+</section>
+<section id="formal-tools" class="level2">
+<h2 class="anchored" data-anchor-id="formal-tools">Formal tools</h2>
+<ol type="1">
+<li>In some cases you may be able to carry out your complete workflow in a Quarto document or in a Jupyter notebook.</li>
+<li>You might consider workflow/pipeline management software such as Drake or other tools discussed in the <a href="https://cran.r-project.org/web/views/ReproducibleResearch.html">CRAN Reproducible Research Task View</a>. Alternatively, one can use the <em>make</em> tool, which is generally used for compiling code, as a tool for reproducible research: if interested, see the tutorial on <a href="http://github.com/berkeley-scf/tutorial-make-workflows">Using make for workflows</a> or this <a href="https://www.jstatsoft.org/article/view/v094c01">Journal of Statistical Software article</a> for more details.</li>
+<li>You might organize your workflow as a Python or R package as described (for the R case) in <a href="https://doi.org/10.1080/00031305.2017.1375986">this article</a>.</li>
+<li>Package management:
+<ul>
+<li>Python: You can manage the versions of Python packages (and dependent packages) used in your project using Conda environments (or virtualenvs).</li>
+<li>R: You can manage the versions of R packages (and dependent packages) used in your project using package management packages such as <code>renv</code> and <code>packrat</code>. Unfortunately, the useful <code>checkpoint</code> package relies on snapshots of CRAN that are not available after January 2023.</li>
+</ul></li>
+<li>If your project uses multiple pieces of software (e.g., not just Python or R), you can set up a reproducible environment using <em>containers</em>, of which Docker containers are the best known. These provide something that is like a lightweight virtual machine in which you can install exactly the software (and versions) you want and then share with others. Docker container images are a key building block of various tools such as GitHub Actions and the <a href="https://mybinder.org">Binder project</a>. Alternatively Conda is a general package manager that can install lots of non-Python packages and can also be used in many circumstances.</li>
+</ol>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../units/unit3-bash.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Unit 3</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../units/unit5-programming.html" class="pagination-link">
+        <span class="nav-page-text">Unit 5</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

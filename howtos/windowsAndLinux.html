@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jared Bennett">
+
+<title>Statistics 243 Fall 2023 - Windows 10 and the Ubuntu Subsystem</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../howtos/windowsInstall.html" rel="next">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Statistics 243 Fall 2023</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../syllabus.html">
+ <span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../office_hours.html">
+ <span class="menu-text">Office hours</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../schedule.html">
+ <span class="menu-text">Schedule</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-units" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Units</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-units">    
+        <li>
+    <a class="dropdown-item" href="../units/unit1-intro.html">
+ <span class="dropdown-text">Unit 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit2-dataTech.html">
+ <span class="dropdown-text">Unit 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit3-bash.html">
+ <span class="dropdown-text">Unit 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit4-goodPractices.html">
+ <span class="dropdown-text">Unit 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit5-programming.html">
+ <span class="dropdown-text">Unit 5</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit6-parallel.html">
+ <span class="dropdown-text">Unit 6</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit8-numbers.html">
+ <span class="dropdown-text">Unit 8</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit9-sim.html">
+ <span class="dropdown-text">Unit 9</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit10-linalg.html">
+ <span class="dropdown-text">Unit 10</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-labs" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Labs</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-labs">    
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-how-tos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">How tos</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-how-tos">    
+        <li>
+    <a class="dropdown-item" href="../howtos/accessingPython.html">
+ <span class="dropdown-text">Accessing Python</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/accessingUnixCommandLine.html">
+ <span class="dropdown-text">Accessing the Unix Command Line</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/gitInstall.html">
+ <span class="dropdown-text">Installing Git</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/ps-submission.html">
+ <span class="dropdown-text">Problem Set Submissions</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">Windows</li>
+        <li>
+    <a class="dropdown-item" href="../howtos/windowsAndLinux.html">
+ <span class="dropdown-text">Installing the Linux Subsystem on Windows</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/windowsInstall.html">
+ <span class="dropdown-text">Using Python on Windows</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="https://edstem.org/us/courses/XYZ/discussion/">
+ <span class="menu-text">Discussion</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://statistics.berkeley.edu/computing/training/tutorials">
+ <span class="menu-text">Tutorials</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/berkeley-stat243/stat243-fall-2023"><i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Windows 10 and the Ubuntu Subsystem</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../howtos/accessingPython.html" class="sidebar-item-text sidebar-link">Accessing Python</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../howtos/accessingUnixCommandLine.html" class="sidebar-item-text sidebar-link">Accessing the Unix Command Line</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../howtos/gitInstall.html" class="sidebar-item-text sidebar-link">Installing Git</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../howtos/ps-submission.html" class="sidebar-item-text sidebar-link">Problem Set Submissions</a>
+  </div>
+</li>
+        <li class="px-0"><hr class="sidebar-divider hi "></li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">Windows</a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../howtos/windowsAndLinux.html" class="sidebar-item-text sidebar-link active">Installing the Linux Subsystem on Windows</a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../howtos/windowsInstall.html" class="sidebar-item-text sidebar-link">Using Python on Windows</a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#installing-ubuntu" id="toc-installing-ubuntu" class="nav-link active" data-scroll-target="#installing-ubuntu">Installing Ubuntu</a>
+  <ul class="collapse">
+  <li><a href="#enable-linux-subsystem" id="toc-enable-linux-subsystem" class="nav-link" data-scroll-target="#enable-linux-subsystem">1) Enable Linux Subsystem</a></li>
+  <li><a href="#install-linux-subsystem" id="toc-install-linux-subsystem" class="nav-link" data-scroll-target="#install-linux-subsystem">2) Install Linux Subsystem</a></li>
+  </ul></li>
+  <li><a href="#using-the-linux-terminal-from-r-in-windows" id="toc-using-the-linux-terminal-from-r-in-windows" class="nav-link" data-scroll-target="#using-the-linux-terminal-from-r-in-windows">Using the Linux Terminal from R in Windows</a></li>
+  <li><a href="#a-note-on-file-modification" id="toc-a-note-on-file-modification" class="nav-link" data-scroll-target="#a-note-on-file-modification">A Note on File Modification</a></li>
+  <li><a href="#finding-windows-from-linux" id="toc-finding-windows-from-linux" class="nav-link" data-scroll-target="#finding-windows-from-linux">Finding Windows from Linux</a></li>
+  <li><a href="#finding-linux-from-windows" id="toc-finding-linux-from-windows" class="nav-link" data-scroll-target="#finding-linux-from-windows">Finding Linux from Windows</a></li>
+  <li><a href="#installing-r-on-the-linux-subsystem" id="toc-installing-r-on-the-linux-subsystem" class="nav-link" data-scroll-target="#installing-r-on-the-linux-subsystem">Installing R on the Linux Subsystem</a></li>
+  <li><a href="#installing-rstudio-on-the-linux-subsystem" id="toc-installing-rstudio-on-the-linux-subsystem" class="nav-link" data-scroll-target="#installing-rstudio-on-the-linux-subsystem">Installing Rstudio on the Linux Subsystem</a></li>
+  <li><a href="#installing-latex-on-the-linux-subsystem" id="toc-installing-latex-on-the-linux-subsystem" class="nav-link" data-scroll-target="#installing-latex-on-the-linux-subsystem">Installing LaTeX on the Linux Subsystem</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Windows 10 and the Ubuntu Subsystem</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jared Bennett </p>
+          </div>
+  </div>
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Windows 10 has a powerful new feature that allows a full Linux system to be installed and run from within Windows. This is incredibly useful for building/testing code in Linux, without having a dedicated Linux machine, but it poses strange new behaviors as two very different operating systems coexist in one place. Initially, this document mirrors the <a href="./windowsInstall.Rmd">Windows Install</a> tutorial, showing you how to install Ubuntu and setting up R, RStudio, and LaTex. Then, we cover some of the issues of running two systems together, starting with finding files, finding the Ubuntu subsystem, and file modifications.</p>
+<section id="installing-ubuntu" class="level2">
+<h2 class="anchored" data-anchor-id="installing-ubuntu">Installing Ubuntu</h2>
+<p>There are 2 parts to installing a Linux subsystem in Windows. I will write this using Ubuntu as the example, as it is my preferred Linux distro, but several others are provided by Windows.</p>
+<p><strong>Sources:</strong></p>
+<ul>
+<li><a href="https://docs.microsoft.com/en-us/windows/wsl/install-win10">Official Windows Instructions</a></li>
+<li><a href="https://vitux.com/how-to-keep-ubuntu-up-to-date/">Ubuntu Update Instructions</a></li>
+</ul>
+<section id="enable-linux-subsystem" class="level3">
+<h3 class="anchored" data-anchor-id="enable-linux-subsystem">1) Enable Linux Subsystem</h3>
+<p>By default, the Linux subsystem is an optional addition in Windows. This feature has to be enabled prior to installing Linux. There are two ways to do it.</p>
+<ul>
+<li><strong>CMD Line</strong><br>
+The simplest way to enable the Linux subsystem is through PowerShell.
+<ul>
+<li><p>Open PowerShell as Administrator</p></li>
+<li><p>Run the following (on one line):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Enable-WindowsOptionalFeature</span> <span class="at">-Online</span> <span class="at">-FeatureName</span> Microsoft-Windows-Subsystem-Linux</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Restart the computer</p></li>
+</ul></li>
+<li><strong>GUI</strong><br>
+If you don’t wish to use PowerShell, you can work your way through the control panel and turn on the Linux subsystem.
+<ol type="1">
+<li>Open the <strong>settings</strong> page through the search bar</li>
+<li>Go to <strong>Programs and Features</strong></li>
+<li>Find <strong>Turn Windows Features on or off</strong> on the right side</li>
+<li>Enable the <strong>Windows Subsystem for Linux</strong> option</li>
+<li>Restart the computer</li>
+</ol></li>
+</ul>
+</section>
+<section id="install-linux-subsystem" class="level3">
+<h3 class="anchored" data-anchor-id="install-linux-subsystem">2) Install Linux Subsystem</h3>
+<p>Once the Linux subsystem feature has been enabled, there are multiple methods to download and install the Linux distro you want. I highly recommend installing Ubuntu from the Microsoft store. There are several other flavors available as well, but Ubuntu is generally the easiest to learn and the most well supported.</p>
+<ol type="1">
+<li>Open the <strong>Microsoft Store</strong></li>
+<li>Search for <strong>Ubuntu</strong>
+<ul>
+<li>You’re looking for the highest number followed by LTS, currently <strong>20.04 LTS</strong> (or 18.04 LTS is fine too). This is the current long-term-release, meaning it will be supported for the next 5 years.</li>
+</ul></li>
+<li>Click on the tile, then click <strong>Get</strong>, and this should start the installation.</li>
+<li>Follow the prompts to install Ubuntu.</li>
+</ol>
+<p>After installing Ubuntu, it is advisable to update it. This is something you should do on a regular basis.</p>
+<ol type="1">
+<li>Open a Bash terminal.</li>
+<li>Type <code>sudo apt update</code> to update your local package database.</li>
+<li>Type <code>sudo apt upgrade</code> to upgrade your installed packages.</li>
+</ol>
+</section>
+</section>
+<section id="using-the-linux-terminal-from-r-in-windows" class="level2">
+<h2 class="anchored" data-anchor-id="using-the-linux-terminal-from-r-in-windows">Using the Linux Terminal from R in Windows</h2>
+<p>To get all the functionality of a UNIX-style commandline from within R (e.g., for bash code chunks), you should set the terminal under R in Windows to be the Linux subsystem.</p>
+</section>
+<section id="a-note-on-file-modification" class="level2">
+<h2 class="anchored" data-anchor-id="a-note-on-file-modification">A Note on File Modification</h2>
+<p><strong>DO NOT MODIFY LINUX FILES FROM WINDOWS</strong></p>
+<p>It is highly recommended that you never modify Linux files from Windows because of metadata corruption issues. Any files created under the Linux subsystem, only modify them with Linux tools. In contrast, you can create files in the Windows system and modify them with both Windows or Linux tools. There could be file permission issues because Windows doesn’t have the same concept of file permissions as Linux. So, if you intend to work on files using both Linux and Windows, create the files in the <code>C</code> drive under Windows, and you should be safe to edit them with either OS.</p>
+</section>
+<section id="finding-windows-from-linux" class="level2">
+<h2 class="anchored" data-anchor-id="finding-windows-from-linux">Finding Windows from Linux</h2>
+<p>Once you have some flavor of Linux installed, you need to be able to navigate from your Linux home directory to wherever Windows stores files. This is relatively simple, as the Windows Subsystem shows Windows to Linux as a mounted drive.</p>
+<ul>
+<li><a href="https://www.howtogeek.com/261383/how-to-access-your-ubuntu-bash-files-in-windows-and-your-windows-system-drive-in-bash/">Source</a></li>
+</ul>
+<ol type="1">
+<li>Open a Bash terminal.</li>
+<li>Type <code>cd /</code> to get to the root directory.</li>
+<li>In root, type <code>cd /mnt</code>. This gets you to the mount point for your drives.</li>
+<li>Type <code>ls</code> to see what drives are available (you should see a <code>c</code>, and maybe <code>d</code> as well).</li>
+<li>Type <code>cd c</code> to get into the Windows <code>C</code> drive. This is the root of the <code>C</code> directory for Windows.</li>
+<li>To find your files, change directy into the users folder, then into your username.
+<ul>
+<li><code>cd Users/&lt;your-user-name&gt;</code></li>
+<li>This is your home directory in Windows. If you type <code>ls</code> here, you should see things like
+<ul>
+<li><code>Documents</code></li>
+<li><code>Downloads</code></li>
+<li><code>Pictures</code></li>
+<li><code>Videos</code></li>
+<li>etc…</li>
+</ul></li>
+</ul></li>
+</ol>
+</section>
+<section id="finding-linux-from-windows" class="level2">
+<h2 class="anchored" data-anchor-id="finding-linux-from-windows">Finding Linux from Windows</h2>
+<p>This is slightly more tricky than getting from Linux to Windows. Windows stores the Linux files in a hidden subfolder so that you don’t mess with them from Windows. However, you can find them, and then the easiest way (note, do not read as safest or smartest) to find those files in the future is by creating a desktop shortcut.</p>
+<ul>
+<li><a href="https://www.howtogeek.com/261383/how-to-access-your-ubuntu-bash-files-in-windows-and-your-windows-system-drive-in-bash/">Source</a></li>
+</ul>
+<ol type="1">
+<li>Open File Explorer</li>
+<li>In the address bar, type <code>%userprofile%\AppData\Local\Packages</code>
+<ul>
+<li><code>%userprofile%</code> will expand to something like <code>C:\Users\&lt;your-user-name&gt;</code></li>
+</ul></li>
+<li>Look for a folder related to the Linux distro that you installed
+<ul>
+<li>These names will change slightly over time, but look for something similar-ish.</li>
+<li>For Ubuntu, look for something with <em>CanonicalGroupLimited.UbuntuonWindows</em> in it.
+<ul>
+<li>Canonical is the creator/distributor of Ubuntu.</li>
+</ul></li>
+</ul></li>
+<li>Click <strong>LocalState</strong></li>
+<li>Click <strong>rootfs</strong>
+<ul>
+<li>This is the root of your Linux distro.</li>
+</ul></li>
+<li>Click into <strong>home</strong> and then into your user name.
+<ul>
+<li>This is your home directory under Linux.</li>
+</ul></li>
+<li><strong>DO NOT MODIFY THESE FILES FROM WINDOWS</strong>
+<ul>
+<li>Data corruption is a possibility.</li>
+</ul></li>
+</ol>
+<p>So, the final path to find your home directory from windows will look like:</p>
+<pre><code>%userprofile%\AppData\Local\Packages\&lt;Distro-Folder&gt;\LocalStat\rootfs\home\&lt;your-user-name&gt;\</code></pre>
+</section>
+<section id="installing-r-on-the-linux-subsystem" class="level2">
+<h2 class="anchored" data-anchor-id="installing-r-on-the-linux-subsystem">Installing R on the Linux Subsystem</h2>
+<p>IMPORTANT: This section is only if you’d like to try using R under Linux. For class, using R under Windows should be fine.</p>
+<p>The Linux Subsystem behaves exactly like a regular Linux installation, but for completeness, I will provide instructions here for people new to Linux. These instructions are written from the perspective of Ubuntu, but will be similar for other repos.</p>
+<p>R is not a part of the standard Ubuntu installation. So, we have to add the repository manually to our repository list. This is relatively straightforward, and R supports several versions of Ubuntu.</p>
+<p><strong>Sources:</strong></p>
+<ul>
+<li><a href="https://cran.r-project.org/">CRAN</a> guide for Ubuntu</li>
+<li><a href="https://www.digitalocean.com/community/tutorials/how-to-install-r-on-ubuntu-18-04">Digital Ocean</a> quick tutorial</li>
+</ul>
+<ol type="1">
+<li><p>In a bash window, type:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> apt-key adv <span class="at">--keyserver</span> keyserver.ubuntu.com <span class="at">--recv-keys</span> E298A3A825C0D65DFD57CBB651716619E084DAB9</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>This adds the key to “sign”, or validate, the R repository</li>
+</ul></li>
+<li><p>Then, type:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> add-apt-repository <span class="st">'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li><a href="https://cloud.r-project.org">cloud.r-project.org</a> is the default mirror, however, it is prudent to connect to the mirror closest to you geographically. Berkeley has it’s own mirror, so the command with the Berkeley mirror would look like</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> add-apt-repository <span class="st">'deb https://cran.r-project.org/bin/linux/ubuntu/bionic-cran40/'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Finally, type <code>sudo apt install r-base</code>, and press <code>y</code> to confirm installation</p></li>
+<li><p>To test that it worked, type <code>R</code> into the console, and an R session should begin</p>
+<ul>
+<li>Type <code>q()</code> to quit the R session</li>
+</ul></li>
+</ol>
+</section>
+<section id="installing-rstudio-on-the-linux-subsystem" class="level2">
+<h2 class="anchored" data-anchor-id="installing-rstudio-on-the-linux-subsystem">Installing Rstudio on the Linux Subsystem</h2>
+<div class="callout-warning callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>THIS NO LONGER WORKS</p>
+</div>
+</div>
+<p>As of Rstudio 1.5.x, it does not run on WSL. <a href="https://github.com/rstudio/rstudio/issues/3615#issuecomment-427914311">Link</a><br>
+Also possible issues, WSL has no GUI, and therefore can’t support anything that uses a GUI.<br>
+These instructions work, but Rstudio doesn’t run.</p>
+<p><strong>Sources:</strong></p>
+<ul>
+<li><a href="https://www.rstudio.com/products/rstudio/download/#download">Rstudio</a></li>
+<li><a href="https://unix.stackexchange.com/questions/159094/how-to-install-a-deb-file-by-dpkg-i-or-by-apt">Source</a></li>
+</ul>
+<ol type="1">
+<li>Go the the Rstudio website (link above) and download the appropriate Rstudio Desktop version.
+<ul>
+<li>For most people, this is the <code>Ubuntu 18 (64-bit)</code> installer.</li>
+<li>Save it somewhere that you can find it.</li>
+<li>You should have a file similar to <code>rstudio-&lt;version number&gt;-amd64.deb</code></li>
+</ul></li>
+<li>Open a terminal window and navigate to wherever you saved the rstudio install file.</li>
+<li>Type the command <code>sudo dpkg -i ./rstudio-&lt;version number&gt;-amd64.deb</code>
+<ul>
+<li>This tells the package installer (<code>dpkg</code>) to install (<code>-i</code>) the file specified (<code>./thing.deb</code>)</li>
+</ul></li>
+<li>Type the command <code>sudo apt-get install -f</code>
+<ul>
+<li>This tells the package manager (<code>apt-get</code>) to fix (<code>-f</code>) any dependency issues that may have arisen when installing the package.</li>
+</ul></li>
+<li>Type the command <code>which rstudio</code> to make sure the system can find it.
+<ul>
+<li>Output should be similar to <code>/usr/bin/rstudio</code></li>
+</ul></li>
+<li>Run rstudio from linux by typing <code>rstudio &amp;</code>
+<ul>
+<li>The <code>&amp;</code> runs it in the background, allowing you to close the terminal window.</li>
+</ul></li>
+</ol>
+</section>
+<section id="installing-latex-on-the-linux-subsystem" class="level2">
+<h2 class="anchored" data-anchor-id="installing-latex-on-the-linux-subsystem">Installing LaTeX on the Linux Subsystem</h2>
+<div class="callout-important callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This section is only if you’d like to try using LaTeX under Linux. For class, using LaTeX (or R Markdown) under Windows should be fine.</p>
+</div>
+</div>
+<p>LaTeX is a text-markup language used when generating documents from .Rmd files.</p>
+<p><strong>Source</strong> <a href="https://www.latex-project.org/">LaTeX</a></p>
+<ol type="1">
+<li>Type <code>sudo apt-get install texlive-full</code>, press <code>y</code> to confirm installation</li>
+</ol>
+<p>Generally, if you want to create and edit R Markdown documents you will also need a text editor to go with your LaTeX installation, but we won’t go into that here.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../howtos/windowsInstall.html" class="pagination-link">
+        <span class="nav-page-text">Using Python on Windows</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Chris Paciorek">
+<meta name="dcterms.date" content="2023-07-26">
+
+<title>Statistics 243 Fall 2023 - Introduction to UNIX, computers, and key tools</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../units/unit2-dataTech.html" rel="next">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Statistics 243 Fall 2023</span>
+    </a>
+  </div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../syllabus.html">
+ <span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../office_hours.html">
+ <span class="menu-text">Office hours</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../schedule.html">
+ <span class="menu-text">Schedule</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-units" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Units</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-units">    
+        <li>
+    <a class="dropdown-item" href="../units/unit1-intro.html">
+ <span class="dropdown-text">Unit 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit2-dataTech.html">
+ <span class="dropdown-text">Unit 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit3-bash.html">
+ <span class="dropdown-text">Unit 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit4-goodPractices.html">
+ <span class="dropdown-text">Unit 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit5-programming.html">
+ <span class="dropdown-text">Unit 5</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit6-parallel.html">
+ <span class="dropdown-text">Unit 6</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit8-numbers.html">
+ <span class="dropdown-text">Unit 8</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit9-sim.html">
+ <span class="dropdown-text">Unit 9</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit10-linalg.html">
+ <span class="dropdown-text">Unit 10</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-labs" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Labs</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-labs">    
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-how-tos" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">How tos</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-how-tos">    
+        <li>
+    <a class="dropdown-item" href="../howtos/accessingPython.html">
+ <span class="dropdown-text">Accessing Python</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/accessingUnixCommandLine.html">
+ <span class="dropdown-text">Accessing the Unix Command Line</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/gitInstall.html">
+ <span class="dropdown-text">Installing Git</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/ps-submission.html">
+ <span class="dropdown-text">Problem Set Submissions</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">Windows</li>
+        <li>
+    <a class="dropdown-item" href="../howtos/windowsAndLinux.html">
+ <span class="dropdown-text">Installing the Linux Subsystem on Windows</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/windowsInstall.html">
+ <span class="dropdown-text">Using Python on Windows</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="https://edstem.org/us/courses/XYZ/discussion/">
+ <span class="menu-text">Discussion</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://statistics.berkeley.edu/computing/training/tutorials">
+ <span class="menu-text">Tutorials</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/berkeley-stat243/stat243-fall-2023"><i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title">Introduction to UNIX, computers, and key tools</h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit1-intro.html" class="sidebar-item-text sidebar-link active">Unit 1</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit2-dataTech.html" class="sidebar-item-text sidebar-link">Unit 2</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit3-bash.html" class="sidebar-item-text sidebar-link">Unit 3</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit4-goodPractices.html" class="sidebar-item-text sidebar-link">Unit 4</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit5-programming.html" class="sidebar-item-text sidebar-link">Unit 5</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit6-parallel.html" class="sidebar-item-text sidebar-link">Unit 6</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit8-numbers.html" class="sidebar-item-text sidebar-link">Unit 8</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit9-sim.html" class="sidebar-item-text sidebar-link">Unit 9</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit10-linalg.html" class="sidebar-item-text sidebar-link">Unit 10</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#unix-command-line-basics" id="toc-unix-command-line-basics" class="nav-link active" data-scroll-target="#unix-command-line-basics">UNIX command line basics</a></li>
+  <li><a href="#version-control" id="toc-version-control" class="nav-link" data-scroll-target="#version-control">Version control</a></li>
+  <li><a href="#parts-of-a-computer" id="toc-parts-of-a-computer" class="nav-link" data-scroll-target="#parts-of-a-computer">Parts of a computer</a></li>
+  <li><a href="#connecting-to-other-machines" id="toc-connecting-to-other-machines" class="nav-link" data-scroll-target="#connecting-to-other-machines">Connecting to other machines</a></li>
+  <li><a href="#editors" id="toc-editors" class="nav-link" data-scroll-target="#editors">Editors</a>
+  <ul class="collapse">
+  <li><a href="#some-useful-editors" id="toc-some-useful-editors" class="nav-link" data-scroll-target="#some-useful-editors">Some useful editors</a></li>
+  <li><a href="#optional-basic-emacs" id="toc-optional-basic-emacs" class="nav-link" data-scroll-target="#optional-basic-emacs">(Optional) Basic emacs</a></li>
+  <li><a href="#optional-emacs-keystroke-sequence-shortcuts." id="toc-optional-emacs-keystroke-sequence-shortcuts." class="nav-link" data-scroll-target="#optional-emacs-keystroke-sequence-shortcuts.">(Optional) Emacs keystroke sequence shortcuts.</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block">Introduction to UNIX, computers, and key tools</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Chris Paciorek </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 26, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p><a href="./unit1-intro.pdf" class="btn btn-primary">PDF</a></p>
+<section id="unix-command-line-basics" class="level1">
+<h1>UNIX command line basics</h1>
+<p>By UNIX, I mean any UNIX-like operating system, including Linux and MacOS. Most modern scientific computing is done on UNIX-based machines, often by remotely logging in to a UNIX-based server.</p>
+<p>There are a <a href="../howtos/accessingUnixCommandLine">variety of ways to get access to a UNIX-style command line environment</a>.</p>
+<p>Please see the material in <a href="https://berkeley-scf.github.io/tutorial-unix-basics">our tutorial on the basics of UNIX</a> to get up to speed on working in a UNIX-style command line environment. We’ll do a bit of demo in the first class. If what you see seems quite familiar, you can probably skip that tutorial. If what you see is not familiar, please work through the tutorial by Monday August 29 and (optionally) attend section on Friday August 26 to work on the problems at the end of the tutorial and be able to ask questions of the GSI and other students.</p>
+<p>For an alternative introduction (which also includes some of the topics we’ll discuss in Unit 3 on shell scripting), see <a href="https://swcarpentry.github.io/shell-novice">this Software Carpentry tutorial</a>.</p>
+</section>
+<section id="version-control" class="level1">
+<h1>Version control</h1>
+<p>Version control refers to the process of keeping track of changes to your materials on a computer, often code files but other files as well. It generally works well with text files because version control operates based on differences between two versions of a file, and those differences are kept track of on a line-by-line basis. Version control is a central concept/practice in modern scientific computing.</p>
+<p>A very popular and powerful tool for version control is Git. We’ll be using Git extensively for version control.</p>
+<p>Git stores the files for a project in a <em>repository</em>. Here are some basic Git commands you can use to access the class materials from the command line. There are also <a href="https://git-scm.com/downloads">graphical interfaces to Git</a> that you can explore. I’ve heard good things(albeit a few years ago) about <a href="https://desktop.github.com">Github Desktop</a>, available for Mac and Windows.</p>
+<ol type="1">
+<li><p>To clone (i.e., copy) a repository (in this case from GitHub) (<em>berkeley-stat243</em> is the organization and <em>stat243-fall-2022</em> is the repository):</p>
+<pre><code>git clone https://github.com/berkeley-stat243/stat243-fall-2022</code></pre></li>
+<li><p>To update a repository to reflect changes made in a remote copy of the repository:</p>
+<pre><code>cd /to/any/directory/within/the/local/repository
+git pull</code></pre></li>
+</ol>
+<p>More information is available in the <a href="https://github.com/berkeley-scf/tutorial-git-basics">tutorial on the basics of using Git</a>, as well as lots of information/tutorials online. We’ll see a lot more about Git in Section sessions, where you’ll learn to set up a repository, make changes to repositories and work with local and remote versons of the repository. In particular, you’ll have a chance to work through the tutorial and practice with Git in the first section/lab (September 2). During the course, you’ll make use of Git for submitting problem sets and for doing the final project. I recommend you practice using it more generally while preparing your problem set solutions.</p>
+</section>
+<section id="parts-of-a-computer" class="level1">
+<h1>Parts of a computer</h1>
+<p>We won’t spend a lot of time thinking about computer hardware, but we do need to know some of the basics that relate to using a computer and programming effectively. There are many layers of technical detail one could get into, but the key things for now are to have a basic understanding of these components of a computer:</p>
+<ul>
+<li>CPU
+<ul>
+<li>cache</li>
+</ul></li>
+<li>main memory (RAM)</li>
+<li>disk</li>
+</ul>
+<p>Please read <a href="https://36-750.github.io/tools/computer-architecture/">this overview</a> from a class at CMU that is similar to this class. Don’t worry about too much of the details in the “How Programs Run” section - just try to get the main idea.</p>
+</section>
+<section id="connecting-to-other-machines" class="level1">
+<h1>Connecting to other machines</h1>
+<p>To connect to a remote machine, you generally need to use SSH. SSH is available as <code>ssh</code> when you are on the UNIX command line. There are also SSH clients for Windows. The SCF has <a href="http://statistics.berkeley.edu/computing/ssh">more information on SSH client programs and on using SSH</a>. Here’s an example of connecting to one of the SCF machines (this assumes you have an SCF account, which you may, and that your user name is paciorek, which it is not).</p>
+<pre><code>ssh paciorek@radagast.berkeley.edu</code></pre>
+<p>To copy files between machines, we can use <em>scp</em>, which has similar options to <em>cp</em>. Here’s how we can copy a local file to a remote machine.</p>
+<pre><code>scp file.txt paciorek@radagast.berkeley.edu:~/research/.</code></pre>
+<p>And here’s how we can copy from a remote machine to the machine you are on.</p>
+<pre><code>scp paciorek@radagast.berkeley.edu:/data/file.txt \
+  ~/research/renamed.txt</code></pre>
+<p>You can use relative paths to refer to locations on the local machine. On the remote machine all paths need to be absolute or to be relative to your home directory on that machine.</p>
+<p>There are also client programs for file transfer; see <a href="http://statistics.berkeley.edu/computing/copying-files">this webpage</a>.</p>
+</section>
+<section id="editors" class="level1">
+<h1>Editors</h1>
+<p>For statistical computing, we need a text editor, not a word processor, because we’re going to be operating on code files, plain-text data files, , for which word processing formatting gets in the way. <strong>Don’t use Microsoft Word or Google Docs to edit code files or Markdown/R Markdown/LaTeX.</strong></p>
+<section id="some-useful-editors" class="level2">
+<h2 class="anchored" data-anchor-id="some-useful-editors">Some useful editors</h2>
+<ul>
+<li>various editors available on all operating systems:
+<ul>
+<li>traditional editors born in UNIX: <em>emacs</em>, <em>vim</em></li>
+<li>some newer editors: <em>Atom</em>, <em>Sublime Text</em> (Sublime is proprietary/not free)</li>
+</ul></li>
+<li>Windows-specific: <em>WinEdt</em></li>
+<li>Mac-specific: <em>Aquamacs Emacs</em>, <em>TextMate</em>, <em>TextEdit</em></li>
+<li>RStudio provides a built-in editor for R code and R Markdown files. (Note: RStudio as a whole is an IDE (integrated development environment. The editor is just the editing window where you edit code (and R Markdown) files.)</li>
+<li><em>VSCode</em> has a powerful code editor that is customized to work with various languages.</li>
+</ul>
+<p>As you get started it’s ok to use a very simple text editor such as Notepad in Windows, but you should take the time in the next few weeks to try out more powerful editors such as one of those listed above. It will be well worth your time over the course of your graduate work and then your career.</p>
+<p>Be careful in Windows - file suffixes are often hidden.</p>
+</section>
+<section id="optional-basic-emacs" class="level2">
+<h2 class="anchored" data-anchor-id="optional-basic-emacs">(Optional) Basic emacs</h2>
+<p>Emacs is one option as an editor. I use Emacs a fair amount, so I’m including some tips here, but other editors listed above are just as good.</p>
+<ul>
+<li><em>Emacs</em> has special modes for different types of files: R code files, C code files, Latex files – it’s worth your time to figure out how to set this up on your machine for the kinds of files you often work on
+<ul>
+<li>For working with R, ESS (emacs speaks statistics) mode is helpful. This is built into Aquamacs Emacs.</li>
+</ul></li>
+<li>To open emacs in the terminal window rather than as a new window, which is handy when it’s too slow (or impossible) to pass (i.e., tunnel) the graphical emacs window through ssh: <code>emacs -nw file.txt</code></li>
+</ul>
+</section>
+<section id="optional-emacs-keystroke-sequence-shortcuts." class="level2">
+<h2 class="anchored" data-anchor-id="optional-emacs-keystroke-sequence-shortcuts.">(Optional) Emacs keystroke sequence shortcuts.</h2>
+<blockquote class="blockquote">
+<p><strong>Note</strong> Several of these (Ctrl-a, Ctrl-e, Ctrl-k, Ctrl-y) work in the command line and other places as well.</p>
+</blockquote>
+<table class="table">
+<colgroup>
+<col style="width: 39%">
+<col style="width: 60%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Sequence</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>Ctrl-x,Ctrl-c</code></td>
+<td>Close the file</td>
+</tr>
+<tr class="even">
+<td><code>Ctrl-x,Ctrl-s</code></td>
+<td>Save the file</td>
+</tr>
+<tr class="odd">
+<td><code>Ctrl-x,Ctrl-w</code></td>
+<td>Save with a new name</td>
+</tr>
+<tr class="even">
+<td><code>Ctrl-s</code></td>
+<td>Search</td>
+</tr>
+<tr class="odd">
+<td><code>ESC</code></td>
+<td>Get out of command buffer at bottom of screen</td>
+</tr>
+<tr class="even">
+<td><code>Ctrl-a</code></td>
+<td>Go to beginning of line</td>
+</tr>
+<tr class="odd">
+<td><code>Ctrl-e</code></td>
+<td>Go to end of line</td>
+</tr>
+<tr class="even">
+<td><code>Ctrl-k</code></td>
+<td>Delete the rest of the line from cursor forward</td>
+</tr>
+<tr class="odd">
+<td><code>Ctrl-space</code><em>,</em> then move to end of block</td>
+<td>Highlight a block of text</td>
+</tr>
+<tr class="even">
+<td><code>Ctrl-w</code></td>
+<td>Remove the highlighted block, putting it in the kill buffer</td>
+</tr>
+<tr class="odd">
+<td><code>Ctrl-y</code> <em>(</em>after using <code>Ctrl-k</code> or <code>Ctrl-w</code><em>)</em></td>
+<td>Paste from kill buffer (‘y’ is for ‘yank’)</td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../units/unit2-dataTech.html" class="pagination-link">
+        <span class="nav-page-text">Unit 2</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
