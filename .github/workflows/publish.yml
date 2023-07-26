@@ -30,7 +30,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          source('install_requirements.R')  # Windows doesn't like running via ./install_requirements.R
+          source('install_requirements.R')  
         shell: Rscript {0}
 
       # publish to GitHub Pages
