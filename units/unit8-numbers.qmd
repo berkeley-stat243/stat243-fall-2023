@@ -1,7 +1,7 @@
 ---
 title: "Numbers on a computer"
 author: "Chris Paciorek"
-date: "2022-10-13"
+date: "2023-07-26"
 format:
   pdf:
     documentclass: article

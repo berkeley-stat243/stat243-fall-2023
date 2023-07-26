@@ -1,7 +1,7 @@
 ---
 title: "Numerical linear algebra"
 author: "Chris Paciorek"
-date: "2023-07-05"
+date: "2023-07-26"
 format:
   pdf:
     documentclass: article
@@ -506,6 +506,8 @@ matrices, we see that in the first order case, the eigenvalue
 corresponding to the constant eigenvector is zero.
 
 ```{python}
+import numpy as np
+
 precMat = np.array([[1,-1,0,0,0],[-1,2,-1,0,0],[0,-1,2,-1,0],[0,0,-1,2,-1],[0,0,0,-1,1]])
 e=np.linalg.eig(precMat)
 e[0]        # 4th eigenvalue is numerically zero

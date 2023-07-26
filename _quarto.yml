@@ -32,23 +32,21 @@ website:
       contents:
         - file: units/unit1-intro.md
           text: "Unit 1"
-        - file: units/unit2-dataTech.Rmd
+        - file: units/unit2-dataTech.qmd
           text: "Unit 2"
         - file: units/unit3-bash.Rmd
           text: "Unit 3"
-        - file: units/unit4-goodPractices.md
+        - file: units/unit4-goodPractices.qmd
           text: "Unit 4"
-        - file: units/unit5-programming.Rmd
+        - file: units/unit5-programming.qmd
           text: "Unit 5"
-        - file: units/unit6-parallel.Rmd
+        - file: units/unit6-parallel.qmd
           text: "Unit 6"
-        - file: units/unit7-bigData.Rmd
-          text: "Unit 7"
-        - file: units/unit8-numbers.Rmd
+        - file: units/unit8-numbers.qmd
           text: "Unit 8"
-        - file: units/unit9-sim.Rmd
+        - file: units/unit9-sim.qmd
           text: "Unit 9"
-        - file: units/unit10-linalg.Rmd
+        - file: units/unit10-linalg.qmd
           text: "Unit 10"
     - id: labs
       title: "Labs"

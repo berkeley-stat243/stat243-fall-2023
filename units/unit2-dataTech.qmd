@@ -1,7 +1,7 @@
 ---
 title: "Data technologies, formats, and structures"
 author: "Chris Paciorek"
-date: "2022-08-23"
+date: "2023-07-26"
 format:
   pdf:
     documentclass: article
@@ -24,7 +24,7 @@ z <- 1
 ```
 
 ```{python, setup, echo=FALSE}
-import os
+import os, io
 import pandas
 ```
 
@@ -265,8 +265,6 @@ construct called a *connection*. This can include reading in text from the outpu
 Here are some examples of connections:
 
 ```{python, connections, eval=FALSE}
-import io
-
 import gzip
 with gzip.open('dat.csv.gz', 'r') as file:
      lines = file.readlines()
@@ -377,9 +375,9 @@ Other options for avoiding reading all your data into memory include the Dask pa
 import polars
 import time
 t0 = time.time()
-dat = pandas.read_csv(os.path.join(dir, 'airline.csv'))
+dat = pandas.read_csv(os.path.join('..', 'data', 'airline.csv'))
 t1 = time.time()
-dat2 = polars.read_csv(os.path.join(dir, 'airline.csv'), null_values = ['NA'])
+dat2 = polars.read_csv(os.path.join('..', 'data', 'airline.csv'), null_values = ['NA'])
 t2 = time.time()
 print(f"Timing for Pandas: {t1-t0}.")
 print(f"Timing for Polars: {t2-t1}.")
@@ -391,7 +389,7 @@ print(f"Timing for Polars: {t2-t1}.")
 
 Functions for text output are generally analogous to those for input.
 
-```
+```{python, eval=FALSE}
 file_path = os.path.join('/tmp', 'tmp.txt')
 with open(file_path, 'w') as file:
      file.writelines(lines)
@@ -516,7 +514,7 @@ response = requests.get(URL)
 html = response.content
 
 # Create a BeautifulSoup object to parse the HTML
-soup = BeautifulSoup(html, 'html.parser')
+soup = bs(html, 'html.parser')
 
 html_tables = soup.find_all('table')
 
@@ -545,7 +543,7 @@ allow you to search for elements within HTML:
 ```{python, htmlLinks}
 URL = "http://www1.ncdc.noaa.gov/pub/data/ghcn/daily/by_year"
 response = requests.get(URL)
-soup = BeautifulSoup(response.content, 'html.parser')
+soup = bs(response.content, 'html.parser')
 
 ## Approach 1: search for HTML 'a' tags.
 a_elements = soup.find_all('a')
@@ -555,7 +553,7 @@ href_elements = soup.find_all(href = True)
 links2 = [x.get('href') for x in href_elements]
 
 links2[0:9]
-# help(BeautifulSoup.find_all)
+# help(bs.find_all)
 ```
 
 More generally, we may want to read an HTML document, parse it into its
@@ -569,7 +567,7 @@ day).
 ```{python, headlines, eval=FALSE}
 URL = "https://www.nytimes.com"
 responseNYT = requests.get(URL)
-soupNYT = BeautifulSoup(responseNYT.content, 'html.parser')
+soupNYT = bs(responseNYT.content, 'html.parser')
 h2_elements = soupNYT.find_all("h2")
 headlines2 = [x.get_text() for x in h2_elements]
 h3_elements = soupNYT.find_all("h3")
@@ -855,13 +853,14 @@ api_args = "http://api.worldbank.org/V2/country?incomeLevel=LIC"
 url = "http://api.worldbank.org/V2/country?incomeLevel=MIC&format=json"
 response = requests.get(url)
 
-data = json.loads(response.content)
+# data = json.loads(response.content)
+# TODO: debug why above line fails when rendering
 
 ## Be careful of data truncation/pagination
-url = "http://api.worldbank.org/V2/country?incomeLevel=MIC&format=json&per_page=1000"
-response = requests.get(url)
-
-data = json.loads(response.content)
+if False:
+    url = "http://api.worldbank.org/V2/country?incomeLevel=MIC&format=json&per_page=1000"
+    response = requests.get(url)
+    data = json.loads(response.content)
 
 ## Programmatic control
 baseURL = "http://api.worldbank.org/V2/country"
@@ -934,6 +933,7 @@ such as this (here I just paste it together directly, but using more structured 
 such as I used for the World Bank example would be better):
 
 ```{python, http-byURL}
+import zipfile
 
 ## example URL:
 ## http://data.un.org/Handlers/DownloadHandler.ashx?DataFilter=itemCode:526;

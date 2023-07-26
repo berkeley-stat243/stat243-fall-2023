@@ -1,0 +1,198 @@
+[
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this site"
+  },
+  {
+    "objectID": "about.html#sec-2a",
+    "href": "about.html#sec-2a",
+    "title": "About",
+    "section": "Sec 2a",
+    "text": "Sec 2a"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Statistics 243 Fall 2022",
+    "section": "",
+    "text": "This site is UNDER CONSTRUCTION. Do not rely on materials here before August 22.\nIf you would like to audit the class, enroll as a UC Berkeley undergraduate, or enroll as a concurrent enrollment student (i.e., for visiting students), or for some other reason are not enrolled, please fill out this survey as soon as possible. All those enrolled or wishing to take the class should have filled it out by Friday August 27 at noon.\nThe first three weeks involve a lot of moving pieces, in part related to trying to get everyone up to speed with the bash shell and R. Please use these notes to keep on top of what you need to do."
+  },
+  {
+    "objectID": "units/unit1.html",
+    "href": "units/unit1.html",
+    "title": "R bootcamp, Module 0: Recruit processing",
+    "section": "",
+    "text": "The GitHub site (https://github.com/berkeley-scf/r-bootcamp-fall-2022) is the main site for the bootcamp. It has information on logistics, software installation, and is the master repository for materials for the modules.\nWe have an Ed Discussion site for discussion and answering questions online during (and before) the bootcamp.\nIf you have an administrative question, email r-bootcamp@lists.berkeley.edu.\n\n\n\nThe campus WiFi is now eduroam, not AirBears. Follow these instructions for how to set up your eduroam account. If you need wireless access as a guest (i.e., you don’t have a CalNet ID), connect to ‘CalVisitor’."
+  },
+  {
+    "objectID": "units/unit1.html#within-rstudio",
+    "href": "units/unit1.html#within-rstudio",
+    "title": "R bootcamp, Module 0: Recruit processing",
+    "section": "Within RStudio",
+    "text": "Within RStudio\nWithin RStudio go to File->New Project->Version Control->Git and enter:\n\n“Repository URL”: https://github.com/berkeley-scf/r-bootcamp-fall-2022\n“Project Directory Name”: r-bootcamp-fall-2022 (or something else of your choosing)\n“Directory”: ~/Desktop (or somewhere of your choosing)\n\nThen to update from the repository to get any changes we’ve made, you can select (from within RStudio): Tools->Version Control->Pull Branches\nor from the Environment/History/Git window, click on the Git tab and then on the blue down arrow.\nBe warned that you probably do not want to make your own notes or changes to the files we are providing. Because if you do, and you then do a “Git Pull” to update the materials, you’ll have to deal with the conflict between your local version and our version. You probably will want to make a personal copy of such files in another directory or by making copies of files with new names."
+  },
+  {
+    "objectID": "units/unit1.html#from-a-maclinux-terminal-window",
+    "href": "units/unit1.html#from-a-maclinux-terminal-window",
+    "title": "R bootcamp, Module 0: Recruit processing",
+    "section": "From a Mac/Linux terminal window",
+    "text": "From a Mac/Linux terminal window\nRun the following commands:\n\ncd /directory/where/you/want/repository/located\ngit clone https://github.com/berkeley-scf/r-bootcamp-fall-2022\n\nThen to update from the repository to get any changes we’ve made:\n\ncd /directory/where/you/put/the/repository/r-bootcamp-fall-2022\ngit pull"
+  },
+  {
+    "objectID": "units/unit1.html#as-a-zip-file",
+    "href": "units/unit1.html#as-a-zip-file",
+    "title": "R bootcamp, Module 0: Recruit processing",
+    "section": "As a zip file",
+    "text": "As a zip file\nIf you don’t want to bother using Git or have problems, simply download a zip file with all the material from https://github.com/berkeley-scf/r-bootcamp-fall-2022/archive/main.zip."
+  },
+  {
+    "objectID": "units/unit2.html",
+    "href": "units/unit2.html",
+    "title": "Unit 2: Data Technologies",
+    "section": "",
+    "text": "References:"
+  },
+  {
+    "objectID": "units/unit2.html#text-and-binary-files",
+    "href": "units/unit2.html#text-and-binary-files",
+    "title": "Unit 2: Data Technologies",
+    "section": "Text and binary files",
+    "text": "Text and binary files\nIn general, files can be divided into text files and binary files. In both cases, information is stored as a series of bits. Recall that a bit is a single value in base 2 (i.e., a 0 or a 1), while a byte is 8 bits.\nA text file is one in which the bits in the file encode individual characters. Note that the characters can include the digit characters 0-9, so one can include numbers in a text file by writing down the digits needed for the number of interest. Examples of text file formats include CSV, XML, HTML, and JSON.\nText files may be simple ASCII files (i.e., files encoded using ASCII) or in other encodings such as UTF-8, both covered in Section 4. ASCII files have 8 bits (1 byte) per character and can represent 128 characters (the 52 lower and upper case letters in English, 10 digits, punctuation and a few other things – basically what you see on a standard US keyboard). UTF-8 files have between 1 and 4 bytes per character.\nA binary file is one in which the bits in the file encode the information in a custom format and not simply individual characters. Binary formats are not (easily) human readable but can be more space-efficient and faster to work with (because it can allow random access into the data rather than requiring sequential reading). The meaning of the bytes in such files depends on the specific binary format being used and a program that uses the file needs to know how the format represents information. Examples of binary files include netCDF files, R data (e.g., .Rda) files, and compiled code files.\nNumbers in binary files are usually stored as 8 bytes per number. We’ll discuss this much more in Unit 6."
+  },
+  {
+    "objectID": "units/unit2.html#common-file-types",
+    "href": "units/unit2.html#common-file-types",
+    "title": "Unit 2: Data Technologies",
+    "section": "Common file types",
+    "text": "Common file types\nHere are some of the common file types. Any of these types can be categorized as text or binary.\n\n‘Flat’ text files: data are often provided as simple text files. Often one has one record or observation per row and each column or field is a different variable or type of information about the record. Such files can either have a fixed number of characters in each field (fixed width format) or a special character (a delimiter) that separates the fields in each row. Common delimiters are tabs, commas, one or more spaces, and the pipe (|). Common file extensions are .txt and .csv. Metadata (information about the data) are often stored in a separate file. CSV files are quite common, but if you have files where the data contain commas, other delimiters can be good. Text can be put in quotes in CSV files, and this can allow use of commas within the data. This is difficult to deal with in bash, but read.table() in R handles this situation.\n\nOne occasionally tricky difficulty is as follows. If you have a text file created in Windows, the line endings are coded differently than in UNIX (a newline (the ASCII character \\n) and a carriage return (the ASCII character \\r) in Windows vs. only a newline in UNIX). There are UNIX utilities (fromdos in Ubuntu, including the SCF Linux machines and dos2unix in other Linux distributions) that can do the necessary conversion. If you see ^M at the end of the lines in a file, that’s the tool you need. Alternatively, if you open a UNIX file in Windows, it may treat all the lines as a single line. You can fix this with todos or unix2dos.\n\nIn some contexts, such as textual data and bioinformatics data, the data may in a text file with one piece of information per row, but without meaningful columns/fields.\nIn scientific contexts, netCDF (.nc) (and the related HDF5) are popular format for gridded data that allows for highly-efficient storage and contains the metadata within the file. The basic structure of a netCDF file is that each variable is an array with multiple dimensions (e.g., latitude, longitude, and time), and one can also extract the values of and metadata about each dimension. The ncdf4 package in R nicely handles working with netCDF files.\nData may also be in text files in formats designed for data interchange between various languages, in particular XML or JSON. These formats are “self-describing”; namely the metadata is part of the file. The XML2, rvest, and jsonlite packages are useful for reading and writing from these formats.\nYou may be scraping information on the web, so dealing with text files in various formats, including HTML. The XML2 and rvest packages are also useful for reading HTML.\nData may already be in a database or in the data storage of another statistical package (Stata, SAS, SPSS, etc.). The foreign package in R has excellent capabilities for importing Stata (read.dta()), SPSS (read.spss()), and SAS (read.ssd() and, for XPORT files, read.xport()), among others.\nFor Excel, there are capabilities to read an Excel file (see the readxl and XLConnect package among others), but you can also just go into Excel and export as a CSV file or the like and then read that into R. In general, it’s best not to pass around data files as Excel or other spreadsheet format files because (1) Excel is proprietary, so someone may not have Excel and the format is subject to change, (2) Excel imposes limits on the number of rows, (3) one can easily manipulate text files such as CSV using UNIX tools, but this is not possible with an Excel file, (4) Excel files often have more than one sheet, graphs, macros, etc., so they’re not a data storage format per se.\nR can easily interact with databases (SQLite, PostgreSQL, MySQL, Oracle, etc.), querying the database using SQL and returning results to R. More in the big data unit and in the large datasets tutorial mentioned above."
+  },
+  {
+    "objectID": "units/unit2.html#core-r-functions",
+    "href": "units/unit2.html#core-r-functions",
+    "title": "Unit 2: Data Technologies",
+    "section": "Core R functions",
+    "text": "Core R functions\nread.table() is probably the most commonly-used function for reading in data. It reads in delimited files (read.csv() and read.delim() are special cases of read.table()). The key arguments are the delimiter (the sep argument) and whether the file contains a header, a line with the variable names. We can use read.fwf() to read from a fixed width text file into a data frame.\nThe most difficult part of reading in such files can be dealing with how R determines the classes of the fields that are read in. There are a number of arguments to read.table() and read.fwf() that allow the user to control the classes. One difficulty in older versions of R was that character fields were read in as factors.\nLet’s work through a couple examples. Before we do that, let’s look at the arguments to read.table(). Note that sep=“ separates on any amount of white space. In the code chunk below, I’ve told knitr not to print the output to the PDF; you can see the full output by running the code yourself.\n\ndat <- read.table(file.path('..', 'data', 'RTADataSub.csv'),\n                  sep = ',', header = TRUE)\nsapply(dat, class)\n## whoops, there is an 'x', presumably indicating missingness:\nunique(dat[ , 2])\n## let's treat 'x' as a missing value indicator\ndat2 <- read.table(file.path('..', 'data', 'RTADataSub.csv'),\n                   sep = ',', header = TRUE,\n                   na.strings = c(\"NA\", \"x\"))\nunique(dat2[ ,2])\n## hmmm, what happened to the blank values this time?\nwhich(dat[ ,2] == \"\")\ndat2[which(dat[, 2] == \"\")[1], ] # pull out a line with a missing string\n\n# using 'colClasses'\nsequ <- read.table(file.path('..', 'data', 'hivSequ.csv'),\n  sep = ',', header = TRUE,\n  colClasses = c('integer','integer','character',\n    'character','numeric','integer'))\n## let's make sure the coercion worked - sometimes R is obstinant\nsapply(sequ, class)\n## that made use of the fact that a data frame is a list\n\nNote that you can avoid reading in one or more columns by specifying NULL as the column class for those columns to be omitted. Also, specifying the colClasses argument explicitly should make for faster file reading. Finally, setting stringsAsFactors=FALSE is standard practice and is the default in R as of version 4.0. (readr::read_csv() has always set stringsAsFactors=FALSE.\nIf possible, it’s a good idea to look through the input file in the shell or in an editor before reading into R to catch such issues in advance. Using less on RTADataSub.csv would have revealed these various issues, but note that RTADataSub.csv is a 1000-line subset of a much larger file of data available from the kaggle.com website. So more sophisticated use of UNIX utilities as we saw in Unit 2 is often useful before trying to read something into R.\nThe basic function scan() simply reads everything in, ignoring lines, which works well and very quickly if you are reading in a numeric vector or matrix. scan() is also useful if your file is free format - i.e., if it’s not one line per observation, but just all the data one value after another; in this case you can use scan() to read it in and then format the resulting character or numeric vector as a matrix with as many columns as fields in the dataset. Remember that the default is to fill the matrix by column.\nIf the file is not nicely arranged by field (e.g., if it has ragged lines), we’ll need to do some more work. readLines() will read in each line into a separate character vector, after which we can process the lines using text manipulation. Here’s an example from some US meteorological data where I know from metadata (not provided here) that the 4-11th values are an identifier, the 17-20th are the year, the 22-23rd the month, etc.\nActually, that file, precip.txt, is in a fixed-width format (i.e., every element in a given column has the exact same number of characters),so reading in using read.fwf() would be a good strategy.\nR allows you to read in not just from a file but from a more general construct called a connection. Here are some examples of connections:\n\nreadLines(pipe(\"ls -al\"))\n\n[1] \"total 64\"                                                         \n[2] \"drwxr-sr-x 2 paciorek scfstaff     8 Aug 12 10:56 .\"              \n[3] \"drwxr-sr-x 5 paciorek scfstaff    12 Aug 12 10:49 ..\"             \n[4] \"-rw-r--r-- 1 paciorek scfstaff 10177 Aug 12 10:13 unit1.Rmd\"      \n[5] \"-rw-r--r-- 1 paciorek scfstaff    48 Aug 12 10:49 unit2.R\"        \n[6] \"-rw-r--r-- 1 paciorek scfstaff    55 Aug 12 10:20 unit2.R~\"       \n[7] \"-rw-r--r-- 1 paciorek scfstaff 12791 Aug 12 10:56 unit2.rmarkdown\"\n[8] \"-rw-r--r-- 1 paciorek scfstaff 12785 Aug 12 10:56 unit2.Rmd\"      \n[9] \"-rw-r--r-- 1 paciorek scfstaff 12797 Aug 12 10:30 unit2.Rmd~\"     \n\n\nIn some cases, you might need to create the connection using url() or using the curl() function from the curl package. Though for the example here, simply passing the URL to readLines() does work. (In general, curl::curl() provides some nice features for reading off the internet.)\nIf a file is large, we may want to read it in in chunks (of lines), do some computations to reduce the size of things, and iterate. read.table(), read.fwf() and readLines() all have the arguments that let you read in a fixed number of lines. To read-on-the-fly in blocks, we need to first establish the connection and then read from it sequentially. (If you don’t, you’ll read from the start of the file every time you read from the file.)"
+  },
+  {
+    "objectID": "index.html#course-content",
+    "href": "index.html#course-content",
+    "title": "Statistics 243 Fall 2022",
+    "section": "Course content",
+    "text": "Course content\n\nThis site: most non-recorded course material\nVarious SCF tutorials: These include the various tutorials referred to in the class materials (e.g., the UNIX and bash shell tutorials, the dynamic documents tutorial, the Git tutorial, the string processing tutorial, etc.)\nbCourses: links to class course captures and any pre-recorded material.\n\nIf you’re not yet familiar with Git, go to the upper right of this page and click on ‘Clone or download’ and then ‘Download ZIP’."
+  },
+  {
+    "objectID": "index.html#logistics",
+    "href": "index.html#logistics",
+    "title": "Statistics 243 Fall 2022",
+    "section": "Logistics",
+    "text": "Logistics\nInstructor office hours:\n\nChris (Evans 495 or Zoom (see Ed Discussion post for link))\n\nTBD\ngenerally available immediately after class\nfeel free to schedule an appointment or drop by if my door is open\n\nJames:\n\nTBD\nFridays during unused section time, generally 1-2 pm and 3-3:30 pm (Evans 443)"
+  },
+  {
+    "objectID": "index.html#software",
+    "href": "index.html#software",
+    "title": "Statistics 243 Fall 2022",
+    "section": "Software",
+    "text": "Software\nThe howtos directory has information on installing and/or getting access to the software you’ll need for the course. In particular, in the second week of class you’ll need to get access to the UNIX command line in some fashion. See https://github.com/berkeley-stat243/stat243-fall-2021/blob/master/howtos/accessingUnixCommandLine.md for some options on how to do this."
+  },
+  {
+    "objectID": "index.html#submitting-assignments",
+    "href": "index.html#submitting-assignments",
+    "title": "Statistics 243 Fall 2022",
+    "section": "Submitting assignments",
+    "text": "Submitting assignments\nThe file [UNDER CONSTRUCTION][submitting-electronically.txt](./howtos/submitting-electronically.txt) has information on setting up a Github repository for the class and submitting your assignments by committing your solution to Github. We will discuss this in section on Friday September 3."
+  },
+  {
+    "objectID": "index.html#online-discussion-and-questions.",
+    "href": "index.html#online-discussion-and-questions.",
+    "title": "Statistics 243 Fall 2022",
+    "section": "Online discussion and questions.",
+    "text": "Online discussion and questions.\nWe will use the course Ed Discussion site for communication (announcements, questions, and discussion). If you’re enrolled in the class you should be a member of the group and be able to access it. If you’re auditing or not yet enrolled and would like access, make sure to fill out the survey above and I will add you."
+  },
+  {
+    "objectID": "syllabus.html",
+    "href": "syllabus.html",
+    "title": "Statistics 243 Fall 2022",
+    "section": "",
+    "text": "Statistics 243 is an introduction to statistical computing, taught using R. The course will cover both programming concepts and statistical computing concepts. Programming concepts will include data and text manipulation, data structures, functions and variable scope, regular expressions, debugging/testing, and parallel processing. Statistical computing topics will include working with large datasets, numerical linear algebra, computer arithmetic/precision, simulation studies and Monte Carlo methods, numerical optimization, and numerical integration/differentiation. A goal is that coverage of these topics complement the models/methods discussed in the rest of the statistics/biostatistics graduate curriculum. We will also cover the basics of UNIX/Linux, in particular some basic shell scripting and operating on remote servers, as well as a bit of Python.\nWhile the course is taught using R and you will learn a lot about using R at an advanced level, the focus of the course is statistical computing/computing for data science more generally. Also, this is not a course that will cover specific statistical/data analysis methods.\nInformal prerequisites: If you are not a statistics or biostatistics graduate student, please chat with me if you’re not sure if this course makes sense for you. A background in calculus, linear algebra, probability and statistics is expected, as well as a basic ability to operate on a computer (but I do not assume familiarity with the UNIX-style command line/terminal/shell). Furthermore, I’m expecting you will know the basics of R, at the level of the Modules 1-5 in the R bootcamp offered Aug. 21-22, 2021. If you don’t have that background you’ll need to spend time in the initial couple weeks getting up to speed. All the material from the bootcamp is available here (plus I can give you access to the bootcamp videos), we’ll have an optional hands-on practice session during the second or third week of class, and the GSI can also provide assistance."
+  },
+  {
+    "objectID": "syllabus.html#covid-considerations",
+    "href": "syllabus.html#covid-considerations",
+    "title": "Statistics 243 Fall 2022",
+    "section": "Covid considerations",
+    "text": "Covid considerations\nWe’ll be following university policy through the semester. At the moment that means:\n\nClass and section are in person. I will be recording class (but not section) via the room’s course capture capabilities so if anyone needs to miss a class they should be able to catch up. There is in-class discussion and problem-solving so I expect students to attend class in general. However, please do not come to class if you feel any symptoms or satisfy the university’s definition of having been exposed to Covid – you can watch the recording and it will not affect your grade in any way.\nMasks are required at the moment. Hopefully the public health situation will improve to the point that masks will be optional later in the semester.\nVaccination is required with very limited exceptions.\n\nPersonally, I am feeling comfortable with having class under these circumstances, and I hope you are as well. If you have any concerns, please let me know; I’m happy to talk with you."
+  },
+  {
+    "objectID": "syllabus.html#objectives-of-the-course",
+    "href": "syllabus.html#objectives-of-the-course",
+    "title": "Statistics 243 Fall 2022",
+    "section": "Objectives of the course",
+    "text": "Objectives of the course\nThe goals of the course are that, by the end of the course, students be able to:\n\noperate effectively in a UNIX environment and on remote servers and compute clusters;\nprogram effectively in R with an advanced knowledge of R functionality and an understanding of general programming concepts and principles;\nbe familiar with concepts and tools for reproducible research and good scientific computing practices; and\nunderstand in depth and be able to make use of principles of numerical linear algebra, optimization, and simulation for statistics- and data science-related analyses and research."
+  },
+  {
+    "objectID": "syllabus.html#personnel",
+    "href": "syllabus.html#personnel",
+    "title": "Statistics 243 Fall 2022",
+    "section": "Personnel",
+    "text": "Personnel\n\nInstructor:\n\nChris Paciorek (paciorek@stat.berkeley.edu)\n\nGSI\n\nAndrew Vaughn (ahv36@berkeley.edu)\n\nWe’ll post office hours on the GitHub site README.\nWhen to see us about an assignment: We’re here to help, including providing guidance on assignments. You don’t want to be futilely spinning your wheels for a long time getting nowhere. That said, before coming to see us about a difficulty, you should try something a few different ways and define/summarize what is going wrong or where you are getting stuck."
+  },
+  {
+    "objectID": "syllabus.html#course-websites-github-piazza-gradescope-and-bcourses",
+    "href": "syllabus.html#course-websites-github-piazza-gradescope-and-bcourses",
+    "title": "Statistics 243 Fall 2022",
+    "section": "Course websites: GitHub, Piazza, GradeScope, and bCourses",
+    "text": "Course websites: GitHub, Piazza, GradeScope, and bCourses\nKey websites for the course are:\n\nGitHub for course content: https://github.com/berkeley-stat243/stat243-fall-2021, including logistics info on the main GitHub page (scroll down below the files listing).\nSCF tutorials for additional content: https://statistics.berkeley.edu/computing/training/tutorials\nPiazza site for discussions/Q&A (also linked from bCourses): https://piazza.com/berkeley/fall2021/stat243\nbCourses site for course capture recordings and possibly some other materials:\nhttps://bcourses.berkeley.edu/courses/1507757.\nGradescope for assignments (also linked from bCourses): [UNDER CONSTRUCTION]https://www.gradescope.com/courses/XYZ\n\nAll course materials will be posted on GitHub except for video content, which will be in bCourses.\nWe will use the course Piazza site for communication (announcements, questions, and discussion). You should ask questions about class material and problem sets through Piazza. Please use this site for your questions so that either Andrew or I can respond and so that everyone can benefit from the discussion. I suggest you to modify your settings on Piazza so you are informed by email of postings. I strongly encourage you to respond to or comment on each other’s questions as well (this will help your class participation grade), although of course you should not provide a solution to a problem set problem. If you have a specific administrative question you need to direct just to me, it’s fine to email me directly. But if you simply want to privately ask a question about content, then just come to an office hour or see me after class.\nIn addition, we will use Gradescope for viewing grades."
+  },
+  {
+    "objectID": "syllabus.html#course-material",
+    "href": "syllabus.html#course-material",
+    "title": "Statistics 243 Fall 2022",
+    "section": "Course material",
+    "text": "Course material\n\nPrimary materials: Course notes on GitHub, SCF tutorials, and potentially pre-recorded videos on bCourses.\nBack-up textbooks:\n\nFor bash: Newham, Cameron and Rosenblatt, Bill. Learning the bash Shell (available electronically through OskiCat: http://uclibs.org/PID/77225)\nFor R:\n\nAdler, Joseph; R in a Nutshell (available electronically through OskiCat: http://uclibs.org/PID/151634)\nWickham, Hadley: Advanced R: http://adv-r.had.co.nz/\n\nFor statistical computing topics:\n\nGentle, James. Computational Statistics (available electronically through OskiCat: http://dx.doi.org/10.1007/978-0-387-98144-4)\nGentle, James. Matrix Algebra https://link-springer-com.libproxy.berkeley.edu/book/10.1007%2F978-3-319-64867-5 or Numerical Linear Algebra with Applications in Statistics https://link-springer-com.libproxy.berkeley.edu/chapter/10.1007/978-1-4612-0623-1_1\n\nOther resources with more details on particular aspects of R:\n\nChambers, John; Software for Data Analysis: Programming with R (available electronically through OskiCat: http://dx.doi.org/10.1007/978-0-387-75936-4)\nXie, Yihui; Dynamic documents with R and knitr. (available electronically through Oskicat)\nNolan, Deborah and Temple Lang, Duncan. XML and Web Technologies for Data Sciences with R. https://link.springer.com/book/10.1007%2F978-1-4614-7900-0\nThe R-intro and R-lang documentation. https://www.cran.r-project.org/manuals.html\nMurrell, Paul; R Graphics, 2nd ed. http://www.stat.auckland.ac.nz/\\(\\sim\\)paul/RG2e/\nMurrell, Paul; Introduction to Data Technologies. http://www.stat.auckland.ac.nz/\\(\\sim\\)paul/ItDT/\n\nOther resources with more detail on particular aspects of statistical computing concepts:\n\nLange, Kenneth; Numerical Analysis for Statisticians, 2nd ed. (first edition is available electronically through OskiCat:\nhttps://link.springer.com/book/10.1007%2Fb98850)\nMonahan, John; Numerical Methods of Statistics (available electronically through OskiCat:\nhttp://dx.doi.org/10.1017/CBO9780511977176)"
+  },
+  {
+    "objectID": "syllabus.html#section",
+    "href": "syllabus.html#section",
+    "title": "Statistics 243 Fall 2022",
+    "section": "Section",
+    "text": "Section\nThe GSI will lead a two-hour discussion section each week (there are two sections). By and large, these will only last for about one hour of actual content, but the second hour may be used as an office hour with the GSI or for troubleshooting software during the early weeks. The discussion sections will vary in format and topic, but material will include demonstrations on various topics (version control, debugging, testing, etc.), group work on these topics, discussion of relevant papers, and discussion of problem set solutions. The first section generally has more demand, so to avoid having too many people in the room, you should go to your assigned section unless you talk to me first."
+  },
+  {
+    "objectID": "syllabus.html#computing-resources",
+    "href": "syllabus.html#computing-resources",
+    "title": "Statistics 243 Fall 2022",
+    "section": "Computing Resources",
+    "text": "Computing Resources\nMost work for the course can be done on your laptop. Later in the course we’ll also use the Statistics Department cluster. You can also use the campus DataHub to access a bash shell or run RStudio.\nThe software needed for the course is as follows:\n\nAccess to the UNIX command line (bash shell)\nGit\nR (RStudio is recommended but by no means required)\nPython (later in the course)\n\nSome tips for software installation (and access to DataHub) are in the ‘howtos’ directory of the Git repository. In particular, please see ‘accessingUnixCommandLine.html’ for options of how to access a bash shell."
+  },
+  {
+    "objectID": "syllabus.html#class-time",
+    "href": "syllabus.html#class-time",
+    "title": "Statistics 243 Fall 2022",
+    "section": "Class time",
+    "text": "Class time\nMy goal is to have classes be an interactive environment. This is both more interesting for all of us and more effective in learning the material. I encourage you to ask questions and will pose questions to the class to think about, respond to via Google forms, and discuss (though I may have to adjust discussion given mask wearing and the public health situation). To increase time for discussion and assimilation of the material in class, before some classes I may ask that you read material or work through tutorials in advance of class. Occasionally, I will ask you to submit answers to questions in advance of class as well.\nPlease do not use phones during class and limit laptop use to the material being covered.\nStudent backgrounds with computing will vary. For those of you with limited background on a topic, I encourage you to ask questions during class so I know what you find confusing. For those of you with extensive background on a topic (there will invariably be some topics where one of you will know more about it than I do or have more real-world experience), I encourage you to pitch in with your perspective. In general, there are many ways to do things on a computer, particularly in a UNIX environment and in R, so it will help everyone (including me) if we hear multiple perspectives/ideas.\nFinally, class recordings for review or to make up for absence will be available through the bCourses Media Gallery, available on the Media Gallery tab on the bCourses page for the class."
+  },
+  {
+    "objectID": "syllabus.html#course-requirements-and-grading",
+    "href": "syllabus.html#course-requirements-and-grading",
+    "title": "Statistics 243 Fall 2022",
+    "section": "Course requirements and grading",
+    "text": "Course requirements and grading\n\nCourse grades\nThe grade for this course is primarily based on assignments due every 1-2 weeks, two quizzes (likely in early-mid October and mid-late November, or possibly a single quiz/exam in November, and a final group project. I will also provide extra credit questions on some problem sets. There is no final exam. 50% of the grade is based on the problem sets, 25% on the quizzes, 15% on the project, and 10% on your participation in discussions on Piazza, your responses to the in-class Google forms questions, as well as occasional brief questions that I will ask you to answer in advance of the next class.\nGrades will generally be As and Bs. An A involves doing all the work, getting full credit on most of the problem sets, showing competence on the quizzes, and doing a thorough job on the final project.\n\n\nProblem sets\nWe will be less willing to help you if you come to our office hours or post a question online at the last minute. Working with computers can be unpredictable, so give yourself plenty of time for the assignments.\nThere are several rules for submitting your assignments.\n\nYou should prepare your assignments using either R Markdown or LaTeX plus knitr.\nProblem set submission consists of both of the following:\n\nA PDF submitted electronically through Gradescope, by the start of class (10 am) on the due date, and\nAn electronic copy of the PDF, code file, and R Markdown/knitr document pushed to your class GitHub repository, following the instructions to be provided by the GSI.\n\nOn-time submission will be determined based on the time stamp of when the PDF is submitted to gradeScope.\nAnswers should consist of textual response or mathematical expressions as appropriate, with key chunks of code embedded within the document. Extensive additional code can be provided as an appendix. Before diving into the code for a problem, you should say what the goal of the code is and your strategy for solving the problem. Raw code without explanation is not an appropriate solution.\nAny mathematical derivations may be done by hand and scanned with your phone if you prefer that to writing up LaTeX equations.\n\nNote: knitr is a tool that allows one to embed chunks of code within LaTeX documents. It can also be used with the L-.1667em.25emY-.125emX GUI front-end to LaTeX. R Markdown is an extension to the Markdown markup language that allows one to embed R code within an HTML document. Please see the dynamics document tutorial on the SCF tutorials website; there will be additional information in the first section and on the first problem set.\n\n\nProblem set grading\nThe grading scheme for problem sets is as follows. Each problem set will receive a numeric score for (1) presentation and explanation of results, (2) technical accuracy of code or mathematical derivation, and (3) code quality/style and creativity. For each of these three components, the possible scores are:\n\n0 = no credit,\n1 = partial credit (you did some of the problems but not all),\n2 = satisfactory (you tried everything but there were pieces of what you did that didn’t solve or present/explain one or more problems in a complete way), and\n3 = full credit.\n\nFor components #1 and #3, many of you will get a score of 2 for some problem sets as you develop good coding practices. You can still get an A in the class despite this.\nYour total score for the PS is a weighted sum of the scores for the three components. If you turn in a PS late, I’ll bump you down by two points (out of the available). If you turn it in really late (i.e., after we start grading them), I will bump you down by four points. No credit after solutions are distributed.\n\n\nFinal project\nThe final project will be a joint coding project in groups of 3-4. I’ll assign an overall task, and you’ll be responsible for dividing up the work, coding, debugging, testing, and documentation. You’ll need to use the Git version control system for working in your group.\n\n\nRules for working together and the campus honor code\nI encourage you to work together and help each other out. However, with regard to the problem sets, you should first try to figure out a given problem on your own. After that, if you’re stuck or want to explore alternative approaches, feel free to consult with your fellow students and with the GSI and me. You can share tips on general strategy or syntax for how to do small individual tasks within a problem, but you should not ask for and you should not share complete code or solutions for a problem. Basically, you can help each other out, but no one should be doing the work for someone else. In particular, your solution to a problem set (writeup and code) must be your own, and you’ll hear from me if either look too similar to someone else’s. You MUST note on your problem set solution any fellow students who you worked/consulted with. If you got a specific idea for how to do part of a problem from a fellow student, you should note that in your solution in the appropriate place, just as you would cite a book or URL.\nPlease see the last section of this document for more information on the Campus Honor Code, which I expect you to follow."
+  },
+  {
+    "objectID": "syllabus.html#feedback",
+    "href": "syllabus.html#feedback",
+    "title": "Statistics 243 Fall 2022",
+    "section": "Feedback",
+    "text": "Feedback\nI welcome comments and suggestions and concerns. Particularly good suggestions will count towards your class participation grade."
+  },
+  {
+    "objectID": "syllabus.html#topics-in-order-with-rough-timing",
+    "href": "syllabus.html#topics-in-order-with-rough-timing",
+    "title": "Statistics 243 Fall 2022",
+    "section": "Topics (in order with rough timing)",
+    "text": "Topics (in order with rough timing)\nThe ‘days’ here are class sessions under a non-virtual format, as general guidance.\n\nIntroduction to UNIX, operating on a compute server (1 day)\nData formats, data access, webscraping (2 days)\nDebugging, good programming practices, reproducible research (1 day)\nThe bash shell and shell scripting, version control (3 days)\nProgramming concepts and advanced R programming: text processing and regular expressions, functions and variable scope, environments, object oriented programming, efficient programming (9 days)\nComputer arithmetic/representation of numbers on a computer (3 days)\nParallel processing (2 days)\nWorking with databases, hashing, and big data (3 days)\nNumerical linear algebra (5 days)\nSimulation studies and Monte Carlo (2 days)\nOptimization (7 days)\nNumerical integration and differentiation (1 day)\nGraphics (1 day)\n\nIf you want to get a sense of what material we will cover in more detail, in advance, you can take a look at the materials in the units directory of GitHub repository from when I taught the class in 2020. See https://github.com/berkeley-stat243/stat243-fall-2020."
+  }
+]
