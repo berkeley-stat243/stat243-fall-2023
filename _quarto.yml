@@ -50,11 +50,8 @@ website:
           text: "Unit 9"
         - file: units/unit10-linalg.Rmd
           text: "Unit 10"
-        - file: units/unit11-optim.Rmd
-          text: "Unit 11"
     - id: labs
       title: "Labs"
-      contents:
     - id: howtos
       title: "How tos"
       contents:
