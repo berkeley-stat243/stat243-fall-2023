@@ -509,7 +509,7 @@ corresponding to the constant eigenvector is zero.
 import numpy as np
 
 precMat = np.array([[1,-1,0,0,0],[-1,2,-1,0,0],[0,-1,2,-1,0],[0,0,-1,2,-1],[0,0,0,-1,1]])
-e=np.linalg.eig(precMat)
+e = np.linalg.eig(precMat)
 e[0]        # 4th eigenvalue is numerically zero
 e[1][:,3]   # constant eigenvector
 ```
@@ -523,7 +523,7 @@ $\sum y_{i}$ has no variation, i.e., $\sum y_{i}=\bar{y}=0$ - you can
 see this by seeing that $\mbox{Var}(\Gamma_{\cdot i}^{\top}y)=0$ when
 $\lambda_{i}=0$.
 
-```{r}
+```{python}
 # generate a realization
 evals = e[0]
 evals = 1/evals   # variances
@@ -677,7 +677,7 @@ We see in the code above that the large disparity in eigenvalues of $A$
 leads to an effect predictable from our inequality above, with the
 condition number helping us find an upper bound.
 
-```{r}
+```{python}
 e = np.linalg.eig(A)
 evals = e[0]
 norm2(x - xPerturbed)  ## delta x
@@ -725,7 +725,7 @@ $x=\{1990,\ldots,2010\}$ (e.g., regressing on calendar years), we see
 that centering and scaling the matrix columns makes a huge difference on
 the condition number
 
-```{r}
+```{python}
 t1 = np.arange(1990, 2011)  # naive covariate
 X1 = np.column_stack((np.ones(21), t1, t1 ** 2))
 e1 = np.linalg.eig(np.dot(X1.T, X1))
@@ -980,7 +980,7 @@ also a method for finding the Cholesky without square roots.
 
 The standard algorithm for generating $y\sim\mathcal{N}(0,A)$ is:
 
-```{r, eval=FALSE}
+```{python, eval=FALSE}
 L = sp.linalg.cholesky(A)
 y = L @ np.random.normal(size = n)
 ```
@@ -1410,7 +1410,7 @@ $|A^{\top}A|=|(QR)^{\top}QR|=|R^{\top}R|=|R_{1}^{\top}R_{1}|=|R_{1}|^{2}$\
 In R, the following will do it (on the log scale), since $R$ is stored
 in the upper triangle of the *\$qr* element.
 
-```{r, eval=FALSE}
+```{python, eval=FALSE}
 Q,R = qr(A)
 magn = np.sum(np.log(np.abs(np.diag(R)))) 
 ```
