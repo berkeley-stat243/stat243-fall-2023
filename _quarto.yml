@@ -42,6 +42,8 @@ website:
           text: "Unit 5"
         - file: units/unit6-parallel.qmd
           text: "Unit 6"
+        - file: units/unit7-bigData.qmd
+          text: "Unit 7"
         - file: units/unit8-numbers.qmd
           text: "Unit 8"
         - file: units/unit9-sim.qmd
