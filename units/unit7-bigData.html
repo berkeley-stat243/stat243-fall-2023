@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Chris Paciorek">
+<meta name="dcterms.date" content="2023-07-26">
+
+<title>Statistics 243 Fall 2023 - Big data and databases</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../units/unit8-numbers.html" rel="next">
+<link href="../units/unit6-parallel.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Statistics 243 Fall 2023</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../syllabus.html" rel="" target="">
+ <span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../office_hours.html" rel="" target="">
+ <span class="menu-text">Office hours</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../schedule.html" rel="" target="">
+ <span class="menu-text">Schedule</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-units" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Units</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-units">    
+        <li>
+    <a class="dropdown-item" href="../units/unit1-intro.html" rel="" target="">
+ <span class="dropdown-text">Unit 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit2-dataTech.html" rel="" target="">
+ <span class="dropdown-text">Unit 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit3-bash.html" rel="" target="">
+ <span class="dropdown-text">Unit 3</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit4-goodPractices.html" rel="" target="">
+ <span class="dropdown-text">Unit 4</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit5-programming.html" rel="" target="">
+ <span class="dropdown-text">Unit 5</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit6-parallel.html" rel="" target="">
+ <span class="dropdown-text">Unit 6</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit7-bigData.html" rel="" target="">
+ <span class="dropdown-text">Unit 7</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit8-numbers.html" rel="" target="">
+ <span class="dropdown-text">Unit 8</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit9-sim.html" rel="" target="">
+ <span class="dropdown-text">Unit 9</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit10-linalg.html" rel="" target="">
+ <span class="dropdown-text">Unit 10</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-labs" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Labs</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-labs">    
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-how-tos" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">How tos</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-how-tos">    
+        <li>
+    <a class="dropdown-item" href="../howtos/accessingPython.html" rel="" target="">
+ <span class="dropdown-text">Accessing Python</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/accessingUnixCommandLine.html" rel="" target="">
+ <span class="dropdown-text">Accessing the Unix Command Line</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/gitInstall.html" rel="" target="">
+ <span class="dropdown-text">Installing Git</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/ps-submission.html" rel="" target="">
+ <span class="dropdown-text">Problem Set Submissions</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">Windows</li>
+        <li>
+    <a class="dropdown-item" href="../howtos/windowsAndLinux.html" rel="" target="">
+ <span class="dropdown-text">Installing the Linux Subsystem on Windows</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/windowsInstall.html" rel="" target="">
+ <span class="dropdown-text">Using Python on Windows</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="https://edstem.org/us/courses/XYZ/discussion/" rel="" target="">
+ <span class="menu-text">Discussion</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://statistics.berkeley.edu/computing/training/tutorials" rel="" target="">
+ <span class="menu-text">Tutorials</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/berkeley-stat243/stat243-fall-2023" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../units/unit7-bigData.html">Unit 7</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit1-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unit 1</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit2-dataTech.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unit 2</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit3-bash.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unit 3</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit4-goodPractices.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unit 4</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit5-programming.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unit 5</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit6-parallel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unit 6</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit7-bigData.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Unit 7</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit8-numbers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unit 8</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit9-sim.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unit 9</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit10-linalg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unit 10</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#a-few-preparatory-notes" id="toc-a-few-preparatory-notes" class="nav-link active" data-scroll-target="#a-few-preparatory-notes">1. A few preparatory notes</a>
+  <ul class="collapse">
+  <li><a href="#an-editorial-on-big-data" id="toc-an-editorial-on-big-data" class="nav-link" data-scroll-target="#an-editorial-on-big-data">An editorial on ‘big data’</a></li>
+  <li><a href="#logistics-and-data-size" id="toc-logistics-and-data-size" class="nav-link" data-scroll-target="#logistics-and-data-size">Logistics and data size</a></li>
+  <li><a href="#what-we-already-know-about-handling-big-data" id="toc-what-we-already-know-about-handling-big-data" class="nav-link" data-scroll-target="#what-we-already-know-about-handling-big-data">What we already know about handling big data!</a></li>
+  </ul></li>
+  <li><a href="#mapreduce-dask-hadoop-and-spark" id="toc-mapreduce-dask-hadoop-and-spark" class="nav-link" data-scroll-target="#mapreduce-dask-hadoop-and-spark">2. MapReduce, Dask, Hadoop, and Spark</a>
+  <ul class="collapse">
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#using-dask-for-big-data-processing" id="toc-using-dask-for-big-data-processing" class="nav-link" data-scroll-target="#using-dask-for-big-data-processing">Using Dask for big data processing</a>
+  <ul class="collapse">
+  <li><a href="#dask-dataframes-pandas" id="toc-dask-dataframes-pandas" class="nav-link" data-scroll-target="#dask-dataframes-pandas">Dask dataframes (pandas)</a></li>
+  <li><a href="#dask-bags" id="toc-dask-bags" class="nav-link" data-scroll-target="#dask-bags">Dask bags</a></li>
+  <li><a href="#dask-arrays-numpy" id="toc-dask-arrays-numpy" class="nav-link" data-scroll-target="#dask-arrays-numpy">Dask arrays (numpy)</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#databases" id="toc-databases" class="nav-link" data-scroll-target="#databases">3. Databases</a>
+  <ul class="collapse">
+  <li><a href="#overview-1" id="toc-overview-1" class="nav-link" data-scroll-target="#overview-1">Overview</a></li>
+  <li><a href="#interacting-with-a-database" id="toc-interacting-with-a-database" class="nav-link" data-scroll-target="#interacting-with-a-database">Interacting with a database</a></li>
+  <li><a href="#database-schema-and-normalization" id="toc-database-schema-and-normalization" class="nav-link" data-scroll-target="#database-schema-and-normalization">Database schema and normalization</a>
+  <ul class="collapse">
+  <li><a href="#keys" id="toc-keys" class="nav-link" data-scroll-target="#keys">Keys</a></li>
+  <li><a href="#queries-that-join-data-across-multiple-tables" id="toc-queries-that-join-data-across-multiple-tables" class="nav-link" data-scroll-target="#queries-that-join-data-across-multiple-tables">Queries that join data across multiple tables</a></li>
+  </ul></li>
+  <li><a href="#stack-overflow-metadata-example" id="toc-stack-overflow-metadata-example" class="nav-link" data-scroll-target="#stack-overflow-metadata-example">Stack Overflow metadata example</a></li>
+  <li><a href="#accessing-databases-in-python" id="toc-accessing-databases-in-python" class="nav-link" data-scroll-target="#accessing-databases-in-python">Accessing databases in Python</a></li>
+  <li><a href="#basic-sql-for-choosing-rows-and-columns-from-a-table" id="toc-basic-sql-for-choosing-rows-and-columns-from-a-table" class="nav-link" data-scroll-target="#basic-sql-for-choosing-rows-and-columns-from-a-table">Basic SQL for choosing rows and columns from a table</a></li>
+  <li><a href="#grouping-stratifying" id="toc-grouping-stratifying" class="nav-link" data-scroll-target="#grouping-stratifying">Grouping / stratifying</a></li>
+  <li><a href="#getting-unique-results-distinct" id="toc-getting-unique-results-distinct" class="nav-link" data-scroll-target="#getting-unique-results-distinct">Getting unique results (DISTINCT)</a></li>
+  <li><a href="#simple-sql-joins" id="toc-simple-sql-joins" class="nav-link" data-scroll-target="#simple-sql-joins">Simple SQL joins</a></li>
+  <li><a href="#temporary-tables-and-views" id="toc-temporary-tables-and-views" class="nav-link" data-scroll-target="#temporary-tables-and-views">Temporary tables and views</a></li>
+  <li><a href="#more-on-joins" id="toc-more-on-joins" class="nav-link" data-scroll-target="#more-on-joins">More on joins</a></li>
+  <li><a href="#indexes" id="toc-indexes" class="nav-link" data-scroll-target="#indexes">Indexes</a></li>
+  <li><a href="#creating-database-tables" id="toc-creating-database-tables" class="nav-link" data-scroll-target="#creating-database-tables">Creating database tables</a></li>
+  </ul></li>
+  <li><a href="#sparsity" id="toc-sparsity" class="nav-link" data-scroll-target="#sparsity">4. Sparsity</a></li>
+  <li><a href="#using-statistical-concepts-to-deal-with-computational-bottlenecks" id="toc-using-statistical-concepts-to-deal-with-computational-bottlenecks" class="nav-link" data-scroll-target="#using-statistical-concepts-to-deal-with-computational-bottlenecks">5. Using statistical concepts to deal with computational bottlenecks</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="unit7-bigData.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Big data and databases</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Chris Paciorek </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 26, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p><a href="./unit7-bigData.pdf" class="btn btn-primary">PDF</a></p>
+<p>References:</p>
+<ul>
+<li><a href="https://berkeley-scf.github.io/tutorial-dask-future">Tutorial on parallel processing using Python’s Dask and R’s future packages</a></li>
+<li><a href="https://berkeley-scf.github.io/tutorial-databases">Tutorial on working with large datasets in SQL, R, and Python</a></li>
+<li>Murrell: Introduction to Data Technologies</li>
+<li>Adler: R in a Nutshell</li>
+<li><a href="https://spark.apache.org/docs/latest/programming-guide.html">Spark Programming Guide</a></li>
+</ul>
+<p>I’ve also pulled material from a variety of other sources, some mentioned in context below.</p>
+<p>Note that for a lot of the demo code I ran the code separately from rendering this document because of the time involved in working with large datasets.</p>
+<p>We’ll focus on Dask and databases/SQL in this Unit. The material on using Spark is provided for reference, but you’re not responsible for that material. If you’re interested in working with big datasets in R or with tools other than Dask in Python, there is <a href="https://berkeley-scf.github.io/tutorial-databases/R-and-Python">some material in the tutorial on working with large datasets</a>.</p>
+<section id="a-few-preparatory-notes" class="level1">
+<h1>1. A few preparatory notes</h1>
+<section id="an-editorial-on-big-data" class="level2">
+<h2 class="anchored" data-anchor-id="an-editorial-on-big-data">An editorial on ‘big data’</h2>
+<p>‘Big data’ was trendy these days, though I guess it’s not quite the buzzword/buzzphrase that it was a few years ago, given the AI/ML revolution, but of course that revolution is largely based on having massive datasets available online.</p>
+<p>Personally, I think some of the hype around giant datasets is justified and some is hype. Large datasets allow us to address questions that we can’t with smaller datasets, and they allow us to consider more sophisticated (e.g., nonlinear) relationships than we might with a small dataset. But they do not directly help with the problem of correlation not being causation. Having medical data on every American still doesn’t tell me if higher salt intake causes hypertension. Internet transaction data does not tell me if one website feature causes increased viewership or sales. One either needs to carry out a designed experiment or think carefully about how to infer causation from observational data. Nor does big data help with the problem that an ad hoc ‘sample’ is not a statistical sample and does not provide the ability to directly infer properties of a population. Consider the immense difficulties we’ve seen in answering questions about Covid despite large amounts of data, because it is incomplete/non-representative. A well-chosen smaller dataset may be much more informative than a much larger, more ad hoc dataset. However, having big datasets might allow you to select from the dataset in a way that helps get at causation or in a way that allows you to construct a population-representative sample. Finally, having a big dataset also allows you to do a large number of statistical analyses and tests, so multiple testing is a big issue. With enough analyses, something will look interesting just by chance in the noise of the data, even if there is no underlying reality to it.</p>
+<p>Different people define the ‘big’ in big data differently. One definition involves the actual size of the data, and in some cases the speed with which it is collected. Our efforts here will focus on dataset sizes that are large for traditional statistical work but would probably not be thought of as large in some contexts such as Google or the US National Security Agency (NSA). Another definition of ‘big data’ has more to do with how pervasive data and empirical analyses backed by data are in society and not necessarily how large the actual dataset size is.</p>
+</section>
+<section id="logistics-and-data-size" class="level2">
+<h2 class="anchored" data-anchor-id="logistics-and-data-size">Logistics and data size</h2>
+<p>One of the main drawbacks with Python (and R) in working with big data is that all objects are stored in memory, so you can’t directly work with datasets that are more than 1-20 Gb or so, depending on the memory on your machine.</p>
+<p>The techniques and tools discussed in this Unit (apart from the section on MapReduce/Spark) are designed for datasets in the range of gigabytes to tens of gigabytes, though they may scale to larger if you have a machine with a lot of memory or simply have enough disk space and are willing to wait. If you have 10s of gigabytes of data, you’ll be better off if your machine has 10s of GBs of memory, as discussed in this Unit.</p>
+<p>If you’re scaling to 100s of GBs, terabytes or petabytes, tools such as carefully-administered databases, cloud-based tools such as provided by AWS and Google Cloud Platform, and Spark or other such tools are probably your best bet.</p>
+<p>Note: in handling big data files, it’s best to have the data on the local disk of the machine you are using to reduce traffic and delays from moving data over the network.</p>
+</section>
+<section id="what-we-already-know-about-handling-big-data" class="level2">
+<h2 class="anchored" data-anchor-id="what-we-already-know-about-handling-big-data">What we already know about handling big data!</h2>
+<p>UNIX operations are generally very fast, so if you can manipulate your data via UNIX commands and piping, that will allow you to do a lot. We’ve already seen UNIX commands for extracting columns. And various commands such as <code>grep</code>, <code>head</code>, <code>tail</code>, etc. allow you to pick out rows based on certain criteria. As some of you have done in problem sets, one can use <code>awk</code> to extract rows. So basic shell scripting may allow you to reduce your data to a more manageable size.</p>
+<p>The tool <a href="https://docs-research-it.berkeley.edu/services/high-performance-computing/user-guide/running-your-jobs/gnu-parallel/">GNU parallel</a> allows you to parallelize operations from the command line and is commonly used in working on Linux clusters.</p>
+<p>And don’t forget simple things. If you have a dataset with 30 columns that takes up 10 Gb but you only need 5 of the columns, get rid of the rest and work with the smaller dataset. Or you might be able to get the same information from a random sample of your large dataset as you would from doing the analysis on the full dataset. Strategies like this will often allow you to stick with the tools you already know.</p>
+<p>Also, remember that we can often store data more compactly in binary formats than in flat text (e.g., csv) files.</p>
+<p>Finally, for many applications, storing large datasets in a standard database will work well.</p>
+</section>
+</section>
+<section id="mapreduce-dask-hadoop-and-spark" class="level1">
+<h1>2. MapReduce, Dask, Hadoop, and Spark</h1>
+<p>Traditionally, high-performance computing (HPC) has concentrated on techniques and tools for message passing such as MPI and on developing efficient algorithms to use these techniques. In the last 20 years, focus has shifted to technologies for processing large datasets that are distributed across multiple machines but can be manipulated as if they are one dataset.</p>
+<p>Two commonly-used tools for doing this are Spark and Python’s Dask package. We’ll cover Dask.</p>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>A basic paradigm for working with big datasets is the <em>MapReduce</em> paradigm. The basic idea is to store the data in a distributed fashion across multiple nodes and try to do the computation in pieces on the data on each node. Results can also be stored in a distributed fashion.</p>
+<p>A key benefit of this is that if you can’t fit your dataset on disk on one machine you can on a cluster of machines. And your processing of the dataset can happen in parallel. This is the basic idea of <em>MapReduce</em>.</p>
+<p>The basic steps of <em>MapReduce</em> are as follows:</p>
+<ul>
+<li>read individual data objects (e.g., records/lines from CSVs or individual data files)</li>
+<li><em>map</em>: create key-value pairs using the inputs (more formally, the map step takes a key-value pair and returns a new key-value pair)</li>
+<li><em>reduce</em>: for each key, do an operation on the associated values and create a result - i.e., aggregate within the values assigned to each key</li>
+<li>write out the {key,result} pair</li>
+</ul>
+<p>A similar paradigm that is implemented in <em>dplyr</em> is the <a href="http://www.jstatsoft.org/v40/i01/paper">split-apply-combine strategy</a>, discussed a bit in Unit 5.</p>
+<p>A few additional comments. In our map function, we could exclude values or transform them in some way, including producing multiple records from a single record. And in our reduce function, we can do more complicated analysis. So one can actually do fairly sophisticated things within what may seem like a restrictive paradigm. But we are constrained such that in the map step, each record needs to be treated independently and in the reduce step each key needs to be treated independently. This allows for the parallelization.</p>
+<p><strong>One important note is that any operations that require moving a lot of data between the workers can take a long time.</strong> (This is sometimes called a <em>shuffle</em>.) This could happen if, for example, you computed the median value within each of many groups if the data for each group are spread across the workers. In contrast, if we compute the mean or sum, one can compute the partial sums on each worker and then just add up the partial sums.</p>
+<p>Note that as discussed in Unit 5 the concepts of <em>map</em> and <em>reduce</em> are core concepts in functional programming, and the various <code>apply</code> and <code>lapply</code> style commands are base R’s version of a map operation.</p>
+<p><em>Hadoop</em> is an infrastructure for enabling MapReduce across a network of machines. The basic idea is to hide the complexity of distributing the calculations and collecting results. Hadoop includes a file system for distributed storage (HDFS), where each piece of information is stored redundantly (on multiple machines). Calculations can then be done in a parallel fashion, often on data in place on each machine thereby limiting the amount of communication that has to be done over the network. Hadoop also monitors completion of tasks and if a node fails, it will redo the relevant tasks on another node. Hadoop is based on Java. Given the popularity of Spark, I’m not sure how much usage these approaches currently see. Setting up a Hadoop cluster can be tricky. Hopefully if you’re in a position to need to use Hadoop, it will be set up for you and you will be interacting with it as a user/data analyst.</p>
+<p>Ok, so what is Spark? You can think of Spark as in-memory Hadoop. Spark allows one to treat the memory across multiple nodes as a big pool of memory. Therefore, Spark should be faster than Hadoop when the data will fit in the collective memory of multiple nodes. In cases where it does not, Spark will make use of the HDFS (and generally, Spark will be reading the data initially from HDFS.) While Spark is more user-friendly than Hadoop, there are also some things that can make it hard to use. Setting up a Spark cluster also involves a bit of work, Spark can be hard to configure for optimal performance, and Spark calculations have a tendency to fail (often involving memory issues) in ways that are hard for users to debug.</p>
+</section>
+<section id="using-dask-for-big-data-processing" class="level2">
+<h2 class="anchored" data-anchor-id="using-dask-for-big-data-processing">Using Dask for big data processing</h2>
+<p>Unit 6 on parallelization gives an overview of using Dask in similar for flexible parallelization on different kinds of computational resources (in particular, parallelizing across multiple cores on one machine versus parallelizing across multiple cores across multiple machines/ndoes).</p>
+<p>Here we’ll see the use of Dask to work with distributed datasets. Dask can process datasets (potentially very large ones) by parallelizing operations across subsets of the data using multiple cores on one or more machines.</p>
+<p>Like Spark, Dask automatically reads data from files in parallel and operates on <em>chunks</em> (also called <em>partitions</em> or <em>shards</em>) of the full dataset in parallel. There are two big advantages of this:</p>
+<ul>
+<li>You can do calculations (including reading from disk) in parallel because each worker will work on a piece of the data.</li>
+<li>When the data is split across machines, you can use the memory of multiple machines to handle much larger datasets than would be possible in memory on one machine. That said, Dask processes the data in chunks, so one often doesn’t need a lot of memory, even just on one machine.</li>
+</ul>
+<p>While reading from disk in parallel is a good goal, if all the data are on one hard drive, there are limitations on the speed of reading the data from disk because of having multiple processes all trying to access the disk at once. Supercomputing systems will generally have parallel file systems that support truly parallel reading (and writing, i.e., <em>parallel I/O</em>). Hadoop/Spark deal with this by distributing across multiple disks, generally one disk per machine/node.</p>
+<p>Because computations are done in external compiled code (e.g., via <code>numpy</code>) it’s effective to use the <code>threads</code> scheduler when operating on one node to avoid having to copy and move the data.</p>
+<section id="dask-dataframes-pandas" class="level3">
+<h3 class="anchored" data-anchor-id="dask-dataframes-pandas">Dask dataframes (pandas)</h3>
+<p>Dask dataframes are Pandas-like dataframes where each dataframe is split into groups of rows, stored as smaller Pandas dataframes.</p>
+<p>One can do a lot of the kinds of computations that you would do on a Pandas dataframe on a Dask dataframe, but many operations are not possible. See <a href="http://docs.dask.org/en/latest/dataframe-api.html">here</a>.</p>
+<p>By default dataframes are handled by the <code>threads</code> scheduler. (Recall we discussed Dask’s various schedulers in Unit 6.)</p>
+<p>Here’s an example of reading from a dataset of flight delays (about 11 GB data). You can get the data <a href="https://www.stat.berkeley.edu/share/paciorek/1987-2008.csvs.tgz">here</a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dask</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>dask.config.<span class="bu">set</span>(scheduler<span class="op">=</span><span class="st">'threads'</span>, num_workers <span class="op">=</span> <span class="dv">4</span>)  </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dask.dataframe <span class="im">as</span> ddf</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="st">'/scratch/users/paciorek/243/AirlineData/csvs/'</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>air <span class="op">=</span> ddf.read_csv(path <span class="op">+</span> <span class="st">'*.csv.bz2'</span>,</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>      compression <span class="op">=</span> <span class="st">'bz2'</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>      encoding <span class="op">=</span> <span class="st">'latin1'</span>, <span class="co"># (unexpected) latin1 value(s) in TailNum field in 2001</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>      dtype <span class="op">=</span> {<span class="st">'Distance'</span>: <span class="st">'float64'</span>, <span class="st">'CRSElapsedTime'</span>: <span class="st">'float64'</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      <span class="st">'TailNum'</span>: <span class="st">'object'</span>, <span class="st">'CancellationCode'</span>: <span class="st">'object'</span>})</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co"># specify dtypes so Pandas doesn't complain about column type heterogeneity</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>air</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Dask will reads the data in parallel from the various .csv.bz2 files (unzipping on the fly), but note the caveat in the previous section about the possibilities for truly parallel I/O.</p>
+<p>However, recall that Dask uses delayed evaluation. In this case, the reading is delayed until <code>compute()</code> is called. For that matter, the various other calculations (<code>max</code>, <code>groupby</code>, <code>mean</code>) shown below are only done after <code>compute()</code> is called.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>air.DepDelay.<span class="bu">max</span>().compute()   <span class="co"># this takes a while</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>sub <span class="op">=</span> air[(air.UniqueCarrier <span class="op">==</span> <span class="st">'UA'</span>) <span class="op">&amp;</span> (air.Origin <span class="op">==</span> <span class="st">'SFO'</span>)]</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>byDest <span class="op">=</span> sub.groupby(<span class="st">'Dest'</span>).DepDelay.mean()</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>byDest.compute()               <span class="co"># this takes a while too</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>You should see this:</p>
+<pre><code>    Dest 
+    ACV 26.200000 
+    BFL 1.000000 
+    BOI 12.855069 
+    BOS 9.316795 
+    CLE 4.000000
+    ...</code></pre>
+<p>Note: calling compute twice is a bad idea as Dask will read in the data twice - more on this in a bit.</p>
+</section>
+<section id="dask-bags" class="level3">
+<h3 class="anchored" data-anchor-id="dask-bags">Dask bags</h3>
+<p>Bags are like lists but there is no particular ordering, so it doesn’t make sense to ask for the i’th element.</p>
+<p>You can think of operations on Dask bags as being like parallel map operations on lists in Python or R.</p>
+<p>By default bags are handled via the <code>multiprocessing</code> scheduler.</p>
+<p>Let’s see some basic operations on a large dataset of Wikipedia log files. You can get a subset of the Wikipedia data <a href="https://www.stat.berkeley.edu/share/paciorek/wikistats_example.tar.gz">here</a>.</p>
+<p>Here we again read the data in (which Dask will do in parallel):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dask.multiprocessing</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>dask.config.<span class="bu">set</span>(scheduler<span class="op">=</span><span class="st">'processes'</span>, num_workers <span class="op">=</span> <span class="dv">4</span>)  </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dask.bag <span class="im">as</span> db</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">## This is the full data</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">## path = '/scratch/users/paciorek/wikistats/dated_2017/'</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">## For demo we'll just use a small subset</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>path <span class="op">=</span> <span class="st">'/scratch/users/paciorek/wikistats/dated_2017_small/dated/'</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>wiki <span class="op">=</span> db.read_text(path <span class="op">+</span> <span class="st">'part-0000*gz'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here we’ll just count the number of records.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>wiki.count().compute()</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>time.time() <span class="op">-</span> t0   <span class="co"># 136 sec. for full data</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And here is a more realistic example of filtering (subsetting).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find(line, regex <span class="op">=</span> <span class="st">'Armenia'</span>):</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    vals <span class="op">=</span> line.split(<span class="st">' '</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(vals) <span class="op">&lt;</span> <span class="dv">6</span>:</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span>(<span class="va">False</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    tmp <span class="op">=</span> re.search(regex, vals[<span class="dv">3</span>])</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> tmp <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span>(<span class="va">False</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span>(<span class="va">True</span>)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>wiki.<span class="bu">filter</span>(find).count().compute()</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>armenia <span class="op">=</span> wiki.<span class="bu">filter</span>(find)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>smp <span class="op">=</span> armenia.take(<span class="dv">100</span>) <span class="co">## grab a handful as proof of concept</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>smp[<span class="dv">0</span>:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note that it is quite inefficient to do the <code>find()</code> (and implicitly reading the data in) and then compute on top of that intermediate result in two separate calls to <code>compute()</code>. Rather, we should set up the code so that all the operations are set up before a single call to <code>compute()</code>. More on this the <a href="https://berkeley-scf.github.io/tutorial-dask-future/python-dask#63-avoid-repeated-calculations-by-embedding-tasks-within-one-call-to-compute">Dask/future tutorial</a></p>
+<p>Since the data are just treated as raw strings, we might want to introduce structure by converting each line to a tuple and then converting to a data frame.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_tuple(line):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span>(<span class="bu">tuple</span>(line.split(<span class="st">' '</span>)))</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>dtypes <span class="op">=</span> {<span class="st">'date'</span>: <span class="st">'object'</span>, <span class="st">'time'</span>: <span class="st">'object'</span>, <span class="st">'language'</span>: <span class="st">'object'</span>,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="st">'webpage'</span>: <span class="st">'object'</span>, <span class="st">'hits'</span>: <span class="st">'float64'</span>, <span class="st">'size'</span>: <span class="st">'float64'</span>}</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">## Let's create a Dask dataframe. </span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">## This will take a while if done on full data.</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> armenia.<span class="bu">map</span>(make_tuple).to_dataframe(dtypes)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(df)</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">## Now let's actually do the computation, returning a Pandas df</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> df.compute()  </span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(result)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>result[<span class="dv">0</span>:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="dask-arrays-numpy" class="level3">
+<h3 class="anchored" data-anchor-id="dask-arrays-numpy">Dask arrays (numpy)</h3>
+<p>Dask arrays are numpy-like arrays where each array is split up by both rows and columns into smaller numpy arrays.</p>
+<p>One can do a lot of the kinds of computations that you would do on a numpy array on a Dask array, but many operations are not possible. See <a href="http://docs.dask.org/en/latest/array-api.html">here</a>.</p>
+<p>By default arrays are handled via the <code>threads</code> scheduler.</p>
+<section id="non-distributed-arrays" class="level4">
+<h4 class="anchored" data-anchor-id="non-distributed-arrays">Non-distributed arrays</h4>
+<p>Let’s first see operations on a single node, using a single 13 GB two-dimensional array. Again, Dask uses lazy evaluation, so creation of the array doesn’t happen until an operation requiring output is done.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dask</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>dask.config.<span class="bu">set</span>(scheduler <span class="op">=</span> <span class="st">'threads'</span>, num_workers <span class="op">=</span> <span class="dv">4</span>) </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dask.array <span class="im">as</span> da</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> da.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, size<span class="op">=</span>(<span class="dv">40000</span>,<span class="dv">40000</span>), chunks<span class="op">=</span>(<span class="dv">10000</span>, <span class="dv">10000</span>))</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co"># square 10k x 10k chunks</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>mycalc <span class="op">=</span> da.mean(x, axis <span class="op">=</span> <span class="dv">1</span>)  <span class="co"># by row</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>rs <span class="op">=</span> mycalc.compute()</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>time.time() <span class="op">-</span> t0  <span class="co"># 41 sec.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>For a row-based operation, we would presumably only want to chunk things up by row, but this doesn’t seem to actually make a difference, presumably because the mean calculation can be done in pieces and only a small number of summary statistics moved between workers.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dask</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dask.config.<span class="bu">set</span>(scheduler<span class="op">=</span><span class="st">'threads'</span>, num_workers <span class="op">=</span> <span class="dv">4</span>)  </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dask.array <span class="im">as</span> da</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co"># x = da.from_array(x, chunks=(2500, 40000))  # adjust chunk size of existing array</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> da.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, size<span class="op">=</span>(<span class="dv">40000</span>,<span class="dv">40000</span>), chunks<span class="op">=</span>(<span class="dv">2500</span>, <span class="dv">40000</span>))</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>mycalc <span class="op">=</span> da.mean(x, axis <span class="op">=</span> <span class="dv">1</span>)  <span class="co"># row means</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>rs <span class="op">=</span> mycalc.compute()</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>time.time() <span class="op">-</span> t0   <span class="co"># 42 sec.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Of course, given the lazy evaluation, this timing comparison is not just timing the actual row mean calculations.</p>
+<p>But this doesn’t really clarify the story…</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dask</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>dask.config.<span class="bu">set</span>(scheduler<span class="op">=</span><span class="st">'threads'</span>, num_workers <span class="op">=</span> <span class="dv">4</span>)  </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dask.array <span class="im">as</span> da</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, size<span class="op">=</span>(<span class="dv">40000</span>,<span class="dv">40000</span>))</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>time.time() <span class="op">-</span> t0   <span class="co"># 110 sec.</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co"># for some reason the from_array and da.mean calculations are not done lazily here</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>dx <span class="op">=</span> da.from_array(x, chunks<span class="op">=</span>(<span class="dv">2500</span>, <span class="dv">40000</span>))</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>time.time() <span class="op">-</span> t0   <span class="co"># 27 sec.</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>mycalc <span class="op">=</span> da.mean(x, axis <span class="op">=</span> <span class="dv">1</span>)  <span class="co"># what is this doing given .compute() also takes time?</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>time.time() <span class="op">-</span> t0   <span class="co"># 28 sec.</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>rs <span class="op">=</span> mycalc.compute()</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>time.time() <span class="op">-</span> t0   <span class="co"># 21 sec.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Dask will avoid storing all the chunks in memory. (It appears to just generate them on the fly.) Here we have an 80 GB array but we never use more than a few GB of memory (based on <code>top</code> or <code>free -h</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dask</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>dask.config.<span class="bu">set</span>(scheduler<span class="op">=</span><span class="st">'threads'</span>, num_workers <span class="op">=</span> <span class="dv">4</span>)  </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dask.array <span class="im">as</span> da</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> da.random.normal(<span class="dv">0</span>, <span class="dv">1</span>, size<span class="op">=</span>(<span class="dv">100000</span>,<span class="dv">100000</span>), chunks<span class="op">=</span>(<span class="dv">10000</span>, <span class="dv">10000</span>))</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>mycalc <span class="op">=</span> da.mean(x, axis <span class="op">=</span> <span class="dv">1</span>)  <span class="co"># row means</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>rs <span class="op">=</span> mycalc.compute()</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>time.time() <span class="op">-</span> t0   <span class="co"># 205 sec.</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>rs[<span class="dv">0</span>:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="distributed-arrays" class="level4">
+<h4 class="anchored" data-anchor-id="distributed-arrays">Distributed arrays</h4>
+<p>Using arrays distributed across multiple machines should be straightforward based on using <em>Dask distributed</em>. However, one would want to be careful about creating arrays by distributing the data from a single Python process as that would involve copying between machines.</p>
+</section>
+</section>
+</section>
+</section>
+<section id="databases" class="level1">
+<h1>3. Databases</h1>
+<p>This material is drawn from the tutorial on <a href="https://berkeley-scf.github.io/tutorial-databases">Working with large datasets in SQL, R, and Python</a>, though I won’t hold you responsible for all of the database/SQL material in that tutorial, only what appears here in this Unit.</p>
+<section id="overview-1" class="level2">
+<h2 class="anchored" data-anchor-id="overview-1">Overview</h2>
+<p>Basically, standard SQL databases are <em>relational</em> databases that are a collection of rectangular format datasets (<em>tables</em>, also called <em>relations</em>), with each table similar to R or Pandas data frames, in that a table is made up of columns, which are called <em>fields</em> or <em>attributes</em>, each containing a single <em>type</em> (numeric, character, date, currency, enumerated (i.e., categorical), …) and rows or records containing the observations for one entity. Some of the tables in a given database will generally have fields in common so it makes sense to merge (i.e., join) information from multiple tables. E.g., you might have a database with a table of student information, a table of teacher information and a table of school information, and you might join student information with information about the teacher(s) who taught the students. Databases are set up to allow for fast querying and merging (called joins in database terminology).</p>
+<p>Formally, databases are stored on disk, while Python and R store datasets in memory. This would suggest that databases will be slow to access their data but will be able to store more data than can be loaded into an Python or R session. However, databases can be quite fast due in part to disk caching by the operating system as well as careful implementation of good algorithms for database operations. For more information about disk caching see the tutorial.</p>
+</section>
+<section id="interacting-with-a-database" class="level2">
+<h2 class="anchored" data-anchor-id="interacting-with-a-database">Interacting with a database</h2>
+<p>You can interact with databases in a variety of database systems (<em>DBMS</em>=database management system). Some popular systems are SQLite, MySQL, PostgreSQL, Oracle and Microsoft Access. We’ll concentrate on accessing data in a database rather than management of databases. SQL is the Structured Query Language and is a special-purpose high-level language for managing databases and making queries. Variations on SQL are used in many different DBMS.</p>
+<p>Queries are the way that the user gets information (often simply subsets of tables or information merged across tables). The result of an SQL query is in general another table, though in some cases it might have only one row and/or one column.</p>
+<p>Many DBMS have a client-server model. Clients connect to the server, with some authentication, and make requests (i.e., queries).</p>
+<p>There are often multiple ways to interact with a DBMS, including directly using command line tools provided by the DBMS or via Python or R, among others.</p>
+<p>We’ll concentrate on SQLite (because it is simple to use on a single machine). SQLite is quite nice in terms of being self-contained - there is no server-client model, just a single file on your hard drive that stores the database and to which you can connect to using the SQLite shell, R, Python, etc. However, it does not have some useful functionality that other DBMS have. For example, you can’t use <code>ALTER TABLE</code> to modify column types or drop columns.</p>
+</section>
+<section id="database-schema-and-normalization" class="level2">
+<h2 class="anchored" data-anchor-id="database-schema-and-normalization">Database schema and normalization</h2>
+<p>To truly leverage the conceptual and computational power of a database you’ll want to have your data in a normalized form, which means spreading your data across multiple tables in such a way that you don’t repeat information unnecessarily.</p>
+<p>The <em>schema</em> is the metadata about the tables in the database and the fields (and their types) in those tables.</p>
+<p>Let’s consider this using an educational example. Suppose we have a school with multiple teachers teaching multiple classes and multiple students taking multiple classes. If we put this all in one table organized per student, the data might have the following fields:</p>
+<ul>
+<li>student ID</li>
+<li>student grade level</li>
+<li>student name</li>
+<li>class 1</li>
+<li>class 2</li>
+<li>…</li>
+<li>class n</li>
+<li>grade in class 1</li>
+<li>grade in class 2</li>
+<li>…</li>
+<li>grade in class n</li>
+<li>teacher ID 1</li>
+<li>teacher ID 2</li>
+<li>…</li>
+<li>teacher ID n</li>
+<li>teacher name 1</li>
+<li>teacher name 2</li>
+<li>…</li>
+<li>teacher name n</li>
+<li>teacher department 1</li>
+<li>teacher department 2</li>
+<li>…</li>
+<li>teacher department n</li>
+<li>teacher age 1</li>
+<li>teacher age 2</li>
+<li>…</li>
+<li>teacher age n</li>
+</ul>
+<p>There are a lot of problems with this:</p>
+<ol type="1">
+<li>A lot of information is repeated across rows (e.g., teacher age for students who have the same teacher)
+<ul>
+<li>this is a waste of space</li>
+<li>it is hard/error-prone to update values in the database (e.g., after a teacher’s birthday), because a given value needs to be updated in multiple places</li>
+</ul></li>
+<li>There are potentially a lot of empty cells (e.g., for a student who takes fewer than ‘n’ classes). This will generally result in a waste of space.</li>
+<li>It’s hard to see the information that is not organized uniquely by row – i.e., it’s much easier to understand the information at the student level than the teacher level</li>
+<li>We have to know in advance how big ‘n’ is. Then if a single student takes more than ‘n’ classes, the whole database needs to be restructured.</li>
+</ol>
+<p>It would get even worse if there was a field related to teachers for which a given teacher could have multiple values (e.g., teachers could be in multiple departments). This would lead to even more redundancy - each student-class-teacher combination would be crossed with all of the departments for the teacher (so-called multivalued dependency in database theory).</p>
+<p>An alternative organization of the data would be to have each row represent the enrollment of a student in a class.</p>
+<ul>
+<li>student ID</li>
+<li>student name</li>
+<li>class</li>
+<li>grade in class</li>
+<li>student grade level</li>
+<li>teacher ID</li>
+<li>teacher department</li>
+<li>teacher age</li>
+</ul>
+<p>This has some advantages relative to our original organization in terms of not having empty cells, but it doesn’t solve the other three issues above.</p>
+<p>Instead, a natural way to order this database is with the following four tables.</p>
+<ul>
+<li>Student
+<ul>
+<li>ID</li>
+<li>name</li>
+<li>grade_level</li>
+</ul></li>
+<li>Teacher
+<ul>
+<li>ID</li>
+<li>name</li>
+<li>department</li>
+<li>age</li>
+</ul></li>
+<li>Class
+<ul>
+<li>ID</li>
+<li>topic</li>
+<li>class_size</li>
+<li>teacher_ID</li>
+</ul></li>
+<li>ClassAssignment
+<ul>
+<li>student_ID</li>
+<li>class_ID</li>
+<li>grade</li>
+</ul></li>
+</ul>
+<p>The <code>ClassAssignment</code> table has one row per student-class pair. Having a table like this handles “ragged” data where the number of observations per unit (in this case classes per student) varies. Using such tables is a common pattern when considering how to normalize a database. It’s also a core part of the idea of “tidy data” and data in <em>long</em> format, seen in the <code>tidyr</code> package.</p>
+<p>Then we do queries to pull information from multiple tables. We do the joins based on <em>keys</em>, which are the fields in each table that allow us to match rows from different tables.</p>
+<p>(That said, if all anticipated uses of a database will end up recombining the same set of tables, we may want to have a denormalized schema in which those tables are actually combined in the database. It is possible to be too pure about normalization! We can also create a virtual table, called a <em>view</em>, as discussed later.)</p>
+<section id="keys" class="level3">
+<h3 class="anchored" data-anchor-id="keys">Keys</h3>
+<p>A <em>key</em> is a field or collection of fields that give(s) a unique value for every row/observation. A table in a database should then have a <em>primary key</em> that is the main unique identifier used by the DBMS. <em>Foreign keys</em> are columns in one table that give the value of the primary key in another table. When information from multiple tables is joined together, the matching of a row from one table to a row in another table is generally done by equating the primary key in one table with a foreign key in a different table.</p>
+<p>In our educational example, the primary keys would presumably be: <code>Student.ID</code>, <code>Teacher.ID</code>, <code>Class.ID</code>, and for ClassAssignment a primary key made of two fields: <code>{ClassAssignment.studentID, ClassAssignment.class_ID}</code>.</p>
+<p>Some examples of foreign keys would be:</p>
+<ul>
+<li><p><code>student_ID</code> as the foreign key in <code>ClassAssignment</code> for joining with <code>Student</code> on <code>Student.ID</code></p></li>
+<li><p><code>teacher_ID</code> as the foreign key in <code>Class</code> for joining with <code>Teacher</code> based on <code>Teacher.ID</code></p></li>
+<li><p><code>class_ID</code> as the foreign key in <code>ClassAssignment</code> for joining with <code>Class</code> based on <code>Class.ID</code></p></li>
+</ul>
+</section>
+<section id="queries-that-join-data-across-multiple-tables" class="level3">
+<h3 class="anchored" data-anchor-id="queries-that-join-data-across-multiple-tables">Queries that join data across multiple tables</h3>
+<p>Suppose we want a result that has the grades of all students in 9th grade. For this we need information from the <code>Student</code> table (to determine grade level) and information from the <code>ClassAssignment</code> table (to determine the class grade). More specifically we need a query that:</p>
+<ul>
+<li>joins <code>Student</code> with <code>ClassAssignment</code> based on matching rows in <code>Student</code> with rows in <code>ClassAssignment</code> where <code>Student.ID</code> is the same as <code>ClassAssignment.student_ID</code> and</li>
+<li>filters the rows based on <code>Student.grade_level</code>:</li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span> Student.<span class="kw">ID</span>, grade <span class="kw">FROM</span> Student, ClassAssignment <span class="kw">WHERE</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  Student.<span class="kw">ID</span> <span class="op">=</span> ClassAssignment.student_ID <span class="kw">and</span> Student.grade_level <span class="op">=</span> <span class="dv">9</span>;</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Note that the query is a <em>join</em> (specifically an <em>inner join</em>), which is like <code>merge()</code> (or <code>dplyr::join</code>) in R. We don’t specifically use the JOIN keyword, but one could do these queries explicitly using JOIN, as we’ll see later.</p>
+</section>
+</section>
+<section id="stack-overflow-metadata-example" class="level2">
+<h2 class="anchored" data-anchor-id="stack-overflow-metadata-example">Stack Overflow metadata example</h2>
+<p>I’ve obtained data from <a href="https://stackoverflow.com">Stack Overflow</a>, the popular website for asking coding questions, and placed it into a normalized database. The SQLite version has metadata (i.e., it lacks the actual text of the questions and answers) on all of the questions and answers posted in 2016.</p>
+<p>We’ll explore SQL functionality using this example database.</p>
+<p>Now let’s consider the Stack Overflow data. Each question may have multiple answers and each question may have multiple (topic) tags.</p>
+<p>If we tried to put this into a single table, the fields could look like this if we have one row per question:</p>
+<ul>
+<li>question ID</li>
+<li>ID of user submitting question</li>
+<li>question title</li>
+<li>tag 1</li>
+<li>tag 2</li>
+<li>…</li>
+<li>tag n</li>
+<li>answer 1 ID</li>
+<li>ID of user submitting answer 1</li>
+<li>age of user submitting answer 1</li>
+<li>name of user submitting answer 1</li>
+<li>answer 2 ID</li>
+<li>ID of user submitting answer 2</li>
+<li>age of user submitting answer 2</li>
+<li>name of user submitting answer 2</li>
+<li>…</li>
+</ul>
+<p>or like this if we have one row per question-answer pair:</p>
+<ul>
+<li>question ID</li>
+<li>ID of user submitting question</li>
+<li>question title</li>
+<li>tag 1</li>
+<li>tag 2</li>
+<li>…</li>
+<li>tag n</li>
+<li>answer ID</li>
+<li>ID of user submitting answer</li>
+<li>age of user submitting answer</li>
+<li>name of user submitting answer</li>
+</ul>
+<p>As we’ve discussed neither of those schema is particularly desirable.</p>
+<p><strong>Challenge</strong>: How would you devise a schema to normalize the data. I.e., what set of tables do you think we should create?</p>
+<p>You can view <a href="normalized_example.png">one reasonable schema</a>. The lines between tables indicate the relationship of foreign keys in one table to primary keys in another table. The schema in the actual database of Stack Overflow data we’ll use in the examples here is similar to but not identical to that.</p>
+<p>You can download a <a href="http://www.stat.berkeley.edu/share/paciorek/stackoverflow-2016.db">copy of the SQLite version of the Stack Overflow 2016 database</a>.</p>
+</section>
+<section id="accessing-databases-in-python" class="level2">
+<h2 class="anchored" data-anchor-id="accessing-databases-in-python">Accessing databases in Python</h2>
+<p>Python provides a variety of front-end packages for manipulating databases from a variety of DBMS (SQLite, DuckDB, MySQL, PostgreSQL, among others). Basically, you start with a bit of code that links to the actual database, and then you can easily query the database using SQL syntax regardless of the back-end. The Python function calls that wrap around the SQL syntax will also look the same regardless of the back-end (basically <code>execute("SOME SQL STATEMENT")</code>).</p>
+<p>[TODO: look into SQLAlchemy]</p>
+<p>With SQLite, Python processes make calls against the stand-alone SQLite database (.db) file, so there are no SQLite-specific processes. With a client-server DBMS like PostgreSQL, Python processes call out to separate Postgres processes; these are started from the overall Postgres background process</p>
+<p>You can access and navigate an SQLite database from Python as follows.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlite3 <span class="im">as</span> sq</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>dir_path <span class="op">=</span> <span class="st">'../data'</span>  <span class="co"># Replace with the actual path</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>db_filename <span class="op">=</span> <span class="st">'stackoverflow-2016.db'</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> sq.<span class="ex">connect</span>(os.path.join(dir_path, db_filename))</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>db <span class="op">=</span> con.cursor()</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select * from questions limit 5"</span>)  <span class="co"># simple query </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;sqlite3.Cursor object at 0x7f706a4fcd40&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>db.fetchall() <span class="co"># retrieve results</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">## http://www.stat.berkeley.edu/share/paciorek/stackoverflow-2016.db</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[(34552550, '2016-01-01 00:00:03', 0, 108, 'Scope between methods', 5684416), (34552551, '2016-01-01 00:00:07', 1, 151, 'Rails - Unknown Attribute - Unable to add a new field to a form on create/update', 2457617), (34552552, '2016-01-01 00:00:39', 2, 1942, "Selenium Firefox webdriver won't load a blank page after changing Firefox preferences", 5732525), (34552554, '2016-01-01 00:00:50', 0, 153, 'Android Studio styles.xml Error', 5735112), (34552555, '2016-01-01 00:00:51', -1, 54, 'Java: reference to non-finial local variables inside a thread', 4646288)]</code></pre>
+</div>
+</div>
+<p>We can (fairly) easily see the tables (this is easier from R):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> db_list_tables(db):</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    db.execute(<span class="st">"SELECT name FROM sqlite_master WHERE type='table';"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    tables <span class="op">=</span> db.fetchall()</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [table[<span class="dv">0</span>] <span class="cf">for</span> table <span class="kw">in</span> tables]</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>db_list_tables(db)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['questions', 'answers', 'questions_tags', 'users']</code></pre>
+</div>
+</div>
+<p>and the fields in table, presuming you’ve just queried the table:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select * from questions limit 5"</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># If you've already queried a table, see `description` for the fields:</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;sqlite3.Cursor object at 0x7f706a4fcd40&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>[item[<span class="dv">0</span>] <span class="cf">for</span> item <span class="kw">in</span> db.description]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['questionid', 'creationdate', 'score', 'viewcount', 'title', 'ownerid']</code></pre>
+</div>
+</div>
+<p>Here’s how to make a basic SQL query. One can either make the query and get the results in one go or make the query and separately fetch the results. Here we’ve selected the first five rows (and all columns, based on the * wildcard) and brought them into Python as list of tuples.</p>
+<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-15_29e8e56134e57950dd8891a5f8a96f71">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> db.execute(<span class="st">"select * from questions limit 5"</span>).fetchall()  <span class="co"># simple query </span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'list'&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(results[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;class 'tuple'&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>query <span class="op">=</span> db.execute(<span class="st">"select * from questions"</span>)  <span class="co"># simple query </span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>results2 <span class="op">=</span> query.fetchmany(<span class="dv">5</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>results <span class="op">==</span> results2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p>To disconnect from the database:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>db.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="basic-sql-for-choosing-rows-and-columns-from-a-table" class="level2">
+<h2 class="anchored" data-anchor-id="basic-sql-for-choosing-rows-and-columns-from-a-table">Basic SQL for choosing rows and columns from a table</h2>
+<p>SQL is a declarative language that tells the database system what results you want. The system then parses the SQL syntax and determines how to implement the query.</p>
+<blockquote class="blockquote">
+<p><strong>Note</strong>: An <em>imperative</em> language is one where you provide the sequence of commands you want to be run, in order. A <em>declarative</em> language is one where you declare what result you want and rely on the system that interprets the commands how to actually do it. Most of the languages we’re generally familiar with are imperative. (That said, even in languages like Python, function calls in many ways simply say what we want rather than exactly how the computer should carry out the granular operations.)</p>
+</blockquote>
+<p>Here are some examples using the Stack Overflow database.</p>
+<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-17_a0887a2a5c0337ee7da509d88536b802">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">## find the largest viewcounts in the questions table</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>db.execute(</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="st">'select title, viewcount from questions order by viewcount desc limit 10'</span>).fetchall()</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co">## now get the questions that are viewed the most</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[('How to solve "server DNS address could not be found" error in windows 10?', 196469), ("Code signing is required for product type 'Application' in SDK 'iOS 10.0' - StickerPackExtension requires a development team error", 174790), ('"Gradle Version 2.10 is required." Error', 134399), ("Android- Error:Execution failed for task ':app:transformClassesWithDexForRelease'", 129874), ('Fatal error: Uncaught Error: Call to undefined function mysql_connect()', 129624), ('Unsupported major.minor version 52.0 in my app', 127764), ("Response to preflight request doesn't pass access control check AngularJs", 126752), ('NPM vs. Bower vs. Browserify vs. Gulp vs. Grunt vs. Webpack', 112000), ('Git refusing to merge unrelated histories', 109422), ('"SyntaxError: Unexpected token &lt; in JSON at position 0" in React App', 106995)]</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">'select * from questions where viewcount &gt; 100000'</span>).fetchall()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[(35429801, '2016-02-16 10:21:09', 400, 100125, 'This action could not be completed. Try Again (-22421)', 5881764), (37280274, '2016-05-17 15:21:49', 23, 106995, '"SyntaxError: Unexpected token &lt; in JSON at position 0" in React App', 4043633), (37937984, '2016-06-21 07:23:00', 202, 109422, 'Git refusing to merge unrelated histories', 2670370), (35062852, '2016-01-28 13:28:39', 730, 112000, 'NPM vs. Bower vs. Browserify vs. Gulp vs. Grunt vs. Webpack', 2761509), (35588699, '2016-02-23 21:37:06', 57, 126752, "Response to preflight request doesn't pass access control check AngularJs", 2896963), (35990995, '2016-03-14 15:01:17', 104, 127764, 'Unsupported major.minor version 52.0 in my app', 1629278), (34579099, '2016-01-03 16:55:16', 8, 129624, 'Fatal error: Uncaught Error: Call to undefined function mysql_connect()', 3656666), (35890257, '2016-03-09 11:25:05', 51, 129874, "Android- Error:Execution failed for task ':app:transformClassesWithDexForRelease'", 1118886), (34814368, '2016-01-15 15:24:36', 206, 134399, '"Gradle Version 2.10 is required." Error', 3319176), (37806538, '2016-06-14 08:16:21', 223, 174790, "Code signing is required for product type 'Application' in SDK 'iOS 10.0' - StickerPackExtension requires a development team error", 1554347), (36668374, '2016-04-16 18:57:19', 20, 196469, 'How to solve "server DNS address could not be found" error in windows 10?', 1707976)]</code></pre>
+</div>
+</div>
+<p>Let’s lay out the various verbs in SQL. Here’s the form of a standard query (though the ORDER BY is often omitted and sorting is computationally expensive):</p>
+<pre><code>SELECT &lt;column(s)&gt; FROM &lt;table&gt; WHERE &lt;condition(s) on column(s)&gt; ORDER BY &lt;column(s)&gt;</code></pre>
+<p>SQL keywords are often written in ALL CAPITALS, although I won’t necessarily do that here.</p>
+<p>And here is a table of some important keywords:</p>
+<table class="table">
+<colgroup>
+<col style="width: 35%">
+<col style="width: 65%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Keyword</th>
+<th>Usage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>SELECT</td>
+<td>select columns</td>
+</tr>
+<tr class="even">
+<td>FROM</td>
+<td>which table to operate on</td>
+</tr>
+<tr class="odd">
+<td>WHERE</td>
+<td>filter (choose) rows satisfying certain conditions</td>
+</tr>
+<tr class="even">
+<td>LIKE, IN, &lt;, &gt;, ==, etc.</td>
+<td>used as part of conditions</td>
+</tr>
+<tr class="odd">
+<td>ORDER BY</td>
+<td>sort based on columns</td>
+</tr>
+</tbody>
+</table>
+<p>For comparisons in a <code>WHERE</code> clause, some common syntax for setting conditions includes <code>LIKE</code> (for patterns), <code>=</code>, <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code>, <code>&lt;=</code>, <code>!=</code>.</p>
+<p>Some other keywords are: <code>DISTINCT</code>, <code>ON</code>, <code>JOIN</code>, <code>GROUP BY</code>, <code>AS</code>, <code>USING</code>, <code>UNION</code>, <code>INTERSECT</code>, <code>SIMILAR TO</code>.</p>
+<p><strong>Question</strong>: how would we find the oldest users in the database?</p>
+</section>
+<section id="grouping-stratifying" class="level2">
+<h2 class="anchored" data-anchor-id="grouping-stratifying">Grouping / stratifying</h2>
+<p>A common pattern of operation is to stratify the dataset, i.e., collect it into mutually exclusive and exhaustive subsets. One would then generally do some operation on each subset. In SQL this is done with the GROUP BY keyword.</p>
+<p>Here’s a basic example where we count the occurrences of different tags. Note that we use <code>as</code> to define a name for the new column that is created based on the aggregation operation (<code>count</code> in this case).</p>
+<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-18_f06aeba64194464f5d7e5de5d3398e75">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select tag, count(*) as n from questions_tags </span><span class="ch">\</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="st">           group by tag order by n desc limit 25"</span>).fetchall()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[('javascript', 290966), ('java', 219155), ('android', 184272), ('php', 177969), ('python', 171745), ('c#', 163637), ('html', 126851), ('jquery', 123707), ('ios', 95722), ('css', 86470), ('angularjs', 76951), ('c++', 76260), ('mysql', 75458), ('swift', 61485), ('sql', 58346), ('node.js', 52827), ('r', 48079), ('arrays', 46739), ('json', 45250), ('ruby-on-rails', 39036), ('sql-server', 37077), ('c', 36080), ('asp.net', 35610), ('excel', 29924), ('angular2', 28832)]</code></pre>
+</div>
+</div>
+<p>In general <code>GROUP BY</code> statements will involve some aggregation operation on the subsets. Options include: <code>COUNT</code>, <code>MIN</code>, <code>MAX</code>, <code>AVG</code>, <code>SUM</code>.</p>
+<p>If you filter after using <code>GROUP BY</code>, you need to use <code>having</code> instead of <code>where</code>.</p>
+<p><strong>Challenge</strong>: Write a query that will count the number of answers for each question, returning the most answered questions.</p>
+</section>
+<section id="getting-unique-results-distinct" class="level2">
+<h2 class="anchored" data-anchor-id="getting-unique-results-distinct">Getting unique results (DISTINCT)</h2>
+<p>A useful SQL keyword is <code>DISTINCT</code>, which allows you to eliminate duplicate rows from any table (or remove duplicate values when one only has a single column or set of values).</p>
+<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-19_2b8f206e6a3b58a039377709de913bdc">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>tag_names <span class="op">=</span> db.execute(<span class="st">"select distinct tag from questions_tags"</span>).fetchall()</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>tag_names[<span class="dv">0</span>:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[('c#',), ('razor',), ('flags',), ('javascript',), ('rxjs',)]</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select count(distinct tag) from questions_tags"</span>).fetchall()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[(41006,)]</code></pre>
+</div>
+</div>
+</section>
+<section id="simple-sql-joins" class="level2">
+<h2 class="anchored" data-anchor-id="simple-sql-joins">Simple SQL joins</h2>
+<p>Often to get the information we need, we’ll need data from multiple tables. To do this we’ll need to do a database join, telling the database what columns should be used to match the rows in the different tables.</p>
+<p>The syntax generally looks like this (again the <code>WHERE</code> and <code>ORDER BY</code> are optional):</p>
+<pre><code>SELECT &lt;column(s)&gt; FROM &lt;table1&gt; JOIN &lt;table2&gt; ON &lt;columns to match on&gt; WHERE &lt;condition(s) on column(s)&gt; ORDER BY &lt;column(s)&gt;</code></pre>
+<p>Let’s see some joins using the different syntax on the Stack Overflow database. In particular let’s select only the questions with the tag python.</p>
+<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-20_7115de6b95adc60327baf41045f22c98">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">=</span> db.execute(<span class="st">"select * from questions join questions_tags </span><span class="ch">\</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="st">        on questions.questionid = questions_tags.questionid </span><span class="ch">\</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="st">        where tag = 'python'"</span>).fetchall()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>It turns out you can do it without using the JOIN keyword.</p>
+<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-21_28ec8e4a3030dddbc670c322d77ded25">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>result2 <span class="op">=</span> db.execute(<span class="st">"select * from questions, questions_tags </span><span class="ch">\</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="st">        where questions.questionid = questions_tags.questionid and </span><span class="ch">\</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="st">        tag = 'python'"</span>).fetchall()</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>result1[<span class="dv">0</span>:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[(34553559, '2016-01-01 04:34:34', 3, 96, 'Python nested loops only working on the first pass', 845642, 34553559, 'python'), (34556493, '2016-01-01 13:22:06', 2, 30, 'bool operator in for Timestamp in Series does not work', 4458602, 34556493, 'python'), (34557898, '2016-01-01 16:36:04', 3, 143, 'Pairwise haversine distance calculation', 2927983, 34557898, 'python'), (34560088, '2016-01-01 21:10:32', 1, 126, "Stopwatch (chronometre) doesn't work", 5736692, 34560088, 'python'), (34560213, '2016-01-01 21:25:26', 1, 127, 'How to set the type of a pyqtSignal (variable of class X) that takes a X instance as argument', 5636400, 34560213, 'python')]</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">==</span> result2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p>Here’s a three-way join (using both types of syntax) with some additional use of aliases to abbreviate table names. What does this query ask for?</p>
+<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-22_ec930e09602907b09bf7f4cc1bcdbb91">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">=</span> db.execute(<span class="st">"select * from </span><span class="ch">\</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="st">        questions Q </span><span class="ch">\</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="st">        join questions_tags T on Q.questionid = T.questionid </span><span class="ch">\</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="st">        join users U on Q.ownerid = U.userid </span><span class="ch">\</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="st">        where tag = 'python' and </span><span class="ch">\</span></span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="st">        age &gt; 60"</span>).fetchall()</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>result2 <span class="op">=</span> db.execute(<span class="st">"select * from </span><span class="ch">\</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a><span class="st">        questions Q, questions_tags T, users U where </span><span class="ch">\</span></span>
+<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a><span class="st">        Q.questionid = T.questionid and </span><span class="ch">\</span></span>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a><span class="st">        Q.ownerid = U.userid and </span><span class="ch">\</span></span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a><span class="st">        tag = 'python' and </span><span class="ch">\</span></span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a><span class="st">        age &gt; 60"</span>).fetchall()</span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">==</span> result2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True</code></pre>
+</div>
+</div>
+<p><strong>Challenge</strong>: Write a query that would return all the answers to questions with the Python tag.</p>
+<p><strong>Challenge</strong>: Write a query that would return the users who have answered a question with the Python tag.</p>
+</section>
+<section id="temporary-tables-and-views" class="level2">
+<h2 class="anchored" data-anchor-id="temporary-tables-and-views">Temporary tables and views</h2>
+<p>You can think of a view as a temporary table that is the result of a query and can be used in subsequent queries. In any given query you can use both views and tables. The advantage is that they provide modularity in our querying. For example, if a given operation (portion of a query) is needed repeatedly, one could abstract that as a view and then make use of that view.</p>
+<p>Suppose we always want the age and displayname of owners of questions to be readily available. Once we have the view we can query it like a regular table.</p>
+<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-23_86410da9ce70903f0b1bb03d49cd0a19">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"create view questionsAugment as select </span><span class="ch">\</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="st">                questionid, questions.creationdate, score, viewcount, </span><span class="ch">\</span></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="st">                title, ownerid, age, displayname </span><span class="ch">\</span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="st">                from questions join users </span><span class="ch">\</span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="st">                on questions.ownerid = users.userid"</span>)</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="co">## you'll see the return value is '0'</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>               </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;sqlite3.Cursor object at 0x7f706a4fcd40&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select * from questionsAugment where age &gt; 70 limit 5"</span>).fetchall()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[(36143022, '2016-03-21 22:44:16', 2, 158, 'Record aggregate with dynamic choice', 40851, 71, 'Simon Wright'), (40596400, '2016-11-14 19:30:32', 1, 28, 'Why does Xcode report "Variable \'tuple.0\' used before being initialized" after I\'ve assigned all elements of a Swift tuple?', 74966, 71, 'hkatz'), (40612851, '2016-11-15 14:51:51', 1, 32, 'Converting a Swift array of Ints into an array of its running subtotals', 74966, 71, 'hkatz'), (38532865, '2016-07-22 18:10:34', 0, 134, 'Algorithm to generate all permutations of pairs without repetition', 98062, 71, 'Rocky Luck'), (36189874, '2016-03-23 22:25:56', 0, 32, 'Mediawiki 1.26.2 upgrade - categories listed in a single column', 332786, 71, 'Sakshale')]</code></pre>
+</div>
+</div>
+<p>One use of a view would be to create a mega table that stores all the information from multiple tables in the (unnormalized) form you might have if you simply had one data frame in Python or R.</p>
+</section>
+<section id="more-on-joins" class="level2">
+<h2 class="anchored" data-anchor-id="more-on-joins">More on joins</h2>
+<p>We’ve seen a bunch of joins but haven’t discussed the full taxonomy of types of joins. There are various possibilities for how to do a join depending on whether there are rows in one table that do not match any rows in another table.</p>
+<p><strong>Inner joins</strong>: In database terminology an inner join is when the result has a row for each match of a row in one table with the rows in the second table, where the matching is done on the columns you indicate. If a row in one table corresponds to more than one row in another table, you get all of the matching rows in the second table, with the information from the first table duplicated for each of the resulting rows. For example in the Stack Overflow data, an inner join of questions and answers would pair each question with each of the answers to that question. However, questions without any answers or (if this were possible) answers without a corresponding question would not be part of the result.</p>
+<p><strong>Outer joins</strong>: Outer joins add additional rows from one table that do not match any rows from the other table as follows. A <em>left outer join</em> gives all the rows from the first table but only those from the second table that match a row in the first table. A <em>right outer join</em> is the converse, while a <em>full outer join</em> includes at least one copy of all rows from both tables. So a left outer join of the Stack Overflow questions and answers tables would, in addition to the matched questions and their answers, include a row for each question without any answers, as would a full outer join. In this case there should be no answers that do not correspond to question, so a right outer join should be the same as an inner join.</p>
+<p><strong>Cross joins</strong>: A cross join gives the Cartesian product of the two tables, namely the pairwise combination of every row from each table, analogous to <code>expand.grid()</code> in R. I.e., take a row from the first table and pair it with each row from the second table, then repeat that for all rows from the first table. Since cross joins pair each row in one table with all the rows in another table, the resulting table can be quite large (the product of the number of rows in the two tables). In the Stack Overflow database, a cross join would pair each question with every answer in the database, regardless of whether the answer is an answer to that question.</p>
+<p>Simply listing two or more tables separated by commas as we saw earlier is the same as a <em>cross join</em>. Alternatively, listing two or more tables separated by commas, followed by conditions that equate rows in one table to rows in another is equivalent to an <em>inner join</em>.</p>
+<p>In general, inner joins can be seen as a form of cross join followed by a condition that enforces matching between the rows of the table. More broadly, here are four equivalent joins that all perform the equivalent of an inner join:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>## explicit <span class="kw">inner</span> <span class="kw">join</span>:</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="op">*</span> <span class="kw">from</span> table1 <span class="kw">join</span> table2 <span class="kw">on</span> table1.<span class="kw">id</span> <span class="op">=</span> table2.<span class="kw">id</span> </span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>## non<span class="op">-</span>explicit <span class="kw">join</span> <span class="kw">without</span> <span class="kw">JOIN</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="op">*</span> <span class="kw">from</span> table1, table2 <span class="kw">where</span> table1.<span class="kw">id</span> <span class="op">=</span> table2.<span class="kw">id</span> </span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>## <span class="kw">cross</span><span class="op">-</span><span class="kw">join</span> followed <span class="kw">by</span> matching</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="op">*</span> <span class="kw">from</span> table1 <span class="kw">cross</span> <span class="kw">join</span> table2 <span class="kw">where</span> table1.<span class="kw">id</span> <span class="op">=</span> table2.<span class="kw">id</span> </span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>## explicit <span class="kw">inner</span> <span class="kw">join</span> <span class="kw">with</span> <span class="st">'using'</span></span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="op">*</span> <span class="kw">from</span> table1 <span class="kw">join</span> table2 <span class="kw">using</span>(<span class="kw">id</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Challenge</strong>: Create a view with one row for every question-tag pair, including questions without any tags.</p>
+<p><strong>Challenge</strong>: Write a query that would return the displaynames of all of the users who have <em>never</em> posted a question. The NULL keyword will come in handy it’s like ‘NA’ in R. Hint: NULLs should be produced if you do an outer join.</p>
+</section>
+<section id="indexes" class="level2">
+<h2 class="anchored" data-anchor-id="indexes">Indexes</h2>
+<p>An index is an ordering of rows based on one or more fields. DBMS use indexes to look up values quickly, either when filtering (if the index is involved in the <code>WHERE</code> condition) or when doing joins (if the index is involved in the <code>JOIN</code> condition). So in general you want your tables to have indexes.</p>
+<p>DBMS use indexing to provide sub-linear time lookup. Without indexes, a database needs to scan through every row sequentially, which is called linear time lookup if there are n rows, the lookup is O(n) in computational cost. With indexes, lookup may be logarithmic O(log(n)) (if using tree-based indexes) or constant time O(1) (if using hash-based indexes). A binary tree-based search is logarithmic; at each step through the tree you can eliminate half of the possibilities.</p>
+<p>Here’s how we create an index, with some time comparison for a simple query.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> db.execute(</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"select * from questions where viewcount &gt; 10000"</span>).fetchall()</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)  <span class="co"># 10 seconds</span></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>db.execute(</span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"create index count_index on questions (viewcount)"</span>) <span class="co"># 19 seconds</span></span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)  <span class="co"># 10 seconds</span></span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a>db.execute(</span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"select * from questions where viewcount &gt; 10000"</span>).fetchall()  <span class="co"># 3 seconds</span></span>
+<span id="cb54-12"><a href="#cb54-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)  <span class="co"># 10 seconds</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In other contexts, an index can save huge amounts of time. So if you’re working with a database and speed is important, check to see if there are indexes. That said, as seen above it takes time to create the index, so you’d only want to create it if you were doing multiple queries that could take advantage of the index. See the databases tutorial for more discussion of how using indexes in a lookup is not always advantageous.</p>
+</section>
+<section id="creating-database-tables" class="level2">
+<h2 class="anchored" data-anchor-id="creating-database-tables">Creating database tables</h2>
+<p>One can create tables from within the ‘sqlite’ command line interfaces (discussed in the tutorial), but often one would do this from Python or R. Here’s the syntax from Python, creating the table from a Pandas dataframe.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co">## create data frame 'student_data' in some fashion</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> sq.<span class="ex">connect</span>(db_path)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>student_data.to_sql(<span class="st">'student'</span>, con if_exists<span class="op">=</span><span class="st">'replace'</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="sparsity" class="level1">
+<h1>4. Sparsity</h1>
+<p>A lot of statistical methods are based on sparse matrices. These include:</p>
+<ul>
+<li>Matrices representing the neighborhood structure (i.e., conditional dependence structure) of networks/graphs.</li>
+<li>Matrices representing autoregressive models (neighborhood structure for temporal and spatial data)</li>
+<li>A statistical method called the <em>lasso</em> is used in high-dimensional contexts to give sparse results (sparse parameter vector estimates, sparse covariance matrix estimates)</li>
+<li>There are many others (I’ve been lazy here in not coming up with a comprehensive list, but trust me!)</li>
+</ul>
+<p>When storing and manipulating sparse matrices, there is no need to store the zeros, nor to do any computation with elements that are zero.</p>
+<p>Python, R, and MATLAB all have functionality for storing and computing with sparse matrices. We’ll see this a bit more in the linear algebra unit.</p>
+<p>Here’s a <a href="http://blog.revolutionanalytics.com/2011/05/the-neflix-prize-big-data-svd-and-r.html">blog post</a> describing the use of sparse matrix manipulations for analysis of the Netflix Prize data.</p>
+</section>
+<section id="using-statistical-concepts-to-deal-with-computational-bottlenecks" class="level1">
+<h1>5. Using statistical concepts to deal with computational bottlenecks</h1>
+<p>As statisticians, we have a variety of statistical/probabilistic tools that can aid in dealing with big data.</p>
+<ol type="1">
+<li>Usually we take samples because we cannot collect data on the entire population. But we can just as well take a sample because we don’t have the ability to process the data from the entire population. We can use standard uncertainty estimates to tell us how close to the true quantity we are likely to be. And we can always take a bigger sample if we’re not happy with the amount of uncertainty.</li>
+<li>There are a variety of ideas out there for making use of sampling to address big data challenges. One idea (due in part to Prof.&nbsp;Michael Jordan here in Statistics/EECS) is to compute estimates on many (relatively small) bootstrap samples from the data (cleverly creating a reduced-form version of the entire dataset from each bootstrap sample) and then combine the estimates across the samples. Here’s <a href="http://arxiv.org/abs/1112.5016">the arXiv paper</a> on this topic, also published as Kleiner et al.&nbsp;in Journal of the Royal Statistical Society (2014) 76:795.</li>
+<li>Randomized algorithms: there has been a lot of attention recently to algorithms that make use of randomization. E.g., in optimizing a likelihood, you might choose the next step in the optimization based on random subset of the data rather than the full data. Or in a regression context you might choose a subset of rows of the design matrix (the matrix of covariates) and corresponding observations, weighted based on the statistical leverage ([recall the discussion of regression diagnostics in a regression course) of the observations. Here’s another <a href="http://arxiv.org/abs/1104.5557">arXiv paper</a> that provides some ideas in this area.</li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../units/unit6-parallel.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Unit 6</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../units/unit8-numbers.html" class="pagination-link">
+        <span class="nav-page-text">Unit 8</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
