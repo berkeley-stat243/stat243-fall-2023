@@ -1492,6 +1492,14 @@ result = sum_args(1, 2, 3, 4, 5)
 print(result)  # Output: 15
 ```
 
+This syntax also comes in handy for some existing functions, such as
+`os.path.join`, which can take either an arbitrary number of inputs or a list.
+
+```{python}
+os.path.join('a','b','c')
+x = ['a','b','c']
+os.path.join(*x)
+```
 
 ### Function outputs
 

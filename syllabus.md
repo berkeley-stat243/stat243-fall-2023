@@ -30,7 +30,7 @@ probability and statistics is expected, as well as a basic ability to
 operate on a computer (but I do not assume familiarity with the
 UNIX-style command line/terminal/shell). Furthermore, I'm expecting you
 will know the basics of Python, at the level of the 
-[Python short course](https://berkeley-scf.github.io/python-shortcourse-2023)
+[Python short course](https://berkeley-scf.github.io/python-workshop-2023)
 offered Aug. 16-17, 2023. If you don't have that background
 you'll need to spend time in the initial couple weeks getting up to
 speed. In addition, we'll have an
@@ -85,9 +85,6 @@ The 'days' here are (roughly) class sessions, as general guidance.
 
 12. Graphics (1 day)
 
-If you want to get a sense of what material we will cover in more
-detail, in advance, you can take a look at the materials in the *units*
-directory of [GitHub repository from when I taught the class in 2022](https://github.com/berkeley-stat243/stat243-fall-2022).
 
 ## Personnel {#personnel .unnumbered}
 
@@ -97,7 +94,7 @@ directory of [GitHub repository from when I taught the class in 2022](https://gi
 
 -   GSI
 
-    -   Ahmed Eldeeb (Deeb)
+    -   Ahmed Eldeeb (Deeb) (deeb@berkeley.edu)
 
 -   Office hours can be found [here](office_hours).
 
@@ -113,20 +110,20 @@ directory of [GitHub repository from when I taught the class in 2022](https://gi
 Key websites for the course are:
 
 -   This course website, which is hosted on GitHub pages, and the GitHub repository containing the source materials:
-    <https://github.com/berkeley-stat243/stat243-fall-2022>
+    <https://github.com/berkeley-stat243/stat243-fall-2023>
 
 -   SCF tutorials for additional content:
     <https://statistics.berkeley.edu/computing/training/tutorials>
 
 -   Ed Discussion site for discussions/Q&A:
-    <https://edstem.org/us/courses/25090/discussion/>
+    <https://edstem.org/us/courses/42474/discussion/>
 
 -   bCourses site for course capture recordings (see Media Gallery) and possibly some other
     materials:
-    <https://bcourses.berkeley.edu/courses/1507757>.
+    <https://bcourses.berkeley.edu/courses/1527498>.
 
 -   Gradescope for assignments (also linked from bCourses): 
-    <https://www.gradescope.com/courses/425343>
+    <https://www.gradescope.com/courses/569739>
 
 All course materials will be posted on here on the website (and on GitHub) except for video content, which will be in bCourses.
 
@@ -204,18 +201,15 @@ The software needed for the course is as follows:
 
 -   Python (Anaconda/Miniconda is recommended but by no means required)
 
--   Python (later in the course)
-
 We have [some tips for software installation (and access to DataHub)](software), including
 suggestions for how to access a UNIX shell, which you'll need to be able to do by the second week of class.
-
 
 ## Class time {#class-time .unnumbered}
 
 My goal is to have classes be an interactive environment. This is both
 more interesting for all of us and more effective in learning the
 material. I encourage you to ask questions and will pose questions to
-the class to think about, respond to via Google forms, and discuss.
+the class to think about, respond to via online polling or Google forms, and discuss.
 To increase time for discussion and
 assimilation of the material in class, before some classes I may ask
 that you read material or work through tutorials in advance of class.

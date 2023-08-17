@@ -6,7 +6,7 @@ This guidance is based on general good practices for scientific communication, r
 - Simply presenting code or derivations is not sufficient.
 - Briefly describe the overall goal or strategy before providing code/derivations.
 - As needed describe what the pieces of your code/derivation are doing to make it easier for a reader to follow the steps.
-- Keep your output focused on illustrating what you did, without distracting from the flow of your solution by showing voluminous output. The output should illustrate and demonstrate, not overwhelm. If you need to show longer output, you can add it at the end as supplemental material.
+- Keep your output focused on illustrating what you did, without distracting from the flow of your solution by showing voluminous output. The output should illustrate and demonstrate, not overwhelm or obscure. If you need to show longer output, you can add it at the end as supplemental material.
 
 ## Coding practice
 

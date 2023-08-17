@@ -61,6 +61,8 @@ website:
           text: Accessing the Unix Command Line
         - file: howtos/gitInstall.md
           text: Installing Git
+        - file: howtos/quartoInstall.md
+          text: Installing Quarto
         - file: howtos/ps-submission.md
           text: Problem Set Submissions
         - text: "---"
@@ -68,8 +70,6 @@ website:
           contents:
             - file: howtos/windowsAndLinux.md
               text: Installing the Linux Subsystem on Windows
-            - file: howtos/windowsInstall.md
-              text: Using Python on Windows
 
 output:
   html
