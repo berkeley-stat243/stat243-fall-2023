@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.433">
+<meta name="generator" content="quarto-1.3.450">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -170,6 +170,10 @@ ul.task-list li input[type="checkbox"] {
  <span class="dropdown-text">Installing Git</span></a>
   </li>  
         <li>
+    <a class="dropdown-item" href="../howtos/quartoInstall.html" rel="" target="">
+ <span class="dropdown-text">Installing Quarto</span></a>
+  </li>  
+        <li>
     <a class="dropdown-item" href="../howtos/ps-submission.html" rel="" target="">
  <span class="dropdown-text">Problem Set Submissions</span></a>
   </li>  
@@ -178,10 +182,6 @@ ul.task-list li input[type="checkbox"] {
         <li>
     <a class="dropdown-item" href="../howtos/windowsAndLinux.html" rel="" target="">
  <span class="dropdown-text">Installing the Linux Subsystem on Windows</span></a>
-  </li>  
-        <li>
-    <a class="dropdown-item" href="../howtos/windowsInstall.html" rel="" target="">
- <span class="dropdown-text">Using Python on Windows</span></a>
   </li>  
     </ul>
   </li>
@@ -243,6 +243,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="../howtos/quartoInstall.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Installing Quarto</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="../howtos/ps-submission.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Problem Set Submissions</span></a>
   </div>
@@ -261,12 +267,6 @@ ul.task-list li input[type="checkbox"] {
   <div class="sidebar-item-container"> 
   <a href="../howtos/windowsAndLinux.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Installing the Linux Subsystem on Windows</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../howtos/windowsInstall.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Using Python on Windows</span></a>
   </div>
 </li>
       </ul>
@@ -309,20 +309,33 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>We recommend using the <a href="https://www.anaconda.com/distribution/">Anaconda distribution of Python</a>, though that is not required. You can download it <a href="https://www.anaconda.com/distribution/">here</a>. Make sure to use Python 3.7, 3.8, or 3.9 and not Python 2.*.</p>
-<p>Once you’ve installed Python, please install the following packages: - numpy - scipy - pandas - dask - dask.distributed - dask.bag - dask.array - dask.dataframe - dask.multiprocessing</p>
-<p>Assuming you installed the Anaconda Python, you should be able to do this:</p>
+<p>We recommend using using the <a href="https://www.anaconda.com/products/individual">Anaconda (Python 3.11 distribution)</a> on your laptop. Click “Download” and then click 64-bit “Graphical Installer” for your current operating system.</p>
+<p>Once you’ve installed Python, please install the following packages:</p>
+<ul>
+<li>numpy</li>
+<li>scipy</li>
+<li>pandas</li>
+<li>dask</li>
+<li>dask.distributed</li>
+<li>dask.bag</li>
+<li>dask.array</li>
+<li>dask.dataframe</li>
+<li>dask.multiprocessing</li>
+</ul>
+<p>Assuming you installed Anaconda Python, you should be able to do this from the command line:</p>
 <pre><code>conda install numpy scipy pandas dask</code></pre>
+<p>While you’re welcome to work with Python in a Jupyter notebook for exploration (e.g., using the <a href="https://datahub.berkeley.edu/hub/login?next=%2Fhub%2F">campus DataHub</a>, you’ll need to submit Quarto (.qmd) documents with Python chunks for your problem sets. So you’ll need Python set up on your laptop or to use it by logging in to an SCF machine.</p>
 <section id="access-via-the-scf" class="level1">
 <h1>Access via the SCF</h1>
 <section id="python-from-the-command-line" class="level2">
 <h2 class="anchored" data-anchor-id="python-from-the-command-line">Python from the command line</h2>
-<p>Once you get your SCF account (which you’ll need for our discussion of parallelization and big data and for PS6), you can access Python or IPython from the UNIX command line as soon as you login to an SCF server. Just SSH to an SCF Linux machine (e.g., arwen.berkeley.edu or radagast.berkeley.edu) and run ‘python’ or ‘ipython’ from the command line.</p>
+<p>Once you get your SCF account, you can access Python or IPython from the UNIX command line as soon as you login to an SCF server. Just SSH to an SCF Linux machine (e.g., gandalf.berkeley.edu or radagast.berkeley.edu) and run ‘python’ or ‘ipython’ from the command line.</p>
 <p>More details on using SSH are <a href="https://statistics.berkeley.edu/computing/ssh">here</a>. Note that if you have the Ubuntu subsystem for Windows, you can use SSH directly from the Ubuntu terminal.</p>
 </section>
 <section id="python-via-jupyter-notebook" class="level2">
 <h2 class="anchored" data-anchor-id="python-via-jupyter-notebook">Python via Jupyter notebook</h2>
-<p>You can use a Jupyter notebook to run Python code from the <a href="https://jupyter.stat.berkeley.edu">SCF JupyterHub</a> or the <a href="https://datahub.berkeley.edu">Berkeley DataHub</a>. Select <code>Start My Server</code>. Then, unless you are running long or parallelized code, just click <code>Spawn</code> (in other words, accept the default ‘standalone’ partition). On the next page select ‘New’ and ‘Python 3’.</p>
+<p>You can use a Jupyter notebook to run Python code from the <a href="https://jupyter.stat.berkeley.edu">SCF JupyterHub</a> or the <a href="https://datahub.berkeley.edu">Berkeley DataHub</a>.</p>
+<p>If you’re on the SCF JupyterHub, select <code>Start My Server</code>. Then, unless you are running long or parallelized code, just click <code>Spawn</code> (in other words, accept the default ‘standalone’ partition). On the next page select ‘New’ and ‘Python 3’.</p>
 <p>To finish your session, click on <code>Control Panel</code> and <code>Stop My Server</code>. Do not click <code>Logout</code>.</p>
 
 
