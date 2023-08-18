@@ -4,15 +4,15 @@
 Statistics 243 is an introduction to statistical computing, taught using
 Python. The course will cover both programming concepts and statistical
 computing concepts. Programming concepts will include data and text
-manipulation, data structures, functions and variable scope, regular
-expressions, debugging/testing, and parallel processing. Statistical
+manipulation, regular expressions, data structures, functions and variable scope, 
+memory use, efficiency, debugging, testing, and parallel processing. Statistical
 computing topics will include working with large datasets, numerical
 linear algebra, computer arithmetic/precision, simulation studies and
 Monte Carlo methods, numerical optimization, and numerical
 integration/differentiation. A goal is that coverage of these topics
 complement the models/methods discussed in the rest of the
 statistics/biostatistics graduate curriculum. We will also cover the
-basics of UNIX/Linux, in particular some basic shell scripting and
+basics of UNIX/Linux, in particular shell scripting and
 operating on remote servers, as well as a bit of R.
 
 ### What the course is not
@@ -33,7 +33,7 @@ will know the basics of Python, at the level of the
 [Python short course](https://berkeley-scf.github.io/python-workshop-2023)
 offered Aug. 16-17, 2023. If you don't have that background
 you'll need to spend time in the initial couple weeks getting up to
-speed. In addition, we'll have an
+speed. In addition, we may have an
 optional hands-on practice session during the second or third week of
 class, and the GSI can also provide assistance.
 
@@ -190,7 +190,7 @@ first.**
 ## Computing Resources {#computing-resources .unnumbered}
 
 Most work for the course can be done on your laptop. Later in the course
-we'll also use the Statistics Department cluster. You can also use the
+we'll also use the Statistics Department Linux cluster. You can also use the
 SCF JupyterHub or the campus DataHub to access a bash shell or run an IPython notebook.
 
 The software needed for the course is as follows:
@@ -304,8 +304,7 @@ There are several rules for submitting your assignments.
 
 Note: Quarto Markdown is an extension to the Markdown
 markup language that allows one to embed Python and R code within an HTML document.
-Please see the SCF [dynamics document tutorial](https://berkeley-scf.github.io/tutorial-dynamic-docs); there will be additional information in the first section and
-on the first problem set.
+Please see the SCF [dynamics document tutorial](https://berkeley-scf.github.io/tutorial-dynamic-docs); there will be additional information in the first section and on the first problem set.
 
 ### Submitting assignments
 

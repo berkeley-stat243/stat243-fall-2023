@@ -17,7 +17,7 @@ website:
       - sidebar:units
       - sidebar:labs
       - sidebar:howtos
-      - href: https://edstem.org/us/courses/XYZ/discussion/
+      - href: https://edstem.org/us/courses/42474/discussion/
         text: "Discussion"
       - href: https://statistics.berkeley.edu/computing/training/tutorials
         text: Tutorials
