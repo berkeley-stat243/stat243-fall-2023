@@ -1,7 +1,7 @@
 ---
 title: "Introduction to UNIX, computers, and key tools"
 author: "Chris Paciorek"
-date: "2023-07-26"
+date: "2023-08-18"
 format:
   pdf:
     documentclass: article
@@ -21,7 +21,7 @@ format:
 # UNIX command line basics
 
 By UNIX, I mean any UNIX-like operating system, including Linux and MacOS. Most modern scientific computing is done on UNIX-based
-machines, often by remotely logging in to a UNIX-based server.
+machines, often by [remotely logging in to a UNIX-based server](https://statistics.berkeley.edu/computing/ssh).
 
 There are a [variety of ways to get access to a UNIX-style command line
 environment](../howtos/accessingUnixCommandLine).
@@ -31,7 +31,7 @@ UNIX](https://berkeley-scf.github.io/tutorial-unix-basics) to get up
 to speed on working in a UNIX-style command line environment. We'll do a
 bit of demo in the first class. If what you see seems quite familiar,
 you can probably skip that tutorial. If what you see is not familiar,
-please work through the tutorial by Monday August 29 and (optionally) attend section on
+please work through the tutorial by Monday August 28 and (optionally) attend section on
 Friday August 26 to work on the problems at the end of the tutorial and
 be able to ask questions of the GSI and other students.
 
@@ -54,7 +54,7 @@ using Git extensively for version control.
 Git stores the files for a project in a *repository*. Here are some
 basic Git commands you can use to access the class materials from the
 command line. There are also [graphical interfaces to
-Git](https://git-scm.com/downloads) that you can explore. I've heard good things(albeit a few years ago) about [Github Desktop](https://desktop.github.com), available for
+Git](https://git-scm.com/downloads) that you can explore. I've heard good things (albeit a few years ago) about [GitHub Desktop](https://desktop.github.com), available for
 Mac and Windows.
 
 1.  To clone (i.e., copy) a repository (in this case from GitHub)
@@ -62,7 +62,7 @@ Mac and Windows.
     repository):
     
     ```
-    git clone https://github.com/berkeley-stat243/stat243-fall-2022
+    git clone https://github.com/berkeley-stat243/stat243-fall-2023
     ```
 
 2.  To update a repository to reflect changes made in a remote copy of
@@ -74,15 +74,14 @@ Mac and Windows.
     ```
 
 More information is available in the [tutorial on the basics of using
-Git](https://github.com/berkeley-scf/tutorial-git-basics), as well as lots
+Git](https://htmlpreview.github.io/?https://github.com/berkeley-scf/tutorial-git-basics/blob/master/git-intro.html), as well as lots
 of information/tutorials online.
 We'll see a lot more about Git in Section sessions, where you'll learn to set up
 a repository, make changes to repositories and work with local and
 remote versons of the repository. In particular, you'll have a chance to
 work through the tutorial and practice with
-Git in the first section/lab (September 2). During the course, you'll make use of Git for submitting problem sets and for doing the final project. I recommend
-you practice using it more generally while preparing your problem set
-solutions.
+Git in the first section/lab (September 2). During the course, you'll make use of Git for submitting problem sets and for doing the final project. You should practice using it more generally while preparing your problem set
+solutions, and you'll need to use it extensively for the final group project.
 
 # Parts of a computer
 
@@ -142,9 +141,11 @@ webpage](http://statistics.berkeley.edu/computing/copying-files).
 # Editors
 
 For statistical computing, we need a text editor, not a word processor,
-because we're going to be operating on code files, plain-text data files, , for which word processing formatting gets
+because we're going to be operating on code files, plain-text data files, 
+and markup language documents (e.g., Markdown/Quarto)
+for which word processing formatting gets
 in the way. **Don't use Microsoft Word or Google Docs to edit code files
-or Markdown/R Markdown/LaTeX.**
+or Markdown/Quarto/R Markdown/LaTeX.**
 
 ## Some useful editors
 
@@ -154,12 +155,14 @@ or Markdown/R Markdown/LaTeX.**
         proprietary/not free)
 -   Windows-specific: *WinEdt*
 -   Mac-specific: *Aquamacs Emacs*, *TextMate*, *TextEdit*
--   RStudio provides a built-in editor for R code and R Markdown files.
+-   RStudio provides a built-in editor for R code and Quarto/R Markdown files.
+    One can actually edit and run Python code chunks quite nicely in 
+    RStudio.
     (Note: RStudio as a whole is an IDE (integrated development environment.
-    The editor is just the editing window where you edit code (and R
+    The editor is just the editing window where you edit code (and
     Markdown) files.)
 -   *VSCode* has a powerful code editor that is customized to work with
-    various languages.
+    various languages, and it has a Quarto extension.
 
 As you get started it's ok to use a very simple text editor such as
 Notepad in Windows, but you should take the time in the next few weeks
@@ -175,10 +178,14 @@ Emacs is one option as an editor. I use Emacs a fair amount, so I'm
 including some tips here, but other editors listed above are just as
 good.
 
--   *Emacs* has special modes for different types of files: R code
+-   *Emacs* has special modes for different types of files: Python
+    code files, R code
     files, C code files, Latex files -- it's worth your time to figure
     out how to set this up on your machine for the kinds of files you
     often work on
+    - If working with Python and R, one can start up a Python or R
+    interpreter in an additional Emacs buffer and send code to that 
+    interpreter and see the results of running the code.
     -   For working with R, ESS (emacs speaks statistics) mode is
         helpful. This is built into Aquamacs Emacs. 
 -   To open emacs in the terminal window rather than as a new window,
@@ -191,7 +198,7 @@ good.
 ## (Optional) Emacs keystroke sequence shortcuts.
 
 > **Note**
-> Several of these (Ctrl-a, Ctrl-e, Ctrl-k, Ctrl-y) work in the command line and other places as well.
+> Several of these (Ctrl-a, Ctrl-e, Ctrl-k, Ctrl-y) work in the command line, interactive Python and R sessions, and other places as well.
 
 |                      Sequence               |                             Result                     |
 |----------------------------------------|-------------------------------------------------------------|

@@ -25,7 +25,7 @@ Due date: TBD.
 |------|--------|------------|------|----------------------------------------------------------------------------------------------------------------------------------------------|
 | 1 | Thursday | 2023-08-24 | 4:00-5:30 pm | Optional: [Introduction to LaTeX session](https://berkeley.libcal.com/event/11068706) run by the library (see Details below)|
 |     | Friday | 2023-08-25 | noon | Required (part of your class participation): [class survey](https://forms.gle/MxPviTJ2Lw1iJvn66)                              |
-|      |  |  | noon | Required: [office hour time survey (UNDER CONSTRUCTION)](http://whenisgood.net/XYZ)                                                                           |
+|      |  |  | noon | Required: [office hour time survey](http://whenisgood.net/tmyj25a)                                                                           |
 |      |  |  | noon | Required: Go to [github.berkeley.edu](github.berkeley.edu) and login with your Calnet credentials (that's all -- it will allow me to create your repository) | 
 |      |  |  | lab (1:00-4:30 pm)  | Optional: Lab 0 help session for software installation/setup and UNIX command line basics (see Details below)         |
 | 2    | Monday  | 2023-08-28 | 7:00-8:15 pm  | Optional: [Python workshop](https://berkeley.libcal.com/event/11031898) (see Details below); perhaps worthwhile if you have no Python background and  if you couldn't attend the Aug 16-17 workshop we held |
