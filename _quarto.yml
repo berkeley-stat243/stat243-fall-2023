@@ -51,8 +51,10 @@ website:
         - file: units/unit10-linalg.qmd
           text: "Unit 10"
     - id: labs
-      title: "Labs"
+      title: "Labs?"
       contents:
+        - file: units/unit1-intro.md
+          text: "Unit 1"
         - file: labs/lab0-setup.md
           text: "Lab 0"
     - id: howtos
