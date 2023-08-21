@@ -53,8 +53,6 @@ website:
     - id: labs
       title: "Labs"
       contents:
-        - file: units/unit1-intro.md
-          text: "Unit 1"
         - file: labs/lab0-setup.md
           text: "Lab 0"
     - id: howtos
