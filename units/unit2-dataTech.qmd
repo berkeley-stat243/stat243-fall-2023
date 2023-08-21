@@ -1,7 +1,7 @@
 ---
 title: "Data technologies, formats, and structures"
 author: "Chris Paciorek"
-date: "2023-07-26"
+date: "2023-08-21"
 format:
   pdf:
     documentclass: article
@@ -18,14 +18,17 @@ execute:
   freeze: auto
 ---
 
-```{r, fake-setup, echo=FALSE}
-## For some reason we need an R chunk in the doc or get result seen in `error.log`.
-z <- 1
-```
 
-```{python, setup, echo=FALSE}
+```{python, setup}
+#| echo: false
 import os, io
-import pandas
+import numpy as np
+import pandas as pd
+
+## So that all objects are printed without explicit `print`.
+from IPython.core.interactiveshell import InteractiveShell
+InteractiveShell.ast_node_interactivity = "all"
+
 ```
 
 [PDF](./unit2-dataTech.pdf){.btn .btn-primary}
@@ -33,12 +36,11 @@ import pandas
 References (see [syllabus](../syllabus) for links):
 
 -   Adler
--   Nolan and Temple Lang, XML and Web Technologies for Data Sciences
-    with R.
+-   Nolan and Temple Lang, XML and Web Technologies for Data Sciences with R.
 -   Murrell, Introduction to Data Technologies.
 -   SCF tutorial: [Working with large datasets in SQL, R, and Python](https://berkeley-scf.github.io/tutorial-databases/)
 
-(Optional) Videos
+(Optional) Videos:
 
 There are four videos from 2020 in the bCourses Media Gallery that you
 can use for reference if you want to:
@@ -48,16 +50,21 @@ can use for reference if you want to:
 3.  HTML
 4.  XML and JSON
 
+Note that the videos were prepared for a version of the course that used
+R, so there are some differences from the content in the current version of
+the unit that reflect translating between R and Python. I'm not sure how
+helpful they'll be, but they are available.
+
 # 1. Data storage and file formats on a computer
 
-We're going to start early in the data analysis pipeline: getting data,
+This unit largely covers topics relevant for early on in the data analysis pipeline: getting data,
 reading data in, writing data out to disk, and webscraping. We'll focus
-on doing these manipulations in R, but the concepts and tools involved
-are common to other languages, so familarity with these in R should
+on doing these manipulations in Python, but the concepts and tools involved
+are common to other languages, so familarity with these in Python should
 allow you to pick up other tools easily. The main downside to
-working with datasets in R (true for Python and most other languages as well) is that the entire
-dataset resides in memory, so R is not so good for dealing with very
-large datasets. More on alternatives in a later unit. R (and similar
+working with datasets in Python (true for R and most other languages as well) is that the entire
+dataset resides in memory, so using standard Python tools can be problematic
+in some cases; we'll discuss some alternatives later.  Python (and similar
 languages) has the capability to read in a wide variety of file formats.
 
 ## Text and binary files
@@ -73,12 +80,17 @@ digits needed for the number of interest. Examples of text file formats
 include CSV, XML, HTML, and JSON.
 
 Text files may be simple ASCII files (i.e., files encoded using ASCII)
-or in other encodings such as UTF-8, both covered in Section 5.
+or files in other encodings such as UTF-8, both covered in Section 5.
 [ASCII](http://en.wikipedia.org/wiki/ASCII) files have 8 bits (1 byte)
 per character and can represent 128 characters (the 52 lower and upper
 case letters in English, 10 digits, punctuation and a few other things
 -- basically what you see on a standard US keyboard). UTF-8 files have
 between 1 and 4 bytes per character.
+
+Some text file formats, such as JSON or HTML, are not easily interpretable/manipulable
+on a line-by-line basis (unlike, e.g., CSV), so they are not as amenable
+to processing using shell commands.
+
 
 A **binary file** is one in which the bits in the file encode the
 information in a custom format and not simply individual characters.
@@ -107,9 +119,9 @@ Here are some of the common file types, some of which are text formats and some 
     extensions are `.txt` and `.csv`. Metadata (information about the
     data) are often stored in a separate file. CSV files are quite
     common, but if you have files where the data contain commas, other
-    delimiters can be good. Text can be put in quotes in CSV files, and
+    delimiters might be preferable. Text can be put in quotes in CSV files, and
     this can allow use of commas within the data. This is difficult to
-    deal with from the command line, but *read.table()* in R handles this situation.
+    deal with from the command line, but `read_table()` in Pandas handles this situation.
 
     -   One occasionally tricky difficulty is as follows. If you have a
         text file created in Windows, the line endings are coded
@@ -120,7 +132,7 @@ Here are some of the common file types, some of which are text formats and some 
         UNIX utilities (`fromdos` in
         Ubuntu, including the SCF Linux machines and `dos2unix` in other
         Linux distributions) that can do the necessary conversion. If
-        you see *\^M* at the end of the lines in a file, that's the tool
+        you see `\^M` at the end of the lines in a file, that's the tool
         you need. Alternatively, if you open a UNIX file in Windows, it
         may treat all the lines as a single line. You can fix this with
         `todos` or `unix2dos`.
@@ -129,26 +141,26 @@ Here are some of the common file types, some of which are text formats and some 
     data may be in a text file with one piece of information per row, but
     without meaningful columns/fields.
 
-3.  In scientific contexts, netCDF (*.nc*) (and the related HDF5) are
-    popular format for gridded data that allows for highly-efficient
-    storage and contains the metadata within the file. The basic
-    structure of a netCDF file is that each variable is an array with
-    multiple dimensions (e.g., latitude, longitude, and time), and one
-    can also extract the values of and metadata about each dimension.
-    The *netCDF4* package in Python nicely handles working with netCDF files.
-
-4.  Data may also be in text files in formats designed for data
+3.  Data may also be in text files in formats designed for data
     interchange between various languages, in particular XML or JSON.
     These formats are "self-describing"; namely the metadata is part of
     the file. The `lxml` and `json` packages are useful for
     reading and writing from these formats. More in Section 4.
 
-5.  You may be scraping information on the web, so dealing with text
+4.  You may be scraping information on the web, so dealing with text
     files in various formats, including HTML. The `requests` and `BeautifulSoup`
-    packages are also useful for reading HTML.
+    packages are useful for reading HTML.
+
+5.  In scientific contexts, netCDF (`.nc`) (and the related HDF5) are
+    popular format for gridded data that allows for highly-efficient
+    storage and contains the metadata within the file. The basic
+    structure of a netCDF file is that each variable is an array with
+    multiple dimensions (e.g., latitude, longitude, and time), and one
+    can also extract the values of and metadata about each dimension.
+    The `netCDF4` package in Python nicely handles working with netCDF files.
 
 6.  Data may already be in a database or in the data storage format of another
-    statistical package (*Stata*, *SAS*, *SPSS*, etc.). The *pandas*
+    statistical package (`Stata`, `SAS`, `SPSS`, etc.). The `Pandas`
     package in Python has  capabilities for importing Stata
     (`read_stata`), SPSS (`read_spss`), and SAS (`read_sas`) files, among others.
 
@@ -169,6 +181,48 @@ Here are some of the common file types, some of which are text formats and some 
     to Python. More in the big data unit and in the large datasets tutorial
     mentioned above.
 
+## CSV vs. specialized formats such as Parquet
+
+CSV is a common format (particularly in some disciplines/contexts) and has the advantages of being simple to understand, human readable, and readily manipulable by line-based processing tools such as shell commands. However, it has various disadvantages:
+
+  - storage is by row, which will often mix values of different types;
+  - extra space is taken up by explicitly storing commas and newlines; and
+  - one must search through the document to find a given row or value -- e.g., to find the 10th row, we must search for the 9th newline and then read until the 10th newline.
+
+A popular file format that has some advantages over plain text formats such as CSV is [Parquet](https://parquet.apache.org/docs/overview/motivation/). The storage is by column (actually in chunks of columns). This works well with how datasets are often structured in that a given field/variable will generally have values of all the same type and there may be many repeated values, so there are opportunities for efficient storage including compression. Storage by column also allows retrieval only of the columns that a user needs. As a result data stored in the Parquet format often takes up much less space than stored as CSV and can be queried much faster. Also note that data stored in Parquet will often be stored as multiple files.
+
+Here's a brief exploration using a data file not in the class repository.
+
+```{python}
+import time
+
+## Read from CSV
+t0 = time.time()
+data_from_csv = pd.read_csv(os.path.join('..', 'data', 'airline.csv'))
+print(time.time() - t0)
+```
+
+```{python}
+## Write out Parquet-formatted data
+data_from_csv.to_parquet(os.path.join('..', 'data', 'airline.parquet'))
+
+## Read from Parquet
+t0 = time.time()
+data_from_parquet = pd.read_parquet(os.path.join(
+                                    '..', 'data', 'airline.parquet'))
+print(time.time() - t0)
+```
+
+The CSV file is 51 MB while the Parquet file is 8 MB.
+
+```{python}
+import subprocess
+subprocess.run(["ls", "-l", os.path.join("..", "data", "airline.csv")])
+subprocess.run(["ls", "-l", os.path.join("..", "data", "airline.parquet")])
+```
+
+
+
 # 2. Reading data from text files into Python
 
 ## Core Python functions
@@ -187,26 +241,30 @@ to tell Pandas what the types are, using the `dtype` argument to `read_table()`.
 
 Let's work through a couple examples. Before we do that, let's look at
 the arguments to `read_table`. Note that `sep=''` can use regular expressions
-(which would be helpful if you want to separate on any amount of white space, e.g.).
+(which would be helpful if you want to separate on any amount of white space, as one example).
 
-```{python, readcsv, eval = TRUE}
-dat = pandas.read_table(os.path.join('..', 'data', 'RTADataSub.csv'),
-                  sep = ',', header = None)
-dat.dtypes  # What are the classes of the columns?
-type(dat.loc[0,1])
-## whoops, there is an 'x', presumably indicating missingness:
+```{python, readcsv}
+dat = pd.read_table(os.path.join('..', 'data', 'RTADataSub.csv'),
+                    sep = ',', header = None)
+dat.dtypes.head()   # 'object' is string or mixed type
+dat.loc[0,1]     
+type(dat.loc[0,1]) # string!
+## Whoops, there is an 'x', presumably indicating missingness:
 dat.loc[:,1].unique()
-## let's treat 'x' as a missing value indicator
-dat2 = pandas.read_table(os.path.join('..', 'data', 'RTADataSub.csv'),
-                  sep = ',', header = None, na_values = 'x')
-[type(dat2.loc[0,colid]) for colid in dat] # What are the classes of the columns?
+```
+
+```{python, readcsv2}
+## Let's treat 'x' as a missing value indicator.
+dat2 = pd.read_table(os.path.join('..', 'data', 'RTADataSub.csv'),
+                     sep = ',', header = None, na_values = 'x')
+dat2.dtypes.head()
 dat2.loc[:,1].unique()
 ```
 
 Using `dtype` is a good way to control how data are read in.
 
 ```{python, dtype}
-dat = pandas.read_table(os.path.join('..', 'data', 'hivSequ.csv'),
+dat = pd.read_table(os.path.join('..', 'data', 'hivSequ.csv'),
                   sep = ',', header = 0,
                   dtype = {
                   'PatientID': int,
@@ -226,9 +284,9 @@ specifying the `dtype` argument explicitly should make for faster
 file reading. 
 
 If possible, it's a good idea to look through the input file in the
-shell or in an editor before reading into R to catch such issues in
-advance. Using the UNIX command *less* on *RTADataSub.csv* would have revealed these
-various issues, but note that *RTADataSub.csv* is a 1000-line subset of
+shell or in an editor before reading into Python to catch such issues in
+advance. Using the UNIX command `less` on `RTADataSub.csv` would have revealed these
+various issues, but note that `RTADataSub.csv` is a 1000-line subset of
 a much larger file of data available from the kaggle.com website. So
 more sophisticated use of UNIX utilities (as we will see in Unit 3) is often
 useful before trying to read something into a program.
@@ -250,12 +308,15 @@ id = [line[3:11] for line in lines]
 year = [int(line[17:21]) for line in lines]
 month = [int(line[21:23]) for line in lines]
 nvalues = [int(line[27:30]) for line in lines]
+year[0:5]
 ```
 
 
 Actually, that file, `precip.txt`, is in a fixed-width format (i.e.,
 every element in a given column has the exact same number of
 characters),so reading in using `pandas.read_fwf()` would be a good strategy.
+
+
 
 ## Connections
 
@@ -264,7 +325,8 @@ construct called a *connection*. This can include reading in text from the outpu
 
 Here are some examples of connections:
 
-```{python, connections, eval=FALSE}
+```{python, connections}
+#| eval: false
 import gzip
 with gzip.open('dat.csv.gz', 'r') as file:
      lines = file.readlines()
@@ -276,11 +338,12 @@ with zipfile.ZipFile('dat.zip', 'r') as archive:
 
 import subprocess
 command = "ls -al"
-output = subprocess.check_output(command, shell = True) # result is a sequence of bytes
-with io.BytesIO(output) as stream:  # create a file-like object
+output = subprocess.check_output(command, shell = True)
+# `output` is a sequence of bytes.
+with io.BytesIO(output) as stream:  # Create a file-like object.
     content = stream.readlines()
 
-df = pandas.read_csv("https://download.bls.gov/pub/time.series/cu/cu.item", sep="\t")
+df = pd.read_csv("https://download.bls.gov/pub/time.series/cu/cu.item", sep="\t")
 ```
 
 
@@ -289,11 +352,12 @@ some computations to reduce the size of things, and iterate. This is referred
 to as online processing, streaming, or chunking, and can be done [using Pandas](https://pandas.pydata.org/pandas-docs/stable/user_guide/io.html#io-chunking) (among other tools).
 
 
-```{python, streaming, eval=FALSE}
+```{python, streaming}
+#| eval: false
 file_path = os.path.join('..', 'data', 'RTADataSub.csv')
-chunksize = 50 # obviously this would be large in any real application
+chunksize = 50 # Obviously this would be much larger in any real application.
 
-with pandas.read_csv(file_path, chunksize = chunksize) as reader:
+with pd.read_csv(file_path, chunksize = chunksize) as reader:
      for chunk in reader:
          # manipulate the lines and store the key stuff
          print(f'Read {len(chunk)} rows.')
@@ -305,10 +369,8 @@ More details on sequential (on-line) processing of large files can be
 found in the tutorial on large datasets mentioned in the reference list
 above.
 
-#HERE
-
 One cool trick that can come in handy is to 'read' from a string as if it were a text
-file. Here's an example
+file. Here's an example:
 
 ```{python, text-connection}
 
@@ -317,7 +379,7 @@ with open(file_path, 'r') as file:
      text = file.read()
 
 stringIOtext = io.StringIO(text)
-df = pandas.read_fwf(stringIOtext, header = None, widths = [3,8,4,2,4,2])
+df = pd.read_fwf(stringIOtext, header = None, widths = [3,8,4,2,4,2])
 ```
 
 We can create connections for writing output too. Just make sure to open
@@ -333,39 +395,36 @@ A few notes on file paths, related to ideas of reproducibility.
     relative to the directory the code file is in, or relative to a
     baseline directory for the project, e.g.:\
     
-    ```{python, relative-paths, eval=FALSE}
-    dat = pandas.read_csv('../data/cpds.csv')
+    ```{python, relative-paths}
+    #| eval: false
+    dat = pd.read_csv('../data/cpds.csv')
     ```    
 
-2.  Be careful with the directory separator in Windows files: you can
-    either do `C:\mydir\file.txt` or `C:/mydir/file.txt`, but
-    note the next comment about
-    avoiding use of '\\' for portability.
-
-3.  Using UNIX style directory separators will work in Windows, Mac or
+2.  Using UNIX style directory separators will work in Windows, Mac or
     Linux, but using Windows style separators is not portable across
     operating systems.
 
-    ```{python, path-separators, eval=FALSE}
-
+    ```{python, path-separators}
+    #| eval: false
     ## good: will work on Windows
-    dat = pandas.read_csv('../data/cpds.csv')
+    dat = pd.read_csv('../data/cpds.csv')
     ## bad: won't work on Mac or Linux
-    dat = pandas.read_csv('..\data\cpds.csv')  
+    dat = pd.read_csv('..\data\cpds.csv')  
     ```
 
-4.  Even better, use `os.path.join` so that paths are constructed
+3.  Even better, use `os.path.join` so that paths are constructed
     specifically for the operating system the user is using:\
 
-    ```{python, file.path, eval=FALSE}
+    ```{python, file.path}
+    #| eval: false
     ## good: operating-system independent
-    dat = pandas.read_csv(os.path.join('..', 'data', 'cpds.csv'))  
+    dat = pd.read_csv(os.path.join('..', 'data', 'cpds.csv'))  
     ```
 
 
 ## Reading data quickly: Arrow and Polars
 
-Apache Arrow provides efficient data structures for working with data in memory, usable in Python via the PyArrow package in Python. Data are stored by column, with values in a column stored sequentially and in such a way that one can access a specific value without reading the other values in the column (O(1) lookup). Arrow is designed to read data from various file formats, including Parquet, native Arrow format, and text files. In general Arrow will only read data from disk as needed, avoiding keeping the entire dataset in memory.
+Apache Arrow provides efficient data structures for working with data in memory, usable in Python via the PyArrow package. Data are stored by column, with values in a column stored sequentially and in such a way that one can access a specific value without reading the other values in the column (O(1) lookup). Arrow is designed to read data from various file formats, including Parquet, native Arrow format, and text files. In general Arrow will only read data from disk as needed, avoiding keeping the entire dataset in memory.
 
 Other options for avoiding reading all your data into memory include the Dask package and using `numpy.load` with the `mmap_mode` argument. 
 
@@ -375,7 +434,7 @@ Other options for avoiding reading all your data into memory include the Dask pa
 import polars
 import time
 t0 = time.time()
-dat = pandas.read_csv(os.path.join('..', 'data', 'airline.csv'))
+dat = pd.read_csv(os.path.join('..', 'data', 'airline.csv'))
 t1 = time.time()
 dat2 = polars.read_csv(os.path.join('..', 'data', 'airline.csv'), null_values = ['NA'])
 t2 = time.time()
@@ -389,7 +448,8 @@ print(f"Timing for Polars: {t2-t1}.")
 
 Functions for text output are generally analogous to those for input.
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 file_path = os.path.join('/tmp', 'tmp.txt')
 with open(file_path, 'w') as file:
      file.writelines(lines)
@@ -397,7 +457,7 @@ with open(file_path, 'w') as file:
 
 We can also use `file.write()` to write individual strings.
 
-In Pandas, we can use `DataFrame.to_csv`. 
+In Pandas, we can use `DataFrame.to_csv` and `DataFrame.to_parquet`.
 
 We can use the `json.dump` function to output appropriate data objects
 (e.g., dictionaries or possibly lists) as JSON. One
@@ -414,19 +474,8 @@ Python objects between different OS.
 
 We can use [string formatting](https://docs.python.org/3/library/string.html#formatstrings) to control how output is printed to the screen.
 
-This mini-language involving in the format specification can get fairly involved,
+The mini-language involved in the format specification can get fairly involved,
 but a few basic pieces of syntax can do most of what one generally needs to do.
-
-One thing to be aware of when writing out numerical data is how many
-digits are included.
-
-```{python}
-import numpy as np
-np.pi
-```
-
-Suppose we wanted fewer (or more) digits. `round()` is one option
-but we might just want to directly control the printing format.
 
 We can format numbers to chosen number of digits and decimal places
 and handle alignment, using the `format` method of the string class.
@@ -440,24 +489,35 @@ For example:
 format(1/3, '15.10f') # alternative using a function
 ```
 
-
 We can also "interpolate" variables into strings.
 
 ```{python}
 "The number pi is {}.".format(np.pi)
 "The number pi is {:.5f}.".format(np.pi)
 "The number pi is {:.12f}.".format(np.pi)
+```
+
+```{python}
 val1 = 1.5
 val2 = 2.5
-print(f"Let's add {val1} and {val2}.")  # as of Python 3.6, put the variable names in directly.
+# As of Python 3.6, put the variable names in directly.
+print(f"Let's add {val1} and {val2}.")  
 num1 = 1/3
-print("Let's add the %s numbers %.5f and %15.7f."%('floating point', num1 ,32+1/7))
+print("Let's add the %s numbers %.5f and %15.7f."
+       %('floating point', num1 ,32+1/7))
+```
 
+Or to insert into a file:
+```{python}
+#| eval: false
 file_path = os.path.join('/tmp', 'tmp.txt')
 with open(file_path, 'a') as file:
-     file.write("Let's add the %s numbers %.5f and %15.7f."%('floating point', num1 ,32+1/7))
+     file.write("Let's add the %s numbers %.5f and %15.7f."
+                %('floating point', num1 ,32+1/7))
 
 ```
+
+`round` is another option, but it's often better to directly control the printing format.
 
 
 # 4. Webscraping and working with HTML, XML, and JSON
@@ -494,7 +554,7 @@ Let's see a brief example of reading in HTML tables.
 Note that before doing any coding, it can be helpful to look at the raw
 HTML source code for a given page. We can explore the underlying HTML
 source in advance of writing our code by looking at the page source
-directly in the browser (e.g., in Firefox under the 3-lines "open menu"
+directly in the browser (e.g., in Firefox under the 3-lines (hamburger) "open menu"
 symbol, see `Web Developer (or More Tools) -> Page Source` and in Chrome
 `View -> Developer -> View Source`), or by downloading the webpage and
 looking at it in an editor, although in some cases (such as the
@@ -502,12 +562,11 @@ nytimes.com case), what we might see is a lot of JavaScript.
 
 One lesson here is not to write a lot of your own code to do something
 that someone else has probably already written a package for. We'll use
-the *BeautifulSoup4* package.
+the `BeautifulSoup4` package.
 
 ```{python, https}
 import requests
 from bs4 import BeautifulSoup as bs
-import pandas as pd
 
 URL = "https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population"
 response = requests.get(URL)
@@ -522,18 +581,14 @@ pd_tables = [pd.read_html(str(tbl))[0] for tbl in html_tables]
 
 [x.shape[0] for x in pd_tables]
 
-pd_tables[1].head()
+pd_tables[0].head()
 ```
 
-(Caution here -- notice that the population information is stored
-in two columns that are somehow part of a single column, presumably
-because of the two-level header of the table.)
 
 Beautiful Soup works by reading in the HTML as text and then parsing it
-to build up a tree containing the HTML elements. Then one can search by
-HTML tag or attribute for information you want using `find_all`.
-
-https://beautiful-soup-4.readthedocs.io/en/latest/#searching-the-tree
+to build up a tree containing the HTML elements. Then one can [search by
+HTML tag or attribute](https://beautiful-soup-4.readthedocs.io/en/latest/#searching-the-tree)
+for information you want using `find_all`.
 
 As another example, it's often useful to be able to extract the hyperlinks in an HTML
 document. We'll find the link using [CSS
@@ -564,7 +619,8 @@ Here's another example of extracting specific components of information
 from a webpage (results not shown, since headlines will vary from day to
 day).
 
-```{python, headlines, eval=FALSE}
+```{python, headlines}
+#| eval: false
 URL = "https://www.nytimes.com"
 responseNYT = requests.get(URL)
 soupNYT = bs(responseNYT.content, 'html.parser')
@@ -587,6 +643,7 @@ lxml_doc = lxml.html.fromstring(str(soup))
 # Use XPath to select elements
 a_elements = lxml_doc.xpath('//a[@href]')
 links = [x.get('href') for x in a_elements]
+links[0:9]
 ```
 
 
@@ -601,7 +658,7 @@ HTML. Some examples of the use of XML include serving as the underlying
 format for Microsoft Office and Google Docs documents and for the KML
 language used for spatial information in Google Earth.
 
-Here's a brief example. The book with id attribute *bk101* is an
+Here's a brief example. The book with id attribute `bk101` is an
 element; the author of the book is also an element that is a child
 element of the book. The id attribute allows us to uniquely identify the
 element.
@@ -632,9 +689,7 @@ We can read XML documents into Python using various packages,
 including `lxml` and then manipulate the resulting structured data
 object. Here's an
 example of working with lending data from the Kiva lending non-profit.
-You can see the XML format in a browser at
-
-<http://api.kivaws.org/v1/loans/newest.xml>.
+You can see the XML format in a browser at <http://api.kivaws.org/v1/loans/newest.xml>.
 
 XML documents have a tree structure with information at nodes. As above
 with HTML, one can use the *XPath* language for navigating the tree and
@@ -714,8 +769,7 @@ but JSON is less *verbose* than XML.
 
 We can read JSON into Python using the `json` package.
 Let's play again with the Kiva data. The same data that we had worked
-with in XML format is also available in JSON format:
-<https://api.kivaws.org/v1/loans/newest.json>.
+with in XML format is also available in JSON format: <https://api.kivaws.org/v1/loans/newest.json>.
 
 ```{python, json}
 URL = "https://api.kivaws.org/v1/loans/newest.json"
@@ -744,9 +798,9 @@ Ideally, but not always, the API will be documented. In many cases that
 simply amounts to making an HTTP GET request, which is done by
 constructing a URL.
 
-The packages *RCurl* and *httr* are useful for a wide variety of such
+The `requests` package is  useful for a wide variety of such
 functionality. Note that much of the functionality I describe below is
-also possible within the shell using either *wget* or *curl*.
+also possible within the shell using either `wget` or `curl`.
 
 ### Webscraping ethics and best practices
 
@@ -777,9 +831,6 @@ Some places to look for information on what the website allows are:
     amount of data
 
 Here are some links with useful information:
-
--   [A blog post overview on webscraping and
-    robots.txt](http://feedproxy.google.com/~r/RBloggers/~3/RZGJ8Trv5Xw/?utm_source=feedburner&utm_medium=email)
 
 -   [Blog post on webscraping
     ethics](https://towardsdatascience.com/ethics-in-web-scraping-b96b18136f01)
@@ -844,7 +895,7 @@ Berkeley, and we'll see the GET request, in the form:
 Let's see an example of accessing economic data from the
 World Bank, using the [documentation for their API](https://datahelpdesk.worldbank.org/knowledgebase/topics/125589-developer-information). Following the [API call structure](https://datahelpdesk.worldbank.org/knowledgebase/articles/898581-api-basic-call-structures), we can download (for example), data on various countries. The documentation indicates that our REST-based query can use either a URL structure or an argument-based structure.
 
-```{python, REST, eval=TRUE}
+```{python, REST}
 ## Queries based on the documentation
 api_url = "http://api.worldbank.org/V2/incomeLevel/LIC/country"
 api_args = "http://api.worldbank.org/V2/country?incomeLevel=LIC"
@@ -867,7 +918,8 @@ baseURL = "http://api.worldbank.org/V2/country"
 group = 'MIC'
 format = 'json'
 args = {'incomeLevel': group, 'format': format, 'per_page': 1000}
-url = baseURL + '?' + '&'.join(['='.join([key, str(args[key])]) for key in args])
+url = baseURL + '?' + '&'.join(['='.join(
+                               [key, str(args[key])]) for key in args])
 response = requests.get(url)
 data = json.loads(response.content)
    
@@ -895,7 +947,7 @@ you would first authenticate with your login and password and receive a
 "token". This token would then be used in subsequent interactions in the
 same session.
 
-I created your *github.berkeley.edu* accounts from Python by interacting
+I created your `github.berkeley.edu` accounts from Python by interacting
 with the [GitHub API](https://docs.github.com/en/rest/reference/repos)
 using `requests`.
 
@@ -928,7 +980,7 @@ see that an HTTP GET request is being used with a URL such as:\
 <http://data.un.org/Handlers/DownloadHandler.ashx?DataFilter=itemCode:526;year:2012,2013,2014,2015,2016,2017&DataMartId=FAO&Format=csv&c=2,4,5,6,7&s=countryName:asc,elementCode:asc,year:desc>.
 
 We'e now able to easily download the data using that URL, which we can
-fairly easily construct using string processing in bash, R, or Python,
+fairly easily construct using string processing in bash, Python, or R,
 such as this (here I just paste it together directly, but using more structured syntax
 such as I used for the World Bank example would be better):
 
@@ -952,7 +1004,7 @@ response = requests.get(url)
 with io.BytesIO(response.content) as stream:  # create a file-like object
      with zipfile.ZipFile(stream, 'r') as archive:   # treat the object as a zip file
           with archive.open(archive.filelist[0].filename, 'r') as file:  # get a pointer to the embedded file
-              dat = pandas.read_csv(file)
+              dat = pd.read_csv(file)
 
 dat.head()
 ```
@@ -978,10 +1030,10 @@ data = {"DataFilter": f"itemCode:{itemCode};year:{yrs}",
 
 response = requests.get(baseURL, params = data)
 
-with io.BytesIO(response.content) as stream:  # create a file-like object
-     with zipfile.ZipFile(stream, 'r') as archive:   # treat the object as a zip file
-          with archive.open(archive.filelist[0].filename, 'r') as file:  # get a pointer to the embedded file
-              dat = pandas.read_csv(file)
+with io.BytesIO(response.content) as stream:  
+     with zipfile.ZipFile(stream, 'r') as archive:
+          with archive.open(archive.filelist[0].filename, 'r') as file:  
+              dat = pd.read_csv(file)
                
 ```
 
@@ -992,7 +1044,8 @@ need to use an HTTP POST request (POST requests are often used for
 submitting web forms). A typical request would have syntax like this
 search (using `requests`):
 
-```{python, http-post, eval=FALSE}
+```{python, http-post}
+#| eval: false
 url = 'http://www.wormbase.org/db/searches/advanced/dumper'
 
 data = {      "specipes":"briggsae",
@@ -1004,7 +1057,7 @@ data = {      "specipes":"briggsae",
               "orientation": "Relative to feature",
               "relative": "Chromsome",
               "DNA":"flanking sequences only",
-              ".cgifields :  "feature, orientation, DNA, dump, relative"
+              ".cgifields" :  "feature, orientation, DNA, dump, relative"
 }                                  
 
 response = requests.post(url, data = data)
@@ -1028,17 +1081,17 @@ details are available in the Nolan and Temple Lang book.
 ### Packaged access to an API
 
 For popular websites/data sources, a developer may have packaged up the
-API calls in a user-friendly fashion for use from R, Python or other
+API calls in a user-friendly fashion for use from Python, R, or other
 software. For example there are Python (twitter) and R (twitteR)
 packages for interfacing with Twitter via its API.
 
-Here's some example code for Python (the Python package seems to be more
-fully-featured than the R package). This looks up the US senators'
+Here's some example code for Python. This looks up the US senators'
 Twitter names and then downloads a portion of each of their timelines,
 i.e., the time series of their tweets. Note that Twitter has limits on
 how much one can download at once.
 
-```{python, twitter-python, engine='python', eval=FALSE}
+```{python, twitter-python}
+#| eval: false
 import json
 import twitter
 
@@ -1065,7 +1118,8 @@ auth = twitter.oauth.OAuth(OAUTH_TOKEN, OAUTH_TOKEN_SECRET,
 api = twitter.Twitter(auth=auth)
 
 # get the list of senators
-senators = api.lists.members(owner_screen_name="gov", slug="us-senate", count=100)
+senators = api.lists.members(owner_screen_name="gov",
+                             slug="us-senate", count=100)
 
 # get all the senators' timelines
 names = [d["screen_name"] for d in senators["users"]]
@@ -1086,12 +1140,8 @@ Some websites dynamically change in reaction to the user behavior. In
 these cases you need a tool that can mimic the behavior of a human
 interacting with a site. Some options are:
 
--   *selenium* (and the *RSelenium* wrapper for R) is a popular tool for
-    doing this.
-
--   *splash* (and the *splashr* wrapper for R) is another approach.
-
--   *htmlunit* is another tool for this.
+- `selenium` is a popular tool for doing this, and there is a Python package of the same name.
+- Using `scrapy` plus `splash`  is another approach.
 
 # 5. File and string encodings
 
@@ -1114,17 +1164,20 @@ written as two base-16 numbers (i.e., hexadecimal), where "0100"="4" and
 
 ## 4d in hexadecimal is 'M'
 ## 0a is a newline (at least in Linux/Mac)
-## "0x" is how we tell R we are using hexadecimal
+## "0x" is how we tell Python we are using hexadecimal
 [hex(ord(x)) for x in ['M','o','m','\n']] ## i.e., "Mom\n" in ascii
 hexvals = b'\x4d\x6f\x6d\x0a'
 
 with open('tmp.txt', 'wb') as textfile:
-     textfile.write(hexvals)
+     nbytes = textfile.write(hexvals)
+
+nbytes
+subprocess.run(["ls", "-l", "tmp.txt"])
 
 with open('tmp.txt', 'r') as textfile:
      line = textfile.readlines()
-     
-os.system('ls -l tmp.txt')
+
+line
 ```
 
 
@@ -1140,7 +1193,7 @@ encodes a small subset of Unicode and contains the characters used in
 many European languages (e.g., letters with accents). Here's an example
 of using a non-ASCII Unicode character:
 
-```{python, unicode-example, eval=TRUE}
+```{python, unicode-example}
 ## n-tilde and division symbol as Unicode 'code points'
 ## Python `str` type stores Unicode characters.
 x2_unicode = 'Pe\u00f1a 3\u00f72'
@@ -1154,13 +1207,13 @@ x2_utf8 = b'Pe\xc3\xb1a 3\xc3\xb72'
 x2_utf8
 
 with open('tmp2.txt', 'wb') as textfile:
-     textfile.write(x2_utf8)
+     nbytes = textfile.write(x2_utf8)
 
 ## Here n-tilde and division symbol take up two bytes
-os.system('ls -l tmp2.txt') 
+subprocess.run(["ls", "-l", "tmp2.txt"])
 ## The system knows how to interpret the UTF-8 encoded file
 ## and represent the Unicode character on the screen:
-os.system('cat tmp2.txt')
+subprocess.run(["cat", "tmp2.txt"])
 ```
 
 UTF-8 is cleverly designed in terms of the bit-wise representation of
@@ -1195,6 +1248,9 @@ the `encode` method for string objects:
 ```{python, encode}
 text = "Melhore sua seguran\xe7a"
 text  # automatically encoded as UTF-8
+```
+
+```{python, encode2}
 text.encode('latin1')
 text  
 
@@ -1223,13 +1279,13 @@ except Exception as error:
 with open('file.txt', 'r', encoding = 'latin1') as textfile:
     lines = textfile.readlines()
 
-## Note the non-ASCII (Latin-1) character
+## Note the non-ASCII (Latin-1) character (the upside-down question mark)
 lines[16925]
 ```
 
 # 6. Data structures
 
-As we're reading data into R or other languages, it's important to think about the data structures we'll use to store the information. The data structure we choose can affect:
+As we're reading data into Python or other languages, it's important to think about the data structures we'll use to store the information. The data structure we choose can affect:
 
 - the amount of memory we need, 
 - how quickly we can access the information in the data structure,
@@ -1238,12 +1294,12 @@ As we're reading data into R or other languages, it's important to think about t
 
 This means that what you plan to do with the data should guide what kind of structure you store the data in.
 
-## Standard data structures in R and Python
+## Standard data structures in Python and R
 
-- In R and Python, one often ends up working with dataframes, lists, and vectors/matrices/arrays/tensors.
-- In R, if we are not working with rectangular datasets or standard numerical objects, we often end up using lists or enhanced versions of lists, sometimes with deeply nested structures.
+- In Python and R, one often ends up working with dataframes, lists, and arrays/vectors/matrices/tensors.
 - In Python we commonly work with data structures that are part of additional packages, in particular numpy arrays and pandas dataframes.
 - Dictionaries in Python allow for easy use of key-value pairs where one can access values based on their key/label. In R one can do something similar with named vectors or named lists or (more efficiently) by using environments.
+- In R, if we are not working with rectangular datasets or standard numerical objects, we often end up using lists or enhanced versions of lists, sometimes with deeply nested structures.
 
 In Unit 7, we'll talk about *distributed* data structures that allow one to easily work with data distributed across multiple computers.
 
@@ -1270,7 +1326,7 @@ A *stack* is a collection of elements that behave like a stack of lunch trays. Y
 
 A *queue* is like the line at a grocery store, behaving as "first in, first out".
 
-One can use such data structures either directly or via add-on packages in R and Python, though I don't think they're all that commonly used in R. This is probably because statistical/data science/machine learning workflows often involve either 'rectangular' data (i.e., dataframe-style data) and/or mathematical computations with arrays. That said, trees and graphs are widely used.
+One can use such data structures either directly or via add-on packages in Python and R, though I don't think they're all that commonly used in R. This is probably because statistical/data science/machine learning workflows often involve either 'rectangular' data (i.e., dataframe-style data) and/or mathematical computations with arrays. That said, trees and graphs are widely used.
 
 Some related concepts that we'll discuss further in Unit 5 include:
 
