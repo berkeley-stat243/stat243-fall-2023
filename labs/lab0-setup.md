@@ -20,7 +20,7 @@ format:
 
 You will need to set up (or make sure you have access to) the following:
 
-1. Unix shell
+1. [Unix shell](../howtos/accessingUnixCommandLine.md)
 2. git
 3. quarto
 4. python
