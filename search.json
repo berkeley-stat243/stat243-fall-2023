@@ -658,181 +658,6 @@
     "text": "Notes on assignments and activities\n\nOptional library LaTeX session: I highly recommend (in particular if you are a Statistics graduate student) that you know how to create equations in LaTeX. Even if you develop your documents using Quarto, Jupyter notebooks, R Markdown, etc. rather than LaTeX-based documents, LaTeX math syntax is the common tool for writing math syntax that will render beautifully.\nOptional Lab 0 software/command line help session: (August 25 in lab room) Help session for installing software, accessing a UNIX-style command line, and basic UNIX usage (e.g., the UNIX basics tutorial). You should have software installed, be able to accesss the command line, and have started to become familiar with basic UNIX usage before class on Wednesday August 30.\nOptional Python workshop: (location/time TBD) If you are not familiar with Python at the level of the Python short course, work through that material and the exercises (solutions provided). You should do this by the end of the week of September 4. If you couldn’t make the workshop and want a more structured experience you could consider the library’s short introductions to Python.\nBash shell tutorial and exercises: (by September 1), read through this tutorial on using the bash shell. You can skip the pages on Regular Expressions and Managing Processes. Work through the first 10 problems in the exercises and submit your answers via Gradescope. This is not a formal problem set, so you don’t need to worry about formatting nor about explaining/commenting your answers, nor do you need to put your answers in your GitHub class repository. In fact it’s even fine with me if you hand-write the answers and scan them to an electronic document. I just want to make sure you’ve worked through the tutorial. I’ll be doing demonstrations on using the bash shell in class starting on Wednesday August 30, so that will be helpful as you work through the tutorial.\nLab 1: (September 1) First section/lab on using Git, setting up your GitHub repository for problem sets, and using Quarto to generate dynamic documents. Please come only to the section you are registered for given space limits in the room, unless you have talked with Chris and have his permission.\nRegular expression tutorial and exercises: (by September 8), read the regular expression material in the tutorial on using the bash shell. Also read Section 1 of the ‘basic text manipulation’ page of the string processing tutorial (you can focus on Section 1.2 on stringr if you wish). Then answer the regular expressions (regex) practice problems and submit your answers on Gradescope (UNDER CONSTRUCTION). This is not one of the graded problem sets but rather an ‘assignment’ that will simply be noted as being completed or not."
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Statistics 243 Fall 2023",
-    "section": "",
-    "text": "See the links above for the key resources for the course."
-  },
-  {
-    "objectID": "index.html#questions-about-taking-the-class",
-    "href": "index.html#questions-about-taking-the-class",
-    "title": "Statistics 243 Fall 2023",
-    "section": "Questions about taking the class",
-    "text": "Questions about taking the class\nIf you would like to audit the class, enroll as a UC Berkeley undergraduate, or enroll as a concurrent enrollment student (i.e., for visiting students), or for some other reason are not enrolled, please fill out this survey as soon as possible. All those enrolled or wishing to take the class should have filled it out by Friday August 25 at noon.\nUndergraduates can only take the course with my permission and once all graduate students have an opportunity to register. I expect there will be space, and will likely start admitting undergraduates early the week of August 28 or late the previous week.\nConcurrent enrollment students (e.g., exchange students from other universities/countries) can take the course with my permission and once all UC Berkeley students have had an opportunity to register. I expect there will be space, and will likely start admitting concurrent enrollment students early the week of August 28.\nPlease see the syllabus for the math and statistics background I expect, as well as the need to be familiar with Python or to get up to speed in Python during the first few weeks of the semester.\nThe first three weeks involve a lot of moving pieces, in part related to trying to get everyone up to speed with the bash shell and Python. Please use the schedule to keep on top of what you need to do."
-  },
-  {
-    "objectID": "index.html#course-content",
-    "href": "index.html#course-content",
-    "title": "Statistics 243 Fall 2023",
-    "section": "Course content",
-    "text": "Course content\n\nThis site: most non-recorded course material\n\nFor html versions of the Units, see the navigation bar above.\nFor PDF versions of the Units, clone the GitHub repository, or if you’re not yet familiar with Git, download a zip file.\n\nVarious SCF tutorials: These include the various tutorials referred to in the class materials (e.g., the UNIX and bash shell tutorials, the dynamic documents tutorial, the Git tutorial, the string processing tutorial, etc.).\nbCourses: links to class course captures and any pre-recorded material.\n\nIf you’re not yet familiar with Git, go to the upper right of this page and click on ‘Clone or download’ and then ‘Download ZIP’."
-  },
-  {
-    "objectID": "howtos/ps-submission.html",
-    "href": "howtos/ps-submission.html",
-    "title": "Problem Set Submissions",
-    "section": "",
-    "text": "[UNDER CONSTRUCTION]"
-  },
-  {
-    "objectID": "howtos/ps-submission.html#submission-format",
-    "href": "howtos/ps-submission.html#submission-format",
-    "title": "Problem Set Submissions",
-    "section": "Submission format",
-    "text": "Submission format\nProblem set solutions should be written in Quarto Markdown (.qmd) source files, interspersing explanatory text with Python (and in some cases bash) code chunks. Please do not use Jupyter notebook (.ipynb) files as your underlying source file for your solutions.\nWhy?\n\nFor one or two of the initial problem sets you’ll need to include both bash and Python code. This isn’t possible in a single notebook.\nThe underlying format of .ipynb files is JSON. While this is a plain text format, the key-value pair structure is much less well-suited for use with Git version control (which relies on diff) than Markdown-based formats.\nOne can run chunks in a Jupyter notebook in arbitrary order. What is printed to PDF depends on the order in which the chunks are run and the results can differ from what one would expect based on reading the notebook sequentially and running the chunks sequentially. For example, consider the following experiment and you’ll see what I mean: (1) Have one code chunk with a = 3 and run it; (2) Add a second chunk with print(a) and run it; and (3) Change the first chunk to a=4 and DO NOT rerun the second chunk. Save the notebook to PDF. You’ll see that your “report” makes no sense. Here’s the result of me doing that experiment.\n\nIf you really want to do your initial explorations of the problems in a Jupyter notebook, with content then copied to qmd, that is fine.\nFor problem sets later in the semester, we may allow the work to be done in a Jupyter notebook (committed to the repository as the source file) and then submitted as a PDF, but the initial problem sets must be provided as qmd source files."
-  },
-  {
-    "objectID": "howtos/ps-submission.html#problem-set-solution-workflows",
-    "href": "howtos/ps-submission.html#problem-set-solution-workflows",
-    "title": "Problem Set Submissions",
-    "section": "Problem set solution workflows",
-    "text": "Problem set solution workflows\n[Deeb, this is just a start, please edit/augment as we discussed. You don’t need to stick with these three as is, this is just based on our conversation.]\nHere we outline a few suggested workflows for developing your problem set solutions:\n\nOpen the qmd file in any editor you like (e.g., Emacs, Sublime, ….). Use quarto preview to show your rendered document live as you edit and save changes.\nUse VS Code with the Quarto extension.\nUse RStudio (yes, RStudio), which can manage Python code and will display chunk output in the same way it does with R chunks.\n\nPlease commit your work regularly to your repository as you develop your solutions."
-  },
-  {
-    "objectID": "howtos/ps-submission.html#github-repository",
-    "href": "howtos/ps-submission.html#github-repository",
-    "title": "Problem Set Submissions",
-    "section": "GitHub repository",
-    "text": "GitHub repository\n\nSetting up your repository\nWe are creating repositories for everyone at github.berkeley.edu. Additionally, homeworks still need to be submitted as PDFs on Gradescope.\nSteps:\n\nLog into github.berkeley.edu using your Berkeley credentials. Because of how the system works, you will need to log in before your account is created. Nothing else needs to be done, just log in and log out.\nAfter accounts are created (may take a couple days after first login), when you log in again, you should see one private repository listed on the left side (e.g., stat243-fall-2022/ahv36). This is your class repository. Do not change the repository settings! They are set up for this class.\nClone the repo to your home directory (I would clone it into a directory just for repositories (e.g., I use ~/repos). In the top-level of your working directory, you should create a file named (exactly) .gitignore.\n\nThe .gitignore file causes Git to ignore transient or computer-specific files that Quarto generates. (more info at https://github.com/github/gitignore) In it, put (again, don’t put dashed lines):\n[Deeb, as you’re playing with Quarto see what else might belong in .gitignore.]\n# cache directories\n/__pycache__\n\n# pickle files\n*.pkl\n*.pickle\n\n\nRepository Organization\nThe problem sets in your repository should be organized into folders with specific filenames.\nWhen we pull from your repository, our code will be assuming the following structure:\nyour_repo/\n├── ps1/\n│   ├── ps1.pdf\n│   ├── ps1.qmd \n│   ├── &lt;possibly auxiliary code or other files&gt;\n├── ps2/\n│   ├── ...\n├── ...\n├── ps8/\n├── .gitignore\n└── info.json\nThe file names are case-sensitive, so please keep everything lowercase."
-  },
-  {
-    "objectID": "howtos/quartoInstall.html",
-    "href": "howtos/quartoInstall.html",
-    "title": "Installing and Using Quarto",
-    "section": "",
-    "text": "Unless you plan to generate your problem set solutions on the SCF, you’ll need to install Quarto.\nOnce installed, you should be able to run commands such as quarto render from the command line.\nThis includes, I think, running from the Windows Command shell or PowerShell. We’ll add details/troubleshooting tips here as needed."
-  },
-  {
-    "objectID": "howtos/accessingPython.html",
-    "href": "howtos/accessingPython.html",
-    "title": "Accessing Python",
-    "section": "",
-    "text": "We recommend using using the Anaconda (Python 3.11 distribution) on your laptop. Click “Download” and then click 64-bit “Graphical Installer” for your current operating system.\nOnce you’ve installed Python, please install the following packages:\nAssuming you installed Anaconda Python, you should be able to do this from the command line:\nWhile you’re welcome to work with Python in a Jupyter notebook for exploration (e.g., using the campus DataHub, you’ll need to submit Quarto (.qmd) documents with Python chunks for your problem sets. So you’ll need Python set up on your laptop or to use it by logging in to an SCF machine."
-  },
-  {
-    "objectID": "howtos/accessingPython.html#python-from-the-command-line",
-    "href": "howtos/accessingPython.html#python-from-the-command-line",
-    "title": "Accessing Python",
-    "section": "Python from the command line",
-    "text": "Python from the command line\nOnce you get your SCF account, you can access Python or IPython from the UNIX command line as soon as you login to an SCF server. Just SSH to an SCF Linux machine (e.g., gandalf.berkeley.edu or radagast.berkeley.edu) and run ‘python’ or ‘ipython’ from the command line.\nMore details on using SSH are here. Note that if you have the Ubuntu subsystem for Windows, you can use SSH directly from the Ubuntu terminal."
-  },
-  {
-    "objectID": "howtos/accessingPython.html#python-via-jupyter-notebook",
-    "href": "howtos/accessingPython.html#python-via-jupyter-notebook",
-    "title": "Accessing Python",
-    "section": "Python via Jupyter notebook",
-    "text": "Python via Jupyter notebook\nYou can use a Jupyter notebook to run Python code from the SCF JupyterHub or the Berkeley DataHub.\nIf you’re on the SCF JupyterHub, select Start My Server. Then, unless you are running long or parallelized code, just click Spawn (in other words, accept the default ‘standalone’ partition). On the next page select ‘New’ and ‘Python 3’.\nTo finish your session, click on Control Panel and Stop My Server. Do not click Logout."
-  },
-  {
-    "objectID": "howtos/accessingUnixCommandLine.html",
-    "href": "howtos/accessingUnixCommandLine.html",
-    "title": "Accessing the Unix Command Line",
-    "section": "",
-    "text": "You have several options for UNIX command-line access. You’ll need to choose one of these and get it working.\n\nMac OS (on your personal machine):\nOpen a Terminal by going to Applications -&gt; Utilities -&gt; Terminal\n\n\nWindows (on your personal machine):\n\nYou may be able to use the Ubuntu bash shell available in Windows.\nYour PC must be running a 64-bit version of Windows 10 Anniversary Update or later (build 1607+).\nPlease see these links for more information:\n\nhttp://blog.revolutionanalytics.com/2017/12/r-in-the-windows-subsystem-for-linux.html\nhttps://msdn.microsoft.com/en-us/commandline/wsl/install_guide\n\nFor more detailed instructions, see the Installing the Linux Subsystem on Windows tutorial.\n(Not recommended) There’s an older program called cygwin that provides a UNIX command-line interface.\n\nNote that when you install Git on Windows, you will get Git Bash. While you can use this to control Git, the functionality is limited so this will not be enough for general UNIX command-line access for the course.\n\n\nLinux (on your personal machine):\nIf you have access to a Linux machine, you very likely know how to access a terminal.\n\n\nAccess via DataHub (provided by UC Berkeley’s Data Science Education Program)\n\nGo to https://datahub.berkeley.edu\nClick on Sign in with bCourses, sign in via CalNet, and authorize DataHub to have access to your account.\nIn the mid-upper right, click on New and Terminal.\nTo end your session, click on Control Panel and Stop My Server. Note that Logout will not end your running session, it will just log you out of it.\n\n\n\nAccess via the Statistical Computing Facility (SCF)\nWith an SCF account (available here), you can access a bash shell in the ways listed below.\nThose of you in the Statistics Department should be in the process of getting an SCF account. Everyone else will need an SCF account when we get to the unit on parallel computing, but you can request an account now if you prefer.\n\nYou can login to our various Linux servers and access a bash shell that way. Please see http://statistics.berkeley.edu/computing/access.\nYou can also access a bash shell via the SCF JupyterHub interface; please see the Accessing Python instructions but when you click on New, choose Terminal. This is very similar to the DataHub functionality discussed above."
-  },
-  {
-    "objectID": "publish.html",
-    "href": "publish.html",
-    "title": "Statistics 243 Fall 2023",
-    "section": "",
-    "text": "We use Quarto with GitHub Actions to publish the materials as the course website. All commits should be done to main and not to gh-pages.\nThis documents creation of new pages that require Python or R computation. We render the source document locally, with ‘freeze’ set on the document so that results are stored in _freeze and don’t need to be re-run on every commit.\n\nCopy the preamble from an existing units/*.qmd file.\nUpdate _quarto.yml to reflect the new content (unless you don’t yet want it discoverable online).\nRun quarto render &lt;new-Rmd-or-qmd&gt; locally, which will store computations in the _freeze directory.\nCommit the new page and all changes to the _freeze dir including .json and figure (.png/pdf) files.\nPush to GitHub and the publish action should run fairly quickly via GitHub actions.\n\nTo set up the website for a new course/year, one needs to run quarto publish from within main initially."
-  },
-  {
-    "objectID": "howtos/windowsAndLinux.html",
-    "href": "howtos/windowsAndLinux.html",
-    "title": "Windows 10 and the Ubuntu Subsystem",
-    "section": "",
-    "text": "Windows 10 has a powerful new feature that allows a full Linux system to be installed and run from within Windows. This is incredibly useful for building/testing code in Linux, without having a dedicated Linux machine, but it poses strange new behaviors as two very different operating systems coexist in one place. Initially, this document mirrors the Windows Install tutorial, showing you how to install Ubuntu and setting up R, RStudio, and LaTex. Then, we cover some of the issues of running two systems together, starting with finding files, finding the Ubuntu subsystem, and file modifications."
-  },
-  {
-    "objectID": "howtos/windowsAndLinux.html#installing-ubuntu",
-    "href": "howtos/windowsAndLinux.html#installing-ubuntu",
-    "title": "Windows 10 and the Ubuntu Subsystem",
-    "section": "Installing Ubuntu",
-    "text": "Installing Ubuntu\nThere are 2 parts to installing a Linux subsystem in Windows. I will write this using Ubuntu as the example, as it is my preferred Linux distro, but several others are provided by Windows.\nSources:\n\nOfficial Windows Instructions\nUbuntu Update Instructions\n\n\n1) Enable Linux Subsystem\nBy default, the Linux subsystem is an optional addition in Windows. This feature has to be enabled prior to installing Linux. There are two ways to do it.\n\nCMD Line\nThe simplest way to enable the Linux subsystem is through PowerShell.\n\nOpen PowerShell as Administrator\nRun the following (on one line):\nEnable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux\nRestart the computer\n\nGUI\nIf you don’t wish to use PowerShell, you can work your way through the control panel and turn on the Linux subsystem.\n\nOpen the settings page through the search bar\nGo to Programs and Features\nFind Turn Windows Features on or off on the right side\nEnable the Windows Subsystem for Linux option\nRestart the computer\n\n\n\n\n2) Install Linux Subsystem\nOnce the Linux subsystem feature has been enabled, there are multiple methods to download and install the Linux distro you want. I highly recommend installing Ubuntu from the Microsoft store. There are several other flavors available as well, but Ubuntu is generally the easiest to learn and the most well supported.\n\nOpen the Microsoft Store\nSearch for Ubuntu\n\nYou’re looking for the highest number followed by LTS, currently 20.04 LTS (or 18.04 LTS is fine too). This is the current long-term-release, meaning it will be supported for the next 5 years.\n\nClick on the tile, then click Get, and this should start the installation.\nFollow the prompts to install Ubuntu.\n\nAfter installing Ubuntu, it is advisable to update it. This is something you should do on a regular basis.\n\nOpen a Bash terminal.\nType sudo apt update to update your local package database.\nType sudo apt upgrade to upgrade your installed packages."
-  },
-  {
-    "objectID": "howtos/windowsAndLinux.html#using-the-linux-terminal-from-r-in-windows",
-    "href": "howtos/windowsAndLinux.html#using-the-linux-terminal-from-r-in-windows",
-    "title": "Windows 10 and the Ubuntu Subsystem",
-    "section": "Using the Linux Terminal from R in Windows",
-    "text": "Using the Linux Terminal from R in Windows\nTo get all the functionality of a UNIX-style commandline from within R (e.g., for bash code chunks), you should set the terminal under R in Windows to be the Linux subsystem."
-  },
-  {
-    "objectID": "howtos/windowsAndLinux.html#a-note-on-file-modification",
-    "href": "howtos/windowsAndLinux.html#a-note-on-file-modification",
-    "title": "Windows 10 and the Ubuntu Subsystem",
-    "section": "A Note on File Modification",
-    "text": "A Note on File Modification\nDO NOT MODIFY LINUX FILES FROM WINDOWS\nIt is highly recommended that you never modify Linux files from Windows because of metadata corruption issues. Any files created under the Linux subsystem, only modify them with Linux tools. In contrast, you can create files in the Windows system and modify them with both Windows or Linux tools. There could be file permission issues because Windows doesn’t have the same concept of file permissions as Linux. So, if you intend to work on files using both Linux and Windows, create the files in the C drive under Windows, and you should be safe to edit them with either OS."
-  },
-  {
-    "objectID": "howtos/windowsAndLinux.html#finding-windows-from-linux",
-    "href": "howtos/windowsAndLinux.html#finding-windows-from-linux",
-    "title": "Windows 10 and the Ubuntu Subsystem",
-    "section": "Finding Windows from Linux",
-    "text": "Finding Windows from Linux\nOnce you have some flavor of Linux installed, you need to be able to navigate from your Linux home directory to wherever Windows stores files. This is relatively simple, as the Windows Subsystem shows Windows to Linux as a mounted drive.\n\nSource\n\n\nOpen a Bash terminal.\nType cd / to get to the root directory.\nIn root, type cd /mnt. This gets you to the mount point for your drives.\nType ls to see what drives are available (you should see a c, and maybe d as well).\nType cd c to get into the Windows C drive. This is the root of the C directory for Windows.\nTo find your files, change directy into the users folder, then into your username.\n\ncd Users/&lt;your-user-name&gt;\nThis is your home directory in Windows. If you type ls here, you should see things like\n\nDocuments\nDownloads\nPictures\nVideos\netc…"
-  },
-  {
-    "objectID": "howtos/windowsAndLinux.html#finding-linux-from-windows",
-    "href": "howtos/windowsAndLinux.html#finding-linux-from-windows",
-    "title": "Windows 10 and the Ubuntu Subsystem",
-    "section": "Finding Linux from Windows",
-    "text": "Finding Linux from Windows\nThis is slightly more tricky than getting from Linux to Windows. Windows stores the Linux files in a hidden subfolder so that you don’t mess with them from Windows. However, you can find them, and then the easiest way (note, do not read as safest or smartest) to find those files in the future is by creating a desktop shortcut.\n\nSource\n\n\nOpen File Explorer\nIn the address bar, type %userprofile%\\AppData\\Local\\Packages\n\n%userprofile% will expand to something like C:\\Users\\&lt;your-user-name&gt;\n\nLook for a folder related to the Linux distro that you installed\n\nThese names will change slightly over time, but look for something similar-ish.\nFor Ubuntu, look for something with CanonicalGroupLimited.UbuntuonWindows in it.\n\nCanonical is the creator/distributor of Ubuntu.\n\n\nClick LocalState\nClick rootfs\n\nThis is the root of your Linux distro.\n\nClick into home and then into your user name.\n\nThis is your home directory under Linux.\n\nDO NOT MODIFY THESE FILES FROM WINDOWS\n\nData corruption is a possibility.\n\n\nSo, the final path to find your home directory from windows will look like:\n%userprofile%\\AppData\\Local\\Packages\\&lt;Distro-Folder&gt;\\LocalStat\\rootfs\\home\\&lt;your-user-name&gt;\\"
-  },
-  {
-    "objectID": "howtos/windowsAndLinux.html#installing-r-on-the-linux-subsystem",
-    "href": "howtos/windowsAndLinux.html#installing-r-on-the-linux-subsystem",
-    "title": "Windows 10 and the Ubuntu Subsystem",
-    "section": "Installing R on the Linux Subsystem",
-    "text": "Installing R on the Linux Subsystem\nIMPORTANT: This section is only if you’d like to try using R under Linux. For class, using R under Windows should be fine.\nThe Linux Subsystem behaves exactly like a regular Linux installation, but for completeness, I will provide instructions here for people new to Linux. These instructions are written from the perspective of Ubuntu, but will be similar for other repos.\nR is not a part of the standard Ubuntu installation. So, we have to add the repository manually to our repository list. This is relatively straightforward, and R supports several versions of Ubuntu.\nSources:\n\nCRAN guide for Ubuntu\nDigital Ocean quick tutorial\n\n\nIn a bash window, type:\nsudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9\n\nThis adds the key to “sign”, or validate, the R repository\n\nThen, type:\nsudo add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/'\n\ncloud.r-project.org is the default mirror, however, it is prudent to connect to the mirror closest to you geographically. Berkeley has it’s own mirror, so the command with the Berkeley mirror would look like\n\nsudo add-apt-repository 'deb https://cran.r-project.org/bin/linux/ubuntu/bionic-cran40/'\nFinally, type sudo apt install r-base, and press y to confirm installation\nTo test that it worked, type R into the console, and an R session should begin\n\nType q() to quit the R session"
-  },
-  {
-    "objectID": "howtos/windowsAndLinux.html#installing-rstudio-on-the-linux-subsystem",
-    "href": "howtos/windowsAndLinux.html#installing-rstudio-on-the-linux-subsystem",
-    "title": "Windows 10 and the Ubuntu Subsystem",
-    "section": "Installing Rstudio on the Linux Subsystem",
-    "text": "Installing Rstudio on the Linux Subsystem\n\n\n\n\n\n\nWarning\n\n\n\nTHIS NO LONGER WORKS\n\n\nAs of Rstudio 1.5.x, it does not run on WSL. Link\nAlso possible issues, WSL has no GUI, and therefore can’t support anything that uses a GUI.\nThese instructions work, but Rstudio doesn’t run.\nSources:\n\nRstudio\nSource\n\n\nGo the the Rstudio website (link above) and download the appropriate Rstudio Desktop version.\n\nFor most people, this is the Ubuntu 18 (64-bit) installer.\nSave it somewhere that you can find it.\nYou should have a file similar to rstudio-&lt;version number&gt;-amd64.deb\n\nOpen a terminal window and navigate to wherever you saved the rstudio install file.\nType the command sudo dpkg -i ./rstudio-&lt;version number&gt;-amd64.deb\n\nThis tells the package installer (dpkg) to install (-i) the file specified (./thing.deb)\n\nType the command sudo apt-get install -f\n\nThis tells the package manager (apt-get) to fix (-f) any dependency issues that may have arisen when installing the package.\n\nType the command which rstudio to make sure the system can find it.\n\nOutput should be similar to /usr/bin/rstudio\n\nRun rstudio from linux by typing rstudio &\n\nThe & runs it in the background, allowing you to close the terminal window."
-  },
-  {
-    "objectID": "howtos/windowsAndLinux.html#installing-latex-on-the-linux-subsystem",
-    "href": "howtos/windowsAndLinux.html#installing-latex-on-the-linux-subsystem",
-    "title": "Windows 10 and the Ubuntu Subsystem",
-    "section": "Installing LaTeX on the Linux Subsystem",
-    "text": "Installing LaTeX on the Linux Subsystem\n\n\n\n\n\n\nImportant\n\n\n\nThis section is only if you’d like to try using LaTeX under Linux. For class, using LaTeX (or R Markdown) under Windows should be fine.\n\n\nLaTeX is a text-markup language used when generating documents from .Rmd files.\nSource LaTeX\n\nType sudo apt-get install texlive-full, press y to confirm installation\n\nGenerally, if you want to create and edit R Markdown documents you will also need a text editor to go with your LaTeX installation, but we won’t go into that here."
-  },
-  {
-    "objectID": "howtos/gitInstall.html",
-    "href": "howtos/gitInstall.html",
-    "title": "Installing Git",
-    "section": "",
-    "text": "Here are some instructions for installing Git on your computer. Git is the version control software we’ll use in the course.\nYou can install Git by downloading and installing the correct binary from here.\nGit comes installed on the SCF, so if you login to an SCF machine and want to use Git there, you don’t need to install Git.\n\nSidenotes on using Git with RStudio\nYou can work with Git through RStudio via RStudio projects.\nHere are some instructions. Here are some helpful guidelines from RStudio.\nYou may need to tell RStudio where the Git executable is located as follows.\n\nOn Windows, the git executable should be installed somewhere like: \"C:/Program Files (x86)/Git/bin/git.exe\"\nOn MacOS X, you can locate the executable by executing the following in Terminal: which git\nOnce you locate the executable, you may then need to confirm that RStudio is looking in the right place. Go to “Tools -&gt; Options -&gt; Git/SVN -&gt; Git executable” and confirm it has the correct information about the location of the git executable."
-  },
-  {
-    "objectID": "howtos/RandRStudioInstall.html",
-    "href": "howtos/RandRStudioInstall.html",
-    "title": "Installing R & RStudio",
-    "section": "",
-    "text": "On your laptop\nIf your version of R is older than 4.0.0, please install the latest version.\nTo install R, see:\n\nMacOS: install the R-4.2.1.pkg from https://cran.rstudio.com/bin/macosx\nWindows: https://cran.rstudio.com/bin/windows/base/\nLinux: https://cran.rstudio.com/bin/linux/\n\nThen install RStudio. To do so, see https://www.rstudio.com/ide/download/desktop, scrolling down to the “Installers for Supported Platforms” section and selecting the Installer for your operating system.\nVerify that you can install add-on R packages by installing the ‘fields’ package. In RStudio, go to ‘Tools-&gt;Install Packages’. In the resulting dialog box, enter ‘fields’ (without quotes) in the ‘Packages’ field. Depending on the location specified in the ‘Install to Library’ field, you may need to enter your administrator password. To be able to install packages to the directory of an individual user, you may need to do the following:\n\nIn R, enter the command Sys.getenv()['R_LIBS_USER'].\nCreate the directory specified in the result that R returns, e.g., on a Mac, this might be ~/Library/R/4.0/library.\n\nFor more detailed installation instructions for Windows, see Using R, RStudio, and LaTeX on Windows file.\n\n\nVia DataHub\nSee the instructions in Accessing the Unix Command Line for how to login to Datahub. Then in the mid-upper right, click on New and RStudio. Alternatively, to go directly to RStudio, go to https://r.datahub.berkeley.edu."
-  },
-  {
-    "objectID": "howtos/windowsInstall.html",
-    "href": "howtos/windowsInstall.html",
-    "title": "R/Rstudio on Windows",
-    "section": "",
-    "text": "While R was built/designed for UNIX systems, it has been well adapted for Windows. Here, we’ll start with the basics of installing R on Windows. Then, we’ll cover the recommended editor (Rstudio), and how to build pdf documents using MikTeX.\n\n\n\n\n\n\nNote\n\n\n\nThis tutorial installs Windows-only versions of everything. Modern Windows systems have an Ubuntu subsystem available that we highly recommend. See the Installing the Linux Subsystem on Windows tutorial for setting up that configuration.\n\n\n\nInstalling R\nThe first step in installing the R language. This is available on CRAN (Comprehensive R Archive Network).\n\nGo to the CRAN webpage, www.r-project.org\nIn the first paragraph, click the link download R\nYou’re now on a page titled CRAN Mirrors, choose the mirror located closest to your geographic location\n\nMirrors are different servers that all host copies of the same website. You get best performance from the location closest to you.\n\nYou’re now on a paged titled The Comprehensive R Archive Network. The first box is labeled Downloand and Install R, click Download R for Windows\nClick base or install R for the first time, these take you to the same place\n\nFor more advanced things, you may need the Rtools download later. It isn’t necessary now, but remember that for the future.\n\nAt the top is a large-font link, Download R X.X.X for Windows, click this. It will begin downloading the Windows installer for R.\nFollow the instructions for setup. If you are unsure of anything, leave the default settings\n\n\n\nInstalling RStudio\nRStudio is one of the best text editors for coding in R. It is our recommended option for beginning. After you are comfortable with the language, or if you use other languages as well, you may want to explore Atom or Sublime. More advanced options include Emacs with [ESS package][https://ess.r-project.org/] and vim with the Nvim-R plugin.\nTo install RStudio:\n\nGo to the RStudio Desktop download page, rstudio.com/products/rstudio/download/#download\nChoose the download for your OS, most likely the Windows 10/8/7 one\nFollow the instructions for setup. If you are unsure of anything, leave the default settings\nOpen RStudio (R will run automatically in the background)\n\nYou may have to allow RStudio to run if prompted (depends on security settings and anti-virus software)\n\n\nOnce RStudio is installed, you can install or update packages in one of two ways:\n\nVia the console, using install.packages() or update.packages()\n\nVia the gui:\n\nIn the top bar, click on tools\nSelect Install Packages… to install packages\nSelect Check for Package Updates… to update packages\n\n\n\n\nCompiling PDF Documents\nFor the purposes of this class, you will be submitting homeworks as PDF documents that blend written text, code, and code-generated output. These documents are RMarkdown documents, and are dynamic documents that provide a convenient method for documenting your work (more on this in one of the lab sections). To do this, you need a LaTeX renderer. We recommend MiKTeX for Windows.\n\nGo to Getting MiKTeX to download MiKTeX for Windows, miktex.org/download\nThe first page should be Install on Windows, click Download at the bottom of the page\n\nClick the download to begin\n\n\n\n\n\n\n\nImportant\n\n\n\nFOLLOW THESE INSTALL INSTRUCTIONS.\nThe default options are fine in most places, but there is one that will cause problems.\n\n\n\nAccept the Copying Conditions, click next\nInstall only for you, click next\nUse the default directory, click next\nThis should be the Settings page. Under Install missing packages on-the-fly, change the setting to Yes, click next\n\n\n\nBecause we are using MiKTeX as an external renderer, it can’t ask you to install missing packages, and will then fail, so we have to set that installation as automatic.\n\n\nClick start (Optional, but highly recommended) Open RStudio, select a new .Rmd document, d then choose knit. This may take some time, because MiKTeX is installing new braries, but it ensures that your pipeline is setup correctly"
-  },
-  {
     "objectID": "syllabus.html",
     "href": "syllabus.html",
     "title": "Statistics 243 Fall 2023",
@@ -929,6 +754,188 @@
     "title": "Statistics 243 Fall 2023",
     "section": "Campus Honor Code",
     "text": "Campus Honor Code\nThe following is the Campus Honor Code. With regard to collaboration and independence, please see my rules regarding problem sets above – Chris.\nThe student community at UC Berkeley has adopted the following Honor Code: “As a member of the UC Berkeley community, I act with honesty, integrity, and respect for others.” The hope and expectation is that you will adhere to this code.\nCollaboration and Independence: Reviewing lecture and reading materials and studying for exams can be enjoyable and enriching things to do with fellow students. This is recommended. However, unless otherwise instructed, homework assignments are to be completed independently and materials submitted as homework should be the result of one’s own independent work.\nCheating: A good lifetime strategy is always to act in such a way that no one would ever imagine that you would even consider cheating. Anyone caught cheating on a quiz or exam in this course will receive a failing grade in the course and will also be reported to the University Center for Student Conduct. In order to guarantee that you are not suspected of cheating, please keep your eyes on your own materials and do not converse with others during the quizzes and exams.\nPlagiarism: To copy text or ideas from another source without appropriate reference is plagiarism and will result in a failing grade for your assignment and usually further disciplinary action. For additional information on plagiarism and how to avoid it, see, for example: http://gsi.berkeley.edu/teachingguide/misconduct/prevent-plag.html\nAcademic Integrity and Ethics: Cheating on exams and plagiarism are two common examples of dishonest, unethical behavior. Honesty and integrity are of great importance in all facets of life. They help to build a sense of self-confidence, and are key to building trust within relationships, whether personal or professional. There is no tolerance for dishonesty in the academic world, for it undermines what we are dedicated to doing – furthering knowledge for the benefit of humanity.\nYour experience as a student at UC Berkeley is hopefully fueled by passion for learning and replete with fulfilling activities. And we also appreciate that being a student may be stressful. There may be times when there is temptation to engage in some kind of cheating in order to improve a grade or otherwise advance your career. This could be as blatant as having someone else sit for you in an exam, or submitting a written assignment that has been copied from another source. And it could be as subtle as glancing at a fellow student’s exam when you are unsure of an answer to a question and are looking for some confirmation. One might do any of these things and potentially not get caught. However, if you cheat, no matter how much you may have learned in this class, you have failed to learn perhaps the most important lesson of all."
+  },
+  {
+    "objectID": "howtos/windowsInstall.html",
+    "href": "howtos/windowsInstall.html",
+    "title": "R/Rstudio on Windows",
+    "section": "",
+    "text": "While R was built/designed for UNIX systems, it has been well adapted for Windows. Here, we’ll start with the basics of installing R on Windows. Then, we’ll cover the recommended editor (Rstudio), and how to build pdf documents using MikTeX.\n\n\n\n\n\n\nNote\n\n\n\nThis tutorial installs Windows-only versions of everything. Modern Windows systems have an Ubuntu subsystem available that we highly recommend. See the Installing the Linux Subsystem on Windows tutorial for setting up that configuration.\n\n\n\nInstalling R\nThe first step in installing the R language. This is available on CRAN (Comprehensive R Archive Network).\n\nGo to the CRAN webpage, www.r-project.org\nIn the first paragraph, click the link download R\nYou’re now on a page titled CRAN Mirrors, choose the mirror located closest to your geographic location\n\nMirrors are different servers that all host copies of the same website. You get best performance from the location closest to you.\n\nYou’re now on a paged titled The Comprehensive R Archive Network. The first box is labeled Downloand and Install R, click Download R for Windows\nClick base or install R for the first time, these take you to the same place\n\nFor more advanced things, you may need the Rtools download later. It isn’t necessary now, but remember that for the future.\n\nAt the top is a large-font link, Download R X.X.X for Windows, click this. It will begin downloading the Windows installer for R.\nFollow the instructions for setup. If you are unsure of anything, leave the default settings\n\n\n\nInstalling RStudio\nRStudio is one of the best text editors for coding in R. It is our recommended option for beginning. After you are comfortable with the language, or if you use other languages as well, you may want to explore Atom or Sublime. More advanced options include Emacs with [ESS package][https://ess.r-project.org/] and vim with the Nvim-R plugin.\nTo install RStudio:\n\nGo to the RStudio Desktop download page, rstudio.com/products/rstudio/download/#download\nChoose the download for your OS, most likely the Windows 10/8/7 one\nFollow the instructions for setup. If you are unsure of anything, leave the default settings\nOpen RStudio (R will run automatically in the background)\n\nYou may have to allow RStudio to run if prompted (depends on security settings and anti-virus software)\n\n\nOnce RStudio is installed, you can install or update packages in one of two ways:\n\nVia the console, using install.packages() or update.packages()\n\nVia the gui:\n\nIn the top bar, click on tools\nSelect Install Packages… to install packages\nSelect Check for Package Updates… to update packages\n\n\n\n\nCompiling PDF Documents\nFor the purposes of this class, you will be submitting homeworks as PDF documents that blend written text, code, and code-generated output. These documents are RMarkdown documents, and are dynamic documents that provide a convenient method for documenting your work (more on this in one of the lab sections). To do this, you need a LaTeX renderer. We recommend MiKTeX for Windows.\n\nGo to Getting MiKTeX to download MiKTeX for Windows, miktex.org/download\nThe first page should be Install on Windows, click Download at the bottom of the page\n\nClick the download to begin\n\n\n\n\n\n\n\nImportant\n\n\n\nFOLLOW THESE INSTALL INSTRUCTIONS.\nThe default options are fine in most places, but there is one that will cause problems.\n\n\n\nAccept the Copying Conditions, click next\nInstall only for you, click next\nUse the default directory, click next\nThis should be the Settings page. Under Install missing packages on-the-fly, change the setting to Yes, click next\n\n\n\nBecause we are using MiKTeX as an external renderer, it can’t ask you to install missing packages, and will then fail, so we have to set that installation as automatic.\n\n\nClick start (Optional, but highly recommended) Open RStudio, select a new .Rmd document, d then choose knit. This may take some time, because MiKTeX is installing new braries, but it ensures that your pipeline is setup correctly"
+  },
+  {
+    "objectID": "howtos/RandRStudioInstall.html",
+    "href": "howtos/RandRStudioInstall.html",
+    "title": "Installing R & RStudio",
+    "section": "",
+    "text": "On your laptop\nIf your version of R is older than 4.0.0, please install the latest version.\nTo install R, see:\n\nMacOS: install the R-4.2.1.pkg from https://cran.rstudio.com/bin/macosx\nWindows: https://cran.rstudio.com/bin/windows/base/\nLinux: https://cran.rstudio.com/bin/linux/\n\nThen install RStudio. To do so, see https://www.rstudio.com/ide/download/desktop, scrolling down to the “Installers for Supported Platforms” section and selecting the Installer for your operating system.\nVerify that you can install add-on R packages by installing the ‘fields’ package. In RStudio, go to ‘Tools-&gt;Install Packages’. In the resulting dialog box, enter ‘fields’ (without quotes) in the ‘Packages’ field. Depending on the location specified in the ‘Install to Library’ field, you may need to enter your administrator password. To be able to install packages to the directory of an individual user, you may need to do the following:\n\nIn R, enter the command Sys.getenv()['R_LIBS_USER'].\nCreate the directory specified in the result that R returns, e.g., on a Mac, this might be ~/Library/R/4.0/library.\n\nFor more detailed installation instructions for Windows, see Using R, RStudio, and LaTeX on Windows file.\n\n\nVia DataHub\nSee the instructions in Accessing the Unix Command Line for how to login to Datahub. Then in the mid-upper right, click on New and RStudio. Alternatively, to go directly to RStudio, go to https://r.datahub.berkeley.edu."
+  },
+  {
+    "objectID": "howtos/gitInstall.html",
+    "href": "howtos/gitInstall.html",
+    "title": "Installing Git",
+    "section": "",
+    "text": "Here are some instructions for installing Git on your computer. Git is the version control software we’ll use in the course.\nYou can install Git by downloading and installing the correct binary from here.\nGit comes installed on the SCF, so if you login to an SCF machine and want to use Git there, you don’t need to install Git.\n\nSidenotes on using Git with RStudio\nYou can work with Git through RStudio via RStudio projects.\nHere are some instructions. Here are some helpful guidelines from RStudio.\nYou may need to tell RStudio where the Git executable is located as follows.\n\nOn Windows, the git executable should be installed somewhere like: \"C:/Program Files (x86)/Git/bin/git.exe\"\nOn MacOS X, you can locate the executable by executing the following in Terminal: which git\nOnce you locate the executable, you may then need to confirm that RStudio is looking in the right place. Go to “Tools -&gt; Options -&gt; Git/SVN -&gt; Git executable” and confirm it has the correct information about the location of the git executable."
+  },
+  {
+    "objectID": "howtos/windowsAndLinux.html",
+    "href": "howtos/windowsAndLinux.html",
+    "title": "Windows 10 and the Ubuntu Subsystem",
+    "section": "",
+    "text": "Windows 10 has a powerful new feature that allows a full Linux system to be installed and run from within Windows. This is incredibly useful for building/testing code in Linux, without having a dedicated Linux machine, but it poses strange new behaviors as two very different operating systems coexist in one place. Initially, this document mirrors the Windows Install tutorial, showing you how to install Ubuntu and setting up R, RStudio, and LaTex. Then, we cover some of the issues of running two systems together, starting with finding files, finding the Ubuntu subsystem, and file modifications."
+  },
+  {
+    "objectID": "howtos/windowsAndLinux.html#installing-ubuntu",
+    "href": "howtos/windowsAndLinux.html#installing-ubuntu",
+    "title": "Windows 10 and the Ubuntu Subsystem",
+    "section": "Installing Ubuntu",
+    "text": "Installing Ubuntu\nThere are 2 parts to installing a Linux subsystem in Windows. I will write this using Ubuntu as the example, as it is my preferred Linux distro, but several others are provided by Windows.\nSources:\n\nOfficial Windows Instructions\nUbuntu Update Instructions\n\n\n1) Enable Linux Subsystem\nBy default, the Linux subsystem is an optional addition in Windows. This feature has to be enabled prior to installing Linux. There are two ways to do it.\n\nCMD Line\nThe simplest way to enable the Linux subsystem is through PowerShell.\n\nOpen PowerShell as Administrator\nRun the following (on one line):\nEnable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux\nRestart the computer\n\nGUI\nIf you don’t wish to use PowerShell, you can work your way through the control panel and turn on the Linux subsystem.\n\nOpen the settings page through the search bar\nGo to Programs and Features\nFind Turn Windows Features on or off on the right side\nEnable the Windows Subsystem for Linux option\nRestart the computer\n\n\n\n\n2) Install Linux Subsystem\nOnce the Linux subsystem feature has been enabled, there are multiple methods to download and install the Linux distro you want. I highly recommend installing Ubuntu from the Microsoft store. There are several other flavors available as well, but Ubuntu is generally the easiest to learn and the most well supported.\n\nOpen the Microsoft Store\nSearch for Ubuntu\n\nYou’re looking for the highest number followed by LTS, currently 20.04 LTS (or 18.04 LTS is fine too). This is the current long-term-release, meaning it will be supported for the next 5 years.\n\nClick on the tile, then click Get, and this should start the installation.\nFollow the prompts to install Ubuntu.\n\nAfter installing Ubuntu, it is advisable to update it. This is something you should do on a regular basis.\n\nOpen a Bash terminal.\nType sudo apt update to update your local package database.\nType sudo apt upgrade to upgrade your installed packages."
+  },
+  {
+    "objectID": "howtos/windowsAndLinux.html#using-the-linux-terminal-from-r-in-windows",
+    "href": "howtos/windowsAndLinux.html#using-the-linux-terminal-from-r-in-windows",
+    "title": "Windows 10 and the Ubuntu Subsystem",
+    "section": "Using the Linux Terminal from R in Windows",
+    "text": "Using the Linux Terminal from R in Windows\nTo get all the functionality of a UNIX-style commandline from within R (e.g., for bash code chunks), you should set the terminal under R in Windows to be the Linux subsystem."
+  },
+  {
+    "objectID": "howtos/windowsAndLinux.html#a-note-on-file-modification",
+    "href": "howtos/windowsAndLinux.html#a-note-on-file-modification",
+    "title": "Windows 10 and the Ubuntu Subsystem",
+    "section": "A Note on File Modification",
+    "text": "A Note on File Modification\nDO NOT MODIFY LINUX FILES FROM WINDOWS\nIt is highly recommended that you never modify Linux files from Windows because of metadata corruption issues. Any files created under the Linux subsystem, only modify them with Linux tools. In contrast, you can create files in the Windows system and modify them with both Windows or Linux tools. There could be file permission issues because Windows doesn’t have the same concept of file permissions as Linux. So, if you intend to work on files using both Linux and Windows, create the files in the C drive under Windows, and you should be safe to edit them with either OS."
+  },
+  {
+    "objectID": "howtos/windowsAndLinux.html#finding-windows-from-linux",
+    "href": "howtos/windowsAndLinux.html#finding-windows-from-linux",
+    "title": "Windows 10 and the Ubuntu Subsystem",
+    "section": "Finding Windows from Linux",
+    "text": "Finding Windows from Linux\nOnce you have some flavor of Linux installed, you need to be able to navigate from your Linux home directory to wherever Windows stores files. This is relatively simple, as the Windows Subsystem shows Windows to Linux as a mounted drive.\n\nSource\n\n\nOpen a Bash terminal.\nType cd / to get to the root directory.\nIn root, type cd /mnt. This gets you to the mount point for your drives.\nType ls to see what drives are available (you should see a c, and maybe d as well).\nType cd c to get into the Windows C drive. This is the root of the C directory for Windows.\nTo find your files, change directy into the users folder, then into your username.\n\ncd Users/&lt;your-user-name&gt;\nThis is your home directory in Windows. If you type ls here, you should see things like\n\nDocuments\nDownloads\nPictures\nVideos\netc…"
+  },
+  {
+    "objectID": "howtos/windowsAndLinux.html#finding-linux-from-windows",
+    "href": "howtos/windowsAndLinux.html#finding-linux-from-windows",
+    "title": "Windows 10 and the Ubuntu Subsystem",
+    "section": "Finding Linux from Windows",
+    "text": "Finding Linux from Windows\nThis is slightly more tricky than getting from Linux to Windows. Windows stores the Linux files in a hidden subfolder so that you don’t mess with them from Windows. However, you can find them, and then the easiest way (note, do not read as safest or smartest) to find those files in the future is by creating a desktop shortcut.\n\nSource\n\n\nOpen File Explorer\nIn the address bar, type %userprofile%\\AppData\\Local\\Packages\n\n%userprofile% will expand to something like C:\\Users\\&lt;your-user-name&gt;\n\nLook for a folder related to the Linux distro that you installed\n\nThese names will change slightly over time, but look for something similar-ish.\nFor Ubuntu, look for something with CanonicalGroupLimited.UbuntuonWindows in it.\n\nCanonical is the creator/distributor of Ubuntu.\n\n\nClick LocalState\nClick rootfs\n\nThis is the root of your Linux distro.\n\nClick into home and then into your user name.\n\nThis is your home directory under Linux.\n\nDO NOT MODIFY THESE FILES FROM WINDOWS\n\nData corruption is a possibility.\n\n\nSo, the final path to find your home directory from windows will look like:\n%userprofile%\\AppData\\Local\\Packages\\&lt;Distro-Folder&gt;\\LocalStat\\rootfs\\home\\&lt;your-user-name&gt;\\"
+  },
+  {
+    "objectID": "howtos/windowsAndLinux.html#installing-r-on-the-linux-subsystem",
+    "href": "howtos/windowsAndLinux.html#installing-r-on-the-linux-subsystem",
+    "title": "Windows 10 and the Ubuntu Subsystem",
+    "section": "Installing R on the Linux Subsystem",
+    "text": "Installing R on the Linux Subsystem\nIMPORTANT: This section is only if you’d like to try using R under Linux. For class, using R under Windows should be fine.\nThe Linux Subsystem behaves exactly like a regular Linux installation, but for completeness, I will provide instructions here for people new to Linux. These instructions are written from the perspective of Ubuntu, but will be similar for other repos.\nR is not a part of the standard Ubuntu installation. So, we have to add the repository manually to our repository list. This is relatively straightforward, and R supports several versions of Ubuntu.\nSources:\n\nCRAN guide for Ubuntu\nDigital Ocean quick tutorial\n\n\nIn a bash window, type:\nsudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9\n\nThis adds the key to “sign”, or validate, the R repository\n\nThen, type:\nsudo add-apt-repository 'deb https://cloud.r-project.org/bin/linux/ubuntu bionic-cran35/'\n\ncloud.r-project.org is the default mirror, however, it is prudent to connect to the mirror closest to you geographically. Berkeley has it’s own mirror, so the command with the Berkeley mirror would look like\n\nsudo add-apt-repository 'deb https://cran.r-project.org/bin/linux/ubuntu/bionic-cran40/'\nFinally, type sudo apt install r-base, and press y to confirm installation\nTo test that it worked, type R into the console, and an R session should begin\n\nType q() to quit the R session"
+  },
+  {
+    "objectID": "howtos/windowsAndLinux.html#installing-rstudio-on-the-linux-subsystem",
+    "href": "howtos/windowsAndLinux.html#installing-rstudio-on-the-linux-subsystem",
+    "title": "Windows 10 and the Ubuntu Subsystem",
+    "section": "Installing Rstudio on the Linux Subsystem",
+    "text": "Installing Rstudio on the Linux Subsystem\n\n\n\n\n\n\nWarning\n\n\n\nTHIS NO LONGER WORKS\n\n\nAs of Rstudio 1.5.x, it does not run on WSL. Link\nAlso possible issues, WSL has no GUI, and therefore can’t support anything that uses a GUI.\nThese instructions work, but Rstudio doesn’t run.\nSources:\n\nRstudio\nSource\n\n\nGo the the Rstudio website (link above) and download the appropriate Rstudio Desktop version.\n\nFor most people, this is the Ubuntu 18 (64-bit) installer.\nSave it somewhere that you can find it.\nYou should have a file similar to rstudio-&lt;version number&gt;-amd64.deb\n\nOpen a terminal window and navigate to wherever you saved the rstudio install file.\nType the command sudo dpkg -i ./rstudio-&lt;version number&gt;-amd64.deb\n\nThis tells the package installer (dpkg) to install (-i) the file specified (./thing.deb)\n\nType the command sudo apt-get install -f\n\nThis tells the package manager (apt-get) to fix (-f) any dependency issues that may have arisen when installing the package.\n\nType the command which rstudio to make sure the system can find it.\n\nOutput should be similar to /usr/bin/rstudio\n\nRun rstudio from linux by typing rstudio &\n\nThe & runs it in the background, allowing you to close the terminal window."
+  },
+  {
+    "objectID": "howtos/windowsAndLinux.html#installing-latex-on-the-linux-subsystem",
+    "href": "howtos/windowsAndLinux.html#installing-latex-on-the-linux-subsystem",
+    "title": "Windows 10 and the Ubuntu Subsystem",
+    "section": "Installing LaTeX on the Linux Subsystem",
+    "text": "Installing LaTeX on the Linux Subsystem\n\n\n\n\n\n\nImportant\n\n\n\nThis section is only if you’d like to try using LaTeX under Linux. For class, using LaTeX (or R Markdown) under Windows should be fine.\n\n\nLaTeX is a text-markup language used when generating documents from .Rmd files.\nSource LaTeX\n\nType sudo apt-get install texlive-full, press y to confirm installation\n\nGenerally, if you want to create and edit R Markdown documents you will also need a text editor to go with your LaTeX installation, but we won’t go into that here."
+  },
+  {
+    "objectID": "publish.html",
+    "href": "publish.html",
+    "title": "Statistics 243 Fall 2023",
+    "section": "",
+    "text": "We use Quarto with GitHub Actions to publish the materials as the course website. All commits should be done to main and not to gh-pages.\nThis documents creation of new pages that require Python or R computation. We render the source document locally, with ‘freeze’ set on the document so that results are stored in _freeze and don’t need to be re-run on every commit.\n\nCopy the preamble from an existing units/*.qmd file.\nUpdate _quarto.yml to reflect the new content (unless you don’t yet want it discoverable online).\nRun quarto render &lt;new-Rmd-or-qmd&gt; locally, which will store computations in the _freeze directory.\nCommit the new page and all changes to the _freeze dir including .json and figure (.png/pdf) files.\nPush to GitHub and the publish action should run fairly quickly via GitHub actions.\n\nTo set up the website for a new course/year, one needs to run quarto publish from within main initially."
+  },
+  {
+    "objectID": "howtos/accessingUnixCommandLine.html",
+    "href": "howtos/accessingUnixCommandLine.html",
+    "title": "Accessing the Unix Command Line",
+    "section": "",
+    "text": "You have several options for UNIX command-line access. You’ll need to choose one of these and get it working.\n\nMac OS (on your personal machine):\nOpen a Terminal by going to Applications -&gt; Utilities -&gt; Terminal\n\n\nWindows (on your personal machine):\n\nYou may be able to use the Ubuntu bash shell available in Windows.\nYour PC must be running a 64-bit version of Windows 10 Anniversary Update or later (build 1607+).\nPlease see these links for more information:\n\nhttp://blog.revolutionanalytics.com/2017/12/r-in-the-windows-subsystem-for-linux.html\nhttps://msdn.microsoft.com/en-us/commandline/wsl/install_guide\n\nFor more detailed instructions, see the Installing the Linux Subsystem on Windows tutorial.\n(Not recommended) There’s an older program called cygwin that provides a UNIX command-line interface.\n\nNote that when you install Git on Windows, you will get Git Bash. While you can use this to control Git, the functionality is limited so this will not be enough for general UNIX command-line access for the course.\n\n\nLinux (on your personal machine):\nIf you have access to a Linux machine, you very likely know how to access a terminal.\n\n\nAccess via DataHub (provided by UC Berkeley’s Data Science Education Program)\n\nGo to https://datahub.berkeley.edu\nClick on Sign in with bCourses, sign in via CalNet, and authorize DataHub to have access to your account.\nIn the mid-upper right, click on New and Terminal.\nTo end your session, click on Control Panel and Stop My Server. Note that Logout will not end your running session, it will just log you out of it.\n\n\n\nAccess via the Statistical Computing Facility (SCF)\nWith an SCF account (available here), you can access a bash shell in the ways listed below.\nThose of you in the Statistics Department should be in the process of getting an SCF account. Everyone else will need an SCF account when we get to the unit on parallel computing, but you can request an account now if you prefer.\n\nYou can login to our various Linux servers and access a bash shell that way. Please see http://statistics.berkeley.edu/computing/access.\nYou can also access a bash shell via the SCF JupyterHub interface; please see the Accessing Python instructions but when you click on New, choose Terminal. This is very similar to the DataHub functionality discussed above."
+  },
+  {
+    "objectID": "howtos/accessingPython.html",
+    "href": "howtos/accessingPython.html",
+    "title": "Accessing Python",
+    "section": "",
+    "text": "We recommend using using the Anaconda (Python 3.11 distribution) on your laptop. Click “Download” and then click 64-bit “Graphical Installer” for your current operating system.\nOnce you’ve installed Python, please install the following packages:\nAssuming you installed Anaconda Python, you should be able to do this from the command line:\nWhile you’re welcome to work with Python in a Jupyter notebook for exploration (e.g., using the campus DataHub, you’ll need to submit Quarto (.qmd) documents with Python chunks for your problem sets. So you’ll need Python set up on your laptop or to use it by logging in to an SCF machine."
+  },
+  {
+    "objectID": "howtos/accessingPython.html#python-from-the-command-line",
+    "href": "howtos/accessingPython.html#python-from-the-command-line",
+    "title": "Accessing Python",
+    "section": "Python from the command line",
+    "text": "Python from the command line\nOnce you get your SCF account, you can access Python or IPython from the UNIX command line as soon as you login to an SCF server. Just SSH to an SCF Linux machine (e.g., gandalf.berkeley.edu or radagast.berkeley.edu) and run ‘python’ or ‘ipython’ from the command line.\nMore details on using SSH are here. Note that if you have the Ubuntu subsystem for Windows, you can use SSH directly from the Ubuntu terminal."
+  },
+  {
+    "objectID": "howtos/accessingPython.html#python-via-jupyter-notebook",
+    "href": "howtos/accessingPython.html#python-via-jupyter-notebook",
+    "title": "Accessing Python",
+    "section": "Python via Jupyter notebook",
+    "text": "Python via Jupyter notebook\nYou can use a Jupyter notebook to run Python code from the SCF JupyterHub or the Berkeley DataHub.\nIf you’re on the SCF JupyterHub, select Start My Server. Then, unless you are running long or parallelized code, just click Spawn (in other words, accept the default ‘standalone’ partition). On the next page select ‘New’ and ‘Python 3’.\nTo finish your session, click on Control Panel and Stop My Server. Do not click Logout."
+  },
+  {
+    "objectID": "howtos/quartoInstall.html",
+    "href": "howtos/quartoInstall.html",
+    "title": "Installing and Using Quarto",
+    "section": "",
+    "text": "Unless you plan to generate your problem set solutions on the SCF, you’ll need to install Quarto.\nOnce installed, you should be able to run commands such as quarto render from the command line.\nThis includes, I think, running from the Windows Command shell or PowerShell. We’ll add details/troubleshooting tips here as needed."
+  },
+  {
+    "objectID": "howtos/ps-submission.html",
+    "href": "howtos/ps-submission.html",
+    "title": "Problem Set Submissions",
+    "section": "",
+    "text": "[UNDER CONSTRUCTION]"
+  },
+  {
+    "objectID": "howtos/ps-submission.html#submission-format",
+    "href": "howtos/ps-submission.html#submission-format",
+    "title": "Problem Set Submissions",
+    "section": "Submission format",
+    "text": "Submission format\nProblem set solutions should be written in Quarto Markdown (.qmd) source files, interspersing explanatory text with Python (and in some cases bash) code chunks. Please do not use Jupyter notebook (.ipynb) files as your underlying source file for your solutions.\nWhy?\n\nFor one or two of the initial problem sets you’ll need to include both bash and Python code. This isn’t possible in a single notebook.\nThe underlying format of .ipynb files is JSON. While this is a plain text format, the key-value pair structure is much less well-suited for use with Git version control (which relies on diff) than Markdown-based formats.\nOne can run chunks in a Jupyter notebook in arbitrary order. What is printed to PDF depends on the order in which the chunks are run and the results can differ from what one would expect based on reading the notebook sequentially and running the chunks sequentially. For example, consider the following experiment and you’ll see what I mean: (1) Have one code chunk with a = 3 and run it; (2) Add a second chunk with print(a) and run it; and (3) Change the first chunk to a=4 and DO NOT rerun the second chunk. Save the notebook to PDF. You’ll see that your “report” makes no sense. Here’s the result of me doing that experiment.\n\nIf you really want to do your initial explorations of the problems in a Jupyter notebook, with content then copied to qmd, that is fine.\nFor problem sets later in the semester, we may allow the work to be done in a Jupyter notebook (committed to the repository as the source file) and then submitted as a PDF, but the initial problem sets must be provided as qmd source files."
+  },
+  {
+    "objectID": "howtos/ps-submission.html#problem-set-solution-workflows",
+    "href": "howtos/ps-submission.html#problem-set-solution-workflows",
+    "title": "Problem Set Submissions",
+    "section": "Problem set solution workflows",
+    "text": "Problem set solution workflows\n[Deeb, this is just a start, please edit/augment as we discussed. You don’t need to stick with these three as is, this is just based on our conversation.]\nHere we outline a few suggested workflows for developing your problem set solutions:\n\nOpen the qmd file in any editor you like (e.g., Emacs, Sublime, ….). Use quarto preview to show your rendered document live as you edit and save changes.\nUse VS Code with the Quarto extension.\nUse RStudio (yes, RStudio), which can manage Python code and will display chunk output in the same way it does with R chunks.\n\nPlease commit your work regularly to your repository as you develop your solutions."
+  },
+  {
+    "objectID": "howtos/ps-submission.html#github-repository",
+    "href": "howtos/ps-submission.html#github-repository",
+    "title": "Problem Set Submissions",
+    "section": "GitHub repository",
+    "text": "GitHub repository\n\nSetting up your repository\nWe are creating repositories for everyone at github.berkeley.edu. Additionally, homeworks still need to be submitted as PDFs on Gradescope.\nSteps:\n\nLog into github.berkeley.edu using your Berkeley credentials. Because of how the system works, you will need to log in before your account is created. Nothing else needs to be done, just log in and log out.\nAfter accounts are created (may take a couple days after first login), when you log in again, you should see one private repository listed on the left side (e.g., stat243-fall-2022/ahv36). This is your class repository. Do not change the repository settings! They are set up for this class.\nClone the repo to your home directory (I would clone it into a directory just for repositories (e.g., I use ~/repos). In the top-level of your working directory, you should create a file named (exactly) .gitignore.\n\nThe .gitignore file causes Git to ignore transient or computer-specific files that Quarto generates. (more info at https://github.com/github/gitignore) In it, put (again, don’t put dashed lines):\n[Deeb, as you’re playing with Quarto see what else might belong in .gitignore.]\n# cache directories\n/__pycache__\n\n# pickle files\n*.pkl\n*.pickle\n\n\nRepository Organization\nThe problem sets in your repository should be organized into folders with specific filenames.\nWhen we pull from your repository, our code will be assuming the following structure:\nyour_repo/\n├── ps1/\n│   ├── ps1.pdf\n│   ├── ps1.qmd \n│   ├── &lt;possibly auxiliary code or other files&gt;\n├── ps2/\n│   ├── ...\n├── ...\n├── ps8/\n├── .gitignore\n└── info.json\nThe file names are case-sensitive, so please keep everything lowercase."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Statistics 243 Fall 2023",
+    "section": "",
+    "text": "See the links above for the key resources for the course."
+  },
+  {
+    "objectID": "index.html#questions-about-taking-the-class",
+    "href": "index.html#questions-about-taking-the-class",
+    "title": "Statistics 243 Fall 2023",
+    "section": "Questions about taking the class",
+    "text": "Questions about taking the class\nIf you would like to audit the class, enroll as a UC Berkeley undergraduate, or enroll as a concurrent enrollment student (i.e., for visiting students), or for some other reason are not enrolled, please fill out this survey as soon as possible. All those enrolled or wishing to take the class should have filled it out by Friday August 25 at noon.\nUndergraduates can only take the course with my permission and once all graduate students have an opportunity to register. I expect there will be space, and will likely start admitting undergraduates early the week of August 28 or late the previous week.\nConcurrent enrollment students (e.g., exchange students from other universities/countries) can take the course with my permission and once all UC Berkeley students have had an opportunity to register. I expect there will be space, and will likely start admitting concurrent enrollment students early the week of August 28.\nPlease see the syllabus for the math and statistics background I expect, as well as the need to be familiar with Python or to get up to speed in Python during the first few weeks of the semester.\nThe first three weeks involve a lot of moving pieces, in part related to trying to get everyone up to speed with the bash shell and Python. Please use the schedule to keep on top of what you need to do."
+  },
+  {
+    "objectID": "index.html#course-content",
+    "href": "index.html#course-content",
+    "title": "Statistics 243 Fall 2023",
+    "section": "Course content",
+    "text": "Course content\n\nThis site: most non-recorded course material\n\nFor html versions of the Units, see the navigation bar above.\nFor PDF versions of the Units, clone the GitHub repository, or if you’re not yet familiar with Git, download a zip file.\n\nVarious SCF tutorials: These include the various tutorials referred to in the class materials (e.g., the UNIX and bash shell tutorials, the dynamic documents tutorial, the Git tutorial, the string processing tutorial, etc.).\nbCourses: links to class course captures and any pre-recorded material.\n\nIf you’re not yet familiar with Git, go to the upper right of this page and click on ‘Clone or download’ and then ‘Download ZIP’."
+  },
+  {
+    "objectID": "labs/lab0-setup.html",
+    "href": "labs/lab0-setup.html",
+    "title": "Lab 0: Setup",
+    "section": "",
+    "text": "Setting up your environment\nYou will need to set up (or make sure you have access to) the following:\n\nUnix shell\ngit\nquarto\npython\n\nAttending lab 0 is optional. If you successfully set up your environment to have all the listed tools, you don’t need to attend. You are welcome to attend to ask for help with the setup or to help your classmates with setting up their environments."
   },
   {
     "objectID": "office_hours.html",
