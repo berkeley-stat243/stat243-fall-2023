@@ -18,7 +18,7 @@ format:
 
 # Submitting problem set solutions
 
-You already have access to the following:
+You already have access to the following 5 basic tools:
 
 1. [Unix shell](../howtos/accessingUnixCommandLine.md)
 2. [Git](../howtos/gitInstall.md)
@@ -33,3 +33,7 @@ Today we will use all these tools together to submit a solution for Problem set 
 3. Use the quarto command line to render it into a pdf.
 4. Add the padf to the repository.
 5. Make sure that you can log into gradescope and upload a pdf.
+
+We will also take today's lab as an opportunity to get familiar with the basic use of all the 5 basic tools listed above.
+For git and quarto, very basic knowledge should be sufficient, but for unix commands and python, the more you learn the more effective you will be at solving the problem sets (and at any computational task you take on after that). 
+
