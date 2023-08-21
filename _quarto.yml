@@ -54,7 +54,9 @@ website:
       title: "Labs"
       contents:
         - file: labs/lab0-setup.md
-          text: "Lab 0"
+          text: "Lab 0: Setup"
+        - file: labs/lab1-submission.md
+          text: "Lab 1: Problem set submission"
     - id: howtos
       title: "How tos"
       contents:
