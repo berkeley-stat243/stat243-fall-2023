@@ -52,7 +52,7 @@ website:
           text: "Unit 10"
     - id: labs
       title: "Labs"
-      contens:
+      contents:
         - file: labs/lab0-setup.md
           text: "Lab 0"
     - id: howtos
