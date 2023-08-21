@@ -25,6 +25,6 @@ You will need to set up (or make sure you have access to) the following:
 3. quarto
 4. python
 
-Attending lab 0 is optional. If you successfully set up your environment to have all the listed tools, you don't need to attend. You are welcome to attend to ask for help with the setup or to help your classmates with setting up their environments.
+Attending lab 0 is optional. If you successfully set up your environment to have all the listed tools, you don't need to attend. You are welcome to attend to ask for help with the setup or to help your classmates with setting up their environments. You are also welcome to ask for help on using any of these 4 tools/systems, but these questions will be answered after settup related questions.
 
 
