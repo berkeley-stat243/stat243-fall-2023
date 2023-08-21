@@ -20,13 +20,12 @@ For problem sets later in the semester, we may allow the work to be done in a Ju
 
 ## Problem set solution workflows
 
-[Deeb, this is just a start, please edit/augment as we discussed. You don't need to stick with these three as is, this is just based on our conversation.]
-
 Here we outline a few suggested workflows for developing your problem set solutions:
 
- 1. Open the qmd file in any editor you like (e.g., Emacs, Sublime, ....). Use `quarto preview` to show your rendered document live as you edit and save changes.
- 2. Use VS Code with the Quarto extension.
+ 1. Open the qmd file in any editor you like (e.g., Emacs, Sublime, ....). Use `quarto preview` to show your rendered document live as you edit and save changes. You can then put the preview window side by side with the code, and the preview document will automatically render as you save your qmd file.
+ 2. Use VS Code with the following extensions: Python, Quarto, and Jupyter Notebooks. This allows you to execute and preview chunks inside VS Code.
  3. Use RStudio (yes, RStudio), which can manage Python code and will display chunk output in the same way it does with R chunks.
+ 4. Later in the class, you will be allowd to work directly in Jupyter notebooks and use quarto to render from them directly. This has a few quirks and limitations, but will be allowd for some problem sets.
 
 Please commit your work regularly to your repository as you develop your solutions. 
 
@@ -57,7 +56,6 @@ The `.gitignore` file causes Git to ignore transient or computer-specific files
 that Quarto generates. (more info at https://github.com/github/gitignore) In
 it, put (again, don't put dashed lines):
 
-[Deeb, as you're playing with Quarto see what else might belong in `.gitignore`.]
 
 ```bash
 # cache directories
