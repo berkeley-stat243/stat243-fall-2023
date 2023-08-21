@@ -21,9 +21,10 @@ format:
 You will need to set up (or make sure you have access to) the following:
 
 1. [Unix shell](../howtos/accessingUnixCommandLine.md)
-2. git
-3. quarto
-4. [python](https://berkeley-stat243.github.io/stat243-fall-2023/howtos/accessingPython.html)
+2. [Git](../howtos/gitInstall.md)
+3. [Quarto](../howtos/quartoInstall.md)
+4. [Python](../howtos/accessingPython.md)
+5. A text editor of your choice (deeb recommends [sublime](https://www.sublimetext.com/) and [VS Code](https://code.visualstudio.com/) to start)
 
 Attending lab 0 is optional. If you successfully set up your environment to have all the listed tools, you don't need to attend. You are welcome to attend to ask for help with the setup or to help your classmates with setting up their environments.
 
