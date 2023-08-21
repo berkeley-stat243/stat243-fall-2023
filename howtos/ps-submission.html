@@ -360,12 +360,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="problem-set-solution-workflows" class="level2">
 <h2 class="anchored" data-anchor-id="problem-set-solution-workflows">Problem set solution workflows</h2>
-<p>[Deeb, this is just a start, please edit/augment as we discussed. You don’t need to stick with these three as is, this is just based on our conversation.]</p>
 <p>Here we outline a few suggested workflows for developing your problem set solutions:</p>
 <ol type="1">
-<li>Open the qmd file in any editor you like (e.g., Emacs, Sublime, ….). Use <code>quarto preview</code> to show your rendered document live as you edit and save changes.</li>
-<li>Use VS Code with the Quarto extension.</li>
+<li>Open the qmd file in any editor you like (e.g., Emacs, Sublime, ….). Use <code>quarto preview</code> to show your rendered document live as you edit and save changes. You can then put the preview window side by side with the code, and the preview document will automatically render as you save your qmd file.</li>
+<li>Use VS Code with the following extensions: Python, Quarto, and Jupyter Notebooks. This allows you to execute and preview chunks inside VS Code.</li>
 <li>Use RStudio (yes, RStudio), which can manage Python code and will display chunk output in the same way it does with R chunks.</li>
+<li>Later in the class, you will be allowd to work directly in Jupyter notebooks and use quarto to render from them directly. This has a few quirks and limitations, but will be allowd for some problem sets.</li>
 </ol>
 <p>Please commit your work regularly to your repository as you develop your solutions.</p>
 </section>
@@ -381,7 +381,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Clone the repo to your home directory (I would clone it into a directory just for repositories (e.g., I use <code>~/repos</code>). In the top-level of your working directory, you should create a file named (exactly) <code>.gitignore</code>.</p></li>
 </ol>
 <p>The <code>.gitignore</code> file causes Git to ignore transient or computer-specific files that Quarto generates. (more info at https://github.com/github/gitignore) In it, put (again, don’t put dashed lines):</p>
-<p>[Deeb, as you’re playing with Quarto see what else might belong in <code>.gitignore</code>.]</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># cache directories</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/__pycache__</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
