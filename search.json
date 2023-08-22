@@ -674,28 +674,28 @@
   {
     "objectID": "labs/lab2-testing.html",
     "href": "labs/lab2-testing.html",
-    "title": "Lab 2: Assertions, Exceptions, and Debugging",
+    "title": "Lab 2: Assertions, Exceptions, and Tesing",
     "section": "",
     "text": "Under construction …"
   },
   {
     "objectID": "labs/lab2-testing.html#assertions",
     "href": "labs/lab2-testing.html#assertions",
-    "title": "Lab 2: Assertions, Exceptions, and Debugging",
+    "title": "Lab 2: Assertions, Exceptions, and Tesing",
     "section": "Assertions",
     "text": "Assertions"
   },
   {
     "objectID": "labs/lab2-testing.html#exceptions",
     "href": "labs/lab2-testing.html#exceptions",
-    "title": "Lab 2: Assertions, Exceptions, and Debugging",
+    "title": "Lab 2: Assertions, Exceptions, and Tesing",
     "section": "Exceptions",
     "text": "Exceptions"
   },
   {
     "objectID": "labs/lab2-testing.html#unit-tests",
     "href": "labs/lab2-testing.html#unit-tests",
-    "title": "Lab 2: Assertions, Exceptions, and Debugging",
+    "title": "Lab 2: Assertions, Exceptions, and Tesing",
     "section": "Unit Tests",
     "text": "Unit Tests"
   },
@@ -977,14 +977,14 @@
     "href": "labs/lab1-submission.html",
     "title": "Lab 1: Submitting problem set solutions",
     "section": "",
-    "text": "You already have access to the following 5 basic tools:\n\nUnix shell\nGit\nQuarto\nPython\nA text editor of your choice\n\nToday we will use all these tools together to submit a solution for Problem set 0 (not a real problem set) to make sure you know how to submit solutions to upcoming (real) problem sets.\n\n\n\nCreate a subdirectory in your github repository with the name ps0\nIn that subdirectory, create a quarto document (ps0.qmd) that has some simple code that creates a simple plot (you can follow this example/tutorial here)\nUse the quarto command line to render it into a pdf document (quarto render FILE)\nCommit the changes to your repository (git add FILES; git commit -m MESSAGE; git push)\nAdd another section to your quarto document (use your imagination), then preview and commit the changes\nUse the quarto command line to render the updated document into a pdf document\nAdd the pdf document to the repository as well\nMake sure that you can log into gradescope and upload a pdf document\n\nWe will also take today’s lab as an opportunity to get familiar with the basic use of all the 5 basic tools listed above. For git and quarto, very basic knowledge should be sufficient, but for unix commands and python, the more you learn the more effective you will be at solving the problem sets (and at any computational task you take on after that)."
+    "text": "By now you should already have access to the following 5 basic tools:\n\nUnix shell\nGit\nQuarto\nPython\nA text editor of your choice\n\nToday we will use all these tools together to submit a solution for Problem Set 0 (not a real problem set) to make sure you know how to submit solutions to upcoming (real) problem sets.\nHere is a selection of some basic reference tutorials and documentation for unix commands(https://www.unixtutorial.org/basic-unix-commands), git, github, quarto, [python](https://docs.python.org/3/tutorial/index.html0, and VS Code\n\n\n\nCreate a subdirectory in your github repository with the name ps0\nIn that subdirectory, create a quarto document (ps0.qmd) that has some simple code that creates a simple plot (you can follow this example/tutorial here)\nUse the quarto command line to render it into a pdf document (quarto render FILE –to pdf)\nCommit the changes to your repository (git add FILES; git commit -m MESSAGE; git push)\nAdd another section to your quarto document (use your imagination), then preview and commit the changes\nUse the quarto command line to render the updated document into a pdf document\nAdd the pdf document to the repository as well\nMake sure that you can log into gradescope and upload a pdf document\n\nWe will also take today’s lab as an opportunity to get familiar with the basic use of all the 5 basic tools listed above. For git and quarto, very basic knowledge should be sufficient, but for unix commands and python, the more you learn the more effective you will be at solving the problem sets (and at any computational task you take on after that)."
   },
   {
     "objectID": "labs/lab1-submission.html#submitting-problem-set-solutions",
     "href": "labs/lab1-submission.html#submitting-problem-set-solutions",
     "title": "Lab 1: Submitting problem set solutions",
     "section": "",
-    "text": "You already have access to the following 5 basic tools:\n\nUnix shell\nGit\nQuarto\nPython\nA text editor of your choice\n\nToday we will use all these tools together to submit a solution for Problem set 0 (not a real problem set) to make sure you know how to submit solutions to upcoming (real) problem sets.\n\n\n\nCreate a subdirectory in your github repository with the name ps0\nIn that subdirectory, create a quarto document (ps0.qmd) that has some simple code that creates a simple plot (you can follow this example/tutorial here)\nUse the quarto command line to render it into a pdf document (quarto render FILE)\nCommit the changes to your repository (git add FILES; git commit -m MESSAGE; git push)\nAdd another section to your quarto document (use your imagination), then preview and commit the changes\nUse the quarto command line to render the updated document into a pdf document\nAdd the pdf document to the repository as well\nMake sure that you can log into gradescope and upload a pdf document\n\nWe will also take today’s lab as an opportunity to get familiar with the basic use of all the 5 basic tools listed above. For git and quarto, very basic knowledge should be sufficient, but for unix commands and python, the more you learn the more effective you will be at solving the problem sets (and at any computational task you take on after that)."
+    "text": "By now you should already have access to the following 5 basic tools:\n\nUnix shell\nGit\nQuarto\nPython\nA text editor of your choice\n\nToday we will use all these tools together to submit a solution for Problem Set 0 (not a real problem set) to make sure you know how to submit solutions to upcoming (real) problem sets.\nHere is a selection of some basic reference tutorials and documentation for unix commands(https://www.unixtutorial.org/basic-unix-commands), git, github, quarto, [python](https://docs.python.org/3/tutorial/index.html0, and VS Code\n\n\n\nCreate a subdirectory in your github repository with the name ps0\nIn that subdirectory, create a quarto document (ps0.qmd) that has some simple code that creates a simple plot (you can follow this example/tutorial here)\nUse the quarto command line to render it into a pdf document (quarto render FILE –to pdf)\nCommit the changes to your repository (git add FILES; git commit -m MESSAGE; git push)\nAdd another section to your quarto document (use your imagination), then preview and commit the changes\nUse the quarto command line to render the updated document into a pdf document\nAdd the pdf document to the repository as well\nMake sure that you can log into gradescope and upload a pdf document\n\nWe will also take today’s lab as an opportunity to get familiar with the basic use of all the 5 basic tools listed above. For git and quarto, very basic knowledge should be sufficient, but for unix commands and python, the more you learn the more effective you will be at solving the problem sets (and at any computational task you take on after that)."
   },
   {
     "objectID": "labs/lab3-debugging.html",
