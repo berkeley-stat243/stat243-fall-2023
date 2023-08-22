@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Ahmed Eldeeb">
+<meta name="dcterms.date" content="2023-08-21">
 
-<title>Statistics 243 Fall 2023 - Installing and Using Quarto</title>
+<title>Statistics 243 Fall 2023 - Lab 2: Assertions, Exceptions, and Debugging</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +32,6 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../howtos/ps-submission.html" rel="next">
-<link href="../howtos/gitInstall.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -66,7 +66,7 @@ ul.task-list li input[type="checkbox"] {
 <link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar floating nav-fixed">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -219,92 +219,50 @@ ul.task-list li input[type="checkbox"] {
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-        <i class="bi bi-layout-text-sidebar-reverse"></i>
-      </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../howtos/quartoInstall.html">Installing Quarto</a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
-    </div>
-  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
-    <div class="sidebar-menu-container"> 
-    <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../howtos/accessingPython.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Accessing Python</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../howtos/accessingUnixCommandLine.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Accessing the Unix Command Line</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../howtos/gitInstall.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Installing Git</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../howtos/quartoInstall.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Installing Quarto</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../howtos/ps-submission.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Problem Set Submissions</span></a>
-  </div>
-</li>
-        <li class="px-0"><hr class="sidebar-divider hi "></li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
- <span class="menu-text">Windows</span></a>
-          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../howtos/windowsAndLinux.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Installing the Linux Subsystem on Windows</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-    </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#assertions" id="toc-assertions" class="nav-link active" data-scroll-target="#assertions">Assertions</a></li>
+  <li><a href="#exceptions" id="toc-exceptions" class="nav-link" data-scroll-target="#exceptions">Exceptions</a></li>
+  <li><a href="#debugging" id="toc-debugging" class="nav-link" data-scroll-target="#debugging">Debugging</a>
+  <ul class="collapse">
+  <li><a href="#integrated-gui-debugger-with-vs-code" id="toc-integrated-gui-debugger-with-vs-code" class="nav-link" data-scroll-target="#integrated-gui-debugger-with-vs-code">Integrated GUI debugger (with VS Code)</a></li>
+  </ul></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="lab2-testing.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Installing and Using Quarto</h1>
+<h1 class="title">Lab 2: Assertions, Exceptions, and Debugging</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Ahmed Eldeeb </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 21, 2023</p>
+    </div>
+  </div>
   
     
   </div>
@@ -312,11 +270,21 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<p>Unless you plan to generate your problem set solutions on the SCF, you’ll need to <a href="https://quarto.org/docs/get-started/">install Quarto</a>.</p>
-<p>Once installed, you should be able to run commands such as <code>quarto render</code> from the command line.</p>
-<p>This includes, I think, running from the Windows Command shell or PowerShell. We’ll add details/troubleshooting tips here as needed.</p>
+<p>Under construction …</p>
+<section id="assertions" class="level2">
+<h2 class="anchored" data-anchor-id="assertions">Assertions</h2>
+</section>
+<section id="exceptions" class="level2">
+<h2 class="anchored" data-anchor-id="exceptions">Exceptions</h2>
+</section>
+<section id="debugging" class="level2">
+<h2 class="anchored" data-anchor-id="debugging">Debugging</h2>
+<section id="integrated-gui-debugger-with-vs-code" class="level3">
+<h3 class="anchored" data-anchor-id="integrated-gui-debugger-with-vs-code">Integrated GUI debugger (with VS Code)</h3>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -552,18 +520,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
-      <a href="../howtos/gitInstall.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Installing Git</span>
-      </a>          
-  </div>
-  <div class="nav-page nav-page-next">
-      <a href="../howtos/ps-submission.html" class="pagination-link">
-        <span class="nav-page-text">Problem Set Submissions</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
-  </div>
-</nav>
 </div> <!-- /content -->
 
 
