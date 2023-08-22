@@ -32,6 +32,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../labs/lab2-debugging.html" rel="next">
 <link href="../labs/lab0-setup.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -160,6 +161,10 @@ ul.task-list li input[type="checkbox"] {
     <a class="dropdown-item" href="../labs/lab1-submission.html" rel="" target="">
  <span class="dropdown-text">Lab 1: Problem set submission</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/lab2-debugging.html" rel="" target="">
+ <span class="dropdown-text">Lab 2: Assertions, Exceptions, and Debugging</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -245,6 +250,12 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Lab 1: Problem set submission</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../labs/lab2-debugging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 2: Assertions, Exceptions, and Debugging</span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -255,7 +266,10 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#submitting-problem-set-solutions" id="toc-submitting-problem-set-solutions" class="nav-link active" data-scroll-target="#submitting-problem-set-solutions">Submitting problem set solutions</a></li>
+  <li><a href="#submitting-problem-set-solutions" id="toc-submitting-problem-set-solutions" class="nav-link active" data-scroll-target="#submitting-problem-set-solutions">Submitting problem set solutions</a>
+  <ul class="collapse">
+  <li><a href="#steps-to-perform-today" id="toc-steps-to-perform-today" class="nav-link" data-scroll-target="#steps-to-perform-today">Steps to perform today:</a></li>
+  </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="lab1-submission.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
     </div>
@@ -291,8 +305,8 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="submitting-problem-set-solutions" class="level1">
-<h1>Submitting problem set solutions</h1>
+<section id="submitting-problem-set-solutions" class="level2">
+<h2 class="anchored" data-anchor-id="submitting-problem-set-solutions">Submitting problem set solutions</h2>
 <p>You already have access to the following 5 basic tools:</p>
 <ol type="1">
 <li><a href="../howtos/accessingUnixCommandLine.html">Unix shell</a></li>
@@ -302,16 +316,19 @@ ul.task-list li input[type="checkbox"] {
 <li>A text editor of your choice</li>
 </ol>
 <p>Today we will use all these tools together to submit a solution for Problem set 0 (not a real problem set) to make sure you know how to submit solutions to upcoming (real) problem sets.</p>
+<section id="steps-to-perform-today" class="level3">
+<h3 class="anchored" data-anchor-id="steps-to-perform-today">Steps to perform today:</h3>
 <ol type="1">
-<li>Create a folder in our respective github repositories.</li>
-<li>Add a quarto document to it that has some simple code that creates a simple plot (use your imagination).</li>
-<li>Use the quarto command line to render it into a pdf.</li>
-<li>Add the padf to the repository.</li>
-<li>Make sure that you can log into gradescope and upload a pdf.</li>
+<li>Create a folder in your github repository</li>
+<li>Add a quarto document to it that has some simple code that creates a simple plot (use your imagination)</li>
+<li>Use the quarto command line to render it into a pdf document</li>
+<li>Add the padf to the repository</li>
+<li>Make sure that you can log into gradescope and upload a pdf document</li>
 </ol>
 <p>We will also take today’s lab as an opportunity to get familiar with the basic use of all the 5 basic tools listed above. For git and quarto, very basic knowledge should be sufficient, but for unix commands and python, the more you learn the more effective you will be at solving the problem sets (and at any computational task you take on after that).</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -555,6 +572,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="../labs/lab2-debugging.html" class="pagination-link">
+        <span class="nav-page-text">Lab 2: Assertions, Exceptions, and Debugging</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
