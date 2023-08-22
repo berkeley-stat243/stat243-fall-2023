@@ -620,42 +620,42 @@
     "href": "schedule.html",
     "title": "Statistics 243 Fall 2023",
     "section": "",
-    "text": "Submit your solutions on Gradescope and (for problem sets but not assignments) via your Git repository.\n\n\n\nAssignment\nDate\nTime\n\n\n\n\n\nbash shell problems (first 10) (reading some of tutorial before Aug. 31 recommended)\nFriday Sep. 1\n10 am\n\n\n\n\nAssignments will generally be turned in on Gradescope but don’t need to follow the rules for problem set solutions and will be graded complete/incomplete.\n\n\n\nProblem Set\nDate\nTime\n\n\n\n\n\n\nProblem set solutions need to follow the rules discussed in Lab 1 (Sep. 1) and documented here."
+    "text": "Submit your solutions on Gradescope and (for problem sets but not assignments) via your Git repository.\n\n\n\nAssignment\nDate\nTime\n\n\n\n\nbash shell problems (first 10) (reading some of tutorial before Wed. Aug. 30 recommended)\nFriday Sep. 1\n10 am\n\n\n\nAssignments will generally be turned in on Gradescope but don’t need to follow the rules for problem set solutions and will be graded complete/incomplete.\n\n\n\nProblem Set\nDate\nTime\n\n\n\n\nPS1\nTBD\n10 am\n\n\n\nProblem set solutions need to follow the rules discussed in Lab 1 (Sep. 1) and documented here."
   },
   {
-    "objectID": "schedule.html#assignments-and-problem-sets",
-    "href": "schedule.html#assignments-and-problem-sets",
+    "objectID": "schedule.html#problem-sets-and-assignments",
+    "href": "schedule.html#problem-sets-and-assignments",
     "title": "Statistics 243 Fall 2023",
     "section": "",
-    "text": "Submit your solutions on Gradescope and (for problem sets but not assignments) via your Git repository.\n\n\n\nAssignment\nDate\nTime\n\n\n\n\n\nbash shell problems (first 10) (reading some of tutorial before Aug. 31 recommended)\nFriday Sep. 1\n10 am\n\n\n\n\nAssignments will generally be turned in on Gradescope but don’t need to follow the rules for problem set solutions and will be graded complete/incomplete.\n\n\n\nProblem Set\nDate\nTime\n\n\n\n\n\n\nProblem set solutions need to follow the rules discussed in Lab 1 (Sep. 1) and documented here."
+    "text": "Submit your solutions on Gradescope and (for problem sets but not assignments) via your Git repository.\n\n\n\nAssignment\nDate\nTime\n\n\n\n\nbash shell problems (first 10) (reading some of tutorial before Wed. Aug. 30 recommended)\nFriday Sep. 1\n10 am\n\n\n\nAssignments will generally be turned in on Gradescope but don’t need to follow the rules for problem set solutions and will be graded complete/incomplete.\n\n\n\nProblem Set\nDate\nTime\n\n\n\n\nPS1\nTBD\n10 am\n\n\n\nProblem set solutions need to follow the rules discussed in Lab 1 (Sep. 1) and documented here."
   },
   {
-    "objectID": "schedule.html#quiz-schedule",
-    "href": "schedule.html#quiz-schedule",
+    "objectID": "schedule.html#quizzes",
+    "href": "schedule.html#quizzes",
     "title": "Statistics 243 Fall 2023",
-    "section": "Quiz schedule",
-    "text": "Quiz schedule\nQuizzes are in-person only.\n\nQuiz 1: TBD during class.\n\nReview session TBD.\n\nQuiz 2: TBD during class.\n\nReview session TBD."
+    "section": "Quizzes",
+    "text": "Quizzes\nQuizzes are in-person only.\n\nQuiz 1: TBD during class.\n\nReview session TBD.\n\nQuiz 2: TBD during class.\n\nReview session TBD."
   },
   {
-    "objectID": "schedule.html#project-schedule",
-    "href": "schedule.html#project-schedule",
+    "objectID": "schedule.html#project",
+    "href": "schedule.html#project",
     "title": "Statistics 243 Fall 2023",
-    "section": "Project schedule",
-    "text": "Project schedule\nDue date: TBD."
+    "section": "Project",
+    "text": "Project\nDue date: TBD."
   },
   {
-    "objectID": "schedule.html#first-few-week-activities-and-assignments",
-    "href": "schedule.html#first-few-week-activities-and-assignments",
+    "objectID": "schedule.html#first-few-weeks-activities-and-assignments",
+    "href": "schedule.html#first-few-weeks-activities-and-assignments",
     "title": "Statistics 243 Fall 2023",
-    "section": "First few week activities and assignments",
-    "text": "First few week activities and assignments\n\n\n\nWeek\nDay\nDate\nTime\nActivity/Assignment\n\n\n\n\n1\nThursday\n2023-08-24\n4:00-5:30 pm\nOptional: Introduction to LaTeX session run by the library (see Details below)\n\n\n\nFriday\n2023-08-25\nnoon\nRequired (part of your class participation): class survey\n\n\n\n\n\nnoon\nRequired: office hour time survey\n\n\n\n\n\nnoon\nRequired: Go to github.berkeley.edu and login with your Calnet credentials (that’s all – it will allow me to create your repository)\n\n\n\n\n\nlab (1:00-4:30 pm)\nOptional: Lab 0 help session for software installation/setup and UNIX command line basics (see Details below)\n\n\n2\nMonday\n2022-08-28\n10 am\nRequired: read first three sections of Unit 2 (sections before ‘Webscraping’)\n\n\n\n\n\nnone\nOptional: work through the UNIX basics tutorial and answer (for yourself) the questions at the end\n\n\n\n\n\n7:00-8:15 pm\nOptional: Python workshop (see Details below); perhaps worthwhile if you have no Python background and if you couldn’t attend the Aug 16-17 workshop we held\n\n\n\nWednesday\n2023-08-30\n5:00-6:15 pm\nOptional: Python workshop (see Details below); perhaps worthwhile if you have no Python background and if you couldn’t attend the Aug 16-17 workshop we held\n\n\n\nFriday\n2022-09-01\n10 am\nRequired: Bash shell tutorial and exercises (see Details below)\n\n\n\n\n\nlab\nRequired: Lab 1 on using course tools and problem set submission (see Details below)"
+    "section": "First few weeks activities and assignments",
+    "text": "First few weeks activities and assignments\n\n\n\nWeek\nDay\nDate\nTime\nActivity/Assignment\n\n\n\n\n1\nThursday\n2023-08-24\n4:00-5:30 pm\nOptional: Introduction to LaTeX session run by the library (see Details below)\n\n\n\nFriday\n2023-08-25\nnoon\nRequired (part of your class participation): class survey\n\n\n\n\n\nnoon\nRequired: office hour time survey\n\n\n\n\n\nnoon\nRequired: Go to github.berkeley.edu and login with your Calnet credentials (that’s all – it will allow me to create your repository)\n\n\n\n\n\nlab (1:00-4:30 pm)\nOptional: Lab 0 help session for software installation/setup and UNIX-style command line basics (see Details below)\n\n\n2\nMonday\n2022-08-28\n10 am\nRequired: read first three sections of Unit 2 (sections before ‘Webscraping’)\n\n\n\n\n\nnone\nOptional: work through the UNIX basics tutorial and answer (for yourself) the questions at the end\n\n\n\n\n\n7:00-8:15 pm\nOptional: Python workshop (see Details below); perhaps worthwhile if you have no Python background and if you couldn’t attend the Aug 16-17 workshop we held\n\n\n\nWednesday\n2023-08-30\n5:00-6:15 pm\nOptional: Python workshop (see Details below); perhaps worthwhile if you have no Python background and if you couldn’t attend the Aug 16-17 workshop we held\n\n\n\nFriday\n2022-09-01\n10 am\nRequired: Bash shell tutorial and exercises (see Details below)\n\n\n\n\n\nlab\nRequired: Lab 1 on using Git and Quarto and problem set submission (see Details below)"
   },
   {
     "objectID": "schedule.html#notes-on-assignments-and-activities",
     "href": "schedule.html#notes-on-assignments-and-activities",
     "title": "Statistics 243 Fall 2023",
     "section": "Notes on assignments and activities",
-    "text": "Notes on assignments and activities\n\nOptional library LaTeX session: I highly recommend (in particular if you are a Statistics graduate student) that you know how to create equations in LaTeX. Even if you develop your documents using Quarto, Jupyter notebooks, R Markdown, etc. rather than LaTeX-based documents, LaTeX math syntax is the common tool for writing math syntax that will render beautifully.\nOptional Lab 0 software/command line help session: (August 25 in lab room) Help session for installing software, accessing a UNIX-style command line, and basic UNIX usage (e.g., the UNIX basics tutorial). You can show up at any time (unlike all remaining labs). You should have software installed, be able to accesss the command line, and have started to become familiar with basic UNIX usage before class on Wednesday August 30.\nBash shell tutorial and exercises: (by September 1), read through this tutorial on using the bash shell. You can skip the pages on Regular Expressions and Managing Processes. Work through the first 10 problems in the exercises and submit your answers via Gradescope. This is not a formal problem set, so you don’t need to worry about formatting nor about explaining/commenting your answers, nor do you need to put your answers in your GitHub class repository. In fact it’s even fine with me if you hand-write the answers and scan them to an electronic document. I just want to make sure you’ve worked through the tutorial. I’ll be doing demonstrations on using the bash shell in class starting on Wednesday August 30, so that will be helpful as you work through the tutorial.\nLab 1: (September 1) First section/lab on using Git, setting up your GitHub repository for problem sets, and using Quarto to generate dynamic documents. Please come only to the section you are registered for given space limits in the room, unless you have talked with Chris and have his permission."
+    "text": "Notes on assignments and activities\n\nOptional library LaTeX session: I highly recommend (in particular if you are a Statistics graduate student) that you know how to create equations in LaTeX. Even if you develop your documents using Quarto, Jupyter notebooks, R Markdown, etc. rather than LaTeX-based documents, LaTeX math syntax is the common tool for writing math syntax that will render beautifully.\nOptional Lab 0 software/command line help session: (August 25 in lab room) Help session for installing software, accessing a UNIX-style command line, and basic command line usage (e.g., the UNIX basics tutorial). You can show up at any time (unlike all remaining labs). You should have software installed, be able to accesss the command line, and have started to become familiar with basic command line usage before class on Wednesday August 30.\nBash shell tutorial and exercises: (by September 1) Read through this tutorial on using the bash shell. You can skip the pages on Regular Expressions and Managing Processes. Work through the first 10 problems in the exercises and submit your answers via Gradescope. This is not a formal problem set, so you don’t need to worry about formatting nor about explaining/commenting your answers, nor do you need to put your answers in your GitHub class repository. In fact it’s even fine with me if you hand-write the answers and scan them to an electronic document. I just want to make sure you’ve worked through the tutorial. I’ll be doing demonstrations on using the bash shell in class starting on Wednesday August 30, so that will be helpful as you work through the tutorial.\nLab 1: (September 1) First section/lab on using Git, setting up your GitHub repository for problem sets, and using Quarto to generate dynamic documents. Please come only to the section you are registered for given space limits in the room, unless you have talked with Chris and have his permission."
   },
   {
     "objectID": "labs/lab0-setup.html",
