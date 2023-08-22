@@ -30,13 +30,13 @@ Today we will use all these tools together to submit a solution for Problem set 
 
 ### Steps to perform today:
 
-1. Create a folder in your github repository
-2. Create a quarto document that has some simple code that creates a simple plot (you can follow this example/tutorial [here](https://quarto.org/docs/get-started/hello/text-editor.html))
+1. Create a subdirectory in your github repository with the name ps0
+2. In that subdirectory, create a quarto document (ps0.qmd) that has some simple code that creates a simple plot (you can follow this example/tutorial [here](https://quarto.org/docs/get-started/hello/text-editor.html))
 3. Use the quarto command line to render it into a pdf document (quarto render FILE)
-4. Add the quarto document to your repository (git add FILES; git commit -m MESSAGE; git push)
+4. Commit the changes to your repository (git add FILES; git commit -m MESSAGE; git push)
 5. Add another section to your quarto document (use your imagination), then preview and commit the changes
 6. Use the quarto command line to render the updated document into a pdf document
-7. Add the pdf document to the repository as well (git add FILES; git commit -m MESSAGE; git push)
+7. Add the pdf document to the repository as well
 8. Make sure that you can log into [gradescope](https://www.gradescope.com/) and upload a pdf document
 
 We will also take today's lab as an opportunity to get familiar with the basic use of all the 5 basic tools listed above.

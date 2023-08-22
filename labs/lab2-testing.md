@@ -24,9 +24,5 @@ Under construction ...
 ## Exceptions
 
 
-## Debugging
-
-
-### Integrated GUI debugger (with VS Code)
-
+## Unit Tests
 
