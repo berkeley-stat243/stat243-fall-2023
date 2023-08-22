@@ -57,8 +57,10 @@ website:
           text: "Lab 0: Setup"
         - file: labs/lab1-submission.md
           text: "Lab 1: Problem set submission"
-        - file: labs/lab2-debugging.md
-          text: "Lab 2: Assertions, Exceptions, and Debugging"
+        - file: labs/lab2-testing.md
+          text: "Lab 2: Assertions, Exceptions, and Testing"
+        - file: labs/lab3-debugging.md
+          text: "Lab 3: Debugging"
     - id: howtos
       title: "How tos"
       contents:
