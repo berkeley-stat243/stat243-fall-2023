@@ -31,10 +31,13 @@ Today we will use all these tools together to submit a solution for Problem set 
 ### Steps to perform today:
 
 1. Create a folder in your github repository
-2. Add a quarto document to it that has some simple code that creates a simple plot (use your imagination)
-3. Use the quarto command line to render it into a pdf document
-4. Add the padf to the repository
-5. Make sure that you can log into gradescope and upload a pdf document
+2. Create a quarto document that has some simple code that creates a simple plot (you can follow this example/tutorial [here](https://quarto.org/docs/get-started/hello/text-editor.html))
+3. Use the quarto command line to render it into a pdf document (quarto render FILE)
+4. Add the quarto document to your repository (git add FILES; git commit -m MESSAGE; git push)
+5. Add another section to your quarto document (use your imagination), then preview and commit the changes
+6. Use the quarto command line to render the updated document into a pdf document
+7. Add the pdf document to the repository as well (git add FILES; git commit -m MESSAGE; git push)
+8. Make sure that you can log into [gradescope](https://www.gradescope.com/) and upload a pdf document
 
 We will also take today's lab as an opportunity to get familiar with the basic use of all the 5 basic tools listed above.
 For git and quarto, very basic knowledge should be sufficient, but for unix commands and python, the more you learn the more effective you will be at solving the problem sets (and at any computational task you take on after that). 
