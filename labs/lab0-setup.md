@@ -16,7 +16,7 @@ format:
     code-block-background: true
 ---
 
-# Setting up your environment
+## Setting up your environment
 
 You will need to set up (or make sure you have access to) the following:
 
