@@ -1,5 +1,5 @@
 ---
-title: "Lab 2: Assertions, Exceptions, and Debugging"
+title: "Lab 2: Assertions, Exceptions, and Tesing"
 author: "Ahmed Eldeeb"
 date: "2023-08-21"
 format:
