@@ -18,7 +18,7 @@ format:
 
 ## Submitting problem set solutions
 
-You already have access to the following 5 basic tools:
+By now you should already have access to the following 5 basic tools:
 
 1. [Unix shell](../howtos/accessingUnixCommandLine.md)
 2. [Git](../howtos/gitInstall.md)
@@ -28,11 +28,13 @@ You already have access to the following 5 basic tools:
 
 Today we will use all these tools together to submit a solution for Problem set 0 (not a real problem set) to make sure you know how to submit solutions to upcoming (real) problem sets.
 
+Here is a selection of some basic reference tutorials and documentation for unix commands(https://www.unixtutorial.org/basic-unix-commands), [git](https://rogerdudler.github.io/git-guide/), [github](https://docs.github.com/en/get-started/quickstart/hello-world), [quarto](https://quarto.org/docs/get-started/hello/text-editor.html), [python](https://docs.python.org/3/tutorial/index.html0, and [VS Code](https://code.visualstudio.com/docs)
+
 ### Steps to perform today:
 
 1. Create a subdirectory in your github repository with the name ps0
 2. In that subdirectory, create a quarto document (ps0.qmd) that has some simple code that creates a simple plot (you can follow this example/tutorial [here](https://quarto.org/docs/get-started/hello/text-editor.html))
-3. Use the quarto command line to render it into a pdf document (quarto render FILE)
+3. Use the quarto command line to render it into a pdf document (quarto render FILE --to pdf)
 4. Commit the changes to your repository (git add FILES; git commit -m MESSAGE; git push)
 5. Add another section to your quarto document (use your imagination), then preview and commit the changes
 6. Use the quarto command line to render the updated document into a pdf document
