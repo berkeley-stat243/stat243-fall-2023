@@ -353,7 +353,7 @@ the Git version control system for working in your group.
 I encourage you to work together and help each other out. However,
 the problem set solutions you submit must be your own. What do I mean by that?
 
-- You must first try to figure out a given problem on your own. After that, if you're stuck or want to explore
+- You should first try to figure out a given problem on your own. After that, if you're stuck or want to explore
 alternative approaches or check what you've done, feel free to consult with your fellow students
 and with the GSI and me. 
 - What does "consult with a fellow student mean"? You can discuss a problem with another student, brainstorm approaches, and 
