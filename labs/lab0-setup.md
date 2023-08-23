@@ -30,3 +30,5 @@ Attending lab 0 is optional. If you successfully set up your environment to have
 
 You are also welcome to come and ask for help on using any of these 4 tools/systems, but these questions will be answered after setup related questions.
 
+**Deebs's unsolicited advice for the week:** Whatever editor you pick, make sure to spend some time every week learning a few keyboard shortcuts for it. The same goes for the bash shell (ctrl+a and ctrl+e are among my favorites) and for your OS of choice in general. Not only do they make you more efficient, but they dramatically reduce the cognitive load after a while, and so make your life less painful in the long run.
+

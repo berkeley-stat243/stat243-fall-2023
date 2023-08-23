@@ -28,7 +28,7 @@ By now you should already have access to the following 5 basic tools:
 
 Today we will use all these tools together to submit a solution for Problem Set 0 (not a real problem set) to make sure you know how to submit solutions to upcoming (real) problem sets.
 
-Here is a selection of some basic reference tutorials and documentation for unix commands(https://www.unixtutorial.org/basic-unix-commands), [git](https://rogerdudler.github.io/git-guide/), [github](https://docs.github.com/en/get-started/quickstart/hello-world), [quarto](https://quarto.org/docs/get-started/hello/text-editor.html), [python](https://docs.python.org/3/tutorial/index.html0, and [VS Code](https://code.visualstudio.com/docs)
+Here is a selection of some basic reference tutorials and documentation for [unix commands](https://www.unixtutorial.org/basic-unix-commands), [git](https://rogerdudler.github.io/git-guide/), [github](https://docs.github.com/en/get-started/quickstart/hello-world), [quarto](https://quarto.org/docs/get-started/hello/text-editor.html), [python](https://docs.python.org/3/tutorial/index.html) and [VS Code](https://code.visualstudio.com/docs)
 
 ### Steps to perform today:
 
