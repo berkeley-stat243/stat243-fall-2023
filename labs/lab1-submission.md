@@ -32,8 +32,14 @@ Here is a selection of some basic reference tutorials and documentation for [uni
 
 ## Quick Intro to [git and GitHub](https://htmlpreview.github.io/?https://github.com/berkeley-scf/tutorial-git-basics/blob/master/git-intro.html)
 
+1. Making changes
+2. Undoing changes (3 different ways)
+3. Merging divergent versions
+4. Working with branches
+5. GUI
+6. Getting help
 
-## Hands-on Lab Instructions:
+## Hands-on Lab Instructions
 
 ### Steps to perform today:
 
@@ -45,6 +51,7 @@ Here is a selection of some basic reference tutorials and documentation for [uni
 6. Use the quarto command line to render the updated document into a pdf document
 7. Add the pdf document to the repository as well
 8. Make sure that you can log into [gradescope](https://www.gradescope.com/) and upload a pdf document
+9. [optional] Undo your last set of changes and regenerate the pdf file
 
 We will also take today's lab as an opportunity to get familiar with the basic use of all the 5 basic tools listed above.
 For git and quarto, very basic knowledge should be sufficient, but for unix commands and python, the more you learn the more effective you will be at solving the problem sets (and at any computational task you take on after that). 
