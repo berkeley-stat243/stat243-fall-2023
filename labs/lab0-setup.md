@@ -2,6 +2,7 @@
 title: "Lab 0: Setup"
 author: "Ahmed Eldeeb"
 date: "2023-08-21"
+targeting: "2023-08-25"
 format:
   pdf:
     documentclass: article
@@ -16,7 +17,7 @@ format:
     code-block-background: true
 ---
 
-## Setting up your environment
+## Setting up your environment (08/25/23)
 
 You will need to set up (or make sure you have access to) the following:
 
