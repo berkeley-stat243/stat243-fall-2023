@@ -372,7 +372,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#catch-run-time-errors-with-tryexcept-statements" id="toc-catch-run-time-errors-with-tryexcept-statements" class="nav-link" data-scroll-target="#catch-run-time-errors-with-tryexcept-statements">Catch run-time errors with <code>try/except</code> statements</a></li>
   <li><a href="#maintain-dimensionality" id="toc-maintain-dimensionality" class="nav-link" data-scroll-target="#maintain-dimensionality">Maintain dimensionality</a></li>
   <li><a href="#find-and-avoid-global-variables" id="toc-find-and-avoid-global-variables" class="nav-link" data-scroll-target="#find-and-avoid-global-variables">Find and avoid global variables</a></li>
-  <li><a href="#miscellaneous-tips" id="toc-miscellaneous-tips" class="nav-link" data-scroll-target="#miscellaneous-tips">5.5 Miscellaneous tips</a></li>
+  <li><a href="#miscellaneous-tips" id="toc-miscellaneous-tips" class="nav-link" data-scroll-target="#miscellaneous-tips">Miscellaneous tips</a></li>
   </ul></li>
   </ul></li>
   <li><a href="#tips-for-running-analyses" id="toc-tips-for-running-analyses" class="nav-link" data-scroll-target="#tips-for-running-analyses">3. Tips for running analyses</a></li>
@@ -435,12 +435,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="editors">Editors</h2>
 <p>Use an editor that supports the language you are using (e.g., <em>Atom</em>, <em>Emacs</em>/<em>Aquamacs</em>, <em>Sublime</em>, <em>vim</em>, <em>VSCode</em>, <em>TextMate</em>, <em>WinEdt</em>, or the built-in editor in <em>RStudio</em> [you can use Python from within RStudio]). Some advantages of this can include:</p>
 <ol type="1">
-<li>helpful color coding of different types of syntax and of strings,</li>
+<li>helpful color coding of different types of syntax,</li>
 <li>automatic indentation and spacing,</li>
-<li>code can often be run or compiled from within the editor,</li>
 <li>parenthesis matching,</li>
-<li>line numbering (good for finding bugs).</li>
+<li>line numbering (good for finding bugs), and</li>
+<li>code can often be run (or compiled) and debugged from within the editor.</li>
 </ol>
+<p>See the problem set submission how-to document for more information about editors that interact nicely with Quarto documents.</p>
 </section>
 <section id="coding-syntax" class="level2">
 <h2 class="anchored" data-anchor-id="coding-syntax">Coding syntax</h2>
@@ -891,7 +892,7 @@ Regression cannot be fit for stratum 29.</code></pre>
 </div>
 </section>
 <section id="miscellaneous-tips" class="level3">
-<h3 class="anchored" data-anchor-id="miscellaneous-tips">5.5 Miscellaneous tips</h3>
+<h3 class="anchored" data-anchor-id="miscellaneous-tips">Miscellaneous tips</h3>
 <ul>
 <li>Use core Python functionality and algorithms already coded. Figure out if a functionality already exists in (or can be adapted from) an Python package (or potentially in a C/Fortran library/package): code that is part of standard mathematical/numerical packages will probably be more efficient and bug-free than anything you would write.</li>
 <li>Code in a modular fashion, making good use of functions, so that you don’t need to debug the same code multiple times. Smaller functions are easier to debug, easier to understand, and can be combined in a modular fashion (like the UNIX utilities).</li>

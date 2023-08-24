@@ -360,7 +360,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#reading-data-from-text-files-into-python" id="toc-reading-data-from-text-files-into-python" class="nav-link" data-scroll-target="#reading-data-from-text-files-into-python">2. Reading data from text files into Python</a>
   <ul class="collapse">
   <li><a href="#core-python-functions" id="toc-core-python-functions" class="nav-link" data-scroll-target="#core-python-functions">Core Python functions</a></li>
-  <li><a href="#connections" id="toc-connections" class="nav-link" data-scroll-target="#connections">Connections</a></li>
+  <li><a href="#connections-and-streaming" id="toc-connections-and-streaming" class="nav-link" data-scroll-target="#connections-and-streaming">Connections and streaming</a></li>
   <li><a href="#file-paths" id="toc-file-paths" class="nav-link" data-scroll-target="#file-paths">File paths</a></li>
   <li><a href="#reading-data-quickly-arrow-and-polars" id="toc-reading-data-quickly-arrow-and-polars" class="nav-link" data-scroll-target="#reading-data-quickly-arrow-and-polars">Reading data quickly: Arrow and Polars</a></li>
   </ul></li>
@@ -490,7 +490,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>data_from_csv <span class="op">=</span> pd.read_csv(os.path.join(<span class="st">'..'</span>, <span class="st">'data'</span>, <span class="st">'airline.csv'</span>))</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.8521711826324463</code></pre>
+<pre><code>0.8339190483093262</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="3">
@@ -503,7 +503,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                                    <span class="st">'..'</span>, <span class="st">'data'</span>, <span class="st">'airline.parquet'</span>))</span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.0908823013305664</code></pre>
+<pre><code>0.09380316734313965</code></pre>
 </div>
 </div>
 <p>The CSV file is 51 MB while the Parquet file is 8 MB.</p>
@@ -518,7 +518,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>CompletedProcess(args=['ls', '-l', '../data/airline.csv'], returncode=0)</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>-rw-r--r-- 1 paciorek scfstaff 8153160 Aug 21 13:38 ../data/airline.parquet</code></pre>
+<pre><code>-rw-r--r-- 1 paciorek scfstaff 8153160 Aug 24 16:24 ../data/airline.parquet</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="32">
 <pre><code>CompletedProcess(args=['ls', '-l', '../data/airline.parquet'], returncode=0)</code></pre>
@@ -661,8 +661,8 @@ In future versions `DataFrame.to_latex` is expected to utilise the base implemen
 </div>
 <p>Actually, that file, <code>precip.txt</code>, is in a fixed-width format (i.e., every element in a given column has the exact same number of characters),so reading in using <code>pandas.read_fwf()</code> would be a good strategy.</p>
 </section>
-<section id="connections" class="level2">
-<h2 class="anchored" data-anchor-id="connections">Connections</h2>
+<section id="connections-and-streaming" class="level2">
+<h2 class="anchored" data-anchor-id="connections-and-streaming">Connections and streaming</h2>
 <p>Python allows you to read in not just from a file but from a more general construct called a <em>connection</em>. This can include reading in text from the output of running a shell command and from unzipping a file on the fly.</p>
 <p>Here are some examples of connections:</p>
 <div class="cell" data-execution_count="9">
@@ -746,8 +746,8 @@ In future versions `DataFrame.to_latex` is expected to utilise the base implemen
 <span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Timing for Pandas: </span><span class="sc">{</span>t1<span class="op">-</span>t0<span class="sc">}</span><span class="ss">."</span>)</span>
 <span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Timing for Polars: </span><span class="sc">{</span>t2<span class="op">-</span>t1<span class="sc">}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Timing for Pandas: 0.8440947532653809.
-Timing for Polars: 0.11989426612854004.</code></pre>
+<pre><code>Timing for Pandas: 0.8080198764801025.
+Timing for Polars: 0.12088561058044434.</code></pre>
 </div>
 </div>
 </section>
@@ -890,9 +890,9 @@ In future versions `DataFrame.to_latex` is expected to utilise the base implemen
 <td data-quarto-table-cell-role="th">0</td>
 <td>–</td>
 <td>World</td>
-<td>8055248000</td>
+<td>8055874000</td>
 <td>100%</td>
-<td>21 Aug 2023</td>
+<td>24 Aug 2023</td>
 <td>UN projection[3]</td>
 <td>NaN</td>
 </tr>
@@ -920,9 +920,9 @@ In future versions `DataFrame.to_latex` is expected to utilise the base implemen
 <td data-quarto-table-cell-role="th">3</td>
 <td>3</td>
 <td>United States</td>
-<td>335282000</td>
+<td>335300000</td>
 <td>NaN</td>
-<td>21 Aug 2023</td>
+<td>24 Aug 2023</td>
 <td>National population clock[7]</td>
 <td>[d]</td>
 </tr>
@@ -952,12 +952,13 @@ In future versions `DataFrame.to_latex` is expected to utilise the base implemen
 <span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="co">## Approach 1: search for HTML 'a' tags.</span></span>
 <span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a>a_elements <span class="op">=</span> soup.find_all(<span class="st">'a'</span>)</span>
 <span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a>links1 <span class="op">=</span> [x.get(<span class="st">'href'</span>) <span class="cf">for</span> x <span class="kw">in</span> a_elements]</span>
-<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="co">## Approach 2: search for elements with 'href' attribute</span></span>
-<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>href_elements <span class="op">=</span> soup.find_all(href <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a><span class="co">## Approach 2: search for 'a' elements with 'href' attribute</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a>href_elements <span class="op">=</span> soup.find_all(<span class="st">'a'</span>, href <span class="op">=</span> <span class="va">True</span>)</span>
 <span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a>links2 <span class="op">=</span> [x.get(<span class="st">'href'</span>) <span class="cf">for</span> x <span class="kw">in</span> href_elements]</span>
-<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a>links2[<span class="dv">0</span>:<span class="dv">9</span>]</span>
-<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a><span class="co"># help(bs.find_all)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a><span class="co">## In either case, then use `get` to retrieve the `href` attribute value.</span></span>
+<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a>links2[<span class="dv">0</span>:<span class="dv">9</span>]</span>
+<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a><span class="co"># help(bs.find_all)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="43">
 <pre><code>['?C=N;O=D',
  '?C=M;O=A',
@@ -970,8 +971,9 @@ In future versions `DataFrame.to_latex` is expected to utilise the base implemen
  '1765.csv.gz']</code></pre>
 </div>
 </div>
+<p>The <code>kwargs</code> keyword arguments to <code>find</code> and <code>find_all</code> allow one to search for elements with particular characteristics, such as having a particular attribute (seen above) or having an attribute have a particular value (e.g., picking out an element with a particular <code>id</code>).</p>
 <p>More generally, we may want to read an HTML document, parse it into its components (i.e., the HTML elements), and navigate through the tree structure of the HTML.</p>
-<p>Here’s another example of extracting specific components of information from a webpage (results not shown, since headlines will vary from day to day).</p>
+<p>Here’s another example of extracting specific components of information from a webpage (results not shown, since headlines will vary from day to day). We’ll use <code>get_text</code> to retrieve the element’s value.</p>
 <div class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>URL <span class="op">=</span> <span class="st">"https://www.nytimes.com"</span></span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>responseNYT <span class="op">=</span> requests.get(URL)</span>
@@ -1056,35 +1058,33 @@ In future versions `DataFrame.to_latex` is expected to utilise the base implemen
 <pre><code>20</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="45">
-<pre><code>{'id': '2630960',
- 'name': 'Indelicia',
- 'description': {'languages': {'@type': 'list', 'language': 'en'}},
+<pre><code>{'id': '2623415',
+ 'name': 'Madeleine',
+ 'description': {'languages': {'@type': 'list', 'language': ['fr', 'en']}},
  'status': 'fundraising',
  'funded_amount': '0',
  'basket_amount': '0',
- 'image': {'id': '5242988', 'template_id': '1'},
- 'activity': 'Personal Housing Expenses',
- 'sector': 'Housing',
- 'themes': {'@type': 'list',
-  'theme': ['Water and Sanitation', 'Earth Day Campaign']},
- 'use': 'to build a sanitary toilet for her family.',
- 'location': {'country_code': 'PH',
-  'country': 'Philippines',
-  'town': 'Bogo, Cebu',
-  'geo': {'level': 'town', 'pairs': '11.012829 123.986149', 'type': 'point'}},
- 'partner_id': '145',
- 'posted_date': '2023-08-21T20:20:11Z',
- 'planned_expiration_date': '2023-09-25T20:20:11Z',
+ 'image': {'id': '5233576', 'template_id': '1'},
+ 'activity': 'Bricks',
+ 'sector': 'Construction',
+ 'use': 'to buy 30,000 bricks, sacks of rice bran and pay for labour.',
+ 'location': {'country_code': 'MG',
+  'country': 'Madagascar',
+  'town': 'Antananarivo',
+  'geo': {'level': 'town', 'pairs': '-18.87919 47.507906', 'type': 'point'}},
+ 'partner_id': '443',
+ 'posted_date': '2023-08-24T22:40:11Z',
+ 'planned_expiration_date': '2023-09-28T22:40:11Z',
  'loan_amount': '200',
  'borrower_count': '1',
  'lender_count': '0',
- 'bonus_credit_eligibility': '1',
+ 'bonus_credit_eligibility': '0',
  'tags': {'@type': 'list',
-  'tag': [{'name': '#Parent', 'id': '16'},
-   {'name': '#Health and Sanitation', 'id': '27'}]}}</code></pre>
+  'tag': [{'name': '#Woman-Owned Business', 'id': '6'},
+   {'name': '#Elderly', 'id': '13'}]}}</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="45">
-<pre><code>'Personal Housing Expenses'</code></pre>
+<pre><code>'Bricks'</code></pre>
 </div>
 </div>
 <div class="cell" data-execution_count="26">
@@ -1099,70 +1099,70 @@ In future versions `DataFrame.to_latex` is expected to utilise the base implemen
 <span id="cb60-9"><a href="#cb60-9" aria-hidden="true" tabindex="-1"></a><span class="co">## or extract the geographic coordinates</span></span>
 <span id="cb60-10"><a href="#cb60-10" aria-hidden="true" tabindex="-1"></a>[loan.xpath(<span class="st">"location/geo/pairs/text()"</span>) <span class="cf">for</span> loan <span class="kw">in</span> loans]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="46">
-<pre><code>[['Call Center'],
- ['Pigs'],
- ['Personal Housing Expenses'],
- ['Personal Expenses'],
- ['Personal Expenses'],
- ['Personal Housing Expenses'],
- ['Cattle'],
- ['Food Stall'],
- ['Food Market'],
+<pre><code>[['Construction'],
+ ['Sewing'],
+ ['Bricks'],
+ ['Grocery Store'],
  ['Retail'],
+ ['Pigs'],
+ ['Poultry'],
+ ['Catering'],
+ ['Food Production/Sales'],
+ ['Clothing Sales'],
+ ['Farming'],
+ ['Cattle'],
+ ['Food Market'],
  ['Personal Housing Expenses'],
+ ['General Store'],
  ['Personal Housing Expenses'],
- ['Personal Housing Expenses'],
- ['Personal Housing Expenses'],
- ['Personal Housing Expenses'],
- ['Personal Expenses'],
- ['Personal Expenses'],
- ['Personal Housing Expenses'],
- ['Beverages'],
- ['Food Market']]</code></pre>
+ ['Farming'],
+ ['Farming'],
+ ['Weaving'],
+ ['Poultry']]</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="46">
-<pre><code>[['Madagascar'],
- ['Philippines'],
- ['Philippines'],
- ['Philippines'],
- ['Philippines'],
- ['Philippines'],
- ['Tajikistan'],
+<pre><code>[['El Salvador'],
  ['Uganda'],
- ['Liberia'],
- ['Liberia'],
+ ['Madagascar'],
+ ['Madagascar'],
+ ['El Salvador'],
+ ['Ecuador'],
+ ['Madagascar'],
+ ['Honduras'],
+ ['El Salvador'],
+ ['El Salvador'],
+ ['El Salvador'],
+ ['Madagascar'],
  ['Philippines'],
  ['Philippines'],
  ['Philippines'],
  ['Philippines'],
  ['Philippines'],
- ['Philippines'],
- ['Philippines'],
- ['Philippines'],
- ['Sierra Leone'],
- ['Liberia']]</code></pre>
+ ['Tonga'],
+ ['Indonesia'],
+ ['Madagascar']]</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="46">
-<pre><code>[['-18.87919 47.507906'],
- ['11.012829 123.986149'],
- ['11.012829 123.986149'],
- ['10.243864 123.941552'],
- ['10.243864 123.941552'],
- ['10.243864 123.941552'],
- ['38.128915 69.621456'],
- ['3.469802 31.248329'],
- ['6.266909 -10.711196'],
- ['6.348679 -10.743608'],
- ['10.243864 123.941552'],
- ['10.707582 123.863454'],
- ['10.243864 123.941552'],
- ['10.707582 123.863454'],
- ['10.412129 123.986149'],
- ['10.707582 123.863454'],
- ['10.707582 123.863454'],
- ['10.707582 123.863454'],
- ['7.863215 -11.195717'],
- ['6.266909 -10.711196']]</code></pre>
+<pre><code>[['13.332346 -87.850064'],
+ ['3.652738 31.728096'],
+ ['-18.87919 47.507906'],
+ ['-18.87919 47.507906'],
+ ['13.836337 -88.850303'],
+ ['0.594895 -77.828151'],
+ ['-18.87919 47.507906'],
+ ['15.669628 -87.14229'],
+ ['13.836337 -88.850303'],
+ ['13.836337 -88.850303'],
+ ['13.806016 -88.151096'],
+ ['-19.873008 47.029116'],
+ ['10.292561 123.024652'],
+ ['10.878345 123.408176'],
+ ['11.572299 122.770544'],
+ ['10.878345 123.408176'],
+ ['11.572299 122.770544'],
+ ['-20 -175'],
+ ['-6.178056 106.63'],
+ ['-19.873008 47.029116']]</code></pre>
 </div>
 </div>
 </section>
@@ -1219,32 +1219,32 @@ In future versions `DataFrame.to_latex` is expected to utilise the base implemen
 <pre><code>list</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="47">
-<pre><code>dict_keys(['id', 'name', 'description', 'status', 'funded_amount', 'basket_amount', 'image', 'activity', 'sector', 'use', 'location', 'partner_id', 'posted_date', 'planned_expiration_date', 'loan_amount', 'borrower_count', 'lender_count', 'bonus_credit_eligibility', 'tags'])</code></pre>
+<pre><code>dict_keys(['id', 'name', 'description', 'status', 'funded_amount', 'basket_amount', 'image', 'activity', 'sector', 'themes', 'use', 'location', 'partner_id', 'posted_date', 'planned_expiration_date', 'loan_amount', 'borrower_count', 'lender_count', 'bonus_credit_eligibility', 'tags'])</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="47">
-<pre><code>'Madagascar'</code></pre>
+<pre><code>'El Salvador'</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="47">
-<pre><code>['Madagascar',
- 'Philippines',
- 'Philippines',
- 'Philippines',
- 'Philippines',
- 'Philippines',
- 'Tajikistan',
+<pre><code>['El Salvador',
  'Uganda',
- 'Liberia',
- 'Liberia',
+ 'Madagascar',
+ 'Madagascar',
+ 'El Salvador',
+ 'Ecuador',
+ 'Madagascar',
+ 'Honduras',
+ 'El Salvador',
+ 'El Salvador',
+ 'El Salvador',
+ 'Madagascar',
  'Philippines',
  'Philippines',
  'Philippines',
  'Philippines',
  'Philippines',
- 'Philippines',
- 'Philippines',
- 'Philippines',
- 'Sierra Leone',
- 'Liberia']</code></pre>
+ 'Tonga',
+ 'Indonesia',
+ 'Madagascar']</code></pre>
 </div>
 </div>
 <p>One disadvantage of JSON is that it is not set up to deal with missing values, infinity, etc.</p>
@@ -1605,7 +1605,7 @@ In future versions `DataFrame.to_latex` is expected to utilise the base implemen
 <pre><code>4</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>-rw-r--r-- 1 paciorek scfstaff 4 Aug 21 13:38 tmp.txt</code></pre>
+<pre><code>-rw-r--r-- 1 paciorek scfstaff 4 Aug 24 16:25 tmp.txt</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="51">
 <pre><code>CompletedProcess(args=['ls', '-l', 'tmp.txt'], returncode=0)</code></pre>
@@ -1652,7 +1652,7 @@ In future versions `DataFrame.to_latex` is expected to utilise the base implemen
 <pre><code>b'Pe\xc3\xb1a 3\xc3\xb72'</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
-<pre><code>-rw-r--r-- 1 paciorek scfstaff 10 Aug 21 13:38 tmp2.txt</code></pre>
+<pre><code>-rw-r--r-- 1 paciorek scfstaff 10 Aug 24 16:25 tmp2.txt</code></pre>
 </div>
 <div class="cell-output cell-output-display" data-execution_count="52">
 <pre><code>CompletedProcess(args=['ls', '-l', 'tmp2.txt'], returncode=0)</code></pre>
