@@ -16,7 +16,7 @@ format:
     code-block-background: true
 ---
 
-## Submitting problem set solutions
+## Submitting problem set solutions (09/01/23)
 
 By now you should already have access to the following 5 basic tools:
 
@@ -28,7 +28,18 @@ By now you should already have access to the following 5 basic tools:
 
 Today we will use all these tools together to submit a solution for Problem Set 0 (not a real problem set) to make sure you know how to submit solutions to upcoming (real) problem sets.
 
-Here is a selection of some basic reference tutorials and documentation for [unix commands](https://www.unixtutorial.org/basic-unix-commands), [git](https://rogerdudler.github.io/git-guide/), [github](https://docs.github.com/en/get-started/quickstart/hello-world), [quarto](https://quarto.org/docs/get-started/hello/text-editor.html), [python](https://docs.python.org/3/tutorial/index.html) and [VS Code](https://code.visualstudio.com/docs)
+Here is a selection of some basic reference tutorials and documentation for [unix](https://berkeley-scf.github.io/tutorial-unix-basics/) [bash](https://berkeley-scf.github.io/tutorial-using-bash/) and [unix commands](https://www.unixtutorial.org/basic-unix-commands), [git & GitHub](https://htmlpreview.github.io/?https://github.com/berkeley-scf/tutorial-git-basics/blob/master/git-intro.html), [quarto](https://quarto.org/docs/get-started/hello/text-editor.html), [python](https://docs.python.org/3/tutorial/index.html) and [VS Code](https://code.visualstudio.com/docs)
+
+## Quick Intro to [git and GitHub](https://htmlpreview.github.io/?https://github.com/berkeley-scf/tutorial-git-basics/blob/master/git-intro.html)
+
+1. Making changes
+2. Undoing changes (3 different ways)
+3. Merging divergent versions
+4. Working with branches
+5. GUI
+6. Getting help
+
+## Hands-on Lab Instructions
 
 ### Steps to perform today:
 
@@ -40,6 +51,7 @@ Here is a selection of some basic reference tutorials and documentation for [uni
 6. Use the quarto command line to render the updated document into a pdf document
 7. Add the pdf document to the repository as well
 8. Make sure that you can log into [gradescope](https://www.gradescope.com/) and upload a pdf document
+9. [optional] Undo your last set of changes and regenerate the pdf file
 
 We will also take today's lab as an opportunity to get familiar with the basic use of all the 5 basic tools listed above.
 For git and quarto, very basic knowledge should be sufficient, but for unix commands and python, the more you learn the more effective you will be at solving the problem sets (and at any computational task you take on after that). 
