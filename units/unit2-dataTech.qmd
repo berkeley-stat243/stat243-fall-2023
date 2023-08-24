@@ -318,7 +318,7 @@ characters),so reading in using `pandas.read_fwf()` would be a good strategy.
 
 
 
-## Connections
+## Connections and streaming
 
 Python allows you to read in not just from a file but from a more general
 construct called a *connection*. This can include reading in text from the output of running a shell command and from unzipping a file on the fly.
@@ -603,13 +603,20 @@ soup = bs(response.content, 'html.parser')
 ## Approach 1: search for HTML 'a' tags.
 a_elements = soup.find_all('a')
 links1 = [x.get('href') for x in a_elements]
-## Approach 2: search for elements with 'href' attribute
-href_elements = soup.find_all(href = True)
+## Approach 2: search for 'a' elements with 'href' attribute
+href_elements = soup.find_all('a', href = True)
 links2 = [x.get('href') for x in href_elements]
+## In either case, then use `get` to retrieve the `href` attribute value.
 
 links2[0:9]
 # help(bs.find_all)
 ```
+
+The `kwargs` keyword arguments to `find` and `find_all` allow one
+to search for elements with particular characteristics, such
+as having a particular attribute (seen above) or having an attribute
+have a particular value (e.g., picking out an element with a particular
+`id`).
 
 More generally, we may want to read an HTML document, parse it into its
 components (i.e., the HTML elements), and navigate through the tree
@@ -617,7 +624,7 @@ structure of the HTML.
 
 Here's another example of extracting specific components of information
 from a webpage (results not shown, since headlines will vary from day to
-day).
+day). We'll use `get_text` to retrieve the element's value.
 
 ```{python, headlines}
 #| eval: false

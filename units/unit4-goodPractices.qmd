@@ -55,12 +55,14 @@ cases.
 
 Use an editor that supports the language you are using (e.g., *Atom*, *Emacs*/*Aquamacs*, *Sublime*, *vim*, *VSCode*, *TextMate*, *WinEdt*, or the built-in editor in *RStudio* [you can use Python from within RStudio]). Some advantages of this can include:
 
-  1. helpful color coding of different types of syntax and of strings,
+  1. helpful color coding of different types of syntax,
   2. automatic indentation and spacing,
-  3. code can often be run or compiled from within the editor,
-  4. parenthesis matching,
-  5. line numbering (good for finding bugs).
+  3. parenthesis matching,
+  4. line numbering (good for finding bugs), and
+  5. code can often be run (or compiled) and debugged from within the editor.
 
+See the problem set submission how-to document for more information about editors that interact nicely with Quarto documents.
+  
 ## Coding syntax
 
 The PEP 8 style guide is your go-to reference for Python style.
@@ -593,7 +595,7 @@ except Exception as error:
     
 ```
 
-### 5.5 Miscellaneous tips
+### Miscellaneous tips
 
  - Use core Python functionality and algorithms already coded. Figure out if a functionality already exists in (or can be adapted from) an Python package (or potentially in a C/Fortran library/package): code that is part of standard mathematical/numerical packages will probably be more efficient and bug-free than anything you would write.
  - Code in a modular fashion, making good use of functions, so that you don't need to debug the same code multiple times. Smaller functions are easier to debug, easier to understand, and can be combined in a modular fashion (like the UNIX utilities).
