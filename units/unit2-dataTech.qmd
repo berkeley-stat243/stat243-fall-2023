@@ -639,7 +639,11 @@ We can use [CSS selectors](https://www.w3schools.com/cssref/css_selectors.asp)
 
 ```{python, css}
 soup.select("tr th")
-## Or the `a` elements whose parents are `th` elements:
+```
+
+Or we could extract  the `a` elements whose parents are `th` elements:
+
+```{python, css2}
 soup.select("th > a")
 ```
 
@@ -917,8 +921,7 @@ api_args = "http://api.worldbank.org/V2/country?incomeLevel=LIC"
 url = "http://api.worldbank.org/V2/country?incomeLevel=MIC&format=json"
 response = requests.get(url)
 
-# data = json.loads(response.content)
-# TODO: debug why above line fails when rendering
+data = json.loads(response.content)
 
 ## Be careful of data truncation/pagination
 if False:
@@ -1177,9 +1180,7 @@ written as two base-16 numbers (i.e., hexadecimal), where "0100"="4" and
 
 ## 4d in hexadecimal is 'M'
 ## 0a is a newline (at least in Linux/Mac)
-## "0x" is how we tell Python we are using hexadecimal
-[hex(ord(x)) for x in ['M','o','m','\n']] ## i.e., "Mom\n" in ascii
-hexvals = b'\x4d\x6f\x6d\x0a'
+hexvals = b'\x4d\x6f\x6d\x0a'  # "Mom\n" in ASCII as hexadecimal
 
 with open('tmp.txt', 'wb') as textfile:
      nbytes = textfile.write(hexvals)
@@ -1203,16 +1204,26 @@ different operating systems.
 Unicode characters that includes more than 110,000 characters from 100
 different alphabets/scripts. It's widely used on the web. Latin-1
 encodes a small subset of Unicode and contains the characters used in
-many European languages (e.g., letters with accents). Here's an example
-of using a non-ASCII Unicode character:
+many European languages (e.g., letters with accents).
+
+Unicode characters have unique integer identifiers (the unicode *code
+point*), which is given by `ord` in Python. UTF-8 is the encoding
+that represents the character in bytes.
+
+Here's an example of using non-ASCII Unicode characters:
 
 ```{python, unicode-example}
-## n-tilde and division symbol as Unicode 'code points'
+
 ## Python `str` type stores Unicode characters.
 x2_unicode = 'Pe\u00f1a 3\u00f72'
 x2_unicode
 type(x2_unicode)
 
+## From Unicode code point to hexadecimal representation of the code point:
+ord('ñ')
+hex(ord('ñ'))
+
+## And now to the actual UTF-8 encoding, again in hexadecimal:
 bytes('\u00f1', 'utf-8')    # indeed - two bytes, not one
 bytes('\u00f7', 'utf-8')    # indeed - two bytes, not one
 ## specified directly as hexadecimal in UTF-8 encoding 
@@ -1254,6 +1265,16 @@ import locale
 locale.getlocale()
 ```
 
+Note that in Python and various other languages (including R and Julia), you
+can use Unicode characters as part of variable names:
+
+```{python}
+peña = 7
+print(peña)
+σ = 4
+σ * peña
+```
+     
 
 With strings already in Python, you can convert between encodings with
 the `encode` method for string objects:
