@@ -41,6 +41,13 @@ Here is a selection of some basic reference tutorials and documentation for [uni
 
 ## Hands-on Lab Instructions
 
+[Problem Set submission](../howtos/ps.submission.qmd) instructions:
+
+1. Open the qmd file in any editor you like (e.g., Emacs, Sublime, ....). Use `quarto preview FILE` to show your rendered document live as you edit and save changes. You can put the preview window side by side with your editor, and the preview document should [automatically render](https://quarto.org/docs/get-started/hello/text-editor.html) as you save your qmd file.
+ 2. [Use VS Code](https://quarto.org/docs/get-started/hello/vscode.html) with the following extensions: Python, Quarto, and Jupyter Notebooks. This allows you to execute and preview chunks (and whole document) inside VS Code. This is currently deeb's favorite path due to how well it integrated with the Python debugger.
+ 3. [Use RStudio](https://quarto.org/docs/get-started/hello/rstudio.html) (yes, RStudio), which can manage Python code and will display chunk output in the same way it does with R chunks. This path seems to work quite well and is recommended if you are already familiar with RStudio.
+
+
 ### Steps to perform today:
 
 1. Create a subdirectory in your github repository with the name ps0

@@ -31,7 +31,9 @@ After making sure you have access to all these 5 tools, it may be a good idea to
 
 Attending lab 0 is optional. If you successfully set up your environment to have all the listed tools, you don't need to attend. You are welcome to attend to ask for help with the setup or to help your classmates with setting up their environments.
 
-You are also welcome to come and ask for help on using any of these 5 tools/systems, but these questions will be answered after setup related questions.
+You are also welcome to come and ask for help on using any of these 5 tools/systems (esp. bash and unix commands this week), but priority will be given to environment setup questions.
+
+Reach out to deeb @ deeb@berkeley.edu with any unresolved problems or if you discover something that needs to be changed with our howtos and instructions.
 
 **Deeb's unsolicited advice on languages and tools:** 
 
