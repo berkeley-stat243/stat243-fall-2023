@@ -590,10 +590,7 @@ to build up a tree containing the HTML elements. Then one can [search by
 HTML tag or attribute](https://beautiful-soup-4.readthedocs.io/en/latest/#searching-the-tree)
 for information you want using `find_all`.
 
-As another example, it's often useful to be able to extract the hyperlinks in an HTML
-document. We'll find the link using [CSS
-selectors](https://www.w3schools.com/cssref/css_selectors.asp), which
-allow you to search for elements within HTML:
+As another example, it's often useful to be able to extract the hyperlinks in an HTML document. 
 
 ```{python, htmlLinks}
 URL = "http://www1.ncdc.noaa.gov/pub/data/ghcn/daily/by_year"
@@ -618,10 +615,6 @@ as having a particular attribute (seen above) or having an attribute
 have a particular value (e.g., picking out an element with a particular
 `id`).
 
-More generally, we may want to read an HTML document, parse it into its
-components (i.e., the HTML elements), and navigate through the tree
-structure of the HTML.
-
 Here's another example of extracting specific components of information
 from a webpage (results not shown, since headlines will vary from day to
 day). We'll use `get_text` to retrieve the element's value.
@@ -635,6 +628,19 @@ h2_elements = soupNYT.find_all("h2")
 headlines2 = [x.get_text() for x in h2_elements]
 h3_elements = soupNYT.find_all("h3")
 headlines3 = [x.get_text() for x in h3_elements]
+```
+
+More generally, we may want to read an HTML document, parse it into its
+components (i.e., the HTML elements), and navigate through the tree
+structure of the HTML.
+
+We can use [CSS selectors](https://www.w3schools.com/cssref/css_selectors.asp)
+ with the `select` method for more powerful extraction capabilities. Going back to the climate data, let's extract all the `th` elements nested within `tr` elements:
+
+```{python, css}
+soup.select("tr th")
+## Or the `a` elements whose parents are `th` elements:
+soup.select("th > a")
 ```
 
 Next let's use the *XPath* language to specify
