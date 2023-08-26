@@ -1089,14 +1089,28 @@
     "href": "labs/lab1-submission.html",
     "title": "Lab 1: Submitting problem set solutions",
     "section": "",
-    "text": "By now you should already have access to the following 5 basic tools:\n\nUnix shell\nGit\nQuarto\nPython\nA text editor of your choice\n\nToday we will use all these tools together to submit a solution for Problem Set 0 (not a real problem set) to make sure you know how to submit solutions to upcoming (real) problem sets.\nHere is a selection of some basic reference tutorials and documentation for unix bash and unix commands, git & GitHub, quarto, python and VS Code"
+    "text": "By now you should already have access to the following 5 basic tools:\n\nUnix shell\nGit\nQuarto\nPython\nA text editor of your choice\n\nToday we will use all these tools together to submit a solution for Problem Set 0 (not a real problem set) to make sure you know how to submit solutions to upcoming (real) problem sets.\nHere is a selection of some basic reference tutorials and documentation for unix, bash and unix commands, git & GitHub, quarto, python and VS Code"
   },
   {
     "objectID": "labs/lab1-submission.html#submitting-problem-set-solutions-090123",
     "href": "labs/lab1-submission.html#submitting-problem-set-solutions-090123",
     "title": "Lab 1: Submitting problem set solutions",
     "section": "",
-    "text": "By now you should already have access to the following 5 basic tools:\n\nUnix shell\nGit\nQuarto\nPython\nA text editor of your choice\n\nToday we will use all these tools together to submit a solution for Problem Set 0 (not a real problem set) to make sure you know how to submit solutions to upcoming (real) problem sets.\nHere is a selection of some basic reference tutorials and documentation for unix bash and unix commands, git & GitHub, quarto, python and VS Code"
+    "text": "By now you should already have access to the following 5 basic tools:\n\nUnix shell\nGit\nQuarto\nPython\nA text editor of your choice\n\nToday we will use all these tools together to submit a solution for Problem Set 0 (not a real problem set) to make sure you know how to submit solutions to upcoming (real) problem sets.\nHere is a selection of some basic reference tutorials and documentation for unix, bash and unix commands, git & GitHub, quarto, python and VS Code"
+  },
+  {
+    "objectID": "labs/lab1-submission.html#discussion-on-unix-and-the-shell",
+    "href": "labs/lab1-submission.html#discussion-on-unix-and-the-shell",
+    "title": "Lab 1: Submitting problem set solutions",
+    "section": "Discussion on Unix and the Shell",
+    "text": "Discussion on Unix and the Shell\nWhiteboard and group discussion."
+  },
+  {
+    "objectID": "labs/lab1-submission.html#discussion-on-standard-modern-computer-architecture",
+    "href": "labs/lab1-submission.html#discussion-on-standard-modern-computer-architecture",
+    "title": "Lab 1: Submitting problem set solutions",
+    "section": "Discussion on standard modern computer architecture",
+    "text": "Discussion on standard modern computer architecture\nWhiteboard and group discussion"
   },
   {
     "objectID": "labs/lab1-submission.html#quick-intro-to-git-and-github",
@@ -1110,7 +1124,7 @@
     "href": "labs/lab1-submission.html#hands-on-lab-instructions",
     "title": "Lab 1: Submitting problem set solutions",
     "section": "Hands-on Lab Instructions",
-    "text": "Hands-on Lab Instructions\nProblem Set submission instructions:\n\nOpen the qmd file in any editor you like (e.g., Emacs, Sublime, ….). Use quarto preview FILE to show your rendered document live as you edit and save changes. You can put the preview window side by side with your editor, and the preview document should automatically render as you save your qmd file.\nUse VS Code with the following extensions: Python, Quarto, and Jupyter Notebooks. This allows you to execute and preview chunks (and whole document) inside VS Code. This is currently deeb’s favorite path due to how well it integrated with the Python debugger.\nUse RStudio (yes, RStudio), which can manage Python code and will display chunk output in the same way it does with R chunks. This path seems to work quite well and is recommended if you are already familiar with RStudio.\n\n\nSteps to perform today:\n\nCreate a subdirectory in your github repository with the name ps0\nIn that subdirectory, create a quarto document (ps0.qmd) that has some simple code that creates a simple plot (you can follow this example/tutorial here)\nUse the quarto command line to render it into a pdf document (quarto render FILE –to pdf)\nCommit the changes to your repository (git add FILES; git commit -m MESSAGE; git push)\nAdd another section to your quarto document (use your imagination), then preview and commit the changes\nUse the quarto command line to render the updated document into a pdf document\nAdd the pdf document to the repository as well\nMake sure that you can log into gradescope and upload a pdf document\n[optional] Undo your last set of changes and regenerate the pdf file\n\nWe will also take today’s lab as an opportunity to get familiar with the basic use of all the 5 basic tools listed above. For git and quarto, very basic knowledge should be sufficient, but for unix commands and python, the more you learn the more effective you will be at solving the problem sets (and at any computational task you take on after that)."
+    "text": "Hands-on Lab Instructions\nProblem Set submission instructions:\n\nOpen the qmd file in any editor you like (e.g., Emacs, Sublime, ….). Use quarto preview FILE to show your rendered document live as you edit and save changes. You can put the preview window side by side with your editor, and the preview document should automatically render as you save your qmd file.\nUse VS Code with the following extensions: Python, Quarto, and Jupyter Notebooks. This allows you to execute and preview chunks (and whole document) inside VS Code. This is currently deeb’s favorite path due to how well it integrated with the Python debugger.\nUse RStudio (yes, RStudio), which can manage Python code and will display chunk output in the same way it does with R chunks. This path seems to work quite well and is recommended if you are already familiar with RStudio.\n\n\nSteps to perform today:\n\nCreate a subdirectory in your github repository with the name ps0\nIn that subdirectory, create a quarto document (ps0.qmd) that has some simple code that creates a simple plot (you can follow this example/tutorial here)\nUse the quarto command line to render it into a pdf document (quarto render FILE –to pdf)\nCommit the changes to your repository (git add FILES; git commit -m MESSAGE; git push)\nAdd another section to your quarto document (use your imagination), then preview and commit the changes\nUse the quarto command line to render the updated document into a pdf document\nAdd the pdf document to the repository as well\nMake sure that you can log into gradescope and upload a pdf document\n[optional] Undo your last set of changes and regenerate the pdf file\n\nWe will also take today’s lab as an opportunity to get familiar with the basic use of all the 5 basic tools listed above. For git and quarto, very basic knowledge should be sufficient, but for unix commands and python, the more you learn the more effective you will be at solving the problem sets (and at any computational task you take on after that).\n\n\nChunk options\nUnder development …"
   },
   {
     "objectID": "labs/lab3-debugging.html",
