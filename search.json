@@ -823,7 +823,7 @@
     "href": "howtos/gitInstall.html",
     "title": "Installing Git",
     "section": "",
-    "text": "Here are some instructions for installing Git on your computer. Git is the version control software we’ll use in the course.\nYou can install Git by downloading and installing the correct binary from here.\nGit comes installed on the SCF, so if you login to an SCF machine and want to use Git there, you don’t need to install Git.\n\nSidenotes on using Git with RStudio\nYou can work with Git through RStudio via RStudio projects.\nHere are some instructions. Here are some helpful guidelines from RStudio.\nYou may need to tell RStudio where the Git executable is located as follows.\n\nOn Windows, the git executable should be installed somewhere like: \"C:/Program Files (x86)/Git/bin/git.exe\"\nOn MacOS X, you can locate the executable by executing the following in Terminal: which git\nOnce you locate the executable, you may then need to confirm that RStudio is looking in the right place. Go to “Tools -&gt; Options -&gt; Git/SVN -&gt; Git executable” and confirm it has the correct information about the location of the git executable."
+    "text": "Here are some instructions for installing Git on your computer. Git is the version control software we’ll use in the course.\nYou can install Git by downloading and installing the correct binary from here.\nFor macOS, deeb recommends using the Homebrew option.\nGit comes installed on the SCF, so if you login to an SCF machine and want to use Git there, you don’t need to install Git.\n\nSidenotes on using Git with RStudio\nYou can work with Git through RStudio via RStudio projects.\nHere are some instructions. Here are some helpful guidelines from RStudio.\nYou may need to tell RStudio where the Git executable is located as follows.\n\nOn Windows, the git executable should be installed somewhere like: \"C:/Program Files (x86)/Git/bin/git.exe\"\nOn MacOS X, you can locate the executable by executing the following in Terminal: which git\nOnce you locate the executable, you may then need to confirm that RStudio is looking in the right place. Go to “Tools -&gt; Options -&gt; Git/SVN -&gt; Git executable” and confirm it has the correct information about the location of the git executable."
   },
   {
     "objectID": "howtos/windowsAndLinux.html",
@@ -928,7 +928,7 @@
     "href": "howtos/quartoInstall.html",
     "title": "Installing and Using Quarto",
     "section": "",
-    "text": "Unless you plan to generate your problem set solutions on the SCF, you’ll need to install Quarto.\nOnce installed, you should be able to run commands such as quarto render from the command line.\nThis includes, I think, running from the Windows Command shell or PowerShell. We’ll add details/troubleshooting tips here as needed."
+    "text": "Unless you plan to generate your problem set solutions on the SCF, you’ll need to install Quarto.\nOnce installed, you should be able to run commands such as quarto render FILE and quarto preview FILE from the command line.\nQuarto also runs from the Windows Command shell or PowerShell. We’ll add details/troubleshooting tips here as needed."
   },
   {
     "objectID": "howtos/ps-submission.html",
