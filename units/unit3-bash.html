@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Chris Paciorek">
-<meta name="dcterms.date" content="2023-07-26">
+<meta name="dcterms.date" content="2023-08-26">
 
-<title>Statistics 243 Fall 2023 - The bash shell and UNIX utilities</title>
+<title>Statistics 243 Fall 2023 - The bash shell and UNIX commands</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -66,8 +66,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../units/unit4-goodPractices.html" rel="next">
-<link href="../units/unit2-dataTech.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -102,7 +100,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-sidebar floating nav-fixed">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -149,7 +147,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="dropdown-text">Unit 2</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../units/unit3-bash.html" rel="" target="">
+    <a class="dropdown-item" href="../units/unit3-bash.Rmd" rel="" target="">
  <span class="dropdown-text">Unit 3</span></a>
   </li>  
         <li>
@@ -259,87 +257,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-        <i class="bi bi-layout-text-sidebar-reverse"></i>
-      </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../units/unit3-bash.html">Unit 3</a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
-    </div>
-  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
-    <div class="sidebar-menu-container"> 
-    <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../units/unit1-intro.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Unit 1</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../units/unit2-dataTech.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Unit 2</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../units/unit3-bash.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Unit 3</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../units/unit4-goodPractices.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Unit 4</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../units/unit5-programming.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Unit 5</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../units/unit6-parallel.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Unit 6</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../units/unit7-bigData.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Unit 7</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../units/unit8-numbers.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Unit 8</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../units/unit9-sim.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Unit 9</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="../units/unit10-linalg.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Unit 10</span></a>
-  </div>
-</li>
-    </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -356,6 +277,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#third-challenge" id="toc-third-challenge" class="nav-link" data-scroll-target="#third-challenge">4.3 Third challenge</a></li>
   <li><a href="#fourth-challenge" id="toc-fourth-challenge" class="nav-link" data-scroll-target="#fourth-challenge">4.4 Fourth challenge</a></li>
   <li><a href="#fifth-challenge" id="toc-fifth-challenge" class="nav-link" data-scroll-target="#fifth-challenge">4.5 Fifth challenge</a></li>
+  <li><a href="#sixth-challenge" id="toc-sixth-challenge" class="nav-link" data-scroll-target="#sixth-challenge">4.6 Sixth challenge</a></li>
   </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="unit3-bash.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
@@ -365,7 +287,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">The bash shell and UNIX utilities</h1>
+<h1 class="title">The bash shell and UNIX commands</h1>
 </div>
 
 
@@ -382,7 +304,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 26, 2023</p>
+      <p class="date">August 26, 2023</p>
     </div>
   </div>
   
@@ -397,7 +319,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>Newham and Rosenblatt, Learning the bash Shell, 2nd ed.</li>
 </ul>
-<p>Note that it can be difficult to distinguish what is shell-specific and what is just part of the operating system (i.e., a UNIX-style operating system). Some of the material here is not bash-specific but general to UNIX. I’ll use ‘UNIX’ to refer to the family of operating systems that descend from the path-breaking UNIX operating system developed at AT&amp;T’s Bell Labs in the 1970s. These include MacOS and various flavors of Linux (e.g., Ubuntu, Debian, CentOS, Fedora).</p>
+<p>Note that it can be difficult to distinguish what is shell-specific and what is just part of the operating system (i.e., a UNIX-style operating system). Some of the material here is not bash-specific but general to UNIX (e.g., the commands themselves are not specific to bash). I’ll use ‘UNIX’ to refer to the family of operating systems that descend from the path-breaking UNIX operating system developed at AT&amp;T’s Bell Labs in the 1970s. These include MacOS and various flavors of Linux (e.g., Ubuntu, Debian, CentOS, Fedora).</p>
 <p>For your work on this unit, either bash on a Linux machine, the older version of bash on MacOS, or zsh on MacOS (or Linux) are fine. I’ll probably demo everything using bash on a Linux machine, and there are some annoying differences from the older bash on MacOS that may be occasionally confusing (in particular the options to various commands can differ on MacOS).</p>
 <section id="shell-basics" class="level1">
 <h1>1. Shell basics</h1>
@@ -412,10 +334,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="bash-shell-examples" class="level1">
 <h1>3. bash shell examples</h1>
 <p>Here we’ll work through a few examples to start to give you a feel for using the bash shell to manage your workflows and process data.</p>
-<p>First let’s get the files from the 243 class in 2021 so we have a sufficient body of files we can do interesting things with.</p>
+<p>First let’s get the files from GitHub to have a set of files we can do interesting things with.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/berkeley-stat243/stat243-fall-2021</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/berkeley-stat243/stat243-fall-2023</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p>One important note is that most of the shell commands that work with data inside files (in contrast to commands like <code>ls</code> and <code>cd</code>) work only with text files and not binary files. Also the commands operate on a line-by-line basis.</p>
 <p><strong>Our first mission</strong> is some basic manipulation of a data file. Suppose we want to get a sense for the number of weather stations in different states using the <em>coop.txt</em> file.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> stat243-fall-2021/data</span>
@@ -429,6 +352,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">gzip</span> <span class="at">-cd</span> coop.txt.gz <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-b60-61</span> coop.txt <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="at">-c</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>I could have done that in R or Python, but it would have required starting the program up and reading all the data into memory.</p>
+<p>If you feel that manually figuring out the position of the state field is inconsistent with our emphasis on programmatic workflows, see the <a href="#fifth-challenge">fifth challenge</a> below.</p>
 <p><strong>Our second mission</strong>: how can I count the number of fields in a CSV file programmatically?</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span> <span class="at">-n</span> 1 cpds.csv <span class="kw">|</span> <span class="fu">grep</span> <span class="at">-o</span> <span class="st">','</span> <span class="kw">|</span> <span class="fu">wc</span> <span class="at">-l</span></span>
@@ -443,26 +367,26 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Trouble-shooting: How could the syntax above get the wrong answer?</p>
 <p>Extension: We could write a function that can count the number of fields in any file.</p>
 <p>Extension: How could I see if all of the lines have the same number of fields?</p>
-<p><strong>Our third mission</strong>: was <em>example.pdf</em> created by code in the five most recently modified R code files in the units directory?</p>
+<p><strong>Our third mission</strong>: was the <code>sqlite3</code> package in the five most recently modified R code files in the units directory?</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../units</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-l</span> <span class="st">'example.pdf'</span> unit13-graphics.R</span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-tr</span> <span class="pp">*</span>.R</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">## if unit13-graphics.R is not amongst the 5 most recently used,</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-l</span> <span class="st">'import sqlite3'</span> unit7-bigData.qmd</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-tr</span> <span class="pp">*</span>.qmd</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">## if unit7-bigData.qmd is not amongst the 5 most recently used,</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">## let's artificially change the timestamp so it is recently used.</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> unit13-graphics.R</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> unit7-bigData.qmd</span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-tr</span> <span class="pp">*</span>.R <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 5</span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-tr</span> <span class="pp">*</span>.R <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 5 <span class="kw">|</span> <span class="fu">grep</span> pdf</span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-tr</span> <span class="pp">*</span>.R <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 5 <span class="kw">|</span> <span class="fu">grep</span> <span class="st">"13-gr"</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-tr</span> <span class="pp">*</span>.R <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 5 <span class="kw">|</span> <span class="fu">xargs</span> grep <span class="st">'example.pdf'</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-tr</span> <span class="pp">*</span>.R <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 5 <span class="kw">|</span> <span class="fu">xargs</span> grep <span class="at">-l</span> <span class="st">'example.pdf'</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-tr</span> <span class="pp">*</span>.qmd <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 5</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-tr</span> <span class="pp">*</span>.qmd <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 5 <span class="kw">|</span> <span class="fu">grep</span> sqlite3</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-tr</span> <span class="pp">*</span>.qmd <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 5 <span class="kw">|</span> <span class="fu">grep</span> <span class="st">"unit7-bigData"</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-tr</span> <span class="pp">*</span>.qmd <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 5 <span class="kw">|</span> <span class="fu">xargs</span> grep <span class="st">'import sqlite3'</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-tr</span> <span class="pp">*</span>.qmd <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 5 <span class="kw">|</span> <span class="fu">xargs</span> grep <span class="at">-l</span> <span class="st">'import sqlite3'</span></span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">## here's how we could do it by explicitly passing the file names</span></span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">## rather than using xargs</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-l</span> <span class="st">'example.pdf'</span> <span class="va">$(</span><span class="fu">ls</span> <span class="at">-tr</span> <span class="pp">*</span>.R <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 5<span class="va">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-l</span> <span class="st">'import sqlite3'</span> <span class="va">$(</span><span class="fu">ls</span> <span class="at">-tr</span> <span class="pp">*</span>.R <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 5<span class="va">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Notice that <code>man tail</code> indicates it can take input from a FILE or from <em>stdin</em>. Here it uses <em>stdin</em>, so it is gives the last five lines of the output of <em>ls</em>, not the last five lines of the files indicated in that output.</p>
-<p><code>man grep</code> also indicates it can take input from a FILE or from <em>stdin</em>. However, we want grep to operate on the content of the files indicated in stdin. So we use <em>xargs</em> to convert <em>stdin</em> to be recognized as arguments, which then are the FILE inputs to <em>grep</em>.</p>
+<p>Notice that <code>man tail</code> indicates it can take input from a FILE or from <code>stdin</code>. Here it uses <code>stdin</code>, so it is gives the last five lines of the output of <code>ls</code>, not the last five lines of the files indicated in that output.</p>
+<p><code>man grep</code> also indicates it can take input from a FILE or from <code>stdin</code>. However, we want grep to operate on the content of the files indicated in stdin. So we use <code>xargs</code> to convert <code>stdin</code> to be recognized as arguments, which then are the FILE inputs to <code>grep</code>.</p>
 <p>Here are some of the ways we can pass information from a command to somewhere else:</p>
 <ul>
 <li>piping allows us to pass information from one command to another command via stdout to stdin</li>
@@ -475,18 +399,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Our fourth mission</strong>: write a function that will move the most recent <em>n</em> files in your Downloads directory to another directory.</p>
 <p>In general, we want to start with a specific case, and then generalize to create the function.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-rt</span> ~/Downloads <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 1</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">## sometimes the ~ behaves weirdly in scripting, so let's use full path </span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> <span class="st">"/accounts/vis/paciorek/Downloads/</span><span class="va">$(</span><span class="fu">ls</span> <span class="at">-rt</span> <span class="dt">\</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>   /accounts/vis/paciorek/Downloads <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 1<span class="va">)</span><span class="st">"</span> ~/Desktop</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="fu"> mvlast()</span> <span class="kw">{</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mv</span> <span class="st">"/accounts/vis/paciorek/Downloads/</span><span class="va">$(</span><span class="fu">ls</span> <span class="at">-rt</span> <span class="dt">\</span></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>       /accounts/vis/paciorek/Downloads <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 1<span class="va">)</span><span class="st">"</span> <span class="va">$1</span></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-rt</span> ~/Downloads <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 5</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># create dummy test files without any spaces</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">touch</span> ~/Downloads/test{1..4}</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ls</span> <span class="at">-rt</span> ~/Downloads <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 5</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">## sometimes the ~ behaves weirdly in scripting, so let's use full path </span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mv</span> <span class="st">"/accounts/vis/paciorek/Downloads/</span><span class="va">$(</span><span class="fu">ls</span> <span class="at">-rt</span> <span class="dt">\</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>   /accounts/vis/paciorek/Downloads <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 1<span class="va">)</span><span class="st">"</span> ~/Desktop</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="fu"> mvlast()</span> <span class="kw">{</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mv</span> <span class="st">"/accounts/vis/paciorek/Downloads/</span><span class="va">$(</span><span class="fu">ls</span> <span class="at">-rt</span> <span class="dt">\</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>       /accounts/vis/paciorek/Downloads <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 1<span class="va">)</span><span class="st">"</span> <span class="va">$1</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Note the need for the quotes to deal with cases where a file has a space in its name.</p>
+<p>Note that the quotes deal with cases where a file has a space in its name.</p>
 <p>If we wanted to handle multiple files, we could do it with a loop:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span><span class="fu"> mvlast()</span> <span class="kw">{</span></span>
@@ -497,56 +424,65 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="kw">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Side note: if we were just moving files from the current working directory and with files without spaces in their names, it should be possible to use <code>tail -n ${1}</code> without the loop.</p>
-<p><strong>Our fifth mission</strong>: automate the process of determining what R packages are used in all of the R code here and install those packages on a new machine.</p>
+<p><strong>Our fifth mission</strong>: automate the process of determining what Python packages are used in all of the qmd code chunks here and install those packages on a new machine.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> library unit<span class="pp">[</span><span class="ss">1</span><span class="pp">-</span><span class="ss">9</span><span class="pp">]*</span>.R</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">--no-filename</span> library <span class="pp">*</span>.R</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">--no-filename</span> <span class="st">"^library"</span> <span class="pp">*</span>.R</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">--no-filename</span> <span class="st">"^library"</span> <span class="pp">*</span>.R <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">--no-filename</span> <span class="st">"^library"</span> <span class="pp">*</span>.R <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span><span class="st">'#'</span> <span class="at">-f1</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">--no-filename</span> <span class="st">"^library"</span> <span class="pp">*</span>.R <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span><span class="st">'#'</span> <span class="at">-f1</span> <span class="kw">|</span> <span class="dt">\</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">tee</span> libs.txt</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-v</span> <span class="st">"help ="</span> libs.txt <span class="op">&gt;</span> tmp2.txt</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="st">'s/;/\n/g'</span> tmp2.txt <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/ //g'</span> <span class="kw">|</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">sed</span> <span class="st">'s/library(//'</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">'s/)//g'</span> <span class="op">&gt;</span> libs.txt</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">## note: on a Mac, use 's/;/\\\n/g'   -- see https://superuser.com/questions/307165/newlines-in-sed-on-mac-os-x</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"There are </span><span class="va">$(</span><span class="fu">wc</span> <span class="at">-l</span> libs.txt <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span><span class="st">' '</span> <span class="at">-f1</span><span class="va">)</span><span class="st"> </span><span class="dt">\</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="st">unique packages we will install."</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co">## note: on Linux, wc -l puts the number as the first characters of the output</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="co">## on a Mac, there may be a bunch of spaces preceding the number, so try this:</span></span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="co">## echo "There are $(wc -l libs.txt | tr -s ' ' | cut -d' ' -f2) \</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">## unique packages we will install."</span></span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="co">## @knitr mission5a               -</span></span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">"pkgs &lt;- scan('libs.txt', what = 'character'); </span><span class="dt">\</span></span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="st">install.packages(pkgs, repos = 'https://cran.r-project.org')"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> import <span class="pp">*</span>.qmd</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">--no-filename</span> import <span class="pp">*</span>.qmd</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">--no-filename</span> <span class="st">"^import"</span> <span class="pp">*</span>.qmd</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">--no-filename</span> <span class="st">"^import "</span> <span class="pp">*</span>.qmd</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">--no-filename</span> <span class="st">"^import "</span> <span class="pp">*</span>.qmd <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">--no-filename</span> <span class="st">"^import "</span> <span class="pp">*</span>.qmd <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span><span class="st">'#'</span> <span class="at">-f1</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">--no-filename</span> <span class="st">"^import "</span> <span class="pp">*</span>.qmd <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span><span class="st">'#'</span> <span class="at">-f1</span> <span class="kw">|</span> <span class="fu">sed</span>  <span class="st">"s/as .*//"</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">--no-filename</span> <span class="st">"^import "</span> <span class="pp">*</span>.qmd <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span><span class="st">'#'</span> <span class="at">-f1</span> <span class="kw">|</span> <span class="dt">\</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">sed</span>  <span class="st">"s/as .*//"</span> <span class="kw">|</span> <span class="fu">sed</span> <span class="st">"s/import //"</span> <span class="op">&gt;</span> tmp.txt</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">sed</span> <span class="st">"s/,/\n/g"</span> tmp.txt <span class="kw">|</span> <span class="fu">sed</span> <span class="st">"s/ //g"</span> <span class="kw">|</span> <span class="fu">sort</span> <span class="kw">|</span> <span class="fu">uniq</span> <span class="kw">|</span> <span class="fu">tee</span> requirements.txt</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="co">## note: on a Mac, use 's/,/\\\n/g'</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="co">## See https://superuser.com/questions/307165/newlines-in-sed-on-mac-os-x</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"There are </span><span class="va">$(</span><span class="fu">wc</span> <span class="at">-l</span> requirements.txt <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span><span class="st">' '</span> <span class="at">-f1</span><span class="va">)</span><span class="st"> </span><span class="dt">\</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="st">unique packages we will install."</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="co">## note: on Linux, wc -l puts the number as the first characters of the output</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="co">## on a Mac, there may be a bunch of spaces preceding the number, so try this:</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="co">## echo "There are $(wc -l libs.txt | tr -s ' ' | cut -d' ' -f2) \</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a><span class="co">## unique packages we will install."</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a><span class="ex">pip</span> install <span class="at">-r</span> requirements.txt</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="co"># or use Mamba/Conda</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>You wouldn’t want to use this code to accomplish this task in reality - there are packages such as <em>renv</em> and <em>packrat</em> that can accomplish this. The main point was to illustrate how one can quickly hack together some code to do fairly complicated tasks.</p>
+<p>You probably wouldn’t want to use this code to accomplish this task in reality - you would want to see if there are packages that can accomplish this. (In the R ecosystem, the <code>renv</code> and <code>packrat</code> packages do this for R projects.) The main point was to illustrate how one can quickly hack together some code to do fairly complicated tasks.</p>
 <p><strong>Our sixth mission</strong>: suppose I’ve accidentally started a bunch of jobs (perhaps with a for loop in bash!) and need to kill them. (This example uses syntax from the Managing Processes page of the bash tutorial, so it goes beyond what you were asked to read for this Unit.)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="st">"Sys.sleep(1e5)"</span> <span class="op">&gt;</span> job.R </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="va">nJobs</span><span class="op">=</span>30 </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="kw">((</span> <span class="va">i</span><span class="op">=</span><span class="dv">1</span><span class="kw">;</span> <span class="va">i</span><span class="op">&lt;=</span><span class="va">${nJobs}</span><span class="kw">;</span> <span class="va">i</span><span class="op">++</span> <span class="kw">));</span> <span class="cf">do</span>     </span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>   <span class="ex">R</span> CMD BATCH <span class="at">--no-save</span> job.R job-<span class="va">${i}</span>.out <span class="kw">&amp;</span> </span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span> </span>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># use a 'here document':</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span> <span class="op">&gt;</span> job.py <span class="op">&lt;&lt; EOF</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="st">import time</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="st">time.sleep(1e5)</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="op">EOF</span></span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># on Linux:</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ps</span> <span class="at">-o</span> pid,pcpu,pmem,user,cmd <span class="at">-C</span> R </span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ps</span> <span class="at">-o</span> pid,pcpu,pmem,user,cmd,start_time <span class="at">--sort</span><span class="op">=</span>start_time <span class="at">-C</span> R <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 30</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ps</span> <span class="at">-o</span> pid <span class="at">--sort</span><span class="op">=</span>start_time <span class="at">-C</span> R <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> <span class="va">${nJobs}</span> <span class="kw">|</span> <span class="fu">xargs</span> kill</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co"># on a Mac:</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="fu">ps</span> <span class="at">-o</span> pid,pcpu,pmem,user,command <span class="kw">|</span> <span class="fu">grep</span> exec/R</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co"># not clear how to sort by start time</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ps</span> <span class="at">-o</span> pid,command <span class="kw">|</span> <span class="fu">grep</span> exec/R <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span><span class="st">' '</span> <span class="at">-f1</span> <span class="kw">|</span>  <span class="fu">tail</span> <span class="at">-n</span> <span class="va">${nJobs}</span> <span class="kw">|</span> <span class="fu">xargs</span> kill</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co"># alternatively:</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="bu">echo</span> <span class="at">-e</span> <span class="st">"import time\ntime.sleep(1e5)"</span> <span class="op">&gt;</span> job.py</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="va">nJobs</span><span class="op">=</span>30 </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="kw">((</span> <span class="va">i</span><span class="op">=</span><span class="dv">1</span><span class="kw">;</span> <span class="va">i</span><span class="op">&lt;=</span><span class="va">${nJobs}</span><span class="kw">;</span> <span class="va">i</span><span class="op">++</span> <span class="kw">));</span> <span class="cf">do</span>     </span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>   <span class="ex">python</span> job.py <span class="op">&gt;</span> job-<span class="va">${i}</span>.out <span class="kw">&amp;</span> </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="cf">done</span> </span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="co"># on Linux:</span></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="fu">ps</span> <span class="at">-o</span> pid,pcpu,pmem,user,cmd <span class="at">-C</span> python </span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="fu">ps</span> <span class="at">-o</span> pid,pcpu,pmem,user,cmd,start_time <span class="at">--sort</span><span class="op">=</span>start_time <span class="at">-C</span> python <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> 30</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="fu">ps</span> <span class="at">-o</span> pid <span class="at">--sort</span><span class="op">=</span>start_time <span class="at">-C</span> python <span class="kw">|</span> <span class="fu">tail</span> <span class="at">-n</span> <span class="va">${nJobs}</span> <span class="kw">|</span> <span class="fu">xargs</span> kill</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="co"># on a Mac:</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="fu">ps</span> <span class="at">-o</span> pid,pcpu,pmem,user,command <span class="kw">|</span> <span class="fu">grep</span> python</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="co"># not clear how to sort by start time</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="fu">ps</span> <span class="at">-o</span> pid,command <span class="kw">|</span> <span class="fu">grep</span> python <span class="kw">|</span> <span class="fu">cut</span> <span class="at">-d</span><span class="st">' '</span> <span class="at">-f1</span> <span class="kw">|</span>  <span class="fu">tail</span> <span class="at">-n</span> <span class="va">${nJobs}</span> <span class="kw">|</span> <span class="fu">xargs</span> kill</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="bash-shell-challenges" class="level1">
 <h1>4. bash shell challenges</h1>
 <section id="first-challenge" class="level2">
 <h2 class="anchored" data-anchor-id="first-challenge">4.1 First challenge</h2>
-<p>Consider the file <em>cpds.csv</em>. How would you write a shell command that returns “There are 8 occurrences of the word ‘Belgium’ in this file.”, where ‘8’ is actually the correct number of times the word occurs.</p>
+<p>Consider the file <code>cpds.csv</code>. How would you write a shell command that returns “There are 8 occurrences of the word ‘Belgium’ in this file.”, where ‘8’ is actually the correct number of times the word occurs.</p>
 <p>Extra: make your code into a function that can operate on any file indicated by the user and any word of interest.</p>
 </section>
 <section id="second-challenge" class="level2">
@@ -561,7 +497,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="third-challenge" class="level2">
 <h2 class="anchored" data-anchor-id="third-challenge">4.3 Third challenge</h2>
 <ol type="1">
-<li>For Belgium, determine the minimum unemployment value (field #6) in <em>cpds.csv</em> in a programmatic way.</li>
+<li>For Belgium, determine the minimum unemployment value (field #6) in <code>cpds.csv</code> in a programmatic way.</li>
 <li>Have what is printed out to the screen look like “Belgium 6.2”.</li>
 <li>Now store the unique values of the countries in a variable, first stripping out the quotation marks.</li>
 <li>Figure out how to automate step 1 to do the calculation for all the countries and print to the screen.</li>
@@ -579,11 +515,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="fifth-challenge" class="level2">
 <h2 class="anchored" data-anchor-id="fifth-challenge">4.5 Fifth challenge</h2>
-<p>Here’s an advanced one - you’ll probably need to use <em>sed</em>, but the brief examples of text substitution in the using bash tutorial should be sufficient to solve the problem.</p>
+<p>Consider the <code>coop.txt</code> weather station file.</p>
+<p>Figure out how to use <code>grep</code> to tell you the starting position of the state field. Hints: search for a known state-country combination and figure out what flags you can use with <code>grep</code> to print out the “byte offset” for the matched state.</p>
+<p>Use that information to automate the <a href="#bash-shell-examples">first mission</a> where we extracted the state field using <code>cut</code>. You’ll need to do a bit of arithmetic using shell commands.</p>
+</section>
+<section id="sixth-challenge" class="level2">
+<h2 class="anchored" data-anchor-id="sixth-challenge">4.6 Sixth challenge</h2>
+<p>Here’s an advanced one - you’ll probably need to use <code>sed</code>, but the brief examples of text substitution in the using bash tutorial (or in the demos above) should be sufficient to solve the problem.</p>
 <p>Consider a CSV file that has rows that look like this:</p>
 <pre><code>1,"America, United States of",45,96.1,"continental, coastal" 
 2,"France",33,807.1,"continental, coastal"</code></pre>
-<p>While R would be able to handle this using <em>read.table()</em>, using <em>cut</em> in UNIX won’t work because of the commas embedded within the fields. The challenge is to convert this file to one that we can use <em>cut</em> on, as follows.</p>
+<p>While Pandas would be able to handle this using <code>read_csv()</code>, using <code>cut</code> in UNIX won’t work because of the commas embedded within the fields. The challenge is to convert this file to one that we can use <code>cut</code> on, as follows.</p>
 <p>Figure out a way to make this into a new delimited file in which the delimiter is not a comma. At least one solution that will work for this particular two-line dataset does not require you to use regular expressions, just simple replacement of fixed patterns.</p>
 
 
@@ -824,18 +766,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
-      <a href="../units/unit2-dataTech.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Unit 2</span>
-      </a>          
-  </div>
-  <div class="nav-page nav-page-next">
-      <a href="../units/unit4-goodPractices.html" class="pagination-link">
-        <span class="nav-page-text">Unit 4</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
-  </div>
-</nav>
 </div> <!-- /content -->
 
 
