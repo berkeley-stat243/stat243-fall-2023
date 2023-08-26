@@ -28,7 +28,15 @@ By now you should already have access to the following 5 basic tools:
 
 Today we will use all these tools together to submit a solution for Problem Set 0 (not a real problem set) to make sure you know how to submit solutions to upcoming (real) problem sets.
 
-Here is a selection of some basic reference tutorials and documentation for [unix](https://berkeley-scf.github.io/tutorial-unix-basics/) [bash](https://berkeley-scf.github.io/tutorial-using-bash/) and [unix commands](https://www.unixtutorial.org/basic-unix-commands), [git & GitHub](https://htmlpreview.github.io/?https://github.com/berkeley-scf/tutorial-git-basics/blob/master/git-intro.html), [quarto](https://quarto.org/docs/get-started/hello/text-editor.html), [python](https://docs.python.org/3/tutorial/index.html) and [VS Code](https://code.visualstudio.com/docs)
+Here is a selection of some basic reference tutorials and documentation for [unix](https://berkeley-scf.github.io/tutorial-unix-basics/), [bash](https://berkeley-scf.github.io/tutorial-using-bash/) and [unix commands](https://www.unixtutorial.org/basic-unix-commands), [git & GitHub](https://htmlpreview.github.io/?https://github.com/berkeley-scf/tutorial-git-basics/blob/master/git-intro.html), [quarto](https://quarto.org/docs/get-started/hello/text-editor.html), [python](https://docs.python.org/3/tutorial/index.html) and [VS Code](https://code.visualstudio.com/docs)
+
+## Discussion on Unix and the Shell
+
+Whiteboard and group discussion.
+
+## Discussion on standard modern computer architecture
+
+Whiteboard and group discussion 
 
 ## Quick Intro to [git and GitHub](https://htmlpreview.github.io/?https://github.com/berkeley-scf/tutorial-git-basics/blob/master/git-intro.html)
 
@@ -44,8 +52,8 @@ Here is a selection of some basic reference tutorials and documentation for [uni
 [Problem Set submission](../howtos/ps.submission.qmd) instructions:
 
 1. Open the qmd file in any editor you like (e.g., Emacs, Sublime, ....). Use `quarto preview FILE` to show your rendered document live as you edit and save changes. You can put the preview window side by side with your editor, and the preview document should [automatically render](https://quarto.org/docs/get-started/hello/text-editor.html) as you save your qmd file.
- 2. [Use VS Code](https://quarto.org/docs/get-started/hello/vscode.html) with the following extensions: Python, Quarto, and Jupyter Notebooks. This allows you to execute and preview chunks (and whole document) inside VS Code. This is currently deeb's favorite path due to how well it integrated with the Python debugger.
- 3. [Use RStudio](https://quarto.org/docs/get-started/hello/rstudio.html) (yes, RStudio), which can manage Python code and will display chunk output in the same way it does with R chunks. This path seems to work quite well and is recommended if you are already familiar with RStudio.
+2. [Use VS Code](https://quarto.org/docs/get-started/hello/vscode.html) with the following extensions: Python, Quarto, and Jupyter Notebooks. This allows you to execute and preview chunks (and whole document) inside VS Code. This is currently deeb's favorite path due to how well it integrated with the Python debugger.
+3. [Use RStudio](https://quarto.org/docs/get-started/hello/rstudio.html) (yes, RStudio), which can manage Python code and will display chunk output in the same way it does with R chunks. This path seems to work quite well and is recommended if you are already familiar with RStudio.
 
 
 ### Steps to perform today:
@@ -62,4 +70,10 @@ Here is a selection of some basic reference tutorials and documentation for [uni
 
 We will also take today's lab as an opportunity to get familiar with the basic use of all the 5 basic tools listed above.
 For git and quarto, very basic knowledge should be sufficient, but for unix commands and python, the more you learn the more effective you will be at solving the problem sets (and at any computational task you take on after that). 
+
+### Chunk options
+
+Under development ...
+
+
 
