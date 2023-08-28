@@ -34,7 +34,7 @@ website:
           text: "Unit 1"
         - file: units/unit2-dataTech.qmd
           text: "Unit 2"
-        - file: units/unit3-bash.Rmd
+        - file: units/unit3-bash.qmd
           text: "Unit 3"
         - file: units/unit4-goodPractices.qmd
           text: "Unit 4"
