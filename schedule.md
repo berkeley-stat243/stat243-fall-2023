@@ -4,7 +4,7 @@ Submit your solutions on Gradescope and (for problem sets but not assignments) v
 
 | Assignment  | Date | Time | 
 |----|----|----|
-| [bash shell problems (first 10)](https://berkeley-scf.github.io/tutorial-using-bash/exercises) (reading some of tutorial before Wed. Aug. 30 recommended) | Friday Sep. 1 | 10 am |
+| bash shell tutorial and [bash shell problems (first 10)](https://berkeley-scf.github.io/tutorial-using-bash/exercises) (reading some of tutorial before Wed. Aug. 30 recommended); see Details below | Friday Sep. 1 | 10 am |
 
 Assignments will generally be turned in on Gradescope but don't need to follow the rules for problem set solutions and will be graded complete/incomplete.
 
