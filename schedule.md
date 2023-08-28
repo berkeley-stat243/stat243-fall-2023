@@ -36,7 +36,7 @@ Due date: TBD.
 | 1    | Thursday | 2023-08-24 | 4:00-5:30 pm | Optional: [Introduction to LaTeX session](https://berkeley.libcal.com/event/11068706) run by the library (see Details below)|
 |      | Friday   | 2023-08-25 | noon         | Required (part of your class participation): [class survey](https://forms.gle/MxPviTJ2Lw1iJvn66)                              |
 |      |          |            | noon         | Required: [office hour time survey](http://whenisgood.net/tmyj25a)                                                                           |
-|      |          |            | noon         | Required: Go to [github.berkeley.edu](github.berkeley.edu) and login with your Calnet credentials (that's all -- it will allow me to create your repository) | 
+|      |          |            | noon         | Required: Go to [github.berkeley.edu](http://github.berkeley.edu) and login with your Calnet credentials (that's all -- it will allow me to create your repository) | 
 |      |          |            | lab (1:00-4:30 pm)  | Optional: Lab 0 help session for software installation/setup and UNIX-style command line basics (see Details below)         |
 | 2    | Monday   | 2022-08-28 | 10 am        | Required: read first three sections of Unit 2 (sections before 'Webscraping')                                                                                                        |
 |      |          |            | none         | Optional: work through the [UNIX basics tutorial](https://berkeley-scf.github.io/tutorial-unix-basics) and answer (for yourself) the questions at the end |

@@ -20,7 +20,7 @@ Open a Terminal by going to Applications -> Utilities -> Terminal
     - [http://blog.revolutionanalytics.com/2017/12/r-in-the-windows-subsystem-for-linux.html](http://blog.revolutionanalytics.com/2017/12/r-in-the-windows-subsystem-for-linux.html)
     - [https://msdn.microsoft.com/en-us/commandline/wsl/install_guide](https://msdn.microsoft.com/en-us/commandline/wsl/install_guide)
     
-    For more detailed instructions, see the [Installing the Linux Subsystem on Windows](windowsAndLinux.Rmd) tutorial.
+    For more detailed instructions, see the [Installing the Linux Subsystem on Windows](./windowsAndLinux.md) tutorial.
 
 2. (Not recommended) There's an older program called cygwin that provides a UNIX command-line interface.
 
