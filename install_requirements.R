@@ -2,6 +2,9 @@
 
 requirements <- c('rmarkdown')     
 
+system("ls -l /usr/local/lib/R/site-library")
+print(.libPaths())
+
 for (package in requirements) 
     install.packages(package, repos = 'http://cran.us.r-project.org')
 
