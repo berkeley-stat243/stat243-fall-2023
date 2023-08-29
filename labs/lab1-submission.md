@@ -46,15 +46,15 @@ Some books to [learn](https://www.amazon.com/Learning-UNIX-Operating-System-Fift
 ## Quick Intro to [git and GitHub](https://htmlpreview.github.io/?https://github.com/berkeley-scf/tutorial-git-basics/blob/master/git-intro.html)
 
 1. Making changes
-1.1 Editing and saving files
-1.2 Staging changes
-1.3 Committing changes locally
-1.4 Pushing changes to remote repository
+- Editing and saving files
+- Staging changes
+- Committing changes locally
+- Pushing changes to remote repository
 2. Undoing changes:
-2.1 Local changes
-2.2 Local staged changes
-2.3 Local commited changes
-2.4 Pushed changes
+- Local changes
+- Local staged changes
+- Local commited changes
+- Pushed changes
 3. Merging divergent versions
 4. Working with branches
 5. GUI options ([sourcetree](https://www.sourcetreeapp.com/))
