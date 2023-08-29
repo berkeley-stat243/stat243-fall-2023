@@ -11,3 +11,7 @@ We render the source document locally, with 'freeze' set on the document so that
 
 
 To set up the website for a new course/year, one needs to run `quarto publish` from within `main` initially.
+
+Notes:
+
+2023-08-29: when using `knitr` engine with `unit3-bash.qmd` (so that one can work with bash chunks), some GHA runs are complaining about missing `rmarkdown`. But then it sometimes works. Trying to install `rmarkdown` leads to a permission issue in the system directory that the R package is being installed into. If try to use `jupyter` engine with bash chunks, you probably need a Jupyter bash kernel, but I am still investigating.

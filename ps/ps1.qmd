@@ -41,7 +41,7 @@ execute:
 1. Please read [these lecture notes](https://36-750.github.io/tools/computer-architecture) about how computers work, used in a class on statistical computing at CMU. Briefly (a few sentences) describe the difference between disk and memory based on that reference and/or other resources you find. 
 
 2. This problem uses the ideas and tools in Unit 2, Sections 1-3 to explore approaches to reading and writing data from files and to consider file sizes in ASCII plain text vs. binary formats in light of the fact that numbers are (generally) stored as 8 bytes per number in binary formats.
-    a. Generate a numpy array (named `x`) of random real-valued numbers with 10 columns and as many rows as needed that the data takes up about 100 Mb in size. As part of your answer, show the arithmetic (formatted using LaTeX math syntax) you did to determine the number of rows.
+    a. Generate a numpy array (named `x`) of random numbers from a standard normal distribution with 10 columns and as many rows as needed that the data takes up about 100 Mb in size. As part of your answer, show the arithmetic (formatted using LaTeX math syntax) you did to determine the number of rows.
     
        ```{python}
        #| echo: false
