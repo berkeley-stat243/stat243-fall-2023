@@ -50,10 +50,10 @@ The shell is the interface between you and the UNIX operating system.
 When you are working in a terminal window (i.e., a window providing the
 command line interface), you're interacting with a shell.
 
-There are multiple shells (*sh*, *bash*, *zsh, csh*, *tcsh*, *ksh*).
-We'll assume usage of *bash*, as this is a very commonly-used shell in
-Linux, plus it's the default for Mac OS X (until Catalina, for which
-*zsh* is the default), the SCF machines, and the UC Berkeley campus
+There are multiple shells (`sh`, `bash`, `zsh`, `csh`, `tcsh`, `ksh`).
+We'll assume usage of `bash`, as this is a very commonly-used shell in
+Linux, plus was the default for Mac OS X (until Catalina, for which
+`zsh` is the default), the SCF machines, and the UC Berkeley campus
 cluster (Savio). It's fine for you to use zsh.
 
 UNIX shell commands are designed to each do a specific task really well
