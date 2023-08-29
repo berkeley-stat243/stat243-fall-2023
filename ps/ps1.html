@@ -306,7 +306,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><p>Please read <a href="https://36-750.github.io/tools/computer-architecture">these lecture notes</a> about how computers work, used in a class on statistical computing at CMU. Briefly (a few sentences) describe the difference between disk and memory based on that reference and/or other resources you find.</p></li>
 <li><p>This problem uses the ideas and tools in Unit 2, Sections 1-3 to explore approaches to reading and writing data from files and to consider file sizes in ASCII plain text vs.&nbsp;binary formats in light of the fact that numbers are (generally) stored as 8 bytes per number in binary formats.</p>
 <ol type="a">
-<li><p>Generate a numpy array (named <code>x</code>) of random real-valued numbers with 10 columns and as many rows as needed that the data takes up about 100 Mb in size. As part of your answer, show the arithmetic (formatted using LaTeX math syntax) you did to determine the number of rows.</p></li>
+<li><p>Generate a numpy array (named <code>x</code>) of random numbers from a standard normal distribution with 10 columns and as many rows as needed that the data takes up about 100 Mb in size. As part of your answer, show the arithmetic (formatted using LaTeX math syntax) you did to determine the number of rows.</p></li>
 <li><p>Explain the sizes of the two files created below. In discussing the CSV text file, how many characters do you expect to be in the file (i.e., you should be able to estimate this very accurately from first principles without using <code>wc</code> or any explicit program that counts characters). Hint: what do we know about numbers drawn from a standard normal distribution?</p>
 <div class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
@@ -319,7 +319,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(x).to_pickle(<span class="st">'x.pkl'</span>, compression <span class="op">=</span> <span class="va">None</span>) </span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">str</span>(os.path.getsize(<span class="st">'x.pkl'</span>)<span class="op">/</span><span class="fl">1e6</span>)<span class="sc">}</span><span class="ss"> MB"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>167.364089 MB</code></pre>
+<pre><code>167.35776 MB</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>100.000572 MB</code></pre>

@@ -244,6 +244,8 @@ ul.task-list li input[type="checkbox"] {
 <li>Push to GitHub and the publish action should run fairly quickly via GitHub actions.</li>
 </ol>
 <p>To set up the website for a new course/year, one needs to run <code>quarto publish</code> from within <code>main</code> initially.</p>
+<p>Notes:</p>
+<p>2023-08-29: when using <code>knitr</code> engine with <code>unit3-bash.qmd</code> (so that one can work with bash chunks), some GHA runs are complaining about missing <code>rmarkdown</code>. But then it sometimes works. Trying to install <code>rmarkdown</code> leads to a permission issue in the system directory that the R package is being installed into. If try to use <code>jupyter</code> engine with bash chunks, you probably need a Jupyter bash kernel, but I am still investigating.</p>
 
 
 
