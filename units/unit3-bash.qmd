@@ -27,14 +27,31 @@ Reference:
 
 - Newham and Rosenblatt, Learning the bash Shell, 2nd ed.
 
-Note that it can be difficult to distinguish what is shell-specific and
-what is just part of the operating system (i.e., a UNIX-style operating
-system). Some of the material here is not bash-specific but general to
-UNIX (e.g., the commands themselves are not specific to bash).
+
+# 1. Shell basics
+
+The shell is the interface between you and the UNIX operating system.
+
 I'll use 'UNIX' to refer to the family of operating systems that
 descend from the path-breaking UNIX operating system developed at AT&T's
 Bell Labs in the 1970s. These include MacOS and various flavors of Linux
 (e.g., Ubuntu, Debian, CentOS, Fedora).
+
+When you are working in a terminal window (i.e., a window providing the
+command line interface), you're interacting with a shell. From the shell
+you can run UNIX commands such as `cp`, `ls`, `grep`, etc. (as well as
+start various applications).
+
+Here's a [graphical representation](https://technoinfo360.com/explain-what-is-kernel-and-shell-in-unix/) of how the shell relates to various
+programs, commands, and the operating system.
+
+
+There are multiple shells (`sh`, `bash`, `zsh`, `csh`, `tcsh`, `ksh`).
+We'll assume usage of `bash`, as this is a very commonly-used shell in
+Linux, plus was the default for Mac OS X (until Catalina, for which
+`zsh` is the default), the SCF machines, and the UC Berkeley campus
+cluster (Savio). All of the various shells allow you to run
+UNIX commands.
 
 For your work on this unit, either bash on a Linux machine, the older
 version of bash on MacOS, or zsh on MacOS (or Linux) are fine. I'll
@@ -47,18 +64,6 @@ The Windows PowerShell and old cmd.exe/DOS command interpreter both provide
 a command-line interface on Windows, but not a UNIX-based one and
 not interfaces that will be considered here. 
 
-
-# 1. Shell basics
-
-The shell is the interface between you and the UNIX operating system.
-When you are working in a terminal window (i.e., a window providing the
-command line interface), you're interacting with a shell.
-
-There are multiple shells (`sh`, `bash`, `zsh`, `csh`, `tcsh`, `ksh`).
-We'll assume usage of `bash`, as this is a very commonly-used shell in
-Linux, plus was the default for Mac OS X (until Catalina, for which
-`zsh` is the default), the SCF machines, and the UC Berkeley campus
-cluster (Savio). It's fine for you to use `zsh`.
 
 UNIX shell commands are designed to each do a specific task really well
 and really fast. They are modular and composable, so you can build up
