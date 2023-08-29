@@ -28,11 +28,6 @@ jobs:
 
       # add software dependencies here
 
-      - name: Install dependencies
-        run: |
-          source('install_requirements.R')  
-        shell: Rscript {0}
-
       # publish to GitHub Pages
 
       - name: Publish to GitHub Pages (and render)
