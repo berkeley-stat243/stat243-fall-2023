@@ -9,6 +9,6 @@ title: Office hours
      - generally available immediately after class
      - feel free to schedule an appointment or to drop by if my door is open
    - Deeb:
-     - Monday 4-5:30 pm (Evans TBD)
+     - Monday 4-5:30 pm (Evans 444)
      - Fridays during unused section time, generally 2-3 pm and 4-4:30 pm (Evans 340)
 
