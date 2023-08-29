@@ -1145,7 +1145,7 @@
     "href": "office_hours.html",
     "title": "Office hours",
     "section": "",
-    "text": "Chris (Evans 495 or Zoom (see Ed Discussion post for link))\n\nTBD\nfeel free to schedule an appointment or to drop by if my door is open\n\nDeeb:\n\nTBD\nFridays during unused section time, generally 2-3 pm and 4-4:30 pm (Evans 340)"
+    "text": "Chris (Evans 495 or Zoom (see Ed Discussion post for link))\n\nTuesday 11 am - noon\nWednesday 3 pm - 4 pm\nThursday 12:30 - 1:30 pm\ngenerally available immediately after class\nfeel free to schedule an appointment or to drop by if my door is open\n\nDeeb:\n\nMonday 4-5:30 pm (Evans 444)\nFridays during unused section time, generally 2-3 pm and 4-4:30 pm (Evans 340)"
   },
   {
     "objectID": "units/unit8-numbers.html",
@@ -1362,14 +1362,14 @@
     "href": "units/unit3-bash.html",
     "title": "The bash shell and UNIX commands",
     "section": "",
-    "text": "PDF\nReference:\nNote that it can be difficult to distinguish what is shell-specific and what is just part of the operating system (i.e., a UNIX-style operating system). Some of the material here is not bash-specific but general to UNIX (e.g., the commands themselves are not specific to bash). I’ll use ‘UNIX’ to refer to the family of operating systems that descend from the path-breaking UNIX operating system developed at AT&T’s Bell Labs in the 1970s. These include MacOS and various flavors of Linux (e.g., Ubuntu, Debian, CentOS, Fedora).\nFor your work on this unit, either bash on a Linux machine, the older version of bash on MacOS, or zsh on MacOS (or Linux) are fine. I’ll probably demo everything using bash on a Linux machine, and there are some annoying differences from the older bash on MacOS that may be occasionally confusing (in particular the options to various commands can differ on MacOS)."
+    "text": "PDF\nReference:\nNote that it can be difficult to distinguish what is shell-specific and what is just part of the operating system (i.e., a UNIX-style operating system). Some of the material here is not bash-specific but general to UNIX (e.g., the commands themselves are not specific to bash). I’ll use ‘UNIX’ to refer to the family of operating systems that descend from the path-breaking UNIX operating system developed at AT&T’s Bell Labs in the 1970s. These include MacOS and various flavors of Linux (e.g., Ubuntu, Debian, CentOS, Fedora).\nFor your work on this unit, either bash on a Linux machine, the older version of bash on MacOS, or zsh on MacOS (or Linux) are fine. I’ll probably demo everything using bash on a Linux machine, and there are some annoying differences from the older bash on MacOS that may be occasionally confusing (in particular the options to various commands can differ on MacOS).\nThe Windows PowerShell and old cmd.exe/DOS command interpreter both provide a command-line interface on Windows, but not a UNIX-based one and not interfaces that will be considered here."
   },
   {
     "objectID": "units/unit3-bash.html#first-challenge",
     "href": "units/unit3-bash.html#first-challenge",
     "title": "The bash shell and UNIX commands",
     "section": "4.1 First challenge",
-    "text": "4.1 First challenge\nConsider the file cpds.csv. How would you write a shell command that returns “There are 8 occurrences of the word ‘Belgium’ in this file.”, where ‘8’ is actually the correct number of times the word occurs.\nExtra: make your code into a function that can operate on any file indicated by the user and any word of interest."
+    "text": "4.1 First challenge\nConsider the file cpds.csv. How would you write a shell command that returns “There are 8 occurrences of the word ‘Belgium’ in this file.”, where ‘8’ should instead be the correct number of times the word occurs.\nExtra: make your code into a function that can operate on any file indicated by the user and any word of interest."
   },
   {
     "objectID": "units/unit3-bash.html#second-challenge",

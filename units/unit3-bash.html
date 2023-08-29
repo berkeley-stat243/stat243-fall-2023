@@ -400,10 +400,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>Note that it can be difficult to distinguish what is shell-specific and what is just part of the operating system (i.e., a UNIX-style operating system). Some of the material here is not bash-specific but general to UNIX (e.g., the commands themselves are not specific to bash). I’ll use ‘UNIX’ to refer to the family of operating systems that descend from the path-breaking UNIX operating system developed at AT&amp;T’s Bell Labs in the 1970s. These include MacOS and various flavors of Linux (e.g., Ubuntu, Debian, CentOS, Fedora).</p>
 <p>For your work on this unit, either bash on a Linux machine, the older version of bash on MacOS, or zsh on MacOS (or Linux) are fine. I’ll probably demo everything using bash on a Linux machine, and there are some annoying differences from the older bash on MacOS that may be occasionally confusing (in particular the options to various commands can differ on MacOS).</p>
+<p>The Windows PowerShell and old cmd.exe/DOS command interpreter both provide a command-line interface on Windows, but not a UNIX-based one and not interfaces that will be considered here.</p>
 <section id="shell-basics" class="level1">
 <h1>1. Shell basics</h1>
 <p>The shell is the interface between you and the UNIX operating system. When you are working in a terminal window (i.e., a window providing the command line interface), you’re interacting with a shell.</p>
-<p>There are multiple shells (<em>sh</em>, <em>bash</em>, <em>zsh, csh</em>, <em>tcsh</em>, <em>ksh</em>). We’ll assume usage of <em>bash</em>, as this is a very commonly-used shell in Linux, plus it’s the default for Mac OS X (until Catalina, for which <em>zsh</em> is the default), the SCF machines, and the UC Berkeley campus cluster (Savio). It’s fine for you to use zsh.</p>
+<p>There are multiple shells (<code>sh</code>, <code>bash</code>, <code>zsh</code>, <code>csh</code>, <code>tcsh</code>, <code>ksh</code>). We’ll assume usage of <code>bash</code>, as this is a very commonly-used shell in Linux, plus was the default for Mac OS X (until Catalina, for which <code>zsh</code> is the default), the SCF machines, and the UC Berkeley campus cluster (Savio). It’s fine for you to use <code>zsh</code>.</p>
 <p>UNIX shell commands are designed to each do a specific task really well and really fast. They are modular and composable, so you can build up complicated operations by combining the commands. These tools were designed decades ago, so using the shell might seem old-fashioned, but the shell still lies at the heart of modern scientific computing. By using the shell you can automate your work and make it reproducible. And once you know how to use it, you’ll find that enter commands quickly and without a lot of typing.</p>
 </section>
 <section id="using-the-bash-shell" class="level1">
@@ -446,7 +447,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Trouble-shooting: How could the syntax above get the wrong answer?</p>
 <p>Extension: We could write a function that can count the number of fields in any file.</p>
 <p>Extension: How could I see if all of the lines have the same number of fields?</p>
-<p><strong>Our third mission</strong>: was the <code>sqlite3</code> package in the five most recently modified R code files in the units directory?</p>
+<p><strong>Our third mission</strong>: was the <code>sqlite3</code> package in the five most recently modified Quarto Markdown files in the units directory?</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ../units</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">grep</span> <span class="at">-l</span> <span class="st">'import sqlite3'</span> unit7-bigData.qmd</span>
@@ -468,12 +469,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><code>man grep</code> also indicates it can take input from a FILE or from <code>stdin</code>. However, we want grep to operate on the content of the files indicated in stdin. So we use <code>xargs</code> to convert <code>stdin</code> to be recognized as arguments, which then are the FILE inputs to <code>grep</code>.</p>
 <p>Here are some of the ways we can pass information from a command to somewhere else:</p>
 <ul>
-<li>piping allows us to pass information from one command to another command via stdout to stdin</li>
-<li><code>$()</code> allows us to store the result of a command in a variable
+<li>Piping allows us to pass information from one command to another command via stdout to stdin.</li>
+<li><code>$()</code> allows us to store the result of a command in a variable.
 <ul>
 <li>also used to create a temporary variable to pass the output from one command as an option or argument (e.g., the FILE argument) of another command</li>
 </ul></li>
-<li>file redirection operators such as <code>&gt;</code> and <code>&gt;&gt;</code> allow us to pass information from a command into a file</li>
+<li>File redirection operators such as <code>&gt;</code> and <code>&gt;&gt;</code> allow us to pass information from a command into a file.</li>
 </ul>
 <p><strong>Our fourth mission</strong>: write a function that will move the most recent <em>n</em> files in your Downloads directory to another directory.</p>
 <p>In general, we want to start with a specific case, and then generalize to create the function.</p>
@@ -561,7 +562,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>4. bash shell challenges</h1>
 <section id="first-challenge" class="level2">
 <h2 class="anchored" data-anchor-id="first-challenge">4.1 First challenge</h2>
-<p>Consider the file <code>cpds.csv</code>. How would you write a shell command that returns “There are 8 occurrences of the word ‘Belgium’ in this file.”, where ‘8’ is actually the correct number of times the word occurs.</p>
+<p>Consider the file <code>cpds.csv</code>. How would you write a shell command that returns “There are 8 occurrences of the word ‘Belgium’ in this file.”, where ‘8’ should instead be the correct number of times the word occurs.</p>
 <p>Extra: make your code into a function that can operate on any file indicated by the user and any word of interest.</p>
 </section>
 <section id="second-challenge" class="level2">
