@@ -86,12 +86,13 @@ Some books to [learn](https://www.amazon.com/Learning-UNIX-Operating-System-Fift
 8. Make sure that you can log into [gradescope](https://www.gradescope.com/) and upload a pdf document
 9. [optional] Undo your last set of changes and regenerate the pdf file
 
-We will also take today's lab as an opportunity to get familiar with the basic use of all the 5 basic tools listed above.
-For git and quarto, very basic knowledge should be sufficient, but for unix commands and python, the more you learn the more effective you will be at solving the problem sets (and at any computational task you take on after that). 
+If we finish early, We will also take today's lab as an opportunity to get familiar with the basic use of all the 5 basic tools listed above.
+
+For git and quarto, very basic knowledge should be sufficient for now, but for unix commands and python, the more you learn the more effective you will be at solving the problem sets (and at any computational task you take on after that). You will need to learn more advanced use of git and github towards the end of the semester when you start working with other team members on the same project.
 
 ### Chunk options
 
-Under development ...
+Like RMarkdown, quarto allows for several [execution options](https://quarto.org/docs/computations/execution-options.html) to be set per document and per chunk. Spend some time getting familiar with the various options, and kep this link handy when you are working on the first few problem sets.
 
 
 
