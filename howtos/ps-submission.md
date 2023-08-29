@@ -2,8 +2,6 @@
 title: Problem Set Submissions
 ---
 
-[UNDER CONSTRUCTION]
-
 ## Submission format
 
 Problem set solutions should be written in Quarto Markdown (.qmd) source files, interspersing explanatory text with Python (and in some cases bash) code chunks. Please do not use Jupyter notebook (.ipynb) files as your underlying source file for your solutions. 

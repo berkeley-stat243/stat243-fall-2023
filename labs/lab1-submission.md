@@ -57,7 +57,7 @@ Some books to [learn](https://www.amazon.com/Learning-UNIX-Operating-System-Fift
 2.4 Pushed changes
 3. Merging divergent versions
 4. Working with branches
-5. GUI
+5. GUI options ([sourcetree](https://www.sourcetreeapp.com/))
 6. Getting help
 
 **Discussion:**
