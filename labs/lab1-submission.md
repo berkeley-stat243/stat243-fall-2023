@@ -60,6 +60,10 @@ Some books to [learn](https://www.amazon.com/Learning-UNIX-Operating-System-Fift
 5. GUI
 6. Getting help
 
+**Discussion:**
+- Why is git so damn complicated?
+- What do you need to remember when working with collaborators on the same repository?
+
 ## Hands-on Lab Instructions
 
 [Problem Set submission](../howtos/ps.submission.qmd) instructions:
