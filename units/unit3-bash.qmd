@@ -43,6 +43,10 @@ some annoying differences from the older bash on MacOS that may be
 occasionally confusing (in particular the options to various commands
 can differ on MacOS).
 
+The Windows PowerShell and old cmd.exe/DOS command interpreter both provide
+a command-line interface on Windows, but not a UNIX-based one and
+not interfaces that will be considered here. 
+
 
 # 1. Shell basics
 
@@ -54,7 +58,7 @@ There are multiple shells (`sh`, `bash`, `zsh`, `csh`, `tcsh`, `ksh`).
 We'll assume usage of `bash`, as this is a very commonly-used shell in
 Linux, plus was the default for Mac OS X (until Catalina, for which
 `zsh` is the default), the SCF machines, and the UC Berkeley campus
-cluster (Savio). It's fine for you to use zsh.
+cluster (Savio). It's fine for you to use `zsh`.
 
 UNIX shell commands are designed to each do a specific task really well
 and really fast. They are modular and composable, so you can build up
@@ -138,7 +142,7 @@ Extension: How could I see if all of the lines have the same number of
 fields?
 
 **Our third mission**: was the `sqlite3` package in the five most
-recently modified R code files in the units directory?
+recently modified Quarto Markdown files in the units directory?
 
 ```{bash}
 #| eval: false
@@ -171,10 +175,10 @@ arguments, which then are the FILE inputs to `grep`.
 
 Here are some of the ways we can pass information from a command to somewhere else:
 
-- piping allows us to pass information from one command to another command via stdout to stdin
-- `$()` allows us to store the result of a command in a variable
+- Piping allows us to pass information from one command to another command via stdout to stdin.
+- `$()` allows us to store the result of a command in a variable.
     - also used to create a temporary variable to pass the output from one command as an option or argument (e.g., the FILE argument) of another command
-- file redirection operators such as `>` and `>>` allow us to pass information from a command into a file
+- File redirection operators such as `>` and `>>` allow us to pass information from a command into a file.
 
 **Our fourth mission**: write a function that will move the most recent
 *n* files in your Downloads directory to another directory.
@@ -204,6 +208,7 @@ Note that the quotes deal with cases where a file has a space in its name.
 If we wanted to handle multiple files, we could do it with a loop:
 
 ```{bash}
+#| eval: false
 function mvlast() {
     for ((i=1; i<=${1}; i++)); do
         mv "/accounts/vis/paciorek/Downloads/$(ls -rt \
@@ -285,7 +290,7 @@ ps -o pid,command | grep python | cut -d' ' -f1 |  tail -n ${nJobs} | xargs kill
 
 Consider the file `cpds.csv`. How would you write a shell command
 that returns "There are 8 occurrences of the word 'Belgium' in this file.",
-where '8' is actually the correct number of times the word occurs.
+where '8' should instead be the correct number of times the word occurs.
 
 Extra: make your code into a function that can operate on any file
 indicated by the user and any word of interest.
