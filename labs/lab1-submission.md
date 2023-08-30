@@ -92,7 +92,9 @@ For git and quarto, very basic knowledge should be sufficient for now, but for u
 
 ### Chunk options
 
-Like RMarkdown, quarto allows for several [execution options](https://quarto.org/docs/computations/execution-options.html) to be set per document and per chunk. Spend some time getting familiar with the various options, and kep this link handy when you are working on the first few problem sets.
+Like RMarkdown, quarto allows for several [execution options](https://quarto.org/docs/computations/execution-options.html) to be set per document and per chunk. Spend some time getting familiar with the various options, and keep this link handy when you are working on the first few problem sets.
+
+Depending on what's required in the problem sets, you may need to set **eval to false** (just print out code) or **error to true** (print errors and don't halt rendering of the document). Some of the other options may be useful for controlling how the code gets printed.
 
 
 
