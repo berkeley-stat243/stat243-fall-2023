@@ -358,6 +358,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#fifth-challenge" id="toc-fifth-challenge" class="nav-link" data-scroll-target="#fifth-challenge">4.5 Fifth challenge</a></li>
   <li><a href="#sixth-challenge" id="toc-sixth-challenge" class="nav-link" data-scroll-target="#sixth-challenge">4.6 Sixth challenge</a></li>
   </ul></li>
+  <li><a href="#regular-expressions" id="toc-regular-expressions" class="nav-link" data-scroll-target="#regular-expressions">5. Regular expressions</a></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="unit3-bash.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
     </div>
@@ -423,7 +424,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>One important note is that most of the shell commands that work with data inside files (in contrast to commands like <code>ls</code> and <code>cd</code>) work only with text files and not binary files. Also the commands operate on a line-by-line basis.</p>
 <p><strong>Our first mission</strong> is some basic manipulation of a data file. Suppose we want to get a sense for the number of weather stations in different states using the <em>coop.txt</em> file.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> stat243-fall-2021/data</span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> stat243-fall-2023/data</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gzip</span> <span class="at">-cd</span> coop.txt.gz <span class="kw">|</span> <span class="fu">less</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">gunzip</span> coop.txt.gz</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">cut</span> <span class="at">-b50-70</span> coop.txt <span class="kw">|</span> <span class="fu">less</span> </span>
@@ -609,9 +610,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 2,"France",33,807.1,"continental, coastal"</code></pre>
 <p>While Pandas would be able to handle this using <code>read_csv()</code>, using <code>cut</code> in UNIX won’t work because of the commas embedded within the fields. The challenge is to convert this file to one that we can use <code>cut</code> on, as follows.</p>
 <p>Figure out a way to make this into a new delimited file in which the delimiter is not a comma. At least one solution that will work for this particular two-line dataset does not require you to use regular expressions, just simple replacement of fixed patterns.</p>
-
-
 </section>
+</section>
+<section id="regular-expressions" class="level1">
+<h1>5. Regular expressions</h1>
+<p>Regular expressions (“regex”) are a <em>domain-specific language</em> for finding and manipulating patterns of characters and are a key tool used in UNIX commands such as <code>grep</code>, <code>sed</code>, and <code>awk</code> as well as in scripting languages such as Python and R.</p>
+<p>For the moment we’ll focus on learning regular expression syntax in the context of the shell, but in Unit 5, we’ll also use regular expressions within Python using the <code>re</code> package.</p>
+<p>Please see the <a href="https://berkeley-scf.github.io/tutorial-using-bash/regex">bash shell tutorial</a> for a description of regular expressions. I’ll assign a small set of regex problems due as an <a href="../schedule">assignment</a>, and we’ll talk through those problems in class to explore the regex syntax.</p>
+<p><em>Challenge</em>: Let’s think about what regex syntax we would need to detect any number, integer- or real-valued. Let’s start from a test-driven development perspective of writing out test cases including: - various cases we want to detect, - various tricky cases that are not numbers and we don’t want to detect, and - “corner cases” – tricky (perhaps unexpected) cases that might trip us up.</p>
+
+
 </section>
 
 </main> <!-- /main -->
