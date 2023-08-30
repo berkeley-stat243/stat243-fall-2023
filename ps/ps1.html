@@ -319,14 +319,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>pd.DataFrame(x).to_pickle(<span class="st">'x.pkl'</span>, compression <span class="op">=</span> <span class="va">None</span>) </span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">str</span>(os.path.getsize(<span class="st">'x.pkl'</span>)<span class="op">/</span><span class="fl">1e6</span>)<span class="sc">}</span><span class="ss"> MB"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>167.35776 MB</code></pre>
+<pre><code>167.362339 MB</code></pre>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>100.000572 MB</code></pre>
 </div>
 </div>
 <p>Suppose we had rounded each number to three decimal places. Would using CSV have saved disk space relative to the pickle file?</p></li>
-<li><p>Now consider saving out the numbers one row per number in a CSV file. Given we no longer have to save all the commas, why is the file size unchanged?</p></li>
+<li><p>Now consider saving out the numbers one number per row in a CSV file. Given we no longer have to save all the commas, why is the file size unchanged (or perhaps even greater if you are on Windows)?</p></li>
 <li><p>Read the CSV file into Python using <code>pandas.read_csv</code>. Compare the speed of reading with and without providing the <code>dtype</code> argument and using the <code>python</code> vs <code>c</code> engines. Repeat the timing of your first attempt (without <code>dtype</code> and with the default engine) a few times. In some cases you might find that the first time is slower; if so this has to do with the operating system caching the file in memory (we’ll discuss this further in Unit 8).</p></li>
 <li><p>Finally, let’s consider reading the CSV file in chunks as discussed in Unit 2. Time how long it takes to read the first 100,000 rows.</p></li>
 <li><p>Now experiment with the <code>skiprows</code> to see if you can read in a large chunk of data from the middle of the file as quickly as the same size chunk from the start of the file. What does this indicate regarding whether Pandas/Python has to read in all the data up to the point where the chunk in the middle starts or can skip over it in some fashion? Is there any savings relative to reading all the initial rows and the chunk in the middle all at once?</p></li>
