@@ -1117,7 +1117,7 @@
     "href": "labs/lab1-submission.html#quick-intro-to-git-and-github",
     "title": "Lab 1: Submitting problem set solutions",
     "section": "Quick Intro to git and GitHub",
-    "text": "Quick Intro to git and GitHub\n\nMaking changes 1.1 Editing and saving files 1.2 Staging changes 1.3 Committing changes locally 1.4 Pushing changes to remote repository\nUndoing changes: 2.1 Local changes 2.2 Local staged changes 2.3 Local commited changes 2.4 Pushed changes\nMerging divergent versions\nWorking with branches\nGUI options (sourcetree)\nGetting help\n\nDiscussion: - Why is git so damn complicated? - What do you need to remember when working with collaborators on the same repository?"
+    "text": "Quick Intro to git and GitHub\n\nMaking changes\n\n\nEditing and saving files\nStaging changes\nCommitting changes locally\nPushing changes to remote repository\n\n\nUndoing changes:\n\n\nLocal changes\nLocal staged changes\nLocal commited changes\nPushed changes\n\n\nMerging divergent versions\nWorking with branches\nGUI options (sourcetree)\nGetting help\n\nDiscussion: - Why is git so damn complicated? - What do you need to remember when working with collaborators on the same repository?"
   },
   {
     "objectID": "labs/lab1-submission.html#hands-on-lab-instructions",
