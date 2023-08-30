@@ -20,11 +20,11 @@ For problem sets later in the semester, we may allow the work to be done in a Ju
 
 Here we outline a few suggested workflows for developing your problem set solutions:
 
- 1. Open the qmd file in any editor you like (e.g., Emacs, Sublime, ....). Use `quarto preview FILE` to show your rendered document live as you edit and save changes. You can put the preview window side by side with your editor, and the preview document should [automatically render](https://quarto.org/docs/get-started/hello/text-editor.html) as you save your qmd file.
+ 1. Open the qmd file in any editor you like (e.g., Emacs, Sublime, ....). From the command line (we think this will work from a Windows command line such as cmd.exe or PowerShell as well), run `quarto preview FILE` to show your rendered document live as you edit and save changes. You can put the preview window side by side with your editor, and the preview document should [automatically render](https://quarto.org/docs/get-started/hello/text-editor.html) as you save your qmd file.
  2. [Use VS Code](https://quarto.org/docs/get-started/hello/vscode.html) with the following extensions: Python, Quarto, and Jupyter Notebooks. This allows you to execute and preview chunks (and whole document) inside VS Code. This is currently deeb's favorite path due to how well it integrated with the Python debugger.
  3. [Use RStudio](https://quarto.org/docs/get-started/hello/rstudio.html) (yes, RStudio), which can manage Python code and will display chunk output in the same way it does with R chunks. This path seems to work quite well and is recommended if you are already familiar with RStudio.
  
- Later in the semester, you may be allowed to work directly in Jupyter notebooks and use quarto to render from them directly. This has a few quirks and limitations, but will be allowd for some problem sets.
+ Later in the semester, you may be allowed to work directly in Jupyter notebooks and use quarto to render from them directly. This has a few quirks and limitations, but may be allowed for some problem sets.
 
 Please commit your work regularly to your repository as you develop your solutions. 
 

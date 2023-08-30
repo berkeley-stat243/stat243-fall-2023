@@ -63,7 +63,7 @@ execute:
        print(f"{str(os.path.getsize('x.pkl')/1e6)} MB")
        ```
        Suppose we had rounded each number to three decimal places. Would using CSV have saved disk space relative to the pickle file?
-    c. Now consider saving out the numbers one row per number in a CSV file. Given we no longer have to save all the commas, why is the file size unchanged?
+    c. Now consider saving out the numbers one number per row in a CSV file. Given we no longer have to save all the commas, why is the file size unchanged (or perhaps even greater if you are on Windows)?
     d. Read the CSV file into Python using `pandas.read_csv`. Compare the speed of reading with and without providing the `dtype` argument and using the `python` vs `c` engines. Repeat the timing of your first attempt (without `dtype` and with the default engine) a few times. In some cases you might find that the first time is slower; if so this has to do with the operating system caching the file in memory (we’ll discuss this further in Unit 8). 
     e. Finally, let's consider reading the CSV file in chunks as discussed in Unit 2. Time how long it takes to read the first 100,000 rows. 
     f. Now experiment with the `skiprows` to see if you can read in a large chunk of

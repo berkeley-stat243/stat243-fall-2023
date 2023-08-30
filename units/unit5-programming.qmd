@@ -56,7 +56,8 @@ of the `str` class.
 
 ## String processing and regular expressions in Python
 
-[UNDER CONSTRUCTION: insert material from string processing tutorial]
+[UNDER CONSTRUCTION]
+
 
 For details of string processing in Python, including use of regular expressions, see the [string
 processing tutorial](https://berkeley-scf.github.io/tutorial-string-processing).
@@ -1393,7 +1394,7 @@ often very verbose output that can be hard to understand. (In contrast, in R, on
 the error occurs is shown, but you can see the full call stack by invoking `traceback()`.)
 
 What happens when an Python function is evaluated?
-**[Fernando, could you check that this looks ok?]**
+**[Question: check that this is correct.]**
 
   - The user-provided function arguments are evaluated in the calling scope and the results are
 matched to the argument names in the function definition. 
@@ -1866,7 +1867,7 @@ Let's work through this:
     What would happen if it did?
 4.  What is the enclosing function (scope) for `myfun()`?
 
-**[Fernando: is there a way to access variables in a closure (i.e., in
+**[Question: is there a way to access variables in a closure (i.e., in
 this case access 'y' based on `myfun`). Is there a way to find the
 enclosing scope for 'myfun' and look in it?]**
 
@@ -2667,7 +2668,7 @@ out = fun_append2(z)
 
 Strangely the id of `x` doesn't seem to change, even though we are allocating new memory. Perhaps there is something more complicated than I would expect going on in terms of how the list stores pointers to the underlying elements.
 
-**[Fernando, do you know why the id doesn't change? There must be a copy being made as the list gets longer.]**
+**[Question: why doesn't the id change? There must be a copy being made as the list gets longer.]**
 
 ### Vectorization and use of fast matrix algebra
 
@@ -3015,7 +3016,7 @@ timeit.timeit('[np.mean(tA[row,:]) for row in range(tA.shape[0])]',
 
 Strangely, the row-wise and column-wise operations take the same amount of time.
 I don't know why that is.
-**[Fernando - do you have any ideas?]**
+**[Question: what is going on?]**
 
 ### Loop fusion
 
