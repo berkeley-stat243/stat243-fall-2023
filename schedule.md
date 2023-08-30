@@ -5,6 +5,7 @@ Submit your solutions on Gradescope and (for problem sets but not assignments) v
 | Assignment  | Date | Time | 
 |----|----|----|
 | bash shell tutorial and [bash shell problems (first 10)](https://berkeley-scf.github.io/tutorial-using-bash/exercises) (reading some of tutorial before Wed. Aug. 30 recommended); see Details below | Friday Sep. 1 | 10 am |
+| [regular expression reading and problems](https://www.gradescope.com/courses/569739/assignments/3215211); See Details below | Friday Sep. 8 | 10 am | 
 
 Assignments will generally be turned in on Gradescope but don't need to follow the rules for problem set solutions and will be graded complete/incomplete.
 
@@ -38,12 +39,16 @@ Due date: TBD.
 |      |          |            | noon         | Required: [office hour time survey](http://whenisgood.net/tmyj25a)                                                                           |
 |      |          |            | noon         | Required: Go to [github.berkeley.edu](http://github.berkeley.edu) and login with your Calnet credentials (that's all -- it will allow me to create your repository) | 
 |      |          |            | lab (1:00-4:30 pm)  | Optional: Lab 0 help session for software installation/setup and UNIX-style command line basics (see Details below)         |
-| 2    | Monday   | 2022-08-28 | 10 am        | Required: read first three sections of Unit 2 (sections before 'Webscraping')                                                                                                        |
+| 2    | Monday   | 2022-08-28 | 10 am        | Required: read first three sections of Unit 2 (sections before 'Webscraping')                                                                |
 |      |          |            | none         | Optional: work through the [UNIX basics tutorial](https://berkeley-scf.github.io/tutorial-unix-basics) and answer (for yourself) the questions at the end |
 |      |          |            | 7:00-8:15 pm | Optional: [Python workshop](https://berkeley.libcal.com/event/11031898) (see Details below); perhaps worthwhile if you have no Python background and  if you couldn't attend the Aug 16-17 workshop we held |
 |      | Wednesday| 2023-08-30 | 5:00-6:15 pm | Optional: [Python workshop](https://berkeley.libcal.com/event/11031944) (see Details below); perhaps worthwhile if you have no Python background and  if you couldn't attend the Aug 16-17 workshop we held |
 |      | Friday   | 2022-09-01 | 10 am        | Required: Bash shell tutorial and exercises (see Details below) |
 |      |          |            | lab          | Required: Lab 1 on using Git and Quarto and problem set submission (see Details below)|
+| 3    | Wednesday| 2022-09-06 | 10 am        | Required: PS1 due on Gradescope and via GitHub commit |
+|      |          |            | 4:00-5:30 pm | Optional: [Introduction to LaTeX session](https://berkeley.libcal.com/event/11068757) run by the library (see Details below)|
+|      | Friday   | 2022-09-08 | 10 am        | Required: Regular expression tutorial and exercises (see Details below) |
+|      |          |            | lab          | Required: Lab 2 on assertions and testing |
 
 
 
@@ -53,5 +58,6 @@ Due date: TBD.
 - **Optional Lab 0 software/command line help session**: (August 25 in lab room) Help session for installing software, accessing a UNIX-style command line, and basic command line usage (e.g., the UNIX basics tutorial). You can show up at any time (unlike all remaining labs). You should have software installed, be able to accesss the command line, and have started to become familiar with basic command line usage before class on Wednesday August 30.
 - **Bash shell tutorial and exercises**: (by September 1) Read through this [tutorial on using the bash shell](https://berkeley-scf.github.io/tutorial-using-bash). You can skip the pages on Regular Expressions and Managing Processes. Work through the first 10 problems in the [exercises](https://berkeley-scf.github.io/tutorial-using-bash/exercises) and submit your answers via Gradescope. This is not a formal problem set, so you don't need to worry about formatting nor about explaining/commenting your answers, nor do you need to put your answers in your GitHub class repository. In fact it's even fine with me if you hand-write the answers and scan them to an electronic document. I just want to make sure you've worked through the tutorial. I'll be doing demonstrations on using the bash shell in class starting on Wednesday August 30, so that will be helpful as you work through the tutorial.
 - **Lab 1**: (September 1) First section/lab on using Git, setting up your GitHub repository for problem sets, and using Quarto to generate dynamic documents. **Please come only to the section you are registered for given space limits in the room, unless you have talked with Chris and have his permission.** 
+- **Regular expression reading and exercises**: (by September 8), read the regular expression material in the [tutorial on using the bash shell](https://berkeley-scf.github.io/tutorial-using-bash/regex). Then answer the regular expressions (regex) [practice problems and submit your answers on Gradescope](https://www.gradescope.com/courses/569739/assignments/3215211). This is not one of the graded problem sets but rather an assignment that will simply be noted as being completed or not.
 
 

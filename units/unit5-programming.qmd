@@ -51,11 +51,12 @@ are learning another language or choosing a language for a project.
 Text manipulations in Python have a number of things in common with UNIX, R,
 and Perl, as many of these evolved from UNIX. When I use the term
 *string* here, I'll be referring to any sequence of characters that may
-include numbers, white space, and special characters, rather than to the
-character class of R objects. The string or strings will generally be
-stored as an R character vector.
+include numbers, white space, and special characters, stored as an object
+of the `str` class.
 
 ## String processing and regular expressions in Python
+
+[UNDER CONSTRUCTION: insert material from string processing tutorial]
 
 For details of string processing in Python, including use of regular expressions, see the [string
 processing tutorial](https://berkeley-scf.github.io/tutorial-string-processing).
@@ -70,15 +71,17 @@ by seeing how we can replace patterns in addition to finding them.
 
 ## Regex/string processing challenges
 
-We'll work on these challenges (and perhaps one or two others) in class in the process of working
-through the string processing tutorial.
+We'll work on these challenges (and perhaps one or two others) in class.
 
-1.  What regex would I use to find any number with or without a decimal place.
+1.  What regex would I use to find any number with or without a decimal place (done as part of Unit 3).
 
 2.  Suppose a text string has dates in the form "Aug-3", "May-9", etc.
     and I want them in the form "3 Aug", "9 May", etc. How would I do
-    this search and replace operation? (Alternatively, how could I do
-    this without using regular expressions at all?)
+    this regex?
+
+3.  Suppose I want to remove HTML tags such as <br> and </br> from a string such as
+    ""Do an internship <b> in place </b> of <b> one </b> course.". How
+    can I remove only those tags and not any other text?
 
 ## Special characters in Python
 

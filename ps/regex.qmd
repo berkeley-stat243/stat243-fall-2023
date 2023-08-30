@@ -1,0 +1,30 @@
+---
+title: "Assignment: regex problems"
+subtitle: "Due Friday Sep. 8, 10 am"
+format:
+  pdf:
+    documentclass: article
+    margin-left: 30mm
+    margin-right: 30mm
+    toc: false
+  html:
+    theme: cosmo
+    css: ../styles.css
+    toc: false
+    code-copy: true
+    code-block-background: true
+---
+
+# Overview
+
+Read the [regular expression section of the bash shell tutorial](https://berkeley-scf.github.io/tutorial-using-bash/regex) and provide regular expression syntax to match the strings in the following scenarios. Any reasonable syntax si fine, and even better, challenge yourself to figure out multiple ways to answer each question.
+
+This is an assignment, graded credit/no credit, and it does not need to follow the requirements for problem set submissions. Any format is fine (including hand-written and scanned).
+
+# Problems
+
+1. Match the strings "dog", "Dog", "dOg", "doG", "DOg", etc. (The word 'dog' in any combination of lower and upper case.)
+2. Match the strings "cat", "at", and "t".
+3. Match the strings "cat", "caat", "caaat", etc.
+4. Match two words separated by any amount of whitespace.
+5. Match exactly two words separated by ay amount of whitespace and with or without whitespace at the beginning and end. (I.e., you shouldn't match if there are three words.)

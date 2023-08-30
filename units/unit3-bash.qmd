@@ -104,7 +104,7 @@ states using the *coop.txt* file.
 
 ```{bash}
 #| eval: false
-cd stat243-fall-2021/data
+cd stat243-fall-2023/data
 gzip -cd coop.txt.gz | less
 gunzip coop.txt.gz
 cut -b50-70 coop.txt | less 
@@ -376,4 +376,18 @@ Figure out a way to make this into a new delimited file in which the
 delimiter is not a comma. At least one solution that will work for this
 particular two-line dataset does not require you to use regular
 expressions, just simple replacement of fixed patterns.
+
+# 5. Regular expressions
+
+Regular expressions ("regex") are a *domain-specific language* for finding and manipulating patterns of characters and are a key tool used in UNIX commands such as `grep`, `sed`, and `awk` as well as
+in scripting languages such as Python and R.
+
+For the moment we'll focus on learning regular expression syntax in the context of the shell, but in Unit 5, we'll also use regular expressions within Python using the `re` package.
+
+Please see the [bash shell tutorial](https://berkeley-scf.github.io/tutorial-using-bash/regex) for a description of regular expressions. I'll assign a small set of regex problems due as an [assignment](../schedule), and we'll talk through those problems in class to explore the regex syntax.
+
+*Challenge*: Let's think about what regex syntax we would need to detect any number, integer- or real-valued. Let's start from a test-driven development perspective of writing out test cases including:
+  - various cases we want to detect,
+  - various tricky cases that are not numbers and we don't want to detect, and
+  - "corner cases" -- tricky (perhaps unexpected) cases that might trip us up.
 
