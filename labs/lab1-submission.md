@@ -30,21 +30,13 @@ Today we will use all these tools together to submit a solution for Problem Set 
 
 Here is a selection of some basic reference tutorials and documentation for [unix](https://berkeley-scf.github.io/tutorial-unix-basics/), [bash](https://berkeley-scf.github.io/tutorial-using-bash/) and [unix commands](https://www.unixtutorial.org/basic-unix-commands), [git & GitHub](https://htmlpreview.github.io/?https://github.com/berkeley-scf/tutorial-git-basics/blob/master/git-intro.html), [quarto](https://quarto.org/docs/get-started/hello/text-editor.html), [python](https://docs.python.org/3/tutorial/index.html) and [VS Code](https://code.visualstudio.com/docs)
 
-## Discussion on standard modern computer architecture
 
-[Figure](https://www.oreilly.com/api/v2/epubs/0596007558/files/httpatomoreillycomsourceoreillyimages61604.png) from ["Designing Embeded Hardware"](https://www.oreilly.com/library/view/designing-embedded-hardware/0596007558/)
-
-Whiteboard and group discussion
-
-## Discussion on [Unix Architecture](https://www.meted.ucar.edu/ucar/unix/navmenu.php?tab=1&page=2-1-0)
-
-Whiteboard and group discussion.
-
-Some books to [learn](https://www.amazon.com/Learning-UNIX-Operating-System-Fifth/dp/0596002610/) [more](https://www.amazon.com/Unix-Nutshell-Fourth-Arnold-Robbins/dp/0596100299).
+Some books to [learn](https://www.amazon.com/Learning-UNIX-Operating-System-Fifth/dp/0596002610/) [more](https://www.amazon.com/Unix-Nutshell-Fourth-Arnold-Robbins/dp/0596100299) about [Unix](https://www.amazon.com/Unix-Programming-Environment-Prentice-Hall-Software/dp/013937681X).
 
 
 ## Quick Intro to [git and GitHub](https://htmlpreview.github.io/?https://github.com/berkeley-scf/tutorial-git-basics/blob/master/git-intro.html)
 
+0. Creating a enw repository
 1. Making changes
 - Editing and saving files
 - Staging changes
