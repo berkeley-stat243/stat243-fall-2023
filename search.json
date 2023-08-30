@@ -1089,35 +1089,21 @@
     "href": "labs/lab1-submission.html",
     "title": "Lab 1: Submitting problem set solutions",
     "section": "",
-    "text": "By now you should already have access to the following 5 basic tools:\n\nUnix shell\nGit\nQuarto\nPython\nA text editor of your choice\n\nToday we will use all these tools together to submit a solution for Problem Set 0 (not a real problem set) to make sure you know how to submit solutions to upcoming (real) problem sets.\nHere is a selection of some basic reference tutorials and documentation for unix, bash and unix commands, git & GitHub, quarto, python and VS Code"
+    "text": "By now you should already have access to the following 5 basic tools:\n\nUnix shell\nGit\nQuarto\nPython\nA text editor of your choice\n\nToday we will use all these tools together to submit a solution for Problem Set 0 (not a real problem set) to make sure you know how to submit solutions to upcoming (real) problem sets.\nHere is a selection of some basic reference tutorials and documentation for unix, bash and unix commands, git & GitHub, quarto, python and VS Code\nSome books to learn more about Unix."
   },
   {
     "objectID": "labs/lab1-submission.html#submitting-problem-set-solutions-090123",
     "href": "labs/lab1-submission.html#submitting-problem-set-solutions-090123",
     "title": "Lab 1: Submitting problem set solutions",
     "section": "",
-    "text": "By now you should already have access to the following 5 basic tools:\n\nUnix shell\nGit\nQuarto\nPython\nA text editor of your choice\n\nToday we will use all these tools together to submit a solution for Problem Set 0 (not a real problem set) to make sure you know how to submit solutions to upcoming (real) problem sets.\nHere is a selection of some basic reference tutorials and documentation for unix, bash and unix commands, git & GitHub, quarto, python and VS Code"
-  },
-  {
-    "objectID": "labs/lab1-submission.html#discussion-on-standard-modern-computer-architecture",
-    "href": "labs/lab1-submission.html#discussion-on-standard-modern-computer-architecture",
-    "title": "Lab 1: Submitting problem set solutions",
-    "section": "Discussion on standard modern computer architecture",
-    "text": "Discussion on standard modern computer architecture\nFigure from “Designing Embeded Hardware”\nWhiteboard and group discussion"
-  },
-  {
-    "objectID": "labs/lab1-submission.html#discussion-on-unix-architecture",
-    "href": "labs/lab1-submission.html#discussion-on-unix-architecture",
-    "title": "Lab 1: Submitting problem set solutions",
-    "section": "Discussion on Unix Architecture",
-    "text": "Discussion on Unix Architecture\nWhiteboard and group discussion.\nSome books to learn more."
+    "text": "By now you should already have access to the following 5 basic tools:\n\nUnix shell\nGit\nQuarto\nPython\nA text editor of your choice\n\nToday we will use all these tools together to submit a solution for Problem Set 0 (not a real problem set) to make sure you know how to submit solutions to upcoming (real) problem sets.\nHere is a selection of some basic reference tutorials and documentation for unix, bash and unix commands, git & GitHub, quarto, python and VS Code\nSome books to learn more about Unix."
   },
   {
     "objectID": "labs/lab1-submission.html#quick-intro-to-git-and-github",
     "href": "labs/lab1-submission.html#quick-intro-to-git-and-github",
     "title": "Lab 1: Submitting problem set solutions",
     "section": "Quick Intro to git and GitHub",
-    "text": "Quick Intro to git and GitHub\n\nMaking changes\n\n\nEditing and saving files\nStaging changes\nCommitting changes locally\nPushing changes to remote repository\n\n\nUndoing changes:\n\n\nLocal changes\nLocal staged changes\nLocal commited changes\nPushed changes\n\n\nMerging divergent versions\nWorking with branches\nGUI options (sourcetree)\nGetting help\n\nDiscussion: - Why is git so damn complicated? - What do you need to remember when working with collaborators on the same repository?"
+    "text": "Quick Intro to git and GitHub\n\nCreating a enw repository\nMaking changes\n\n\nEditing and saving files\nStaging changes\nCommitting changes locally\nPushing changes to remote repository\n\n\nUndoing changes:\n\n\nLocal changes\nLocal staged changes\nLocal commited changes\nPushed changes\n\n\nMerging divergent versions\nWorking with branches\nGUI options (sourcetree)\nGetting help\n\nDiscussion: - Why is git so damn complicated? - What do you need to remember when working with collaborators on the same repository?"
   },
   {
     "objectID": "labs/lab1-submission.html#hands-on-lab-instructions",
