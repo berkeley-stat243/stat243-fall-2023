@@ -1280,20 +1280,25 @@ With strings already in Python, you can convert between encodings with
 the `encode` method for string objects:
 
 ```{python, encode}
-text = "Melhore sua seguran\xe7a"
-text  # automatically encoded as UTF-8
+text = 'Pe\u00f1a 3\u00f72'
+text
+text.encode('utf-8')
 ```
-
 ```{python, encode2}
 text.encode('latin1')
-text  
-
+```
+```{python, encode3}
 try:
     text.encode('ascii')
 except Exception as error:
     print(error)
 ```
 
+The results above show that the two non-ASCII characters we had been
+working with, which required two bytes in UTF-8, require only one
+byte in the Latin1 (ISO 8859-1) encoding, which provides 191 characters that
+include ASCII characters and various characters (mostly letters with
+accents) used in European languages.
 
 
 An error message about decoding/invalid bytes in the message often indicates
@@ -1309,7 +1314,11 @@ try:
         lines = textfile.readlines()
 except Exception as error:
     print(error)
+```
 
+If we specify the file is encoded with Latin1, it works.
+
+```{python, encoding-error2}
 with open('file.txt', 'r', encoding = 'latin1') as textfile:
     lines = textfile.readlines()
 

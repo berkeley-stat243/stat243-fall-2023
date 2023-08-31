@@ -71,7 +71,7 @@ data from the middle of the file as quickly as the same size chunk from the star
 does this indicate regarding whether Pandas/Python has to read in all the data up to the point where the chunk
 in the middle starts or can skip over it in some fashion? Is there any savings relative to reading
 all the initial rows and the chunk in the middle all at once?
-    g. Now read the data sequentially in equal-sized chunks and determine if reading in the large chunk in the middle (after having already read the earlier chunks) takes the same amount of time as it did in part (e). Comment on what you’ve learned.
+    g. Now read the data sequentially in equal-sized chunks and determine if reading in the large chunk in the middle (after having already read the earlier chunks) takes the same amount of time as it did in part (f). Comment on what you’ve learned.
 
 3. Please read Section 1 of Unit 4 on good programming/project practices and incorporate what you've learned from that reading into your solution for Problem 4. (You can skip the section on Assertions and Testing, as we'll cover that in Lab.) As your response to this question, briefly (a few sentences) note what you did in your code for Problem 4 that reflects what you read. Please also note anything in Unit 4 that you disagree with, if you have a different stylistic perspective.
 

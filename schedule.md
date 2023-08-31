@@ -21,10 +21,10 @@ Problem set solutions need to follow the rules discussed in Lab 1 (Sep. 1) and d
 
 Quizzes are in-person only. 
 
-- Quiz 1: TBD during class.
-  - Review session TBD.
-- Quiz 2: TBD during class.
-  - Review session TBD.
+- Quiz 1: Monday, October 23 in class.
+  - Review session Friday October 20 in section.
+- Quiz 2: Monday, November 20 in class.
+  - Review session Friday November 17 in section.
 
 ## Project
 
