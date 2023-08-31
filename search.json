@@ -1369,7 +1369,7 @@
     "href": "units/unit3-bash.html#second-challenge",
     "title": "The bash shell and UNIX commands",
     "section": "4.2 Second challenge",
-    "text": "4.2 Second challenge\nConsider the data in the RTADataSub.csv file. This is a subset of data giving freeway travel times for segments of a freeway in an Australian city. The data are from a kaggle.com competition. We want to try to understand the kinds of data in each field of the file. The following would be particularly useful if the data were in many files or the data were many gigabytes in size.\n\nFirst, take the fourth column. Figure out the unique values in that column.\nNext, automate the process of determining if any of the values are non-numeric so that you don’t have to scan through all of the unique values looking for non-numbers. You’ll need to look for the following regular expression pattern [^0-9], which is interpreted as NOT any of the numbers 0 through 9.\nNow, do it for all the fields, except the first one. Have your code print out the result in a human-readable way understandable by someone who didn’t write the code."
+    "text": "4.2 Second challenge\nConsider the data in the RTADataSub.csv file. This is a subset of data giving freeway travel times for segments of a freeway in an Australian city. The data are from a kaggle.com competition. We want to try to understand the kinds of data in each field of the file. The following would be particularly useful if the data were in many files or the data were many gigabytes in size.\n\nFirst, take the fourth column. Figure out the unique values in that column.\nNext, automate the process of determining if any of the values are non-numeric so that you don’t have to scan through all of the unique values looking for non-numbers. You’ll need to look for the following regular expression pattern [^0-9], which is interpreted as NOT any of the numbers 0 through 9.\n\nExtra: do it for all the fields, except the first one. Have your code print out the result in a human-readable way understandable by someone who didn’t write the code. For simplicity, you can assume you know the number of fields."
   },
   {
     "objectID": "units/unit3-bash.html#third-challenge",
@@ -1383,7 +1383,7 @@
     "href": "units/unit3-bash.html#fourth-challenge",
     "title": "The bash shell and UNIX commands",
     "section": "4.4 Fourth challenge",
-    "text": "4.4 Fourth challenge\nLet’s return to the RTADataSub.csv file and the issue of missing values.\n\nCreate a new file without any rows that have an ‘x’ (which indicate a missing value).\nTurn the code into a function that also prints out the number of rows that are being removed and that sends its output to stdout so that it can be used with piping.\nNow modify your function so that the user could provide the missing value string, the input filename and the output filename as arguments."
+    "text": "4.4 Fourth challenge\nLet’s return to the RTADataSub.csv file and the issue of missing values.\n\nCreate a new file without any rows that have an ‘x’ (which indicate a missing value).\nTurn the code into a function that also prints out the number of rows that are being removed and that sends its output to stdout so that it can be used with piping.\nNow modify your function so that the user could provide the missing value string and the input filename."
   },
   {
     "objectID": "units/unit3-bash.html#fifth-challenge",
@@ -1398,6 +1398,27 @@
     "title": "The bash shell and UNIX commands",
     "section": "4.6 Sixth challenge",
     "text": "4.6 Sixth challenge\nHere’s an advanced one - you’ll probably need to use sed, but the brief examples of text substitution in the using bash tutorial (or in the demos above) should be sufficient to solve the problem.\nConsider a CSV file that has rows that look like this:\n1,\"America, United States of\",45,96.1,\"continental, coastal\" \n2,\"France\",33,807.1,\"continental, coastal\"\nWhile Pandas would be able to handle this using read_csv(), using cut in UNIX won’t work because of the commas embedded within the fields. The challenge is to convert this file to one that we can use cut on, as follows.\nFigure out a way to make this into a new delimited file in which the delimiter is not a comma. At least one solution that will work for this particular two-line dataset does not require you to use regular expressions, just simple replacement of fixed patterns."
+  },
+  {
+    "objectID": "units/unit3-bash.html#versions-of-regular-expressions",
+    "href": "units/unit3-bash.html#versions-of-regular-expressions",
+    "title": "The bash shell and UNIX commands",
+    "section": "Versions of regular expressions",
+    "text": "Versions of regular expressions\nOne thing that can cause headaches is differences in version of regular expression syntax used. As discussed in man grep, extended regular expressions are standard, with basic regular expressions providing less functionality and Perl regular expressions additional functionality.\nThe bash shell tutorial provides a full documentation of the extended regular expressions syntax, which we’ll focus on here. This syntax should be sufficient for most usage and should be usable in Python and R, but if you notice something funny going on, it might be due to differences between the regular expressions versions.\n\nIn bash, grep -E (or egrep) enables use of the extended regular expressions.\nIn Python, the re package provides syntax “similar to” Perl.\nIn R, stringr provides ICU regular expressions (see help(regex)), which are based on Perl regular expressions.\n\nMore details about Perl regular expressions can be found in the regex Wikipedia page."
+  },
+  {
+    "objectID": "units/unit3-bash.html#general-principles-for-working-with-regex",
+    "href": "units/unit3-bash.html#general-principles-for-working-with-regex",
+    "title": "The bash shell and UNIX commands",
+    "section": "General principles for working with regex",
+    "text": "General principles for working with regex\nThe syntax is very concise, so it’s helpful to break down individual regular expressions into the component parts to understand them. As Murrell notes, since regex are their own language, it’s a good idea to build up a regex in pieces as a way of avoiding errors just as we would with any computer code. re.findall in Python and str_detect in R’s stringr, as well as regex101.com are particularly useful in seeing what was matched to help in understanding and learning regular expression syntax and debugging your regex. As with many kinds of coding, I find that debugging my regex is usually what takes most of my time."
+  },
+  {
+    "objectID": "units/unit3-bash.html#challenge-problem",
+    "href": "units/unit3-bash.html#challenge-problem",
+    "title": "The bash shell and UNIX commands",
+    "section": "Challenge problem",
+    "text": "Challenge problem\nChallenge: Let’s think about what regex syntax we would need to detect any number, integer- or real-valued. Let’s start from a test-driven development perspective of writing out test cases including: - various cases we want to detect, - various tricky cases that are not numbers and we don’t want to detect, and - “corner cases” – tricky (perhaps unexpected) cases that might trip us up."
   },
   {
     "objectID": "units/unit6-parallel.html",

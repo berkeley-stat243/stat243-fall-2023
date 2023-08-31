@@ -358,7 +358,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#fifth-challenge" id="toc-fifth-challenge" class="nav-link" data-scroll-target="#fifth-challenge">4.5 Fifth challenge</a></li>
   <li><a href="#sixth-challenge" id="toc-sixth-challenge" class="nav-link" data-scroll-target="#sixth-challenge">4.6 Sixth challenge</a></li>
   </ul></li>
-  <li><a href="#regular-expressions" id="toc-regular-expressions" class="nav-link" data-scroll-target="#regular-expressions">5. Regular expressions</a></li>
+  <li><a href="#regular-expressions" id="toc-regular-expressions" class="nav-link" data-scroll-target="#regular-expressions">5. Regular expressions</a>
+  <ul class="collapse">
+  <li><a href="#versions-of-regular-expressions" id="toc-versions-of-regular-expressions" class="nav-link" data-scroll-target="#versions-of-regular-expressions">Versions of regular expressions</a></li>
+  <li><a href="#general-principles-for-working-with-regex" id="toc-general-principles-for-working-with-regex" class="nav-link" data-scroll-target="#general-principles-for-working-with-regex">General principles for working with regex</a></li>
+  <li><a href="#challenge-problem" id="toc-challenge-problem" class="nav-link" data-scroll-target="#challenge-problem">Challenge problem</a></li>
+  </ul></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="unit3-bash.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
     </div>
@@ -574,8 +579,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="1">
 <li>First, take the fourth column. Figure out the unique values in that column.</li>
 <li>Next, automate the process of determining if any of the values are non-numeric so that you don’t have to scan through all of the unique values looking for non-numbers. You’ll need to look for the following regular expression pattern <code>[^0-9]</code>, which is interpreted as NOT any of the numbers 0 through 9.</li>
-<li>Now, do it for all the fields, except the first one. Have your code print out the result in a human-readable way understandable by someone who didn’t write the code.</li>
 </ol>
+<p>Extra: do it for all the fields, except the first one. Have your code print out the result in a human-readable way understandable by someone who didn’t write the code. For simplicity, you can assume you know the number of fields.</p>
 </section>
 <section id="third-challenge" class="level2">
 <h2 class="anchored" data-anchor-id="third-challenge">4.3 Third challenge</h2>
@@ -593,7 +598,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ol type="1">
 <li>Create a new file without any rows that have an ‘x’ (which indicate a missing value).</li>
 <li>Turn the code into a function that also prints out the number of rows that are being removed and that sends its output to stdout so that it can be used with piping.</li>
-<li>Now modify your function so that the user could provide the missing value string, the input filename and the output filename as arguments.</li>
+<li>Now modify your function so that the user could provide the missing value string and the input filename.</li>
 </ol>
 </section>
 <section id="fifth-challenge" class="level2">
@@ -616,10 +621,42 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>5. Regular expressions</h1>
 <p>Regular expressions (“regex”) are a <em>domain-specific language</em> for finding and manipulating patterns of characters and are a key tool used in UNIX commands such as <code>grep</code>, <code>sed</code>, and <code>awk</code> as well as in scripting languages such as Python and R.</p>
 <p>For the moment we’ll focus on learning regular expression syntax in the context of the shell, but in Unit 5, we’ll also use regular expressions within Python using the <code>re</code> package.</p>
+<p>The basic idea of regular expressions is that they allow us to find matches of strings or patterns in strings, as well as do substitution. Regular expressions are good for tasks such as:</p>
+<ul>
+<li>extracting pieces of text;</li>
+<li>creating variables from information found in text;</li>
+<li>cleaning and transforming text into a uniform format; and</li>
+<li>mining text by treating documents as data.</li>
+</ul>
 <p>Please see the <a href="https://berkeley-scf.github.io/tutorial-using-bash/regex">bash shell tutorial</a> for a description of regular expressions. I’ll assign a small set of regex problems due as an <a href="../schedule">assignment</a>, and we’ll talk through those problems in class to explore the regex syntax.</p>
+<p>Other resources include:</p>
+<ul>
+<li>Here’s a <a href="https://regex101.com">website where you can interactively test regular expressions on example strings</a>.</li>
+<li>Duncan Temple Lang (UC Davis Statistics) has written a <a href="http://berkeley-scf.github.io/tutorial-string-processing/regexpr-Lang.pdf">nice tutorial</a> covering regular expressions, illustrated in R.</li>
+<li>Sections 9.9 and 11 of <a href="http://www.stat.auckland.ac.nz/~paul/ItDT">Paul Murrell’s book</a></li>
+<li>The back/second page of RStudio’s <code>stringr</code> cheatsheet has a <a href="https://raw.githubusercontent.com/rstudio/cheatsheets/main/strings.pdf">cheatsheet on regular expressions</a>.</li>
+</ul>
+<section id="versions-of-regular-expressions" class="level2">
+<h2 class="anchored" data-anchor-id="versions-of-regular-expressions">Versions of regular expressions</h2>
+<p>One thing that can cause headaches is differences in version of regular expression syntax used. As discussed in <code>man grep</code>, <em>extended regular expressions</em> are standard, with <em>basic regular expressions</em> providing less functionality and <em>Perl regular expressions</em> additional functionality.</p>
+<p>The <a href="https://berkeley-scf.github.io/tutorial-using-bash/regex">bash shell tutorial</a> provides a full documentation of the <em>extended regular expressions</em> syntax, which we’ll focus on here. This syntax should be sufficient for most usage and should be usable in Python and R, but if you notice something funny going on, it might be due to differences between the regular expressions versions.</p>
+<ul>
+<li>In bash, <code>grep -E</code> (or <code>egrep</code>) enables use of the extended regular expressions.</li>
+<li>In Python, the <code>re</code> package provides <a href="https://docs.python.org/3/library/re.html">syntax “similar to” Perl</a>.</li>
+<li>In R, <code>stringr</code> provides <em>ICU regular expressions</em> (see <code>help(regex)</code>), which are based on Perl regular expressions.</li>
+</ul>
+<p>More details about Perl regular expressions can be found in the <a href="https://en.wikipedia.org/wiki/Regular_expression">regex Wikipedia page</a>.</p>
+</section>
+<section id="general-principles-for-working-with-regex" class="level2">
+<h2 class="anchored" data-anchor-id="general-principles-for-working-with-regex">General principles for working with regex</h2>
+<p>The syntax is very concise, so it’s helpful to break down individual regular expressions into the component parts to understand them. As Murrell notes, since regex are their own language, it’s a good idea to build up a regex in pieces as a way of avoiding errors just as we would with any computer code. <code>re.findall</code> in Python and <code>str_detect</code> in R’s <code>stringr</code>, as well as regex101.com are particularly useful in seeing <em>what</em> was matched to help in understanding and learning regular expression syntax and debugging your regex. As with many kinds of coding, I find that debugging my regex is usually what takes most of my time.</p>
+</section>
+<section id="challenge-problem" class="level2">
+<h2 class="anchored" data-anchor-id="challenge-problem">Challenge problem</h2>
 <p><em>Challenge</em>: Let’s think about what regex syntax we would need to detect any number, integer- or real-valued. Let’s start from a test-driven development perspective of writing out test cases including: - various cases we want to detect, - various tricky cases that are not numbers and we don’t want to detect, and - “corner cases” – tricky (perhaps unexpected) cases that might trip us up.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
