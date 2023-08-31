@@ -18,21 +18,11 @@ execute:
   freeze: auto
 ---
 
-```{r, fake-setup, echo=FALSE}
-## For some reason we need an R chunk in the doc or get result seen in `error.log`.
-z <- 1
-```
-
 ```{python, setup, echo=FALSE}
 import re, os, sys, time, math
 ```
 
 [PDF](./unit5-programming.pdf){.btn .btn-primary}
-
-References:
-
-- TBD
-
 
 # Overview
 
@@ -51,43 +41,171 @@ are learning another language or choosing a language for a project.
 Text manipulations in Python have a number of things in common with UNIX, R,
 and Perl, as many of these evolved from UNIX. When I use the term
 *string* here, I'll be referring to any sequence of characters that may
-include numbers, white space, and special characters, stored as an object
+include numbers, white space, and special characters, usually stored as an object
 of the `str` class.
 
 ## String processing and regular expressions in Python
 
-[UNDER CONSTRUCTION]
-
-
-For details of string processing in Python, including use of regular expressions, see the [string
-processing tutorial](https://berkeley-scf.github.io/tutorial-string-processing).
-(You can ignore the sections on R.) That tutorial then refers to
-the [bash shell tutorial](https://berkeley-scf.github.io/tutorial-using-bash/regex) 
-for details on regular expressions.
-
-In class we'll work through some problems in the string processing tutorial, focusing in
-particular on the use of regular expressions with the `re` package.
+Here we'll see functionality for working with strings in Python, focusing on regular expressions with the `re` package. 
 This will augment our consideration of regular expressions in the shell, in particular
 by seeing how we can replace patterns in addition to finding them. 
 
-## Regex/string processing challenges
+The `re` package provides Perl-style regular expressions, but it doesn't seem to support named character classes such as `[:digit:]`. Instead use classes such as `\d` and `[0-9]`.
 
-We'll work on these challenges (and perhaps one or two others) in class.
+In Python, you apply a matching function and then query the result to get information about what was matched and where in the string. 
 
-1.  What regex would I use to find any number with or without a decimal place (done as part of Unit 3).
 
-2.  Suppose a text string has dates in the form "Aug-3", "May-9", etc.
-    and I want them in the form "3 Aug", "9 May", etc. How would I do
-    this regex?
+```{python}
+import re
+text = "Here's my number: 919-543-3300."
+m = re.search("\d+", text)
+m
+m.group()
+m.start()
+m.end()
+m.span()
+```
 
-3.  Suppose I want to remove HTML tags such as <br> and </br> from a string such as
-    ""Do an internship <b> in place </b> of <b> one </b> course.". How
-    can I remove only those tags and not any other text?
+Notice that that showed us only the first match.
+
+We can instead use `findall` to get all the matches.
+
+```{python}
+re.findall("\d+", text)
+```
+
+
+To ignore case, do the following:
+
+```{python}
+text = "That cat in the Hat"
+re.findall("hat", text, re.IGNORECASE)
+```
+
+
+We can of course use list comprehension to work with multiple strings. But we need to be careful to check whether a match was found.
+
+```{python}
+def return_group(pattern, txt):
+    m = re.search(pattern, txt)
+    if m:
+       return(m.group())
+    else:
+       return(None)
+
+text = ["Here's my number: 919-543-3300.", "hi John, good to meet you",
+        "They bought 731 bananas", "Please call 1.919.554.3800"]
+[return_group("\d+", str) for str in text]
+```
+
+We can replace with `re.sub`.
+
+
+```{python}
+text = "Here's my number: 919-543-3300."
+re.sub("\d", "Z", text   )
+```
+
+Recall that we can search for location-specific matches in relation to the start and end of a string.
+
+```{python}
+text = "hats are all that are important to a hatter."
+re.findall("^hat\w+", text)
+```
+
+Recall that we can search based on repetitions (as already demonstrated with the `\w+` just above).
+
+```{python}
+text = "Here's my number: 919-543-3300. They bought 731 bananas. Please call 1.919.554.3800."
+re.findall("\d{3}[-.]\d{3}[-.]\d{4}", text)
+```
+
+Next let's consider grouping using `()`.
+
+Here’s a basic example of using grouping via parentheses with the OR operator.
+
+```{python}
+text = "At the site http://www.ibm.com. Some other text. ftp://ibm.com"
+re.search("(http|ftp):\\/\\/", text).group()
+```
+
+However, `findall` returns only the captured groups when grouping operators are present, as discussed a bit in `help(re.findall)`,
+so we'd need to add an additional grouping operator to capture the full pattern when using `findall`:
+
+```{python}
+re.findall("(http|ftp):\\/\\/", text)  # http or ftp followed by ://
+re.findall("((http|ftp):\\/\\/)", text)  # http or ftp followed by ://
+```
+
+As another example, the phone number detection problem could have been done a bit more compactly (as well as more generally to allow for an initial "1-" or "1.") as:
+
+```{python}
+text = "Here's my number: 919-543-3300. They bought 731 bananas. Please call 1.919.554.3800."
+re.findall("((1[-.])?(\d{3}[-.]){1,2}\d{4})", text)
+```
+
+Question: the above regex would actually match something that is not a valid phone number. What can go wrong?
+
+
+Parentheses are also used for referencing back to a detected pattern when doing a replacement. For example, here we’ll find any numbers and add underscores before and after them:
+
+```{python}
+text = "Here's my number: 919-543-3300. They bought 731 bananas. Please call 919.554.3800."
+re.sub("([0-9]+)", "_\\1_", text)
+```
+
+Here we’ll remove commas not used as field separators.
+
+```{python}
+text = '"H4NY07011","ACKERMAN, GARY L.","H","$13,242",,,'
+re.sub("([^\",]),", "\\1", text)
+```
+
+How does that work? Consider that "[^\",]" matches a character that is not a quote and not a comma. The regex is such a character followed by a comma, with the matched character saved in `\\1` because of the grouping operator.
+
+> **Challenge**: Suppose a text string has dates in the form "Aug-3", "May-9", etc. and I want them in the form "3 Aug", "9 May", etc. How would I do this regex?
+
+Finally, let's consider where a match ends when there is ambiguity.
+
+As a simple example consider that if we try this search, we match as many digits as possible, rather than returning the first "9" as satisfying the request for "one or more" digits.
+
+```{python}
+text = "See the 998 balloons."
+re.findall("\d+", text)
+```
+
+That behavior is called *greedy* matching, and it's the default. That example also shows why it
+is the default. What would happen if it were not the default?
+
+However, sometimes greedy matching doesn't get us what we want.
+
+Consider this attempt to remove multiple html tags from a string.
+
+```{python}
+text = "Do an internship <b> in place </b> of <b> one </b> course."
+re.sub("<.*>", "", text)
+```
+
+Notice what happens because of greedy matching.
+
+One way to avoid greedy matching is to use a `?` after the repetition.
+
+
+```{python}
+re.sub("<.*?>", "", text)
+```
+
+However, that syntax is a bit frustrating because `?` is also used to indicate
+0 or 1 repetitions, making the regex a bit hard to read/understand.
+
+> **Challenge**: Suppose I want to strip out HTML tags but without using the `?` to avoid
+greedy matching. How can I be more careful in constructing my regex?
+
 
 ## Special characters in Python
 
 Recall that when characters are used for special purposes, we need to
-'escape' them if we want them interpreted as the actual character. In what
+'escape' them if we want them interpreted as the actual (*literal*) character. In what
 follows, I show this in Python, but similar manipulations are sometimes
 needed in the shell and in R.
 
@@ -96,18 +214,16 @@ to input special characters such as newline (`\n`) or tab (`\t`).
 
 Here are some examples of using special characters.
 
-> **Note**
-> It is hard to compile the qmd file correctly for these code chunks, so I am just pasting in the output from running in Python 'manually' in some cases.)
 
 ```{python}
 tmp = "Harry said, \"Hi\""
-print(tmp)   # prints out without a newline -- this is hard to show in the pdf
+print(tmp)   # prints out without a newline -- this is hard to show in rendered doc
 tmp = "Harry said, \"Hi\".\n"
-print(tmp)      # prints out with the newline
+print(tmp)      # prints out with the newline -- hard to show in rendered doc
 
 tmp = ["azar", "foo", "hello\tthere\n"]
 print(tmp[2])
-re.search("[\tz]", tmp[2])   ## search for a tab or a 'z'
+re.search("[\tZ]", tmp[2])   ## search for a tab or a 'Z'
 ```
 
 Here are some examples of using various special characters in regex syntax.
@@ -115,6 +231,8 @@ Here are some examples of using various special characters in regex syntax.
 ```{python, re}
 ## Search for characters that are not 'z'
 ## (using ^ as regular expression syntax)
+re.search("[^z]", "zero")
+## Use list comprehension to show results for various input strings:
 [print(st + ":\t", re.search("[^z]", st))
     for st in ["a^2", "93", "zzz", "zit", "azar"]]
 
@@ -174,7 +292,8 @@ Similar things come up in the shell and in R, but in the shell you
 often don't need as many backslashes. E.g. you could do this to look for a
 literal backslash character.
 
-```{bash, eval=FALSE}
+```{bash}
+#| eval: false
 echo "hello" > file.txt
 echo "with a \ there" >> file.txt
 grep '\\' file.txt
@@ -256,7 +375,8 @@ Here are a variety of tools for interacting with the operating system:
     If you want to pass arguments into your script, you can do so with the
     `argparse` package.
 
-    ```{python, eval=FALSE}
+    ```{python}
+    #| eval: false
     import argparse
     parser = argparse.ArgumentParser()
     parser.add_argument('-y', '--year', default=2002,
@@ -270,7 +390,8 @@ Here are a variety of tools for interacting with the operating system:
 
     Now we can run it as follows in the shell:
 
-    ```{bash, eval=FALSE}
+    ```{bash}
+    #| eval: false
     ./example.py 2004 January
     ```
 
@@ -310,7 +431,7 @@ of add-on packages available online (the causal relationship of the popularity a
 the extensive add-on packages goes in both directions). 
 
 A big part of Python's popularity is indeed the extensive collection of add-on
-packages on [PyPI](https://cran.r-project.org) (and GitHub and elsewhere) and
+packages on [PyPI](https://pypi.org) (and GitHub and elsewhere) and
 via `Conda` that provide
 much of Python's functionality (including core numerical capabilities via `numpy` and `scipy`).
 
@@ -327,7 +448,8 @@ A *module* is a collection of related code in a file with the extension `.py`.
 The code can include functions, classes, and variables, as well as
 runnable code. To access the objects in the module, you need to import the module.
 
-```{bash, eval=FALSE}
+```{bash}
+#| eval: false
 cat << EOF > mymod.py
 x = 7
 range = 3
@@ -401,7 +523,8 @@ serves to initialize the package.
 
 Let's create a basic package.
 
-```{bash, eval=FALSE}
+```{bash}
+#| eval: false
 mkdir mypkg
 
 cat << EOF > mypkg/__init__.py
@@ -437,7 +560,8 @@ via *subpackages*.
 A package can automatically import the subpackages via the main `__init__.py`
 or require the user to import them manually, e.g., `import mypkg.mysubmod`.
 
-```{bash, eval=FALSE}
+```{bash}
+#| eval: false
 mkdir mypkg/mysubmod
 
 cat << EOF > mypkg/mysubmod/__init__.py
@@ -560,7 +684,8 @@ x*3
 
 In contrast in a language like C, one has to declare a variable based on its type before using it:
 
-```{c, eval=FALSE}
+```{c}
+#| eval: false
 double y;
 double x = 3.1;
 y = x * 7.1;
@@ -1362,7 +1487,8 @@ list(map(round3, [32.134234, 7.1, 343.7775]))
 
 Let's compare using a map-style operation (with Pandas) to using a for loop to run a stratified analysis for a generic example (this code won't run because the variables don't exist):
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 # stratification 
 subsets = df.groupby('grouping_variable')
 
@@ -1471,7 +1597,8 @@ except Exception as error:
 
 Here's another error related to positional vs. keyword arguments.
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 add(z=-5, 3, 5)  ## Can't trap `SyntaxError` with `try`
 # SyntaxError: positional argument follows keyword argument  
 ```
@@ -1622,7 +1749,8 @@ If you modify part of the object, state is not preserved.
 To put pass-by-value vs. pass-by-reference in a broader context, I want to briefly discuss
 the idea of a pointer, common in compiled languages such as C.
 
-```{c, eval=FALSE}
+```{c}
+#| eval: false
 int x = 3;
 int* ptr;
 ptr = &x;
@@ -1635,7 +1763,8 @@ ptr = &x;
 
 Vectors in C are really pointers to a block of memory:
 
-```{c, eval=FALSE}
+```{c}
+#| eval: false
 int x[10];
 ```
 
@@ -1650,7 +1779,8 @@ function. For example in the following example one passes in the address of an
 object and that object is then modified in place, affecting its value when the function
 call finishes.
 
-```{c, eval=FALSE}
+```{c}
+#| eval: false
 int myCal(int* ptr){
     *ptr = *ptr + *ptr;
 }
@@ -1684,7 +1814,8 @@ Of course to make the objects in a module or package available we need to use `i
 
 Consider what happens if you have two modules that both use `x` and you import `x` using `from`.
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 from mypkg.mymod import x
 from mypkg.mysubmod.values import x
 x  # which x is used?
@@ -1735,7 +1866,8 @@ cat local.py
 
 Run the following code to see what is in the different namespaces:
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 import local
 
 gx = 99
@@ -1779,7 +1911,8 @@ code from a package.
 In this section, we seek to understand what happens in the following
 circumstance. Namely, where does Python get the value for the object `x`?
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 def f(y):
   return(x + y)
 
@@ -1800,7 +1933,8 @@ The behavior of basing lookup on where functions are defined rather than where t
 
 Let's dig deeper to understand where Python looks for non-local variables, illustrating lexical scoping:
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 ## Case 1
 x = 3
 def f2():
@@ -2311,7 +2445,7 @@ If you're really trying to optimize memory use, you may also consider:
 
 -   Using types that take up less memory (e.g., `Bool`, `Int16`, `Float32`) when
     possible.
-    ```{python, eval=TRUE}
+    ```{python}
     x = np.array(np.random.normal(size = 5), dtype = "float32")
     x.itemsize
     x = np.array([3,4,2,-2], dtype = "int16")
@@ -2328,7 +2462,8 @@ evaluation.  This
 code (translated from the original R code) is courtesy of Yuval Benjamini. For our purposes here, let's assume
 that `xvar` and `yvar` are very long vectors using a lot of memory. 
 
-```{r, eval=FALSE}
+```{r}
+#| eval: false
 def fastcount(xvar, yvar):
     naline = np.isnan(xvar)
     naline[np.isnan(yvar)] = True
@@ -2356,7 +2491,8 @@ We'll focus on Python in the following discussion, but most of the concepts appl
 
 For example, consider this code:
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 x = 3
 abs(x)
 x*7
@@ -2374,7 +2510,8 @@ Because of dynamic typing, when the interpreter sees `abs(x)` it needs to check 
 
 Let's consider writing a loop:
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 for i in range(10):
     if np.random.normal(size = 1) > 0:
         x = 'hi'
@@ -2536,7 +2673,8 @@ I haven't run this code when producing this document as the output of
 the profiling can be lengthy.
 
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 def lr_slow(y, x):
     xtx = x.T @ x
     xty = x.T @ y
@@ -2559,7 +2697,8 @@ a matrix. Instead we factorize the matrix and use the factorized result to do th
 computation of interest. In this case using the Cholesky decomposition is a standard
 approach, followed by solving triangular systems of equations.
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 import scipy as sp
 
 def lr_fast(y, x):
@@ -2709,7 +2848,8 @@ whereas in R, printing a function will show its source code.
 
 Here I found the source code for the scipy `triangular_solve` function, which calls out to a Fortran function `trtrs`, found in the LAPACK library.
 
-```{bash, eval=FALSE}
+```{bash}
+#| eval: false
 ## On an SCF machine:
 cat /usr/local/linux/mambaforge-3.11/lib/python3.11/site-packages/scipy/linalg/_basic.py
 ```
@@ -3033,7 +3173,8 @@ This code has some downsides.
 
 Contrast that to running directly as a for loop (e.g., here in Julia or in C/C++):
 
-```{julia, eval=FALSE}
+```{julia}
+#| eval: false
 for i in 1:length(x)
     x[i] = exp(x[i]) + 3*sin(x[i])
 end
