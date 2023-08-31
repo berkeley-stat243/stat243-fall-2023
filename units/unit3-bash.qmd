@@ -316,9 +316,11 @@ non-numeric so that you don't have to scan through all of the unique
 values looking for non-numbers. You'll need to look for the following
 regular expression pattern `[^0-9]`, which is interpreted as NOT any
 of the numbers 0 through 9.
-3. Now, do it for all the fields, except the first one. Have your code
+
+Extra: do it for all the fields, except the first one. Have your code
 print out the result in a human-readable way understandable by someone
-who didn't write the code.
+who didn't write the code. For simplicity, you can assume you know
+the number of fields.
 
 
 ## 4.3 Third challenge
@@ -339,8 +341,8 @@ Let's return to the `RTADataSub.csv` file and the issue of missing values.
 
 1. Create a new file without any rows that have an 'x' (which indicate a missing value).
 2. Turn the code into a function that also prints out the number of rows that are being removed and that sends its output to stdout so that it can be used with piping.
-3. Now modify your function so that the user could provide the missing value string, the input
-filename and the output filename as arguments.
+3. Now modify your function so that the user could provide the missing value string and the input
+filename.
 
 ## 4.5 Fifth challenge
 
@@ -384,7 +386,50 @@ in scripting languages such as Python and R.
 
 For the moment we'll focus on learning regular expression syntax in the context of the shell, but in Unit 5, we'll also use regular expressions within Python using the `re` package.
 
+The basic idea of regular expressions is that they allow us to find
+matches of strings or patterns in strings, as well as do substitution.
+Regular expressions are good for tasks such as:
+
+ - extracting pieces of text;
+ - creating variables from information found in text;
+ - cleaning and transforming text into a uniform format; and
+ - mining text by treating documents as data.
+
 Please see the [bash shell tutorial](https://berkeley-scf.github.io/tutorial-using-bash/regex) for a description of regular expressions. I'll assign a small set of regex problems due as an [assignment](../schedule), and we'll talk through those problems in class to explore the regex syntax.
+
+Other resources include:
+
+  - Here's a [website where you can interactively test regular expressions on example strings](https://regex101.com).
+  - Duncan Temple Lang (UC Davis Statistics) has written a [nice tutorial](http://berkeley-scf.github.io/tutorial-string-processing/regexpr-Lang.pdf) covering regular expressions, illustrated in R. 
+  - Sections 9.9 and 11 of [Paul Murrell's book](http://www.stat.auckland.ac.nz/~paul/ItDT)
+  - The back/second page of RStudio's `stringr` cheatsheet has a [cheatsheet on regular expressions](https://raw.githubusercontent.com/rstudio/cheatsheets/main/strings.pdf).
+
+## Versions of regular expressions
+
+One thing that can cause headaches is differences in version of regular expression syntax used. As discussed in `man grep`, *extended regular expressions* are standard, with *basic regular expressions* providing less functionality and *Perl regular expressions* additional functionality.
+
+The [bash shell tutorial](https://berkeley-scf.github.io/tutorial-using-bash/regex) provides a full documentation of the *extended regular expressions* syntax, which we'll focus on here. This syntax should be sufficient for most usage and should be usable in Python and R, but if you notice something funny going on, it might be due to differences between the regular expressions versions.
+
+  - In bash, `grep -E` (or `egrep`) enables use of the extended regular expressions.
+  - In Python, the `re` package provides [syntax "similar to" Perl](https://docs.python.org/3/library/re.html). 
+  - In R, `stringr` provides *ICU regular expressions* (see `help(regex)`), which are based on Perl regular expressions.
+
+More details about Perl regular expressions can be found in the [regex Wikipedia page](https://en.wikipedia.org/wiki/Regular_expression).
+
+## General principles for working with regex
+
+The syntax is very concise, so it's helpful to break down
+individual regular expressions into the component parts to understand
+them. As Murrell notes, since regex are their own language, it's
+a good idea to build up a regex in pieces as a way of avoiding errors
+just as we would with any computer code. `re.findall` in Python  and  `str_detect` in R's `stringr`,
+as well as regex101.com are particularly
+useful in seeing *what* was matched to help in understanding
+and learning regular expression syntax and debugging your regex. As with
+many kinds of coding, I find that debugging my regex is usually what takes
+most of my time.
+
+## Challenge problem
 
 *Challenge*: Let's think about what regex syntax we would need to detect any number, integer- or real-valued. Let's start from a test-driven development perspective of writing out test cases including:
   - various cases we want to detect,
