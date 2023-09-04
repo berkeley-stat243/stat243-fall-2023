@@ -368,7 +368,7 @@ Here are a variety of tools for interacting with the operating system:
         (like `#!/bin/bash` in a bash shell file, as seen in Unit 2) or
         for more portability across machines, include
         `#!/usr/bin/env python`.
-    3.  Make the Python code file executable with *chmod*:
+    3.  Make the Python code file executable with `chmod`:
         `chmod ugo+x example.py`.
     4.  Run the script from the command line: `./example.py`
 
