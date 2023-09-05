@@ -12,7 +12,7 @@ Assignments will generally be turned in on Gradescope but don't need to follow t
 
 | Problem Set | Date | Time | 
 |----|----|----|
-| PS 1 [(HTML)](ps/ps1.html) [(PDF)](ps/ps1.pdf) | Wednesday Sep. 6 | 10 am | 
+| PS 1 [(HTML)](ps/ps1.html) [(PDF)](ps/ps1.pdf) | Thursday Sep. 7 | 10 am | 
 
 
 Problem set solutions need to follow the rules discussed in Lab 1 (Sep. 1) and documented [here](howtos/ps-submission).
