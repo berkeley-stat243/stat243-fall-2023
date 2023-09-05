@@ -172,17 +172,23 @@ ideas are useful for data analysis as well.
     and the initial plan for the code no longer makes sense and the code
     is no longer designed specifically for the job being done.
 
-## Assertions and testing
+## Assertions, exceptions and testing
 
-Both tests and assertions are critically important for writing robust
+Assertions, exceptions and testing are critically important for writing robust
 code that is less likely to contain bugs.
 
-Assertions are checks in your code that the state of the program is as
-you expect, including arguments provided by users. Here's an example of
-using the `assert` statement in Python, with a clear assertion message
-telling the user what the problem is.
+### Assertions
 
-```{python, eval=FALSE}
+Assertions are checks in your code that the state of the program is as
+you expect. They're primarily intended for use during the development
+process to provide "sanity checks" that specific conditions are true.
+One would generally only expect those conditions not to be true if there is a bug
+in the code. Here's an example of
+using the `assert` statement in Python, with a clear assertion message
+telling the developer what the problem is.
+
+```{python}
+#| eval: false
 number = -42
 assert number > 0, f"number greater than 0 expected, got: {number}"
 ## Produces this error:
@@ -194,7 +200,8 @@ assert number > 0, f"number greater than 0 expected, got: {number}"
 
 Various operators/functions are commonly used in assertions, including
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 assert x in y
 assert x not in y
 assert x is y
@@ -203,6 +210,66 @@ assert isinstance(x, <some_type>)
 assert all(x)
 assert any(x)
 ```
+
+### Exceptions
+
+You've already seen exceptions in action whenever you've done something
+in Python that causes an error to occur and an error message to be printed.
+Syntax errors are different from exceptions in that exceptions occur
+when the syntax is correct but the execution code results in some sort of error.
+
+In developing your own code you can trigger an error (i.e., throw an exception)
+to handle run-time errors and unusual situations that occur when your code
+is being run.
+
+Some standard ways to handle exceptions are with `try-except` blocks and with `raise`.
+
+With `try-except`, you attempt to run some code in the `try` block and
+handle errors in the `except` block.
+
+In the following example, you could let Python
+just catch the error, but it can be better in terms of the experience of those
+using your code for your code to handle it directly in many cases where the
+error reported by Python might be hard for a user to interpret.
+
+```{python}
+#| error: true
+import os
+
+fn = "missing_file.txt"
+try:
+    with open(fn, "r") as file:
+        text = file.read()
+except FileNotFoundError as err:
+    print(f"File `{fn}` not found in the current path: `{os.getcwd()}`.")
+```
+
+Here's another example. In this case,
+by handling the error in our own code, we avoid a long confusing traceback message.
+
+```{python}
+#| error: true
+some_bad_url = "http://missingurl.com"
+try:
+    requests.get("http://missingurl.com")
+except Exception as err:
+    print(f"There was a problem accessing {some_bad_url}. Perhaps it doesn't exist or the URL has a typo?")
+```
+
+With `raise` you can invoke an exception. Suppose we need an input to be a string.
+We'll use Python's built-in `TypeError`, one of the various [exception types
+that Python provides](https://docs.python.org/3/library/exceptions.html#concrete-exceptions) and that you could use. You can also create your own exceptions by subclassing one of Python's existing exception classes. (We haven't yet discussed classes and object-oriented programming, so don't worry if you're not sure about what that means.)
+
+```{python}
+#| error: true
+def myfun(text):
+    if not isinstance(text, str):
+        raise TypeError("`text` should be a string")
+
+myfun(7)
+```
+
+### Testing
 
 Tests evaluate whether your code operates correctly. This can include
 tests that your code provides correct and useful errors when something
@@ -213,7 +280,7 @@ functions. Unit tests naturally work well with the ideas above of
 writing small, modular functions. I recommend the `pytest` package,
 which is designed to make it easier to write sets of good tests.
 
-In lab, we'll go over assertions and testing in
+In lab, we'll go over assertions, exceptions, and testing in
 detail.
 
 ## Version control
