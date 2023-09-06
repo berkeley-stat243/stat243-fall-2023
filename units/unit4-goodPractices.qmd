@@ -177,50 +177,16 @@ ideas are useful for data analysis as well.
 Assertions, exceptions and testing are critically important for writing robust
 code that is less likely to contain bugs.
 
-### Assertions
-
-Assertions are checks in your code that the state of the program is as
-you expect. They're primarily intended for use during the development
-process to provide "sanity checks" that specific conditions are true.
-One would generally only expect those conditions not to be true if there is a bug
-in the code. Here's an example of
-using the `assert` statement in Python, with a clear assertion message
-telling the developer what the problem is.
-
-```{python}
-#| eval: false
-number = -42
-assert number > 0, f"number greater than 0 expected, got: {number}"
-## Produces this error:
-## Traceback (most recent call last):
-##   File "<stdin>", line 1, in <module>
-## AssertionError: number greater than 0 expected, got: -42
-
-```
-
-Various operators/functions are commonly used in assertions, including
-
-```{python}
-#| eval: false
-assert x in y
-assert x not in y
-assert x is y
-assert x is not y
-assert isinstance(x, <some_type>)
-assert all(x)
-assert any(x)
-```
-
 ### Exceptions
 
-You've already seen exceptions in action whenever you've done something
+You've probably already seen exceptions in action whenever you've done something
 in Python that causes an error to occur and an error message to be printed.
 Syntax errors are different from exceptions in that exceptions occur
-when the syntax is correct but the execution code results in some sort of error.
+when the syntax is correct but the execution of the code results in some sort of error.
 
-In developing your own code you can trigger an error (i.e., throw an exception)
-to handle run-time errors and unusual situations that occur when your code
-is being run.
+Exceptions can be a valuable tool for making your code handle different modes of failure (missing file, URL unreachable, premission denied, invalid inputs, etc.), you use it when you are writing code that is supposed to perform a task (e.g. a function that copies lined in a file in reverse order) to indicate that you failed and the reason for that failure (e.g. the file was not there in the first place). In  such case, you want your code to raise an exception and make it as informative as possible, typically by handling the exception thrown by another function you call and augmenting the message.
+
+The other side of the coin happens when you want to write a piece of code that handles failure in a specific way, instead of simply giving up. For example, if you are writing a script that reads and downloads hundreds of URLs, you don't want your program to stop when any of them fails to respond (or do you?). You might want to continue with the rest of the URLs, and write out the failed URLs in a secondary output file.
 
 Some standard ways to handle exceptions are with `try-except` blocks and with `raise`.
 
@@ -269,9 +235,43 @@ def myfun(text):
 myfun(7)
 ```
 
+
+### Assertions
+
+Assertions are a quick way to raise a specific type of Exception (AssertionError). Assertions useful for performing quick checks in your code that the state of the program is as you expect. They're primarily intended for use during the development
+process to provide "sanity checks" that specific conditions are true, and there are ways to disable them when you are running your code for production purposes (to improve performance). A common use is to use them for verifying preconditions and postconditions (especially preconditions). One would generally only expect such conditions not to be true if there is a bug in the code. Here's an example of
+using the `assert` statement in Python, with a clear assertion message
+telling the developer what the problem is.
+
+```{python}
+#| eval: false
+number = -42
+assert number > 0, f"number greater than 0 expected, got: {number}"
+## Produces this error:
+## Traceback (most recent call last):
+##   File "<stdin>", line 1, in <module>
+## AssertionError: number greater than 0 expected, got: -42
+
+```
+
+Various operators/functions are commonly used in assertions, including
+
+```{python}
+#| eval: false
+assert x in y
+assert x not in y
+assert x is y
+assert x is not y
+assert isinstance(x, <some_type>)
+assert all(x)
+assert any(x)
+```
+
 ### Testing
 
-Tests evaluate whether your code operates correctly. This can include
+Testing is informally what you do after you write some code and want to check that it actually works. But when you are developing important code (e.g. functions that are going to be used by others) you typically want to encode your tests in code. There are many reasons to do that, including making sure that if someone else changes your code later on without fully understanding what it was supposed to do, the test suite should immediately indicate that. 
+
+Some people even advocate for writing a preliminary test suite before writing the code itself(!) as it can be a good way to organize work and track progress, as well as act as a secondary form of documentation for clarity.  This can include
 tests that your code provides correct and useful errors when something
 goes wrong (so that means that a test might be to see if problematic
 input correctly produces an error). *Unit tests* are intended to test
@@ -285,7 +285,7 @@ detail.
 
 ## Version control
 
-- Use it! Even for projects that only you are working on.
+- Use it! Even for projects that only you are working on. It's the closest thing you'll get to having a time machine!
 - Use an issues tracker (e.g., the GitHub issues tracker is quite
     nice), or at least a simple to-do file, noting changes you'd like to
     make in the future.
