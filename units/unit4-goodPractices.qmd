@@ -1,7 +1,7 @@
 ---
 title: "Good practices: coding practices, debugging, and reproducible research"
 author: "Chris Paciorek"
-date: "2023-07-26"
+date: "2023-09-06"
 format:
   pdf:
     documentclass: article
@@ -19,10 +19,6 @@ execute:
 from: markdown+tex_math_single_backslash
 ---
 
-```{r, fake-setup, echo=FALSE}
-## For some reason we need an R chunk in the doc or get result seen in `error.log`.
-z <- 1
-```
 
 [PDF](./unit4-goodPractices.pdf){.btn .btn-primary}
 
@@ -184,62 +180,109 @@ in Python that causes an error to occur and an error message to be printed.
 Syntax errors are different from exceptions in that exceptions occur
 when the syntax is correct but the execution of the code results in some sort of error.
 
-Exceptions can be a valuable tool for making your code handle different modes of failure (missing file, URL unreachable, premission denied, invalid inputs, etc.), you use it when you are writing code that is supposed to perform a task (e.g. a function that copies lined in a file in reverse order) to indicate that you failed and the reason for that failure (e.g. the file was not there in the first place). In  such case, you want your code to raise an exception and make it as informative as possible, typically by handling the exception thrown by another function you call and augmenting the message.
+Exceptions can be a valuable tool for making your code handle different modes of failure (missing file, URL unreachable, permission denied, invalid inputs, etc.). You use them when you are writing code that is supposed to perform a task (e.g., a function that does something with an input file) to indicate that the task failed and the reason for that failure (e.g., the file was not there in the first place). In such case, you want your code to raise an exception and make the error message informative as possible, typically by handling the exception thrown by another function you call and augmenting the message. Another possibility is that your code detects a situation where you need to throw an exception (e.g., an invalid input to a function). 
 
 The other side of the coin happens when you want to write a piece of code that handles failure in a specific way, instead of simply giving up. For example, if you are writing a script that reads and downloads hundreds of URLs, you don't want your program to stop when any of them fails to respond (or do you?). You might want to continue with the rest of the URLs, and write out the failed URLs in a secondary output file.
 
-Some standard ways to handle exceptions are with `try-except` blocks and with `raise`.
+#### Using `try-except` to continue execution
 
-With `try-except`, you attempt to run some code in the `try` block and
-handle errors in the `except` block.
+If you want some code to continue running even when it encounters an error, you can use `try-except`.
+This would often be done in code where you were running some workflow rather than in functions
+that you write for general purpose use (e.g., code in a package you are writing).
 
-In the following example, you could let Python
-just catch the error, but it can be better in terms of the experience of those
-using your code for your code to handle it directly in many cases where the
-error reported by Python might be hard for a user to interpret.
+Suppose we have a loop and we want to run all the iterations even if the code for some iterations fail.
+We can embed the code that might fail in a `try` block and then in the `except` block, run code
+that will handle the situation when the error occurs.
+
+```{python}
+#| eval: false
+for i in range(n):
+    try:
+        <some code that might fail>
+        result[i] = <actual result>
+    except:
+        <what to do if the code fails>
+        result[i] = None   
+```
+
+#### Strategies for invoking and handling errors
+
+Here we'll address situations that might arise when you are developing code for general
+purpose use (e.g., writing functions in a package) and need that code
+to invoke an error under certain circumstances or deal gracefully with an error occurring
+in some code that you are calling.
+
+A basic situation is when you want to detect a situation where you need to
+invoke an error (i.e., throw an exception).
+
+With `raise` you can invoke an exception. Suppose we need an input to be a positive number.
+We'll use Python's built-in `ValueError`, one of the various [exception types
+that Python provides](https://docs.python.org/3/library/exceptions.html#concrete-exceptions) and that you could use. You can also create your own exceptions by subclassing one of Python's existing exception classes. (We haven't yet discussed classes and object-oriented programming, so don't worry if you're not sure about what that means.)
+
+```{python}
+#| error: true
+def myfun(val):
+    if val <= 0:
+        raise ValueError("`val` should be positive")
+
+myfun(-3)
+```
+
+Next let's consider cases where your function runs some code that might return an
+error.
+
+We'd often want to catch the error using `try-except`. In some cases we
+would want to notify the user and then continue (perhaps falling back to a
+different way to do things or returning `None`
+from our function) while in others we might want to provide a more informative
+error message than if we had just let the error occur, but still have the
+exception be raised.
+
+First let's see the case of continuing execution.
+
 
 ```{python}
 #| error: true
 import os
 
-fn = "missing_file.txt"
-try:
-    with open(fn, "r") as file:
-        text = file.read()
-except FileNotFoundError as err:
-    print(f"File `{fn}` not found in the current path: `{os.getcwd()}`.")
+def myfun(filename):
+    try:
+        with open(filename, "r") as file:
+            text = file.read()
+    except Exception as err:
+        print(f"{err}\nCheck that the file `{filename}` can be found "\
+              f"in the current path: `{os.getcwd()}`.")
+        return None
+
+    return(text.lower())
+
+
+myfun('missing_file.txt')
 ```
 
-Here's another example. In this case,
-by handling the error in our own code, we avoid a long confusing traceback message.
+Finally let's see how we can intercept an error but then "re-raise" the error rather than
+continuing execution.
 
 ```{python}
 #| error: true
-some_bad_url = "http://missingurl.com"
-try:
-    requests.get("http://missingurl.com")
-except Exception as err:
-    print(f"There was a problem accessing {some_bad_url}. Perhaps it doesn't exist or the URL has a typo?")
-```
+import requests
 
-With `raise` you can invoke an exception. Suppose we need an input to be a string.
-We'll use Python's built-in `TypeError`, one of the various [exception types
-that Python provides](https://docs.python.org/3/library/exceptions.html#concrete-exceptions) and that you could use. You can also create your own exceptions by subclassing one of Python's existing exception classes. (We haven't yet discussed classes and object-oriented programming, so don't worry if you're not sure about what that means.)
+def myfun(url):
+    try:
+        requests.get(url)
+    except Exception as err:
+        print(f"There was a problem accessing {url}. "\
+              f"Perhaps it doesn't exist or the URL has a typo?")
+        raise
 
-```{python}
-#| error: true
-def myfun(text):
-    if not isinstance(text, str):
-        raise TypeError("`text` should be a string")
-
-myfun(7)
+myfun("http://missingurl.com")
 ```
 
 
 ### Assertions
 
-Assertions are a quick way to raise a specific type of Exception (AssertionError). Assertions useful for performing quick checks in your code that the state of the program is as you expect. They're primarily intended for use during the development
-process to provide "sanity checks" that specific conditions are true, and there are ways to disable them when you are running your code for production purposes (to improve performance). A common use is to use them for verifying preconditions and postconditions (especially preconditions). One would generally only expect such conditions not to be true if there is a bug in the code. Here's an example of
+Assertions are a quick way to raise a specific type of Exception (AssertionError). Assertions are useful for performing quick checks in your code that the state of the program is as you expect. They're primarily intended for use during the development
+process to provide "sanity checks" that specific conditions are true, and there are ways to disable them when you are running your code for production purposes (to improve performance). A common use is for verifying preconditions and postconditions (especially preconditions). One would generally only expect such conditions not to be true if there is a bug in the code. Here's an example of
 using the `assert` statement in Python, with a clear assertion message
 telling the developer what the problem is.
 
@@ -340,7 +383,8 @@ Our function is in `stratified_with_break.py`, and it contains `breakpoint` at t
 
 Now I can call the function and will be put into debugging mode just before the next line is called:
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 import run_with_break as run
 run.fit(run.data, run.n_cats)
 ```
@@ -397,7 +441,8 @@ Next let's see how we can enter debugging mode only at point an error occurs.
 
 We'll use a version of the module without the `breakpoint()` command.
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 import pdb
 import run_no_break as run 
 
@@ -480,7 +525,8 @@ We can use `pdb.run()` to run a function under the debugger. We need to make sur
 in order to actually step into the function. From there, we can debug as normal as if we had set a breakpoint at the start
 of the function.
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 import run_with_break as run
 import pdb
 pdb.run("run.fit(run.data, run.n_cats)")
@@ -492,7 +538,8 @@ pdb.run("run.fit(run.data, run.n_cats)")
 We can also invoke pdb when we start Python, executing a file (module). Here we've added `fit(data, n_cats)`
 at the end of `run_no_break2.py` so that we can have that run under the debugger.
 
-```{bash, eval=FALSE}
+```{bash}
+#| eval: false
 python -m pdb run_no_break2.py
 ```
 
@@ -509,7 +556,8 @@ Let's set a breakpoint at the same place we did with `breakpoint()` but using a 
 Breakpoint 1 at /accounts/vis/paciorek/teaching/243fall22/stat243-fall-2023/units/run_no_break.py:9
 ```
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 (Pdb) c
 > /accounts/vis/paciorek/teaching/243fall22/stat243-fall-2023/units/run_no_break2.py(9)fit()
 -> model = statsmodels.api.OLS(sub['y'], statsmodels.api.add_constant(sub['x']))
