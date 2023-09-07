@@ -316,7 +316,7 @@ Also in IPython there is additional functionality/syntax.
 
 Here are a variety of tools for interacting with the operating system:
 
--   To run UNIX commands from within Python, use `os.()`, as follows,
+-   To run UNIX commands from within Python, use `subprocess.run()`, as follows,
     noting that we can save the result of a system call to an R object:
 
     ```{python}
@@ -1348,7 +1348,7 @@ x <- 1:3
 myfun <- function(x) {
       x[2] <- 7
       print(x)
-      return x
+      return(x)
 }
 
 new_x <- myfun(x)
@@ -2475,7 +2475,7 @@ evaluation.  This
 code (translated from the original R code) is courtesy of Yuval Benjamini. For our purposes here, let's assume
 that `xvar` and `yvar` are very long vectors using a lot of memory. 
 
-```{r}
+```{python}
 #| eval: false
 def fastcount(xvar, yvar):
     naline = np.isnan(xvar)
@@ -2801,7 +2801,7 @@ Ok, but how is it that we can append to the list at apparently no cost?
 
 It's not magic, just that Python is clever...
 
-HERE: look into id() of elements and of the list
+TODO: look into id() of elements and of the list
 
 ```{python}
 def fun_append2(vals):

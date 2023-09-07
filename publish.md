@@ -14,4 +14,6 @@ To set up the website for a new course/year, one needs to run `quarto publish` f
 
 Notes:
 
+2023-09-07: GHA can fail with messages about `nbformat`. Can often fix by re-rendering the problematic qmd. I think this is happening when commits are made to a qmd without rendering that updates the freeze files. 
+
 2023-08-29: when using `knitr` engine with `unit3-bash.qmd` (so that one can work with bash chunks), some GHA runs are complaining about missing `rmarkdown`. But then it sometimes works. Trying to install `rmarkdown` leads to a permission issue in the system directory that the R package is being installed into. If try to use `jupyter` engine with bash chunks, you probably need a Jupyter bash kernel, but I am still investigating.
