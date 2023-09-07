@@ -344,7 +344,7 @@ Here are a variety of tools for interacting with the operating system:
     os.listdir(os.path.join("..", "data"))
     ```
 
-    It's best if you can to write your code in a way that is *agnostic* to the underlying operating system.
+    It's best if you can to write your code, as shown here with `os.path.join`, in a way that is *agnostic* to the underlying operating system.
 
 -   To get some info on the system you're running on:
 
@@ -1044,7 +1044,7 @@ mytsFullCopy.getTimes()[0:4] # different from `myts`
 ```
 
 In contrast `mytsFullCopy` is a reference to a different object, and
-all the data from `myts` had to be copied over to `mytsFullCopy`. This takes additional memory (and time), but is also safer, as it avoids the possibility that the user might modify `myts` and not realize that they were also affecting `mytsRef`. We'll discuss this more when we discuss copying in the [section on memory use](TODO: add ref).
+all the data from `myts` had to be copied over to `mytsFullCopy`. This takes additional memory (and time), but is also safer, as it avoids the possibility that the user might modify `myts` and not realize that they were also affecting `mytsRef`. We'll discuss this more when we discuss copying in the [section on memory use](#memory-and-copies).
 
 #### Encapsulation
 
@@ -1532,17 +1532,14 @@ often very verbose output that can be hard to understand. (In contrast, in R, on
 the error occurs is shown, but you can see the full call stack by invoking `traceback()`.)
 
 What happens when an Python function is evaluated?
-**[TODO: check that this is correct.]**
 
   - The user-provided function arguments are evaluated in the calling scope and the results are
 matched to the argument names in the function definition. 
   - A new frame containing a new namespace is created to store information related to the function call and placed on the stack. Assignment to the argument names is done in the namespace, including any default arguments. 
-  - The function is evaluated in the local scope. Any look-up of variables not found in the
-local scope (using the namespace that was created) is done using scoping rules to look in the series of enclosing scopes (if any exist), then in the global/module scope, and then in the built-ins scope. 
-  - When the function finishes, the return
-value is passed back to the calling scope and the frame is
-taken off the stack. The namespace is removed, unless the namespace
-is the enclosing scope for an existing namespace.
+  - The function is evaluated in the (new) local scope. Any look-up of variables not found in the
+local scope (using the namespace that was created) is done using the lexical scoping rules to look in the series of enclosing scopes (if any exist), then in the global/module scope, and then in the built-ins scope. 
+  - When the function finishes, the return value is passed back to the calling scope and the frame is
+taken off the stack. The namespace is removed, unless the namespace is the enclosing scope for an existing namespace.
 
 I'm not expecting you to fully understand that previous paragraph and
 all the terms in it yet. We'll see all the details as we proceed through this Unit.
@@ -2015,9 +2012,9 @@ Let's work through this:
     What would happen if it did?
 4.  What is the enclosing function (scope) for `myfun()`?
 
-**[Question: is there a way to access variables in a closure (i.e., in
+**[TODO: is there a way to access variables in a closure (i.e., in
 this case access 'y' based on `myfun`). Is there a way to find the
-enclosing scope for 'myfun' and look in it?]**
+enclosing scope for 'myfun' and look in it? See the `inspect` package]**
 
 Be careful when using variables from non-local scopes as the
 value of that variable may well not be what
@@ -2366,26 +2363,20 @@ What do we notice?
 
 #### How character strings are stored.
 
-Similar tricks are used for storing character vectors.
-We'll explore this in a problem on PS4.
+Similar tricks are used for storing strings (and also integers). We'll explore this in a problem on PS4.
 
 #### Modifying elements in place
 
-What do these simple experiments tell us?
+What do this simple experiment tell us?
 
 ```{python}
 x = np.random.normal(size = 5)
 id(x)
 x[2] = 3.5
 id(x)
-y = x
-
-x = np.random.normal(size = 5)
-id(x)
-id(y)
 ```
 
-It makes some sense that modifying objects doesn't cause a copy -- if it did, working with large objects would be very difficult. 
+It makes some sense that modifying elements of an object here doesn't cause a copy -- if it did, working with large objects would be very difficult. 
 
 ### When are copies made?
 
@@ -2419,6 +2410,7 @@ sys.getrefcount(y)
 
 del x
 sys.getrefcount(y)
+del y
 ```
 
 We can see the number of references using `sys.getrefcount`.
@@ -2793,20 +2785,26 @@ time.time() - t0
 ```
 
 So what's going on? First let's consider what is happening with the use of `np.append`.
+Note that it is a function, rather than a method, and we need to reassign to `x`.
 What must be happening in terms of memory use and copying when we append an element?
+
+```{python}
+x = np.random.normal(size = 5)
+id(x)
+id(np.append(x, 3.34))
+```
 
 We can avoid that large cost of copying and memory allocation by pre-allocating space for the entire output array. (This is equivalent to variable initialization in compiled languages.)
 
 Ok, but how is it that we can append to the list at apparently no cost?
 
-It's not magic, just that Python is clever...
-
-TODO: look into id() of elements and of the list
+It's not magic, just that Python is clever. Let's get an idea of what is going on:
 
 ```{python}
 def fun_append2(vals):
    n = len(vals)
    x = []
+   print(f"Initial id: {id(x)}")
    sz = sys.getsizeof(x)
    print(f"iteration 0: size {sz}")
    for i in range(n):
@@ -2814,15 +2812,22 @@ def fun_append2(vals):
        if sys.getsizeof(x) != sz:
            sz = sys.getsizeof(x)
            print(f"iteration {i}: size {sz}")
+   print(f"Final id: {id(x)}")
    return(x)
 
-z = np.random.normal(size = 10000)
+z = np.random.normal(size = 1000)
 out = fun_append2(z)
 ```
 
-Strangely the id of `x` doesn't seem to change, even though we are allocating new memory. Perhaps there is something more complicated than I would expect going on in terms of how the list stores pointers to the underlying elements.
+Surprisingly, the id of `x` doesn't seem to change, even though we are allocating new memory at many of the iterations. I haven't looked into this fully, but I believe that what is happening is that `x` is an wrapper object that contains within it a reference to an array of pointers to the list elements. The location of the wrapper object doesn't change, but the underlying array of pointers is being reallocated.
 
-**[Question: why doesn't the id change? There must be a copy being made as the list gets longer.]**
+Side note: our assessment of size above does not include the actual size of the list elements.
+
+```{python}
+print(sys.getsizeof(out))
+out[2] = np.random.normal(size = 100000)
+print(sys.getsizeof(out))
+```
 
 One upshot of this is that if you need to grow an object use a Python list. Then once it is complete, you can always convert it to another type, such as a numpy array.
 
@@ -2856,12 +2861,12 @@ of overhead because of the repeated processing of the Python code inside the loo
 in each iteration of the loop, Python is checking the types of the variables because it's possible
 that the types might change, as discussed earlier.
 
-You can
-usually get a sense for how quickly a Python call will pass things along
+You can usually get a sense for how quickly a Python call will pass things along
 to C or Fortran by looking at the body of the relevant function(s) being called.
 
 Unfortunately seeing the source code in Python often involves going and finding it in a file on disk,
-whereas in R, printing a function will show its source code.
+whereas in R, printing a function will show its source code. However you can use `??` in IPython
+to get the code for non-builtin functions. Consider `numpy.linspace??`.
 
 Here I found the source code for the scipy `triangular_solve` function, which calls out to a Fortran function `trtrs`, found in the LAPACK library.
 
@@ -2937,7 +2942,7 @@ loop over the smallest dimension and use the vectorized calculation
 on the larger dimension(s). For example if you have a 10000 by 10 matrix, try to set
 up your problem so you can loop over the 10 columns rather than the 10000 rows.
  - In general, in Python looping over rows is likely to be faster than looping over columns
-because of Python's row-major ordering (matrices are stored in memory as a long array in which values in a row are adjacent to each other). However how numpy handles this is [more complicated](https://numpy.org/doc/stable/dev/internals.html#multidimensional-array-indexing-order-issues) (see more in Section 4.6 on the cache), such that it may not matter for numpy calculations.
+because of numpy's row-major ordering (by default, matrices are stored in memory as a long array in which values in a row are adjacent to each other). However how numpy handles this is [more complicated](https://numpy.org/doc/stable/dev/internals.html#multidimensional-array-indexing-order-issues) (see more in Section 4.6 on the cache), such that it may not matter for numpy calculations.
  - You can use direct arithmetic operations to add/subtract/multiply/divide
 a vector by each column of a matrix, e.g. `A*b` does element-wise multiplication of
 each column of *A* by a vector *b*. If you need to operate
@@ -3140,15 +3145,25 @@ There's a nice example of the importance of the cache at [the bottom of this blo
 
 If you know the size of the cache, you can try to design your code so that in a given part of your code you access data structures that will fit in the cache. This sort of thing is generally more relevant if you're coding in a language like C. But it can matter sometimes in interpreted languages too.
 
-However with numpy, numpy is smart enough in some cases to figure out how to rearrange the looping in concordance with the calculation being done and how the data are laid out in memory.
+Let's see what happens in Python.
 
 ```{python, cache-aware}
 nr = 800000
 nc = 100
 
 A = np.random.normal(size=(nr, nc))
-tA = A.T
+tA = np.random.normal(size=(nc, nr))  
 
+## Verify that A is row-major using `.flags` (notice the `C_CONTIGUOUS: True`).
+A.flags
+```
+
+Note that I didn't use `A.T` or `np.transpose` as that doesn't make a copy in memory and so the transposed
+matrix doesn't end up being row-major. You can use `A.flags` and A.T.flags` to see this.
+
+Now let's time things.
+
+```{python, cache-aware2}
 # Define the mean calculations as functions
 def mean_by_column():
     return np.mean(A, axis=0)
@@ -3160,20 +3175,20 @@ timeit.timeit(mean_by_column, number=10)
 timeit.timeit(mean_by_row, number=10)
 ```
 
-The analogous code in R would show a substantial difference, so in this case numpy is more sophisticated than R.
+Suppose we instead do the looping manually.
 
-Suppose we instead do the looping manually to see if it matters if we don't let numpy do any tricks with the looping:
-
-```{python, cache-aware2}
+```{python, cache-aware3}
 timeit.timeit('[np.mean(A[:,col]) for col in range(A.shape[1])]',
     setup = 'import numpy as np', number=10, globals = {'A': A})   # 5.10 sec.
 timeit.timeit('[np.mean(tA[row,:]) for row in range(tA.shape[0])]',
     setup = 'import numpy as np', number=10, globals = {'tA': tA})  # 5.06 sec.
 ```
 
-Strangely, the row-wise and column-wise operations take the same amount of time.
-I don't know why that is.
-**[Question: what is going on?]**
+Indeed, the row-wise calculations are faster, particularly if we do it manually. So that suggests numpy might be doing something clever in its implementation of `mean` with the `axis` argument.
+
+> **Challenge**: suppose you were writing code for this kind of use case. How could you set up your calculations to do either row-wise or column-wise operations in a way that processes each number sequentially based on the order in which the numbers are stored. For example suppose the values are stored row-major but you want the column sums.
+
+When we define a numpy array, we can choose to use column-major order (i.e., "Fortran" order) with the `order` argument.
 
 ### Loop fusion
 
