@@ -13,6 +13,7 @@ Assignments will generally be turned in on Gradescope but don't need to follow t
 | Problem Set | Date | Time | 
 |----|----|----|
 | PS 1 [(HTML)](ps/ps1.html) [(PDF)](ps/ps1.pdf) | Thursday Sep. 7 | 10 am | 
+| PS 2 [(HTML)](ps/ps2.html) [(PDF)](ps/ps2.pdf) | Friday  Sep. 15 | 10 am | 
 
 
 Problem set solutions need to follow the rules discussed in Lab 1 (Sep. 1) and documented [here](howtos/ps-submission).
@@ -48,7 +49,7 @@ Due date: TBD.
 | 3    | Wednesday| 2022-09-06 | 10 am        | Required: PS1 due on Gradescope and via GitHub commit |
 |      |          |            | 4:00-5:30 pm | Optional: [Introduction to LaTeX session](https://berkeley.libcal.com/event/11068757) run by the library (see Details below)|
 |      | Friday   | 2022-09-08 | 10 am        | Required: Regular expression tutorial and exercises (see Details below) |
-|      |          |            | lab          | Required: Lab 2 on assertions and testing |
+|      |          |            | lab          | Required: Lab 2 on exceptions and testing |
 
 
 

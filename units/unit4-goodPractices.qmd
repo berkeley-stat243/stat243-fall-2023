@@ -86,12 +86,12 @@ suggestions of my own.
     - between matrix/array indices.
 - Use blank lines to separate blocks of code with comments to say what
     the block does.
-- Avoid code lines longer than 79 characters and comment/docstring lines
-    longer than 72 characters.
 - Use whitespaces or parentheses for clarity even if not needed for order of
     operations. For example, `a/y*x` will work but is not easy to read
     and you can easily induce a bug if you forget the order of ops. Instead,
     use `a/y * x`.
+- Avoid code lines longer than 79 characters and comment/docstring lines
+    longer than 72 characters.
 - Comments: add lots of comments (but don't belabor the
     obvious, such as `x = x + 1  # increment x`).
     - Remember that in a few months, you may not follow your own
@@ -101,6 +101,16 @@ suggestions of my own.
       of code - recall our complicated regular expressions, and (3) explaining
       arbitrary constant values.
     - Comments should generally be complete sentences.
+- You can use parentheses to group operations such that they can be split up into lines
+  and easily commented, e.g.,
+  ```{python}
+  #| eval: false
+  newdf = (
+          pd.read_csv('file.csv')
+          .rename(columns = {'STATE': 'us_state'})  # adjust column names
+          .dropna()                                 # remove some rows
+          )
+  ```
 - For software development, break code into separate files
     (2000-3000 lines per file) with meaningful file names and related
     functions grouped within a file.

@@ -89,9 +89,9 @@ We can of course use list comprehension to work with multiple strings. But we ne
 def return_group(pattern, txt):
     m = re.search(pattern, txt)
     if m:
-       return(m.group())
+       return m.group()
     else:
-       return(None)
+       return None
 
 text = ["Here's my number: 919-543-3300.", "hi John, good to meet you",
         "They bought 731 bananas", "Please call 1.919.554.3800"]
@@ -468,7 +468,7 @@ mymod.myfun(7)
 
 The import statement allows one to get access to code in a module.
 Importantly it associates the names of the objects in the module with
-a name accessible in the local scope (i.e., the local context). The mapping of
+a name accessible in the scope in which it was imported (i.e., the local context). The mapping of
 names (references) to objects is called a *namespace*. We discuss
 [scopes and namespaces](#namespaces-and-scopes) in more detail later.
 
@@ -479,8 +479,8 @@ except Exception as error:
     print(error)
 
 import mymod
-mymod         # essentially a dictionary in the local scope
-x             # not a name in the local scope
+mymod         # essentially a dictionary in the current (global) scope
+x             # not a name in the current (global) scope
 range         # a builtin, not from the module
 mymod.x
 dir(mymod)
@@ -488,17 +488,17 @@ mymod.x
 mymod.range
 ```
 
-So `range` and `mymod` are in the global scope and `range` and `x` are in the module scope
+So `range` and `mymod` are in the global namespace and `range` and `x` are in the module namespace
 of `mymod`.
 
-Note the usefulness of distinguishing the objects in a module from those in the global scope.
+Note the usefulness of distinguishing the objects in a module from those in the global namespace.
 We'll discuss this more in a bit.
 
-That said, we can make an object defined in a module directly accessible in the current scope, at which point it is distinct from the object in the module:
+That said, we can make an object defined in a module directly accessible in the current scope (adding it to the global namespace in this example) at which point it is distinct from the object in the module:
 
 ```{python}
 from mymod import x
-x
+x   # now part of global namespace
 dir()
 mymod.x = 5
 x = 3
@@ -517,7 +517,7 @@ m.x
 
 ## Packages
 
-A package is a directory containing a set of modules and with a file
+A package is a directory containing one or more modules and with a file
 named `__init__.py` that is called when a package is imported and
 serves to initialize the package.
 
@@ -542,6 +542,11 @@ def myfun(val):
 EOF
 ```
 
+Note that if there were other modules, we could have imported from those as well.
+
+Now we can use the objects from the module without having to know
+that it was in a particular module (because of how `__init__.py` was set up).
+
 ```{python}
 import mypkg
 mypkg.x
@@ -565,6 +570,7 @@ or require the user to import them manually, e.g., `import mypkg.mysubmod`.
 mkdir mypkg/mysubmod
 
 cat << EOF > mypkg/mysubmod/__init__.py
+from values import *
 print("Welcome to my package's submodule.")
 EOF
 
@@ -573,18 +579,22 @@ x = 999
 b = 7
 d = 9
 EOF
-
 ```
 
 ```{python}
-import mypkg.mysubmod.values  ## Note that __init__.py is invoked
-mypkg.mysubmod.values.b
+import mypkg.mysubmod     ## Note that __init__.py is invoked
+mypkg.mysubmod.b
 ```
 
 Note that a given `__init__.py` is invoked when importing anything nested within the
 directory containing the `__init__.py`. 
 
+If we wanted to automatically import the subpackage we would add
+`import mypkg.mysubmod` to `mypkg/__init__.py`.
 
+One would generally not import the items from `mysubmod` directly into the `mypkg` namespace
+but there may be cases one would do something like this. For example `np.linspace` is actually
+found `numpy/core/function_base.py`, but we don't need to refer to `numpy.core.linspace`.
 
 ## Installing packages
 
@@ -953,19 +963,19 @@ class tsSimClass:
         self._currentU = False
         self._calcMats()
     def __str__(self):    # 'print' method
-        return(f"An object of class `tsSimClass` with {self.n} time points.")
+        return f"An object of class `tsSimClass` with {self.n} time points."
     def __len__(self):
-        return(self.n)
+        return self.n
     def setTimes(self, newTimes):
         self._times = newTimes
         self._calcMats()
     def getTimes(self):
-        return(self._times)
+        return self._times
     def simulate(self):
         if not self._currentU:    
             self._calcMats()
         ## analogous to mu+sigma*z for generating N(mu, sigma^2)
-        return(self.mean + np.dot(self.U.T, np.random.normal(size = self.n)))
+        return self.mean + np.dot(self.U.T, np.random.normal(size = self.n))
     def _calcMats(self):
         ## calculates correlation matrix and Cholesky factor
         lagMat = np.abs(self._times[:, np.newaxis] - self._times)
@@ -1070,16 +1080,16 @@ class Bear:
           self.name = name
           self.age = age
       def __str__(self):
-          return(f"A bear named '{self.name}' of age {self.age}.")
+          return f"A bear named '{self.name}' of age {self.age}."
       def color(self):
-          return("unknown")
+          return "unknown"
 
 class GrizzlyBear(Bear):
       def __init__(self, name, age, num_people_killed = 0):
           super().__init__(name, age)
           self.num_people_killed = num_people_killed
       def color(self):
-          return("brown")
+          return "brown"
 
 yog = Bear("Yogi the Bear", 23)
 print(yog)
@@ -1224,9 +1234,9 @@ class Bear:
           self.name = name
           self.age = age
       def __str__(self):
-          return(f"A bear named {self.name} of age {self.age}.")
+          return f"A bear named {self.name} of age {self.age}."
       def __repr__(self):
-          return(f"Bear(name={self.name}, age={self.age})")
+          return f"Bear(name={self.name}, age={self.age})"
 
 yog = Bear("Yogi the Bear", 23)
 print(yog)   # Invokes __str__
@@ -1275,7 +1285,7 @@ class Bear:
           self.name = name
           self.age = age
       def __str__(self):
-          return(f"A bear named {self.name} of age {self.age}.")
+          return f"A bear named {self.name} of age {self.age}."
       def __add__(self, value):
           self.age += value
 
@@ -1338,7 +1348,7 @@ x <- 1:3
 myfun <- function(x) {
       x[2] <- 7
       print(x)
-      return(x)
+      return x
 }
 
 new_x <- myfun(x)
@@ -1351,7 +1361,7 @@ In contrast, Python uses a *pass-by-reference* approach, seen here:
 x = np.array([1,2,3])
 def myfun(x):
   x[1] = 7
-  return(x)
+  return x
 
 new_x = myfun(x)
 x   # modified!
@@ -1366,7 +1376,7 @@ x = np.array([1,2,3])
 def myfun(x):
   y = x.copy()
   y[1] = 7
-  return(y)
+  return y
 
 new_x = myfun(x)
 x   # no side effects!
@@ -1442,6 +1452,8 @@ x
 
 Note that the use of the operator does not modify the object.
 
+(Note that you can use `return(x)` and `del(x)` but behind the scenes the Python interpreter is intepreting those
+as `return x` and `del x`.)
 
 ### Map operations
 
@@ -1520,7 +1532,7 @@ often very verbose output that can be hard to understand. (In contrast, in R, on
 the error occurs is shown, but you can see the full call stack by invoking `traceback()`.)
 
 What happens when an Python function is evaluated?
-**[Question: check that this is correct.]**
+**[TODO: check that this is correct.]**
 
   - The user-provided function arguments are evaluated in the calling scope and the results are
 matched to the argument names in the function definition. 
@@ -1817,7 +1829,7 @@ Consider what happens if you have two modules that both use `x` and you import `
 ```{python}
 #| eval: false
 from mypkg.mymod import x
-from mypkg.mysubmod.values import x
+from mypkg.mysubmod import x
 x  # which x is used?
 ```
 
@@ -1829,12 +1841,14 @@ This is much better:
 import mypkg
 mypkg.x
 
-import mypkg.mysubmod.values
-mypkg.mysubmod.values.x
+import mypkg.mysubmod
+mypkg.mysubmod.x
 ```
 
+Side note: notice that `import mypkg` causes the name `mypkg` itself to be in the current (global) scope.
 
-We can see the objects in a given scope using `dir()`.
+
+We can see the objects in a given namespace/scope using `dir()`.
 
 ```{python}
 xyz = 7
@@ -1849,7 +1863,7 @@ import builtins
 dir(builtins)
 ```
 
-Here are the key scopes to be aware of, in order ("LEGB") of how namespaces are searches:
+Here are the key scopes to be aware of, in order ("LEGB") of how the namespaces are searched:
 
  - **L**ocal scope: objects available within function (or class method).
  - non-local (**E**nclosing) scope: objects available from functions enclosing a given function (we'll talk about this more later; this relates to *lexical scoping*).
@@ -2318,6 +2332,7 @@ id(z)
 sys.getsizeof(z)
 ```
 
+
 ### Memory use in specific circumstances
 
 #### How lists are stored
@@ -2343,7 +2358,7 @@ obj[0] is obj[2]
 
 What do we notice?
 
-  - The list itself appears to be a vector of pointers to the component elements.
+  - The list itself appears to be a array of pointers to the component elements.
   - Each element has its own address.
   - Two elements of a list can use the same memory (see the first two elements here, whose contents are at the same memory address).
   - A list element can use the same memory as another object (or part of another object).
@@ -2375,21 +2390,19 @@ It makes some sense that modifying objects doesn't cause a copy -- if it did, wo
 ### When are copies made?
 
 Let's try to understand when Python uses additional memory for objects, and how it knows when it can delete memory.
+We'll use large objects so that we can use `free` or `top` to see how memory use by the Python process changes.
 
 ```{python}
 x = np.random.normal(size = 10**8)
-mem_used()
+id(x)
 y = x
-mem_used()
+id(y)
 
 x = np.random.normal(size = 10**8)
-mem_used()
-
-del y
-mem_used()
+id(x)
 ```
 
-Only if we re-assign to `x` does additional memory get used.
+Only if we re-assign `x` to reference a different object does additional memory get used.
 
 
 #### How does Python know when it can free up memory?
@@ -2398,14 +2411,14 @@ Python keeps track of how many names refer to an object and only
 removes memory when there are no remaining references to an object.
 
 ```{python}
+import sys
+
 x = np.random.normal(size = 10**8)
 y = x
-mem_used()
+sys.getrefcount(y)
 
 del x
-mem_used()
-del y
-mem_used()
+sys.getrefcount(y)
 ```
 
 We can see the number of references using `sys.getrefcount`.
@@ -2788,6 +2801,8 @@ Ok, but how is it that we can append to the list at apparently no cost?
 
 It's not magic, just that Python is clever...
 
+HERE: look into id() of elements and of the list
+
 ```{python}
 def fun_append2(vals):
    n = len(vals)
@@ -2808,6 +2823,8 @@ out = fun_append2(z)
 Strangely the id of `x` doesn't seem to change, even though we are allocating new memory. Perhaps there is something more complicated than I would expect going on in terms of how the list stores pointers to the underlying elements.
 
 **[Question: why doesn't the id change? There must be a copy being made as the list gets longer.]**
+
+One upshot of this is that if you need to grow an object use a Python list. Then once it is complete, you can always convert it to another type, such as a numpy array.
 
 ### Vectorization and use of fast matrix algebra
 
