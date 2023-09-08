@@ -31,25 +31,25 @@ website:
       title: "Units"
       contents:
         - file: units/unit1-intro.md
-          text: "Unit 1"
+          text: "Unit 1 (UNIX intro)"
         - file: units/unit2-dataTech.qmd
-          text: "Unit 2"
+          text: "Unit 2 (Data technologies)"
         - file: units/unit3-bash.qmd
-          text: "Unit 3"
+          text: "Unit 3 (Bash shell)"
         - file: units/unit4-goodPractices.qmd
-          text: "Unit 4"
+          text: "Unit 4 (Good practices)"
         - file: units/unit5-programming.qmd
-          text: "Unit 5"
+          text: "Unit 5 (Programming)"
         - file: units/unit6-parallel.qmd
-          text: "Unit 6"
+          text: "Unit 6 (Parallelization)"
         - file: units/unit7-bigData.qmd
-          text: "Unit 7"
+          text: "Unit 7 (Databases)"
         - file: units/unit8-numbers.qmd
-          text: "Unit 8"
+          text: "Unit 8 (Precision)"
         - file: units/unit9-sim.qmd
-          text: "Unit 9"
+          text: "Unit 9 (Simulation)"
         - file: units/unit10-linalg.qmd
-          text: "Unit 10"
+          text: "Unit 10 (Linear Algebra)"
     - id: labs
       title: "Labs"
       contents:

@@ -438,9 +438,11 @@ multiple cores.
 
 For example the documentation for the `RandomForestClassifier`
 in scikit-learn's `ensemble` module indicates it can use multiple
-cores -- note the `n_jobs` argument.
+cores -- note the `n_jobs` argument (not shown here because
+the help info is very long).
 
 ```{python}
+#| eval: false
 import sklearn.ensemble
 help(sklearn.ensemble.RandomForestClassifier)
 ```
