@@ -22,9 +22,11 @@ Testing is what you do when you finish implementing a piece of code and want to 
 
 ## Lab Exercise
 
-1- Imagine a function that takes in a string and return another string where the space separated words (or tokens) are the same as the input string but sorted according to a specific ordering. The ordering should be determined by the second argument to the function. The ordering could be specified as (1) lexicographic according to the words (2) lexicographic according to the key produced by sorting the letters of the original word, or (3) numeric.
+1- Imagine a function that:
+  - [option 1] takes in a string and return another string where the space separated words (or tokens) are the same as the input string but sorted according to a specific ordering. The ordering should be determined by the second argument to the function. The ordering could be specified as (1) lexicographic according to the words (2) lexicographic according to the key produced by sorting the letters of the original word, or (3) numeric.
+  - [option 2] (in case you want to practice regex and keep stick with the theme of this week's lecture) takes in a string and returns the first number in that string, returns `None` if there are no numeric values in the string.
 
-2- Write an interface for that function (a function name and arguments), but do not implement the function yet (you can have it return an empty string for now). We will do this in a good old fashioned .py file (not a notebook or a quarto file).
+2- Write an interface for that function (a function name and arguments), but do not implement the function yet (you can have it return an `None`, or an empty string for now). We will do this in a good old fashioned .py file (not a notebook or a quarto file).
 
 3- Build a test suite using the pytest package to test that your function works as intended. Add at least 8 test cases with justification for each. Try to cover the main use cases, and as many potential corner cases or boundary conditions as possible.
 
@@ -41,6 +43,7 @@ Testing is what you do when you finish implementing a piece of code and want to 
 9- Now write a loop that calls your function on a variety of inputs including invalid inputs.
 
 10- In that loop, handle the thown exceptions and print something appropriate, but let the loop continue for later inputs.
+
 
 
 
