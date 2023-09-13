@@ -66,6 +66,7 @@ m.end()
 m.span()
 ```
 
+
 Notice that that showed us only the first match.
 
 We can instead use `findall` to get all the matches.
@@ -75,6 +76,15 @@ re.findall("\d+", text)
 ```
 
 
+This is equivalent to:
+
+```{python}
+pattern = re.compile("\d+")
+re.findall(pattern, text)
+```
+
+The compile can be omitted and will be done implicitly, but is a good idea to do explicitly if you have a complex regex pattern that you will use repeatedly (e.g. on every line in a file). It is also a reminder that regular expressions is a separate language, that can be compiled into a program. The compilation results in an object that relies on finite state machines to match the pattern.
+
 To ignore case, do the following:
 
 ```{python}
@@ -82,6 +92,7 @@ text = "That cat in the Hat"
 re.findall("hat", text, re.IGNORECASE)
 ```
 
+There are several other regex flags (also called compilation flags) that can control the behavior of the matching engine in interesting ways (check out re.VERBOSE and re.MULTILINE for instance).
 
 We can of course use list comprehension to work with multiple strings. But we need to be careful to check whether a match was found.
 
@@ -98,8 +109,7 @@ text = ["Here's my number: 919-543-3300.", "hi John, good to meet you",
 [return_group("\d+", str) for str in text]
 ```
 
-We can replace with `re.sub`.
-
+We can replace matching substrings with `re.sub`.
 
 ```{python}
 text = "Here's my number: 919-543-3300."
@@ -137,6 +147,17 @@ re.findall("(http|ftp):\\/\\/", text)  # http or ftp followed by ://
 re.findall("((http|ftp):\\/\\/)", text)  # http or ftp followed by ://
 ```
 
+When you are searhing for all occurrrences of a pattern in a large text object, it may be beneficial to use `finditer`:
+
+```{python}
+it = re.finditer("(http|ftp):\\/\\/", text)  # http or ftp followed by ://
+
+for match in it:
+    match.span()
+```
+
+This method bahaves lazily and returns an iterator that gives us one match at a time, and only scans for the next match when we ask for it. This is similar to the behavior we saw with `pandas.read_csv(chunksize = n)`
+
 As another example, the phone number detection problem could have been done a bit more compactly (as well as more generally to allow for an initial "1-" or "1.") as:
 
 ```{python}
@@ -147,7 +168,7 @@ re.findall("((1[-.])?(\d{3}[-.]){1,2}\d{4})", text)
 Question: the above regex would actually match something that is not a valid phone number. What can go wrong?
 
 
-Parentheses are also used for referencing back to a detected pattern when doing a replacement. For example, here we’ll find any numbers and add underscores before and after them:
+Groups are also used when we need to reference back to a detected pattern when doing a replacement. This is why they are sometimes referred to as "capturing groups". For example, here we’ll find any numbers and add underscores before and after them:
 
 ```{python}
 text = "Here's my number: 919-543-3300. They bought 731 bananas. Please call 919.554.3800."
@@ -162,6 +183,8 @@ re.sub("([^\",]),", "\\1", text)
 ```
 
 How does that work? Consider that "[^\",]" matches a character that is not a quote and not a comma. The regex is such a character followed by a comma, with the matched character saved in `\\1` because of the grouping operator.
+
+Groups can also be given names, instead of having to refer to them by their numbers, but we will not demonstrate this here.
 
 > **Challenge**: Suppose a text string has dates in the form "Aug-3", "May-9", etc. and I want them in the form "3 Aug", "9 May", etc. How would I do this regex?
 
@@ -188,7 +211,7 @@ re.sub("<.*>", "", text)
 
 Notice what happens because of greedy matching.
 
-One way to avoid greedy matching is to use a `?` after the repetition.
+One way to avoid greedy matching is to use a `?` after the repetition specifier.
 
 
 ```{python}
@@ -260,13 +283,15 @@ print("hello\\nagain")
 print("My Windows path is: C:\\Users\\nadal.")
 ```
 
+Another way to achieve this effect if your string does not contain any special characters is to prefix your string literal with an r for "raw":
+
+```{python}
+print(r"My Windows path is: C:\Users\nadal.")
+```
+
 
 Advanced note: Searching for an actual backslash gets even more
-complicated, because we need to pass two backslashes as the regular
-expression, so that a literal backslash is searched for. However, to
-pass two backslashes, we need to escape each of them with a backslash so
-Python doesn't treat each backslash as part of a special character. So that's
-four backslashes to search for a single backslash! Yikes. One rule of
+complicated (lookup [backslash plague](https://docs.python.org/3/howto/regex.html#the-backslash-plague) or baskslash hell), because we need to pass two backslashes as the regular expression, so that a literal backslash is searched for. However, to pass two backslashes, we need to escape each of them with a backslash so Python doesn't treat each backslash as part of a special character. So that's four backslashes to search for a single backslash! Yikes. One rule of
 thumb is just to keep entering backslashes until things work!
 
 ```{python}
@@ -280,6 +305,15 @@ try:
 except Exception as error:
     print(error)
 ```
+
+Again here you can use "raw" strings, at the price of losing the ability to use any special characters:
+
+```{python}
+## Search for an actual backslash
+re.search(r"\\", tmp)
+```
+
+This tells python to treat this sting literal without any escaping, but does this does not apply to the regex engine (or else we would have used a single backslash). So yes. This can be quite confusing.
 
 > **Warning**
 > Be careful when cutting and pasting from documents that are not text
