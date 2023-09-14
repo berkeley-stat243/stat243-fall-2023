@@ -954,13 +954,27 @@ One can think of functional programming as being focused on actions (or *verbs* 
 
 Many languages are multi-paradigm, containing aspects of both approaches and allowing programmers to use either approach. Both R and Python are like this, though one would generally consider R to be more functional and Python to be more object-oriented.
 
+Let's illustrate the ideas with some numpy and list functionality.
+
 ```python
 import numpy as np
-x = np.array([1.2, 3.5, 4.2])
+x = np.array([1.2, 3.5, 4.2, 9.7])
 x.shape     # field (or attribute) of the numpy array class
 x.sum()     # method of the class
 np.sum(x)   # equivalent numpy function
 len(x)      # built-in function
+
+# functional approach: apply functions sequentially
+x2 = np.reshape(x, (2,2))
+x2t = np.transpose(x2)
+
+# functional, but using class methods
+x2 = x.reshape(2,2)
+x2t = x2.transpose()
+
+# OOP: modify objects using class methods
+y = list([1.2, 3.5, 4.2])
+y.append(7.9)  # y modified in place using class method
 ```
 
 Different people have different preferences, but which is better sometimes depends on what you are trying to do. If your computation is a data analysis pipeline that involves a series of transformations of some data, a functional approach might make more sense, since the focus is on a series of actions rather than the state of objects. If your computation involves various operations on fixed objects whose state needs to change, OOP might make more sense. For example, if you were writing code to keep track of student information, it would probably make sense to have each student as an object of a `Student` class with methods such as `register` and `assign_grade`. 
@@ -999,7 +1013,9 @@ Here's the initial definition of the class with methods and fields.
 import numpy as np
 
 class tsSimClass:
-    ## class for holding time series simulators
+    '''
+    Class definition for time series simulators
+    '''
     def __init__(self, times, mean = 0, corParam = 1):
         ## add assertions that corParam is numeric, length 1 and times is np array
         self._times = times
@@ -1188,6 +1204,8 @@ smoke = Bear("Smoky the Bear", 77)
 smoke.count
 ```
 
+The class attribute allows us to manipulate information relating to all instances of the class, as seen here where we keep track of the number of bears that have been created.
+
 ### Adding attributes
 
 It turns out we can add instance attributes on the fly in some cases, which is a bit disconcerting in some ways.
@@ -1250,9 +1268,9 @@ It is also how the (very) old S3 system in R works. And it's a key part of the (
 
 ### Why use generic functions?
 
-The Python developers could have written `len` as a regular function with a bunch of if statements so that it can handle different kinds of input objects. 
+The Python developers could have written `len` as a regular function with a bunch of `if` statements so that it can handle different kinds of input objects. 
 
-This has two disadvantages:
+This has some disadvantages:
 
   1. We need to write the code that does the checking.
   2. Furthermore, all the code for the different cases all lives inside one potentially very long function, unless we create class-specific helper functions.
@@ -1430,10 +1448,7 @@ x   # no side effects!
 
 More on [pass-by-value vs. pass-by-reference](#pass-by-value-vs.-pass-by-reference) later.
 
-Even in R, there are some (necessary) exceptions to the idea of no side effects, such as `par()`.
-
-> **Challenge**
-> What are some other R functions that are called for the purpose of the side effects they produce? (For example, which functions change the state of your R session in some way?)
+Even in R, there are some (necessary) exceptions to the idea of no side effects, such as `par()` and `plot()`.
 
 ### Functions are first-class objects
 
@@ -1468,6 +1483,7 @@ function(np.array([1,2,3]))
 
 We can also pass a function into another function as the actual function
 object. This is an important aspect of functional programming.
+We can do it with our own function or (as we'll see shortly) with various built-in functions, such as `map`.
 
 ```{python}
 def apply_fun(fun, a):
@@ -1521,6 +1537,9 @@ In Python, `map` is run on the elements of an *iterable* object. Such objects in
 ```{python}
 x = [1.0, -2.7, 3.5, -5.1]
 list(map(abs, x))
+
+list(map(pow, x, [2,2,2,2]))
+
 ```
 
 Or we can use lambda functions to define a function on the fly:
@@ -2058,6 +2077,8 @@ Let's work through this:
     What would happen if it did?
 4.  What is the enclosing function (scope) for `myfun()`?
 
+We can see a variable in the closure like this:
+
 **[TODO: is there a way to access variables in a closure (i.e., in
 this case access 'y' based on `myfun`). Is there a way to find the
 enclosing scope for 'myfun' and look in it? See the `inspect` package]**
@@ -2178,6 +2199,45 @@ bootmeans()
 bootmeans.__closure__
 ```
 
+### Decorators
+
+Now that we've seen function generators, it's straightforward to discuss *decorators*.
+
+A decorator is a wrapper around a function that extends the functionality of the function without actually modifying the function.
+
+We can create a simple decorator "manually" like this:
+
+```{python}
+def verbosity_wrapper(myfun):
+    def wrapper(*args, **kwargs):
+        print(f"Starting {myfun.__name__}.")
+        output = myfun(*args, **kwargs)
+        print(f"Finishing {myfun.__name__}.")
+        return output
+    return wrapper
+    
+verbose_rnorm = verbosity_wrapper(np.random.normal)
+
+x = verbose_rnorm(size = 5)
+x
+```
+
+Python provides syntax that helps you create decorators with less work (this is an example of the general idea of *syntactic sugar*).
+
+We can easily apply our decorator defined above to a function as follows. Now the function name refers to the wrapped version of the function.
+
+```{python}
+@verbosity_wrapper
+def myfun(x):
+    return x
+
+y = myfun(7)
+y
+```
+
+Our decorator doesn't do anything useful, but hopefully you can imagine that the idea of being able to have more control over the operation of functions could be useful. For example we could set up a timing wrapper so that when we run a function, we get a report on how long it took to run the function. Or using the idea of a closure, we could keep a running count of the number of times a function has been called.
+
+One real-world example of using decorators is in setting up functions to run in parallel in `dask`, which we'll discuss in Unit 7.
 
 # 8. Memory and copies
 
