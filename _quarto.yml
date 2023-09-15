@@ -59,7 +59,7 @@ website:
           text: "Lab 1: Problem set submission"
         - file: labs/lab2-testing.md
           text: "Lab 2: Assertions, Exceptions, and Testing"
-        - file: labs/lab3-debugging.md
+        - file: labs/lab3-debugging.qmd
           text: "Lab 3: Debugging"
     - id: howtos
       title: "How tos"
