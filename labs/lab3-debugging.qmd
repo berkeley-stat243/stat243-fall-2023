@@ -3,6 +3,7 @@ title: "Lab 3: Debugging"
 author: "Ahmed Eldeeb"
 date: "2023-08-21"
 engine: knitr
+eval: false
 format:
   pdf:
     documentclass: article
