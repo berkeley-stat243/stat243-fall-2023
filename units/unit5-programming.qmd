@@ -1546,7 +1546,7 @@ Or we can use lambda functions to define a function on the fly:
 
 ```{python}
 x = [1.0, -2.7, 3.5, -5.1]
-result = list(map(lambda x: x * 2, x))
+result = list(map(lambda vals: vals * 2, x))
 ```
 
 If you need to pass another argument to the function you can use a lambda function as above or `functools.partial`:
@@ -1777,14 +1777,17 @@ Let's see what operations cause arguments modified in a function to affect state
 ```{python}
 def myfun(scalar_x, list_x, list_x_reassigned, nparray_x,
     nparray_x_newid, nparray_x_copy):
-    scalar_x = 99
-    list_x[0] = 99
-    list_x_reassigned = [99,2,3]
-    nparray_x[0] = 99
+    
+    scalar_x = 99                # global input unaffected
+    list_x[0] = 99               # global input MODIFIED
+    list_x_reassigned = [99,2,3] # global input unaffected
+    nparray_x[0] = 99            # global input MODIFIED
+
     newx = nparray_x_newid
-    newx[0] = 99
-    xcopy = nparray_x_copy.copy()
-    xcopy[0] = 99
+    newx[0] = 99                 # global input MODIFIED
+
+    xcopy = nparray_x_copy.copy() 
+    xcopy[0] = 99                # global input unaffected
 
 
 scalar_x = 1
@@ -1865,7 +1868,6 @@ myCal(&x)  # x itself will be modified
 So Python behaves similarly to the use of pointers in C.
 
 
-
 ## Namespaces and scopes
 
 As discussed [here in the Python docs](https://docs.python.org/3/tutorial/classes.html#python-scopes-and-namespaces),
@@ -1876,7 +1878,7 @@ Namespaces are created and removed through the course of executing Python code. 
 variables in the function is created, and then deleted when the function finishes executing. Separate function calls
 (including recursive calls) have separate namespaces. 
 
-*Scope* is closely related concept -- a scope determines what namespaces are accessible from a given place in one's code. Scopes are nested and determine where and in what order Python searches the various namespaces for objects.
+*Scope* is closely related concept -- a scope determines what namespaces are accessible from a given place in one's code. Scopes are nested and determine where and in what order Python searches the various namespaces for objects. 
 
 Note that the ideas of namespaces and scopes are relevant in most other languages, though the details of how they work can differ.
 
@@ -1969,7 +1971,7 @@ Suppose we have this code in a module named `scope.py`:
 cat test.py
 ```
 
-Now suppose we also define `magic_number` in the local scope in which `myfun` is called from.
+Now suppose we also define `magic_number` in the scope in which `myfun` is called from.
 
 ```{python}
 import test
@@ -1977,7 +1979,7 @@ magic_number = 900
 test.myfun(3)
 ```
 
-We see that Python uses `magic_number` from the 
+We see that Python uses `magic_number` from the module.
 What would be bad about using `magic_number` from the global scope of the Python session
 rather than the global scope of the module? Consider a case where instead of using the `scope.py` module we were using
 code from a package.
@@ -2073,11 +2075,12 @@ Let's work through this:
 
 1.  What is the enclosing scope for the function `g()`?
 2.  What does `g()` use for `y`?
-3.  When `fun_constructor()` finishes, does its namespace disappear?
+3.  Where is `myfun` defined (this is tricky)?
+4.  What is the enclosing  (scope) for `myfun()`?
+5.  When `fun_constructor()` finishes, does its namespace disappear?
     What would happen if it did?
-4.  What is the enclosing function (scope) for `myfun()`?
+6.  What does `myfun` use for `y`?
 
-We can see a variable in the closure like this:
 
 **[TODO: is there a way to access variables in a closure (i.e., in
 this case access 'y' based on `myfun`). Is there a way to find the
