@@ -68,6 +68,40 @@ def binary_search(lst, T):
 
 There are a couple of things not quite right with this implementation, even though it will run and produce correct results for some cases.
 
+Here's another piece of code implementing merge sort (also with some bugs in it):
+
+```{python}
+def merge_sort(lst):
+    n = len(lst)
+    if n == 1:
+        return lst
+    return merge(merge_sort(lst[:n//2]), merge_sort(lst[n//2:]))
+
+def merge(lst1, lst2):
+    merged = []
+    i, j = 0,0
+    while i < len(lst1) and j < len(lst2):
+        if i < len(lst1) and j < len(lst2) and lst1[i] < lst2[j]:
+            merged.append(lst1[i])
+            i += 1
+        else:
+            merged.append(lst1[j])
+            j += 1
+    while i < len(lst1):
+        merged.append(lst1[i])
+        i += 1
+    while j < len(lst2):
+            merged.append(lst2[j])
+            j += 1
+    return merged
+        
+merge_sort([3,1,5,1,6,3,9,12,8])
+```
+
+You can use this to practice stepping inside functions, and thinking about recursion.
+
+Incidentally, if you first sort, then find, you can get the quantile of a particular value within a collection (you'll need to adjust the binary search a little to achieve this).
+
 Alternatively you could start by implementing (without using any existing functions) a function that inverst the order of the words in a string, and debug it until it works.
 
 Next time we will touch briefly on how to do debugging without an IDE with debugger integration.
