@@ -2,6 +2,7 @@
 title: "Lab 3: Debugging"
 author: "Ahmed Eldeeb"
 date: "2023-08-21"
+engine: knitr
 format:
   pdf:
     documentclass: article
@@ -49,7 +50,7 @@ Today we will experiment with the visual debugging tools integrated with IDEs. W
 
 Here's a piece of code that implements the binary search algorithm to locate the first occurence of a number in a list of numbers:
 
-################
+```{python}
 import math
 def binary_search(lst, T):
     L = 0
@@ -63,11 +64,10 @@ def binary_search(lst, T):
     if lst[L] == T:
         return L
     return -1
-################
+```
 
 There are a couple of things not quite right with this implementation, even though it will run and produce correct results for some cases.
 
 Alternatively you could start by implementing (without using any existing functions) a function that inverst the order of the words in a string, and debug it until it works.
 
 Next time we will touch briefly on how to do debugging without an IDE with debugger integration.
-
