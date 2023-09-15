@@ -104,4 +104,35 @@ Incidentally, if you first sort, then find, you can get the quantile of a partic
 
 Alternatively you could start by implementing (without using any existing functions) a function that inverst the order of the words in a string, and debug it until it works.
 
+Here's a version of this function where I injected a couple of bugs, if you prefer to start from there:
+
+```{python}
+def reverse_words(input):
+    working = list(input)
+    invert(working)
+    start = 0
+    for i, c in enumerate(working):
+        if c == ' ' and i != start:
+            invert(working, start, i)
+            start = i+1
+    return ''.join(working)
+
+def invert(lst, start=None, end=None):
+    if None == start:
+        start = 0
+    if None == end:
+        end = len(lst)-1
+    
+    while start < end:
+        tmp = lst[start]
+        lst[start] = lst[start]
+        lst[end] = tmp
+        start += 1
+        end -= 1
+
+reverse_words("These are my words.   I have spoken!")
+```
+
 Next time we will touch briefly on how to do debugging without an IDE with debugger integration.
+
+
