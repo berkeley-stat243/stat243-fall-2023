@@ -2,6 +2,15 @@
 
 Submit your solutions on Gradescope and (for problem sets but not assignments) via your Git repository. 
 
+| Problem Set | Date | Time | 
+|----|----|----|
+| PS 1 [(HTML)](ps/ps1.html) [(PDF)](ps/ps1.pdf) | Thursday Sep. 7 | 10 am | 
+| PS 2 [(HTML)](ps/ps2.html) [(PDF)](ps/ps2.pdf) | Friday  Sep. 15 | 10 am | 
+| PS 3 [(HTML)](ps/ps3.html) [(PDF)](ps/ps3.pdf) [(code)](ps/ps3start.py) | Wednesday Sep. 27 | 10 am | 
+
+
+Problem set solutions need to follow the rules discussed in Lab 1 (Sep. 1) and documented [here](howtos/ps-submission).
+
 | Assignment  | Date | Time | 
 |----|----|----|
 | bash shell tutorial and [bash shell problems (first 10)](https://berkeley-scf.github.io/tutorial-using-bash/exercises) (reading some of tutorial before Wed. Aug. 30 recommended); see Details below | Friday Sep. 1 | 10 am |
@@ -10,13 +19,6 @@ Submit your solutions on Gradescope and (for problem sets but not assignments) v
 Assignments will generally be turned in on Gradescope but don't need to follow the rules for problem set solutions and will be graded complete/incomplete.
 
 
-| Problem Set | Date | Time | 
-|----|----|----|
-| PS 1 [(HTML)](ps/ps1.html) [(PDF)](ps/ps1.pdf) | Thursday Sep. 7 | 10 am | 
-| PS 2 [(HTML)](ps/ps2.html) [(PDF)](ps/ps2.pdf) | Friday  Sep. 15 | 10 am | 
-
-
-Problem set solutions need to follow the rules discussed in Lab 1 (Sep. 1) and documented [here](howtos/ps-submission).
 
 ## Quizzes
 
