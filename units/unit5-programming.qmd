@@ -1431,6 +1431,20 @@ new_x = myfun(x)
 x   # modified!
 ```
 
+And actually, given the pass-by-reference behavior, we would probably use a version of `myfun`
+that looks like this:
+
+```{python}
+x = np.array([1,2,3])
+def myfun(x):
+  x[1] = 7
+  return None
+
+myfun(x)
+x   # modified!
+```
+
+
 Note how easy it would be for a Python programmer to violate the 'no side effects' principle.
 In fact to avoid it, we need to do some additional work in terms of making a copy of `x`
 to a new location in memory before modifying it in the function.
@@ -1641,12 +1655,9 @@ function_a()
 
 ### Arguments
 
+You can see the arguments (and any default values) for a function using the help system.
 
-Arguments can be specified by position (based on the order of the inputs)
-or by name, using `name=value`, with positional arguments appearing first.
-first. You can see the arguments and defaults for a function using the help system.
-
-All positional arguments are required.
+Let's create an example function:
 
 ```{python}
 def add(x, y, z=1, absol=False):
@@ -1654,8 +1665,18 @@ def add(x, y, z=1, absol=False):
         return(abs(x+y+z))
     else:
         return(x+y+z)
+```
+
+When using a function, there are some rules that must be followed.
+
+Arguments without defaults are required.
+
+Arguments can be specified by position (based on the order of the inputs)
+or by name, using `name=value`, with positional arguments appearing first.
+first.
 
 
+```{python}
 add(3, 5)
 add(3, 5, 7)
 
@@ -1767,6 +1788,7 @@ def myfun(x):
 
 y = [0, 1, 2]
 z = myfun(y)
+type(z)
 y
 ```
 
@@ -1775,51 +1797,50 @@ y
 Let's see what operations cause arguments modified in a function to affect state outside of the function:
 
 ```{python}
-def myfun(scalar_x, list_x, list_x_reassigned, nparray_x,
-    nparray_x_newid, nparray_x_copy):
-    
-    scalar_x = 99                # global input unaffected
-    list_x[0] = 99               # global input MODIFIED
-    list_x_reassigned = [99,2,3] # global input unaffected
-    nparray_x[0] = 99            # global input MODIFIED
+def myfun(f_scalar, f_x, f_x_new, f_x_newid, f_x_copy):
 
-    newx = nparray_x_newid
-    newx[0] = 99                 # global input MODIFIED
+    f_scalar = 99                 # global input unaffected
+    f_x[0] = 99                   # global input MODIFIED
+    f_x_new = [99,2,3]            # global input unaffected
 
-    xcopy = nparray_x_copy.copy() 
-    xcopy[0] = 99                # global input unaffected
+    newx = f_x_newid
+    newx[0] = 99                  # global input MODIFIED
+
+    xcopy = f_x_copy.copy() 
+    xcopy[0] = 99                 # global input unaffected
 
 
-scalar_x = 1
-list_x = [1,2,3]
-list_x_reassigned = np.array([1,2,3])
-nparray_x = np.array([1,2,3])
-nparray_x_newid = np.array([1,2,3])
-nparray_x_copy = np.array([1,2,3])
+scalar = 1
+x = [1,2,3]
+x_new = np.array([1,2,3])
+x_newid = np.array([1,2,3])
+x_copy = np.array([1,2,3])
 
 
-myfun(scalar_x, list_x, list_x_reassigned, nparray_x,
-    nparray_x_newid, nparray_x_copy)
+myfun(scalar, x, x_new, x_newid, x_copy)
 ```
 
 Here are the cases where state is preserved:
 
 ```{python}
-scalar_x
-list_x_reassigned
-nparray_x_copy
+scalar
+x_new
+x_copy
 ```
 
 And here are the cases where state is modified:
 
 ```{python}
-list_x
-nparray_x
-nparray_x_newid
+x
+x_newid
 ```
 
 Basically if you replace the reference (object name) then the state outside the function is preserved.
+That's because a new local variable in the function scope is created. However in the
+`
 If you modify part of the object, state is not preserved.
+
+The same behavior occurs with other mutable objects such as numpy arrays.
 
 ### Pointers 
 
@@ -1965,23 +1986,23 @@ np.x = 33
 
 As more motivation, consider this example. 
 
-Suppose we have this code in a module named `scope.py`:
+Suppose we have this code in a module named `test_scope.py`:
 
 ```{bash}
-cat test.py
+cat test_scope.py
 ```
 
 Now suppose we also define `magic_number` in the scope in which `myfun` is called from.
 
 ```{python}
-import test
+import test_scope
 magic_number = 900
-test.myfun(3)
+test_scope.myfun(3)
 ```
 
 We see that Python uses `magic_number` from the module.
 What would be bad about using `magic_number` from the global scope of the Python session
-rather than the global scope of the module? Consider a case where instead of using the `scope.py` module we were using
+rather than the global scope of the module? Consider a case where instead of using the `test_scope.py` module we were using
 code from a package.
 
 ### Lexical scoping (enclosing scopes)
