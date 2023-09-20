@@ -1375,7 +1375,12 @@ type(Bear)
 
 # 7. Functional programming
 
-## Overview of functional programming
+This section covers an approach to programming called "functional programming" as well as various
+concepts related to writing and using functions. 
+
+## Functional programming (in Python)
+
+### Overview of functional programming
 
 Functional programming is an approach to programming that emphasizes the use of modular, self-contained functions.
 Such functions should operate only on arguments provided to
@@ -1385,8 +1390,6 @@ that functions are considered 'first-class' citizens in that they can be passed 
 returned as the result of a function, and assigned to variables. In other words, a function can be treated as any other variable.
 
 In many cases (including Python and R), anonymous functions (also called 'lambda functions') can be created on-the-fly for use in various circumstances. 
-
-## Functional programming in Python and R
 
 One can do functional programming in Python by focusing on writing modular, self-contained functions rather than classes. And functions are first-class citizens. However, there are aspects of Python that do not align with the principles mentioned above.
 
@@ -1672,8 +1675,7 @@ When using a function, there are some rules that must be followed.
 Arguments without defaults are required.
 
 Arguments can be specified by position (based on the order of the inputs)
-or by name, using `name=value`, with positional arguments appearing first.
-first.
+or by name (keyword), using `name=value`, with positional arguments appearing first.
 
 
 ```{python}
