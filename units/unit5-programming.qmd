@@ -1861,7 +1861,7 @@ ptr = &x;
   - The `&x` gets the address where `x` is stored.
   - `*ptr` dereferences `ptr`, returning the value in that address (which is 3 since `ptr` is the address of `x`.
 
-Vectors in C are really pointers to a block of memory:
+Arrays in C are really pointers to a block of memory:
 
 ```{c}
 #| eval: false
@@ -1957,7 +1957,7 @@ Here are the key scopes to be aware of, in order ("LEGB") of how the namespaces 
  - **G**lobal (aka 'module') scope: objects available in the module in which the function is defined (which may simply be the default global scope when you start the Python interpreter). This is also the local scope if the code is not executing inside a function.
  - **B**uilt-ins scope: objects provided by Python through the built-ins module but available from anywhere.
 
-Note that `import` adds the name of the imported module in the local scope.
+Note that `import` adds the name of the imported module to the namespace of the current (i.e., local) scope.
 
 We can see the local and global namespaces using `locals()` and `globals()`.
 
@@ -2067,6 +2067,7 @@ def f():
     x = 7
     f2()
 
+x = 100
 f() # what will happen?
 
 ## Case 4
@@ -2076,12 +2077,14 @@ def f():
         print(x)
     f2()
 
+x = 100
 f() # what will happen?
 ```
 
 Here's a tricky example:
 
 ```{python}
+#| eval: false
 y = 100
 def fun_constructor():
 	y = 10
@@ -2097,26 +2100,30 @@ myfun(3)
 Let's work through this:
 
 1.  What is the enclosing scope for the function `g()`?
-2.  What does `g()` use for `y`?
-3.  Where is `myfun` defined (this is tricky)?
-4.  What is the enclosing  (scope) for `myfun()`?
+2.  Which `y` does `g()` use?
+3.  Where is `myfun` defined (this is tricky -- how does `myfun` relate to `g`)?
+4.  What is the enclosing scope for `myfun()`?
 5.  When `fun_constructor()` finishes, does its namespace disappear?
     What would happen if it did?
 6.  What does `myfun` use for `y`?
 
 
-**[TODO: is there a way to access variables in a closure (i.e., in
-this case access 'y' based on `myfun`). Is there a way to find the
-enclosing scope for 'myfun' and look in it? See the `inspect` package]**
+We can use the `inspect` package to see information about the closure.
+
+```{python}
+import inspect
+inspect.getclosurevars(myfun)
+```
+
+(Note that I haven't fully investigated the use of `inspect`,
+but it looks like it has a lot of useful tools.)
 
 Be careful when using variables from non-local scopes as the
 value of that variable may well not be what
 you expect it to be. In general one wants to think carefully before using variables that
-are taken from outside the local scope, but in some
-cases it can be useful.
+are taken from outside the local scope, but in some cases it can be useful.
 
-Next we'll see some ways of accessing variables outside of the local scope and of enclosing scopes.
-
+Next we'll see some ways of accessing variables outside of the local scope.
 
 ### Global and non-local variables
 
@@ -2166,9 +2173,9 @@ nicely summarizes the idea, which is a general functional programming idea and n
 Using a closure
 involves creating one (or more functions) within a function call and
 returning the function(s) as the output. When one executes the original
-function, the new function(s) is created and returned and one can then
-call that new function(s). The new function then can access objects in
-the enclosing scope (the scope of the original function) and
+function (the constructor), the new function(s) is created and returned and one can then
+call that function(s). The function then can access objects in
+the enclosing scope (the scope of the constructor) and
 can use `nonlocal` to assign into the enclosing scope, to which the
 function (or the multiple functions) have access. The nice thing about
 this compared to using a global variable is that the data in the closure
@@ -2225,7 +2232,7 @@ bootmeans()
 bootmeans.__closure__
 ```
 
-### Decorators
+## Decorators
 
 Now that we've seen function generators, it's straightforward to discuss *decorators*.
 
@@ -2487,7 +2494,7 @@ obj[0] is obj[2]
 
 What do we notice?
 
-  - The list itself appears to be a array of pointers to the component elements.
+  - The list itself appears to be a array of references (pointers) to the component elements.
   - Each element has its own address.
   - Two elements of a list can use the same memory (see the first two elements here, whose contents are at the same memory address).
   - A list element can use the same memory as another object (or part of another object).
@@ -2573,7 +2580,7 @@ shared pointers in C++ and in how R handles copying and garbage collection.
 
 ## Strategies for saving memory
 
-A couple basic strategies for saving memory include:
+A frew basic strategies for saving memory include:
 
 -   Avoiding unnecessary copies.
 -   Removing objects that are not being used, at which point the Python garbage collector should free up the memory.
@@ -2588,6 +2595,8 @@ If you're really trying to optimize memory use, you may also consider:
     x = np.array([3,4,2,-2], dtype = "int16")
     x.itemsize
     ```
+-   Reading data in from files in chunks rather than reading the entire dataset (more in Unit 7).
+-   Exploring packages such as `arrow` for efficiently using memory, as discussed in [Unit 2](unit2-dataTech.html#reading-data-quickly-arrow-and-polars).
     
 
 ## Example
@@ -2597,15 +2606,15 @@ current memory in use and maximum memory used in a function call. We'll
 want to consider hidden uses of memory, when copies are made, and lazy
 evaluation.  This
 code (translated from the original R code) is courtesy of Yuval Benjamini. For our purposes here, let's assume
-that `xvar` and `yvar` are very long vectors using a lot of memory. 
+that `xvar` and `yvar` are very long numpy arrays using a lot of memory. 
 
 ```{python}
 #| eval: false
 def fastcount(xvar, yvar):
     naline = np.isnan(xvar)
     naline[np.isnan(yvar)] = True
-    localx = xvar
-    localy = yvar
+    localx = xvar.copy()
+    localy = yvar.copy()
     localx[naline] = 0
     localy[naline] = 0
     useline = ~naline
@@ -3074,7 +3083,7 @@ loop over the smallest dimension and use the vectorized calculation
 on the larger dimension(s). For example if you have a 10000 by 10 matrix, try to set
 up your problem so you can loop over the 10 columns rather than the 10000 rows.
  - In general, in Python looping over rows is likely to be faster than looping over columns
-because of numpy's row-major ordering (by default, matrices are stored in memory as a long array in which values in a row are adjacent to each other). However how numpy handles this is [more complicated](https://numpy.org/doc/stable/dev/internals.html#multidimensional-array-indexing-order-issues) (see more in Section 4.6 on the cache), such that it may not matter for numpy calculations.
+because of numpy's row-major ordering (by default, matrices are stored in memory as a long array in which values in a row are adjacent to each other). However how numpy handles this is [more complicated](https://numpy.org/doc/stable/dev/internals.html#multidimensional-array-indexing-order-issues) (see more in the [Section on cache-aware programming](#cache-aware-programming)), such that it may not matter for numpy calculations.
  - You can use direct arithmetic operations to add/subtract/multiply/divide
 a vector by each column of a matrix, e.g. `A*b` does element-wise multiplication of
 each column of *A* by a vector *b*. If you need to operate
