@@ -2605,7 +2605,7 @@ Let's work through a real example where we keep a running tally of
 current memory in use and maximum memory used in a function call. We'll
 want to consider hidden uses of memory, when copies are made, and lazy
 evaluation.  This
-code (translated from the original R code) is courtesy of Yuval Benjamini. For our purposes here, let's assume
+code (translated from the original R code) comes from a PhD student's research. For our purposes here, let's assume
 that `xvar` and `yvar` are very long numpy arrays using a lot of memory. 
 
 ```{python}
@@ -2642,28 +2642,25 @@ For example, consider this code:
 x = 3
 abs(x)
 x*7
-abs(x)
 x = 'hi'
-try:
-    abs(x)
-except Exception as error:
-    print(error)
+abs(x)
 x*3
     
 ```
 
-Because of dynamic typing, when the interpreter sees `abs(x)` it needs to check if `x` is something to on the absolute value function be used, including dealing with the fact that `x` could be a list or array with many numbers in it. In addition it needs to (using scoping rules) look up the value of `x`. (Consider that `x` might not even exist at the point that `abs(x)` is called.) Only then can the absolute value calculation happen. For the multiplication, Python needs to lookup the version of `*` that can be used, depending on the type of `x`.
+Because of dynamic typing, when the interpreter sees `abs(x)` it needs to check if `x` is something to which the absolute value function can be applied, including dealing with the fact that `x` could be a list or array with many numbers in it. In addition it needs to (using scoping rules) look up the value of `x`. (Consider that `x` might not even exist at the point that `abs(x)` is called.) Only then can the absolute value calculation happen. For the multiplication, Python needs to lookup the version of `*` that can be used, depending on the type of `x`.
 
-Let's consider writing a loop:
+Let's consider writing a loop with some ridiculous code:
 
 ```{python}
 #| eval: false
+x = np.random.normal(10)
 for i in range(10):
     if np.random.normal(size = 1) > 0:
         x = 'hi'
     if np.random.normal(size = 1) > 0.5:
         del x
-    x[i] = np.exp(x[i])
+    x[i]= np.exp(x[i])
 ```
 
 There is no way around the fact that because of how dynamic this is, the interpreter needs to check if `x` exists, if it is a vector of sufficient length, if it contains numeric values, and it needs to go retrieve the required value, EVERY TIME the `np.exp()` is executed. Now the code above is unusual, and in most cases, we wouldn't have the `if` statements that modify `x`. So you could imagine a process by which the checking were done on the first iteration and then not needed after that -- that gets into the idea of just-in-time compilation, discussed later. 
@@ -2821,6 +2818,7 @@ the profiling can be lengthy.
 
 ```{python}
 #| eval: false
+
 def lr_slow(y, x):
     xtx = x.T @ x
     xty = x.T @ y
@@ -2831,12 +2829,17 @@ def lr_slow(y, x):
 y = np.random.normal(size = 5000)
 x = np.random.normal(size = (5000,1000))
 
-import cProfile
+t0 = time.time()
+regr = lr_slow(y, x)
+t1 = time.time()
+print(f"Execution time: {t1-t0} seconds.")
 
+import cProfile
 cProfile.run('lr_slow(y,x)')
 ```
 
-The `cumtime` column includes the time spent in subfunction calls while the `tottime` column excludes it.
+
+The `cumtime` column includes the time spent in nested calls to functions while the `tottime` column excludes it.
 
 As we'll discuss in detail in Unit 10, we almost never want to explicitly invert
 a matrix. Instead we factorize the matrix and use the factorized result to do the
@@ -2845,6 +2848,7 @@ approach, followed by solving triangular systems of equations.
 
 ```{python}
 #| eval: false
+
 import scipy as sp
 
 def lr_fast(y, x):
@@ -2855,6 +2859,11 @@ def lr_fast(y, x):
           sp.linalg.solve_triangular(L, xty, lower=True),
           lower=False)
     return(out)
+
+t0 = time.time()
+regr = lr_fast(y, x)
+t1 = time.time()
+print(f"Execution time: {t1-t0} seconds.")
 
 cProfile.run('lr_fast(y,x)')
 ```
@@ -2937,7 +2946,7 @@ id(np.append(x, 3.34))
 
 We can avoid that large cost of copying and memory allocation by pre-allocating space for the entire output array. (This is equivalent to variable initialization in compiled languages.)
 
-Ok, but how is it that we can append to the list at apparently no cost?
+Ok, but how is it that we can append to the **list** at apparently no cost?
 
 It's not magic, just that Python is clever. Let's get an idea of what is going on:
 
@@ -2960,7 +2969,7 @@ z = np.random.normal(size = 1000)
 out = fun_append2(z)
 ```
 
-Surprisingly, the id of `x` doesn't seem to change, even though we are allocating new memory at many of the iterations. I haven't looked into this fully, but I believe that what is happening is that `x` is an wrapper object that contains within it a reference to an array of pointers to the list elements. The location of the wrapper object doesn't change, but the underlying array of pointers is being reallocated.
+Surprisingly, the id of `x` doesn't seem to change, even though we are allocating new memory at many of the iterations. What is happening is that `x` is an wrapper object that contains within it a reference to an array of references (pointers) to the list elements. The location of the wrapper object doesn't change, but the underlying array of references/pointers is being reallocated.
 
 Side note: our assessment of size above does not include the actual size of the list elements.
 
@@ -3175,9 +3184,11 @@ For example, we can sum the rows of a matrix by multiplying by a vector of ones.
 ```{python, matrix-calc}
 mat = np.random.normal(size=(500,500))
 
-timeit.timeit('mat.dot(np.ones(500))', setup = 'import numpy as np', number = 1000, globals = {'mat': mat})
+timeit.timeit('mat.dot(np.ones(500))', setup = 'import numpy as np',
+              number = 1000, globals = {'mat': mat})
 
-timeit.timeit('np.sum(mat, axis = 1)', setup = 'import numpy as np', number = 1000, globals = {'mat': mat})
+timeit.timeit('np.sum(mat, axis = 1)', setup = 'import numpy as np',
+              number = 1000, globals = {'mat': mat})
 ```
 
 Given the extra computation involved in actually multiplying each number by one, it's surprising that this is faster than numpy sum function. One thing we'd want to know is whether the BLAS matrix multiplication call is being done in parallel.
