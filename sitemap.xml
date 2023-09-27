@@ -1,131 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/publish.html</loc>
-    <lastmod>2023-09-26T18:16:47.167Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/ps/ps1.html</loc>
-    <lastmod>2023-09-26T18:16:42.439Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/ps/regex.html</loc>
-    <lastmod>2023-09-26T18:16:32.059Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/rubric.html</loc>
-    <lastmod>2023-09-26T18:16:26.263Z</lastmod>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/labs/lab1-submission.html</loc>
+    <lastmod>2023-09-27T16:45:04.110Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/berkeley-stat243/stat243-fall-2023/labs/lab3-debugging.html</loc>
-    <lastmod>2023-09-26T18:16:19.063Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/labs/lab1-submission.html</loc>
-    <lastmod>2023-09-26T18:16:09.303Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/units/unit1-intro.html</loc>
-    <lastmod>2023-09-26T18:15:57.643Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/units/unit9-sim.html</loc>
-    <lastmod>2023-09-26T18:15:33.546Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/units/unit6-parallel.html</loc>
-    <lastmod>2023-09-26T18:15:11.858Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/units/unit5-programming.html</loc>
-    <lastmod>2023-09-26T18:14:29.746Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/units/unit2-dataTech.html</loc>
-    <lastmod>2023-09-26T18:13:46.654Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/syllabus.html</loc>
-    <lastmod>2023-09-26T18:13:22.826Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/howtos/windowsAndLinux.html</loc>
-    <lastmod>2023-09-26T18:13:21.070Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/howtos/quartoInstall.html</loc>
-    <lastmod>2023-09-26T18:13:19.498Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/howtos/gitInstall.html</loc>
-    <lastmod>2023-09-26T18:13:18.366Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/howtos/accessingUnixCommandLine.html</loc>
-    <lastmod>2023-09-26T18:13:17.158Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/index.html</loc>
-    <lastmod>2023-09-26T18:13:16.162Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/howtos/ps-submission.html</loc>
-    <lastmod>2023-09-26T18:13:17.854Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/howtos/windowsInstall.html</loc>
-    <lastmod>2023-09-26T18:13:19.038Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/howtos/RandRStudioInstall.html</loc>
-    <lastmod>2023-09-26T18:13:20.054Z</lastmod>
-  </url>
-  <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/howtos/accessingPython.html</loc>
-    <lastmod>2023-09-26T18:13:21.574Z</lastmod>
+    <lastmod>2023-09-27T16:44:52.610Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/berkeley-stat243/stat243-fall-2023/units/unit10-linalg.html</loc>
-    <lastmod>2023-09-26T18:13:32.534Z</lastmod>
+    <lastmod>2023-09-27T16:44:39.077Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/units/unit7-bigData.html</loc>
-    <lastmod>2023-09-26T18:14:01.318Z</lastmod>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/units/unit5-programming.html</loc>
+    <lastmod>2023-09-27T16:43:54.465Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/units/unit4-goodPractices.html</loc>
-    <lastmod>2023-09-26T18:14:58.718Z</lastmod>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/units/unit1-intro.html</loc>
+    <lastmod>2023-09-27T16:43:17.248Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/units/unit9-sim.html</loc>
+    <lastmod>2023-09-27T16:42:52.884Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/berkeley-stat243/stat243-fall-2023/units/unit3-bash.html</loc>
-    <lastmod>2023-09-26T18:15:22.698Z</lastmod>
+    <lastmod>2023-09-27T16:42:28.359Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/units/unit8-numbers.html</loc>
-    <lastmod>2023-09-26T18:15:44.534Z</lastmod>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/rubric.html</loc>
+    <lastmod>2023-09-27T16:42:11.023Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/labs/lab2-testing.html</loc>
-    <lastmod>2023-09-26T18:16:04.235Z</lastmod>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/index.html</loc>
+    <lastmod>2023-09-27T16:42:09.951Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/labs/lab0-setup.html</loc>
-    <lastmod>2023-09-26T18:16:14.183Z</lastmod>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/howtos/windowsAndLinux.html</loc>
+    <lastmod>2023-09-27T16:42:08.655Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/schedule.html</loc>
-    <lastmod>2023-09-26T18:16:25.631Z</lastmod>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/howtos/ps-submission.html</loc>
+    <lastmod>2023-09-27T16:42:06.995Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/ps/ps2.html</loc>
-    <lastmod>2023-09-26T18:16:27.519Z</lastmod>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/howtos/RandRStudioInstall.html</loc>
+    <lastmod>2023-09-27T16:42:05.867Z</lastmod>
   </url>
   <url>
-    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/ps/ps3.html</loc>
-    <lastmod>2023-09-26T18:16:37.059Z</lastmod>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/howtos/accessingPython.html</loc>
+    <lastmod>2023-09-27T16:42:04.975Z</lastmod>
   </url>
   <url>
     <loc>https://github.com/berkeley-stat243/stat243-fall-2023/office_hours.html</loc>
-    <lastmod>2023-09-26T18:16:46.631Z</lastmod>
+    <lastmod>2023-09-27T16:42:03.955Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/ps/ps1.html</loc>
+    <lastmod>2023-09-27T16:41:54.698Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/ps/regex.html</loc>
+    <lastmod>2023-09-27T16:41:44.450Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/syllabus.html</loc>
+    <lastmod>2023-09-27T16:41:37.962Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/ps/ps3.html</loc>
+    <lastmod>2023-09-27T16:41:39.734Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/ps/ps2.html</loc>
+    <lastmod>2023-09-27T16:41:49.294Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/ps/ps4.html</loc>
+    <lastmod>2023-09-27T16:41:59.755Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/howtos/accessingUnixCommandLine.html</loc>
+    <lastmod>2023-09-27T16:42:04.483Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/howtos/quartoInstall.html</loc>
+    <lastmod>2023-09-27T16:42:05.391Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/howtos/gitInstall.html</loc>
+    <lastmod>2023-09-27T16:42:06.339Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/howtos/windowsInstall.html</loc>
+    <lastmod>2023-09-27T16:42:07.695Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/schedule.html</loc>
+    <lastmod>2023-09-27T16:42:09.451Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/publish.html</loc>
+    <lastmod>2023-09-27T16:42:10.415Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/units/unit2-dataTech.html</loc>
+    <lastmod>2023-09-27T16:42:17.271Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/units/unit6-parallel.html</loc>
+    <lastmod>2023-09-27T16:42:39.999Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/units/unit8-numbers.html</loc>
+    <lastmod>2023-09-27T16:43:04.092Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/units/unit4-goodPractices.html</loc>
+    <lastmod>2023-09-27T16:43:28.348Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/units/unit7-bigData.html</loc>
+    <lastmod>2023-09-27T16:44:22.229Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/labs/lab0-setup.html</loc>
+    <lastmod>2023-09-27T16:44:47.818Z</lastmod>
+  </url>
+  <url>
+    <loc>https://github.com/berkeley-stat243/stat243-fall-2023/labs/lab2-testing.html</loc>
+    <lastmod>2023-09-27T16:44:59.226Z</lastmod>
   </url>
 </urlset>
