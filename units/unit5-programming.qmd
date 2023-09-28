@@ -56,7 +56,6 @@ In Python, you apply a matching function and then query the result to get inform
 
 
 ```{python}
-import re
 text = "Here's my number: 919-543-3300."
 m = re.search("\d+", text)
 m
@@ -139,15 +138,15 @@ text = "At the site http://www.ibm.com. Some other text. ftp://ibm.com"
 re.search("(http|ftp):\\/\\/", text).group()
 ```
 
-However, `findall` returns only the captured groups when grouping operators are present, as discussed a bit in `help(re.findall)`,
+However, if we want to find all the matches and try to use `findall`, we see that it returns only the captured groups when grouping operators are present, as discussed a bit in `help(re.findall)`,
 so we'd need to add an additional grouping operator to capture the full pattern when using `findall`:
 
 ```{python}
-re.findall("(http|ftp):\\/\\/", text)  # http or ftp followed by ://
-re.findall("((http|ftp):\\/\\/)", text)  # http or ftp followed by ://
+re.findall("(http|ftp):\\/\\/", text)  
+re.findall("((http|ftp):\\/\\/)", text) 
 ```
 
-When you are searhing for all occurrrences of a pattern in a large text object, it may be beneficial to use `finditer`:
+When you are searching for all occurrences of a pattern in a large text object, it may be beneficial to use `finditer`:
 
 ```{python}
 it = re.finditer("(http|ftp):\\/\\/", text)  # http or ftp followed by ://
@@ -156,7 +155,7 @@ for match in it:
     match.span()
 ```
 
-This method bahaves lazily and returns an iterator that gives us one match at a time, and only scans for the next match when we ask for it. This is similar to the behavior we saw with `pandas.read_csv(chunksize = n)`
+This method behaves lazily and returns an iterator that gives us one match at a time, and only scans for the next match when we ask for it. This is similar to the behavior we saw with `pandas.read_csv(chunksize = n)`
 
 As another example, the phone number detection problem could have been done a bit more compactly (as well as more generally to allow for an initial "1-" or "1.") as:
 

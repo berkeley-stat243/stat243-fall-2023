@@ -1,7 +1,7 @@
 ---
 title: "Parallel processing"
 author: "Chris Paciorek"
-date: "2023-07-26"
+date: "2023-09-28"
 format:
   pdf:
     documentclass: article
@@ -19,11 +19,6 @@ execute:
 from: markdown+tex_math_single_backslash
 ---
 
-```{r, fake-setup, echo=FALSE}
-## For some reason we need an R chunk in the doc or get result seen in `error.log`.
-z <- 1
-```
-
 [PDF](./unit6-parallel.pdf){.btn .btn-primary}
 
 References:
@@ -36,6 +31,13 @@ computation is done on systems where some variant of Linux is running.
 The single-machine parallelization discussed here should work on Macs
 and Windows, but some of the details of what is happening under the hood
 are different for Windows.
+
+As context, let's consider some ways we might be able to achieve faster computation:
+
+  - better algorithms: This has been quite important in many areas of science but is not the focus here.
+  - more computationally-efficient implementations of an algorithm: This was a topic in Unit 5.
+  - faster computers: When CPUs were getting faster at a rapid pace (Moore's Law) this was quite important, but that's no longer the case for CPUs. However, GPU technology is improving rapidly.
+  - "more" computers: We can try to exploit more processors (more CPUs, more GPU threads, more compute nodes) for a given computation. That is the topic of this Unit.
 
 # 1. Some scenarios for parallelization
 
@@ -117,9 +119,9 @@ essentially a computer with its own processor(s) and memory. Memory is
 local to each node (distributed memory). One basic principle is that
 communication between a processor and its memory is much faster than
 communication between processors with different memory. An example of a
-modern supercomputer is the Cori supercomputer at Lawrence Berkeley
-National Lab, which has 12,076 nodes, and a total of 735,200 cores. Each
-node has either 96 or 128 GB of memory for a total of 1.3 PB of memory.
+modern supercomputer is the Perlmutter supercomputer at Lawrence Berkeley
+National Lab, which has 3072 CPU-only nodes and 1792 nodes with GPUs, and a total of about 500,000 CPU cores. Each
+node has 512 GB of memory for a total of 2.3 PB of memory.
 
 For our purposes, there is little practical distinction between
 multi-processor and multi-core situations. The main issue is whether
@@ -130,7 +132,8 @@ personal computer or a given node in a cluster.
 ## Some useful terminology:
 
 -   *cores*: We'll use this term to mean the different processing units
-    available on a single machine or node of a cluster.
+    available on a single machine or node of a cluster. A given CPU will
+    have multiple cores. (E.g, the AMD EPYC 7763 has 64 cores per CPU.)
 -   *nodes*: We'll use this term to mean the different computers, each
     with their own distinct memory, that make up a cluster or
     supercomputer.
@@ -181,8 +184,8 @@ copied when creating new processes to do the work in parallel. With
 threaded computations, multiple threads can access object(s) without
 making explicit copies. But in some programming contexts one needs to be
 careful that the threads on different cores doesn't mistakenly overwrite
-places in memory that are used by other cores (this is not an issue in
-R).
+places in memory that are used by other cores (this is generally not an issue in
+Python or R).
 
 We'll cover two types of shared memory parallelism approaches in this
 unit:
@@ -213,9 +216,7 @@ While there are various Python and R that use MPI behind the scenes, we'll only 
 memory parallelization via `Dask`, which doesn't use
 MPI.
 
-## Some other approaches to parallel processing
-
-### GPUs
+## GPUs
 
 GPUs (Graphics Processing Units) are processing units originally
 designed for rendering graphics on a computer quickly. This is done by
@@ -241,6 +242,8 @@ main (CPU) memory and GPU memory. Also, since there is overhead in
 launching a GPU kernel, one wants to avoid launching a lot of kernels
 relative to the amount of work being done by each kernel. 
 
+## Some other approaches to parallel processing
+
 ### Spark and Hadoop
 
 Spark and Hadoop are systems for implementing computations in a
@@ -258,7 +261,7 @@ choose the number of processing cores you want. You configure the
 virtual machine with the applications, libraries, and data you need and
 then treat the virtual machine as if it were a physical machine that you
 log into as usual. You can also assemble multiple virtual machines into
-your own virtual cluster and use platforms such as Spark on the cloud
+your own virtual cluster and use platforms such as databases and Spark on the cloud
 provider's virtual machines.
 
 # 3. Parallelization strategies
@@ -314,7 +317,7 @@ parallelize your computation.
         and 5, and worker 3 assigned tasks 3 and 6. If the tasks are
         dynamically assigned, worker 1 would be assigned task 1, worker
         2 task 2, and worker 3 task 3. Then whichever worker finishes
-        their task first (it woudn't necessarily be worker 1) would be
+        their task first (it wouldn't necessarily be worker 1) would be
         assigned task 4 and so on.
     -   Basically if you have many tasks that each take similar time,
         you want to preschedule the tasks to reduce communication. If
@@ -345,8 +348,8 @@ functionality for parallel processing, including `ipyparallel`, `ray`,
 
 ## Overview: Key idea
 
-A key idea in Dask (and in R's `future` package and the `ray` package for Python) involve abstracting
-the parallelization away from the computational resources that the
+A key idea in Dask (and in R's `future` package and the `ray` package for Python) involve abstracting (i.e, divorcing/separating)
+the specification of the  parallelization in the code away from the computational resources that the
 code will be run on. We want to:
 
 -   Separate what to parallelize from how and where the parallelization
@@ -365,7 +368,8 @@ to run code on multiple machines, and how many cores on each machine to use.
 For example to parallelize across multiple cores via separate Python
 processes, we'd do this.
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 import dask.multiprocessing
 dask.config.set(scheduler='processes', num_workers = 4)  
 ```
@@ -401,6 +405,8 @@ you use in your parallelized code and importing those packages on the workers an
 
 Here's a toy example that shows that the `numpy` package and a global variable `n` are automatically available in the worker processes without any action on our part.
 
+Note the use of the `@delayed` decorator to flag the function so that it operates in a lazy manner for use with Dask's parallelization capabilities.
+
 ```{python}
 import dask.multiprocessing
 dask.config.set(scheduler='processes', num_workers = 4, chunksize = 1)  
@@ -408,6 +414,7 @@ dask.config.set(scheduler='processes', num_workers = 4, chunksize = 1)
 import numpy as np
 n = 10
 
+@dask.delayed
 def myfun(idx):
    return np.random.normal(size = n)
 
@@ -415,7 +422,7 @@ def myfun(idx):
 tasks = []
 p = 8
 for i in range(p):
-    tasks.append(dask.delayed(myfun)(i))  # add lazy task
+    tasks.append(myfun(i))  # add lazy task
 
 tasks
 results = dask.compute(tasks)  # compute all in parallel
@@ -423,12 +430,23 @@ results = dask.compute(tasks)  # compute all in parallel
 
 In other contexts (in various languages) you may need to explicitly copy objects to the workers (or load packages on the workers). This is sometimes called *exporting* variables. 
 
+We don't have to flag the function in advanced with `@delayed`. We could also have directly called the decorator like this, which as the advantage of allowing us to run the function in the normal way if we simply invoke it.
+
+```{python}
+#| eval: false
+tasks.append(dask.delayed(myfun)(i))
+```
+
+
+
 # 5. Illustrating the principles in specific case studies
 
 ## Scenario 1: one model fit
 
-**Scenario**: You need to fit a single statistical/machine learning
+**Specific scenario**: You need to fit a single statistical/machine learning
 model, such as a random forest or regression model, to your data.
+
+**General scenario**: Parallelizing a single task.
 
 ### Scenario 1A:
 
@@ -469,11 +487,11 @@ In addition to being fast when used on a single core, all of these BLAS
 libraries are threaded - if your computer has multiple cores and there
 are free resources, your linear algebra will use multiple cores,
 provided your program is linked against the threaded BLAS installed on
-your machine and provided the environment variable `OMP_NUM_THREADS` is
+your machine and provided the shell environment variable `OMP_NUM_THREADS` is
 not set to one. (Macs make use of `VECLIB_MAXIMUM_THREADS` rather than
 `OMP_NUM_THREADS`.)
 
-It's also possible to use an optimized BLAS with Python's `numpy` and
+For parallel (threaded) linear algebra in Python, one can use an optimized BLAS with the `numpy` and
 `scipy` packages, on either Linux or using the Mac's *vecLib* BLAS.
 Details will depend on how you install Python, numpy, and scipy.
 
@@ -481,7 +499,8 @@ Dask and some other packages also provide threading, but pure Python code is not
 
 Here's some code that illustrates the speed of using a threaded BLAS:
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 import numpy as np
 import time
 
@@ -505,10 +524,61 @@ overhead in setting up the parallelization and because the parallelized
 linear algebra calculation involves more actual operations than when done
 serially.
 
+### GPUs and linear algebra
+
+Linear algebra with large matrices is often a very good use case for GPUs.
+
+Here's an example of using the GPU to multiply large matrices using PyTorch.
+We could do this similarly with Tensorflow or JAX.
+
+```{python}
+#| eval: false
+import torch
+
+start = torch.cuda.Event(enable_timing=True)
+end = torch.cuda.Event(enable_timing=True)
+
+gpu = torch.device("cuda:0")
+
+n = 10000
+x = torch.randn(n,n, device = gpu)
+y = torch.randn(n,n, device = gpu)
+
+## Time the matrix multiplication on GPU:
+start.record()
+z = torch.matmul(x, y)
+end.record()
+torch.cuda.synchronize()
+print(start.elapsed_time(end)) 
+
+## Compare to CPU:
+cpu = torch.device("cpu")
+
+x = torch.randn(n,n, device = cpu)
+y = torch.randn(n,n, device = cpu)
+
+## Time the matrix multiplication on CPU:
+start.record()
+z = torch.matmul(x, y)
+end.record()
+torch.cuda.synchronize()
+print(start.elapsed_time(end)) 
+```
+
+The GPU calculation takes 100-200 milliseconds (ms), while the CPU calculation
+took 18 seconds using two CPU cores. That's a speed-up of more than 100x!
+
+For a careful comparison between GPU and CPU, we'd want to consider the effect of
+using 4-byte floating point numbers for the GPU calculation.
+
+We'd also want to think about how many CPU cores should be used for the comparison.
+
 ## Scenario 2: three different prediction methods on your data
 
-**Scenario**: You need to fit three different statistical/machine
+**Specific scenario**: You need to fit three different statistical/machine
 learning models to your data.
+
+**General scenario**: Parallelizing a small number of tasks.
 
 What are some options?
 
@@ -550,6 +620,11 @@ print(time.time() - t0)
 
 Question: Why might this not have shown a perfect three-fold speedup?
 
+You could also have used tools like a parallel map here
+as well, as we'll discuss in the next scenario.
+
+### Lazy evaluation, synchronicity, and blocking
+
 If we look at the delayed objects, we see that each one is a representation of the computation that needs to be
 done and that execution happens lazily. Also note that `dask.compute` executes *synchronously*, which means
 the main process waits until the `dask.compute` call is complete before allowing other commands to be run.
@@ -558,15 +633,14 @@ a *blocking* call because execution of the task in the worker processes blocks t
 In contrast, if control returns to the user before the worker processes are done, that would be
 *asynchronous* evaluation (aka, a *non-blocking* call).
 
-You could also have used tools like a parallel map here
-as well, as we'll discuss next.
-
 Note: the use of `chunksize = 1` forces Dask to immediately start one task on each worker. Without that argument, by default it groups tasks so as to reduce the overhead of starting each task individually, but when we have few tasks, that prevents effective parallelization.
 
 ## Scenario 3: 10-fold CV and 10 or fewer cores
 
-**Scenario**: You are running a prediction method on 10 cross-validation
+**Specific scenario**: You are running a prediction method on 10 cross-validation
 folds.
+
+**General scenario**: Parallelizing tasks via a parallel map.
 
 This illustrates the idea of running some number of tasks using the
 cores available on a single machine. 
@@ -604,8 +678,10 @@ np.random.seed(1)
 # Generate data
 n = 1000
 p = 50
-X = pd.DataFrame(np.random.normal(size = (n, p)), columns=[f"X{i}" for i in range(1, p + 1)])
-Y = X['X1'] + np.sqrt(np.abs(X['X2'] * X['X3'])) + X['X2'] - X['X3'] + np.random.normal(size = n)
+X = pd.DataFrame(np.random.normal(size = (n, p)),\
+                 columns=[f"X{i}" for i in range(1, p + 1)])
+Y = X['X1'] + np.sqrt(np.abs(X['X2'] * X['X3'])) +\
+    X['X2'] - X['X3'] + np.random.normal(size = n)
 
 n_folds = 10
 seq = np.arange(n_folds)
@@ -629,32 +705,30 @@ results = c.gather(tasks)
 ```
 
 Now suppose you have 4 cores (and therefore won't have an equal number
-of tasks per core). The approach in the next scenario should work
+of tasks per core with the 10 tasks). The approach in the next scenario should work
 better.
 
 ## Scenario 4: parallelizing over prediction methods
 
 **Scenario**: parallelizing over prediction methods or other cases where
-execution time varies
+execution time varies.
 
 If you need to parallelize over prediction methods or in other contexts
 in which the computation time for the different tasks varies widely, you
-want to avoid having the parallelization tool group the tasks in
+want to avoid having the parallelization group the tasks into batches in
 advance, because some cores may finish a lot more quickly than others.
-However, in some cases (such as the future package in R), this sort of grouping in advance (called
-prescheduling or 'static' allocation of tasks to workers) is the
-default, because it reduces overhead (from the latency involved in starting tasks).
+Starting the tasks one by one (not in batches) is called *dynamic allocation*.
 
-When using delayed, Dask starts up each delayed evaluation separately (i.e., dynamic allocation).
-This is good for load-balancing, but each task induces some overhead (a few hundred microseconds).
-Even with a distributed map() it doesn’t appear possible to ask that the tasks be broken up into batches.
-
-So if you have many quick tasks, you probably want to break them up into batches manually,
-to reduce the impact of the overhead.
+In contrast, if the computation time is about the same for the different tasks
+(or if you have so many tasks that the effect of averaging helps with load-balancing)
+then you want to group the tasks into batches.  This is called *static allocation* or *prescheduling*.
+This avoids the extra overhead (~1 millisecond per task) of scheduling many tasks.
 
 ### Dynamic allocation
 
-We’ll set up an artificial example with four slow tasks and 12 fast tasks and see the speed of running with the default of dynamic allocation under the distributed scheduler. Then we’ll compare to the worst-case scenario with all four slow tasks in a single batch.
+With Dask's `distributed` scheduler, Dask starts up each delayed evaluation separately (i.e., dynamic allocation).
+
+We’ll set up an artificial example with four slow tasks and 12 fast tasks and see the speed of running with the default of dynamic allocation under Dask's distributed scheduler. Then in the next section, we’ll compare to the worst-case scenario with all four slow tasks in a single batch.
 
 ```{python}
 import scipy.special
@@ -681,7 +755,7 @@ out = fun(5)
 t0 = time.time()
 tasks = c.map(fun, range(len(n)))
 results = c.gather(tasks)  
-print(time.time() - t0)  # 0.81 sec.
+print(time.time() - t0)  # 1.0 sec. 
 
 cluster.close()
 ```
@@ -694,7 +768,6 @@ by a single worker.
 
 Next, note that by default the ‘processes’ scheduler sets up tasks in batches, with a default chunksize of 6. In this case that means that the first 4 (slow) tasks are all allocated to a single worker.
 
-[TODO: revisit this to check timing
 
 ```{python}
 dask.config.set(scheduler='processes', num_workers = 4)
@@ -710,10 +783,10 @@ for i in range(p):
 
 t0 = time.time()
 results = dask.compute(tasks)  # compute all in parallel
-print(time.time() - t0)
+print(time.time() - t0)   # 3.4 sec.
 ```
 
-We could avoid that by setting `chunksize = 1` (as was shown in our original example of using the `processes` scheduler).
+To force dynamic allocation, we can set `chunksize = 1` (as was shown in our original example of using the `processes` scheduler).
 
 ```{python}
 dask.config.set(scheduler='processes', num_workers = 4, chunksize = 1)
@@ -728,13 +801,26 @@ results = dask.compute(tasks)  # compute all in parallel
 print(time.time() - t0)
 ```
 
+### Choosing static vs. dynamic allocation in Dask
 
+With the `distributed` scheduler, Dask starts up each delayed evaluation separately (i.e., dynamic allocation).
+And even with a distributed `map()` it doesn’t appear possible to ask that the tasks be broken up into batches.
+Therefore if you want static allocation, you could use the `processes` scheduler if using a single machine, or
+if you need to use the `distributed` schduler you could break up the tasks into batches manually.
+
+With the `processes` scheduler, static allocation is the default, with a default chunksize of 6 tasks per batch.
+You can force dynamic allocation by setting `chunksize = 1`.
+
+(Note that in R, static allocation is the default when using the `future` package.)
 
 ## Scenario 5: 10-fold CV across multiple methods with many more than 10 cores
 
-**Scenario**: You are running an ensemble prediction method such as
+**Specific scenario**: You are running an ensemble prediction method such as
 SuperLearner or Bayesian model averaging on 10 cross-validation folds,
 with many statistical/machine learning methods.
+
+**General scenario**: parallelizing nested tasks or a large number of tasks,
+ideally across multiple machines.
 
 Here you want to take advantage of all the cores you have available, so
 you can't just parallelize over folds.
@@ -748,7 +834,9 @@ nodes to parallelize over a large number of tasks.
 One can always flatten the looping, either in a for loop or in similar
 ways when using apply-style statements.
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
+
 ## original code: multiple loops 
 for fold in range(n):
   for method in range(M):
@@ -764,7 +852,8 @@ for idx in range(n*M):
 Rather than flattening the loops at the loop level (which you'd need to do to use `map`), one could just
 generate a list of delayed tasks within the nested loops.
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 for fold in range(n):
   for method in range(M):
      tasks.append(dask.delayed(myfun)(fold,method))
@@ -777,17 +866,19 @@ The future package in R has some nice functionality for easily parallelizing wit
 ### Scenario 5B: Parallelizing across multiple nodes
 
 If you have access to multiple machines networked together, including a
-Linux cluster, you can use the tools in the future package across
+Linux cluster, you can use Dask to start workers across
 multiple nodes (either in a nested parallelization situation with many
 total tasks or just when you have lots of unnested tasks to parallelize
 over). Here we'll just illustrate how to use multiple nodes, but if you
 had a nested parallelization case you can combine the ideas just above
 with the use of multiple nodes.
 
-Simply start Python as you usually would.
+Simply start Python as you usually would. Then the following code
+will parallelize on workers across the machines specified.
 
 
 ```{python}
+#| eval: false
 from dask.distributed import Client, SSHCluster
 # First host is the scheduler.
 cluster = SSHCluster(
@@ -797,7 +888,9 @@ cluster = SSHCluster(
 c = Client(cluster)
 
 ## On the SCF, Savio and other clusters using the SLURM scheduler,
-## you can figure out the machine names like this, repeating the first machihe for the scheduler:
+## you can figure out the machine names like this, repeating the
+## first machine for the scheduler:
+## 
 ## machines = subprocess.check_output("srun hostname", shell = True,
 ##            universal_newlines = True).strip().split('\n')
 ## machines = [machines[0]] + machines
@@ -813,16 +906,20 @@ results = c.gather(tasks)
 ## And just to check we are actually using the various machines:
 import subprocess
 
-c.gather(c.map(lambda x: subprocess.check_output("hostname", shell = True), range(4)))
+c.gather(c.map(lambda x: subprocess.check_output("hostname", shell = True), \
+               range(4)))
 
 cluster.close()
 ```
 
 
+
 ## Scenario 6: Stratified analysis on a very large dataset
 
-**Scenario**: You are doing stratified analysis on a very large dataset
+**Specific scenario**: You are doing stratified analysis on a very large dataset
 and want to avoid unnecessary copies.
+
+**General scenario**: Avoiding copies when working with large data in parallel.
 
 In many parallelization tools, if you try to parallelize this case on a single node, you end up making copies of the original dataset, which both takes up time and eats up memory.
 
@@ -830,6 +927,8 @@ Here when we use the `processes` scheduler, we make copies for each task.
 
 ```{python}
 def do_analysis(i,x):
+    # A fake "analysis", identical for each task.
+    print(id(x))   # Check the number of copies.
     return np.mean(x)
 
 n_cores = 4
@@ -850,6 +949,7 @@ print(time.time() - t0)
 
 
 A better approach is to use the `distributed` scheduler (which is fine to use on a single machine or multiple machines), which makes one copy per worker instead of one per task, provided you apply `delayed()` to the global data object.
+
 
 ```{python}
 from dask.distributed import Client, LocalCluster
@@ -872,14 +972,11 @@ cluster.close()
 
 That seems to work, though Dask suggests sending the data to the workers in advance. I’m not sure of the distinction between what it is recommending and use of `dask.delayed(x)`.
 
+Furthermore, the id of `x` seems to be the same for all the tasks, even though we have four workers. The documentation indicates one copy per worker, but perhaps that's not actually the case.
+
 Even better would be to use the `threads` scheduler, in which case all workers can access the same data objects with no copying (but of course we cannot modify the data in that case without potentially causing problems for the other tasks). Without the copying, this is really fast.
 
 ```{python}
-def do_analysis(i,x):
-    print(id(x))
-    return np.mean(x)
-
-
 dask.config.set(scheduler='threads', num_workers = n_cores)
 
 tasks = []
@@ -910,7 +1007,9 @@ based on that subsequence. All random numbers can be generated from one
 or more random uniform numbers, so we can just think about a sequence of
 values between 0 and 1.
 
-**Scenario**: You are running a simulation study with n=1000 replicates.
+**Specific scenario**: You are running a simulation study with n=1000 replicates.
+
+**General scenario**: Safely handling random number generation in parallel.
 
 Each replicate involves fitting two statistical/machine learning
 methods.
@@ -920,7 +1019,7 @@ might as well just parallelize across replicates.
 
 However, you need to think about random number generation. One option is to set the random number seed to different values for each replicate. One danger in setting the seed like that is that the random numbers in the different replicate could overlap somewhat. This is probably somewhat unlikely if you are not generating a huge number of random numbers, but it’s unclear how safe it is.
 
-We can use functionality with numpy's PCG64 or MT19937 generators to be completely safe in our parallel random number generation. Each provide a `jumped()` function that moves the RNG ahead as if one had generated a very large number of random variables ($2^{128}) for the Mersenne Twister and nearly that for the PCG64).
+We can use functionality with numpy's PCG64 or MT19937 generators to be completely safe in our parallel random number generation. Each provide a `jumped()` function that moves the RNG ahead as if one had generated a very large number of random variables ($2^{128}$) for the Mersenne Twister and nearly that for the PCG64).
 
 Here’s how we can set up the use of the PCG64 generator:
 
@@ -962,7 +1061,8 @@ rng.normal(size = 3)
 
 So the strategy to parallelize across tasks (or potentially workers if random number generation is done sequentially for tasks done by a single worker) is to give each task the same seed and use `jumped(i)` where `i` indexes the tasks (or workers).
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 def myrandomfun(i):
     bitGen = np.random.PCG(1)
     bitGen = bitGen.jumped(i)
@@ -973,7 +1073,8 @@ One caution is that it appears that the period for PCG64 is $2^{128}$ and that `
 
 Alternatively as [recommended in the docs](https://numpy.org/doc/stable/reference/random/bit_generators/pcg64.html):
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 n_tasks = 10
 sg = np.random.SeedSequence(1)
 rngs = [Generator(PCG64(s)) for s in sg.spawn(n_tasks)]
@@ -998,7 +1099,8 @@ One implication is that if you can include all computations on a large dataset w
 
 Here’s an example with Dask dataframe on the airline delay data, where we make sure to do all our computations as part of one graph:
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 import dask
 dask.config.set(scheduler='processes', num_workers = 6)  
 import dask.dataframe as ddf
@@ -1032,7 +1134,8 @@ of threads can be set by setting the OMP_NUM_THREADS environment
 variable (VECLIB_MAXIMUM_THREADS on a Mac). E.g., to set it for four
 threads in the bash shell:
 
-```{bash, eval=FALSE}
+```{bash}
+#| eval: false
 export OMP_NUM_THREADS=4
 ```
 
@@ -1042,7 +1145,8 @@ compiled executable.
 Alternatively, you can set OMP_NUM_THREADS as you invoke your job, e.g.,
 here with R:
 
-```{bash, eval=FALSE}
+```{bash}
+#| eval: false
 OMP_NUM_THREADS=4 R CMD BATCH --no-save job.R job.out
 ```
 
@@ -1064,7 +1168,7 @@ taking advantage of the threaded BLAS (i.e., restricting each process to
 a single thread).
 
 
-# 8. Introduction to R's future package (optional)
+# 7. Introduction to R's future package (optional)
 
 Before we illustrate implementation of various kinds of parallelization,
 I'll give an overview of the `future` package, which we'll use for many
@@ -1118,7 +1222,8 @@ machine(s) to use and how many cores on each machine to use.
 
 For example,
 
-```{r, eval=FALSE}
+```{r}
+#| eval: false
 plan(multiprocess)
 ## spreads work across multiple cores
 # alternatively, one can also control number of workers
