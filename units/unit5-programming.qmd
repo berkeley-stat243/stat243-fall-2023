@@ -3065,19 +3065,22 @@ Sometimes we can exploit vectorized mathematical operations in
 surprising ways, though sometimes the
 code is uglier. 
 
-```{python, vec-tricks, cache=TRUE}
+```{python, vec-tricks}
+#| cache: true
 x = np.random.normal(size = n)
 
 ## List comprehension
 timeit.timeit('truncx = [max(0,val) for val in x]', number = 10, globals = {'x':x})
 ```
 
-```{python, vec-tricks2, cache=TRUE}
+```{python, vec-tricks2}
+#| cache: true
 ## Vectorized slice replacement
-timeit.timeit('truncx = x; truncx[x < 0] = 0', number = 10, globals = {'x':x})
+timeit.timeit('truncx = x.copy(); truncx[x < 0] = 0', number = 10, globals = {'x':x})
 ```
 
-```{python, vec-tricks3, cache=TRUE}
+```{python, vec-tricks3}
+#| cache: true
 ## Vectorized math trick
 timeit.timeit('truncx = x * x>0', number = 10, globals = {'x':x})
 ```
@@ -3104,13 +3107,46 @@ and poses greater dangers of bugs. In some cases you may want to
 first write the code more directly and
 then compare the more efficient code to make sure the results are the same. It's also a good idea to  comment your code in such cases.
 
-### Are map operations faster than loops?
+### Vectorization, mapping, and loops
 
-The potential for inefficiency of looping and map operations in interpreted languages will depend in part on whether a substantial part of the work is in the overhead involved in the looping or in the time required by the function
-evaluation on each of the elements. If you're worried about speed,
-it's a good idea to benchmark `map` or `pandas.apply` against looping.
+Next let's consider when loops and mapping would be particularly slow and how mapping and loops might compare to each other.
 
-Here's an example where the bulk of time is in the actual computation and not in the looping itself. Here `map` is not faster than a loop. 
+First, the potential for inefficiency of looping and map operations in interpreted languages will depend in part on whether a substantial part of the work is in the overhead involved in the looping or in the time required by the function evaluation on each of the elements.
+
+Here's an example, where the core computation is very fast, so we might expect the overhead of looping (in its various forms seen here) to be important. 
+
+```{python}
+import time
+n = 10**6
+x = np.random.normal(size = n)
+
+t0 = time.time()
+out = np.exp(x)
+time.time() - t0
+
+t0 = time.time()
+vals = np.zeros(n)
+for i in range(n):
+    vals[i] = np.exp(x[i])
+
+
+time.time() - t0
+
+t0 = time.time()
+vals = [np.exp(v) for v in x]
+time.time() - t0
+
+t0 = time.time()
+vals = list(map(np.exp, x))
+time.time() - t0
+```
+
+Regardless of how we do the looping (an explicit loop, list comprehension, or `map`), it looks like we can't avoid the overhead unless we use the vectorized call,
+which is of course the recommended approach in this case, both for speed and readability (and conciseness).
+
+Second, is it faster to use `map` than to use a loop? In the example above it is somewhat faster to use `map`. That might not be surprising. In the loop case, the interpreter needs to do the checking we discussed earlier in this section at each iteration of the loop. What about in the `map` case? For mapping over a numpy array, perhaps not, but what if mapping over a list? So without digging into how `map` works, it's hard to say.
+
+Here's an example where the bulk of time is in the actual computation and not in the looping itself. We'll run a bunch of regressions on a matrix `X` (i.e., each column of `X` is a predictor) using each column of the matrix `mat` to do a separate regression. 
 
 ```{python, map-vs-for}
 import time
@@ -3142,36 +3178,7 @@ for i in range(nCalcs):
 time.time() - t0
 ```
 
-And here's an example, where (unlike the previous example) the core computation is very fast, so we might expect the overhead of looping (in its various forms seen here) to be important. 
-
-```{python}
-import time
-n = 10**6
-x = np.random.normal(size = n)
-
-t0 = time.time()
-out = np.exp(x)
-time.time() - t0
-
-t0 = time.time()
-vals = np.zeros(n)
-for i in range(n):
-    vals[i] = np.exp(x[i])
-
-
-time.time() - t0
-
-t0 = time.time()
-vals = [np.exp(v) for v in x]
-time.time() - t0
-
-t0 = time.time()
-vals = list(map(np.exp, x))
-time.time() - t0
-```
-
-In fact, it looks like we can't avoid the overhead unless we use the vectorized call,
-which is of course the recommended approach in this case, both for speed and readability (and conciseness).
+Here the looping is faster. I don't have any particular explanation for that result.
 
 ### Matrix algebra efficiency
 

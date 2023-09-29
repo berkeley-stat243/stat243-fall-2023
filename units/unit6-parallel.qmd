@@ -156,14 +156,14 @@ personal computer or a given node in a cluster.
     cases if objects are not changed, the objects in the child process
     may refer back to the original objects in the original process,
     avoiding making copies.
--   *sockets*: some of R's parallel functionality involves creating new
-    R processes (e.g., starting processes via `Rscript`) and
-    communicating with them via a communication technology called
-    sockets.
 -   *scheduler*: a program that manages users' jobs on a cluster.
     *Slurm* is a commonly used scheduler.
 -   *load-balanced*: when all the cores that are part of a computation
     are busy for the entire period of time the computation is running.
+-   *sockets*: some of R's parallel functionality involves creating new
+    R processes (e.g., starting processes via `Rscript`) and
+    communicating with them via a communication technology called
+    sockets.
 
 ## Distributed vs. shared memory
 
@@ -1097,7 +1097,7 @@ For example, if you are create a Dask distributed dataset from data on disk, I t
 
 One implication is that if you can include all computations on a large dataset within a single computational graph (i.e., a call to compute) that may be much more efficient than making separate calls.
 
-Here’s an example with Dask dataframe on the airline delay data, where we make sure to do all our computations as part of one graph:
+Here’s an example with Dask dataframe on some air traffic delay data, where we make sure to do all our computations as part of one graph:
 
 ```{python}
 #| eval: false
