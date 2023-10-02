@@ -626,14 +626,11 @@ organized per student, the data might have the following fields:
 -    ...
 -   teacher age n
 
-There are a lot of problems with this:
+There are a lot of problems with this (to be filled out in class):
 
-1.  A lot of information is repeated across rows (e.g., teacher age for students who have the same teacher)
-    - this is a waste of space
-    - it is hard/error-prone to update values in the database (e.g., after a teacher's birthday), because a given value needs to be updated in multiple places
-2.  There are potentially a lot of empty cells (e.g., for a student who takes fewer than 'n' classes). This will generally result in a waste of space.
-3.  It's hard to see the information that is not organized uniquely by row -- i.e., it's much easier to understand the information at the student level than the teacher level
-4.  We have to know in advance how big 'n' is. Then if a single student takes more than 'n' classes, the whole database needs to be restructured.
+1. ???
+2. ???
+3. ???
 
 It would get even worse if there was a field related to teachers for
 which a given teacher could have multiple values (e.g., teachers could
@@ -1203,25 +1200,27 @@ You can do set operations like union, intersection, and set difference using the
 
 > **Note**: While one can often set up an equivalent query without using INTERSECT or UNION, set operations can be very handy. In the example below one could do it with a self-join, joining a table to itself, but the syntax is often more complicated.
 
-Suppose we want to know the names of all individuals who have asked both an R question and a Python question. We can do this with INTERSECT:
+Consider the following example of using `INTERSECT`. What does it return?
 
 
 ```{python}
 #| eval: false
-result1 = db.execute("select displayname, userid from
-                     questions Q join users U on U.userid = Q.ownerid
-                     join questions_tags T on Q.questionid = T.questionid
-                     where tag = 'r'
-                     intersect
-                     select displayname, userid from
-                     questions Q join users U on U.userid = Q.ownerid
-                     join questions_tags T on Q.questionid = T.questionid
+result1 = db.execute("select displayname, userid from \
+                     questions Q join users U on U.userid = Q.ownerid \
+                     join questions_tags T on Q.questionid = T.questionid \
+                     where tag = 'r' \
+                     intersect \
+                     select displayname, userid from \
+                     questions Q join users U on U.userid = Q.ownerid \
+                     join questions_tags T on Q.questionid = T.questionid \
                      where tag = 'python'")
 ```
 
 ## Subqueries
 
 A subquery is a full query that is embedded in a larger query. 
+These can be quite handy in building up complicated queries. One could instead use temporary tables, but it often
+is easier to write all in one query (and that let's the database's query optimizer operate on the entire query).
 
 ### Subqueries in the FROM statement
 
@@ -1229,14 +1228,13 @@ We can use subqueries in the FROM statement to create a temporary table to use i
 
 > **Challenge**: What does the following do?
 
-
 ```{python}
 #| eval: false
-db.execute("select * from questions join answers A
-           on questions.questionid = A.questionid
-           join
-           (select ownerid, count(*) as n_answered from answers
-           group by ownerid order by n_answered desc limit 1000) most_responsive
+db.execute("select * from questions join answers A \
+           on questions.questionid = A.questionid \
+           join \
+           (select ownerid, count(*) as n_answered from answers \
+           group by ownerid order by n_answered desc limit 1000) most_responsive \
            on A.ownerid = most_responsive.ownerid")
 ```
 
@@ -1251,11 +1249,11 @@ Instead of a join, we can use subqueries as a way to combine information across 
 For example, suppose we want to know the average number of UpVotes for users who have posted a question with the tag "python".
 
 ```{python}
-db.execute("select avg(upvotes) from users where userid in
-           (select distinct ownerid from
-           questions join questions_tags
-           on questions.questionid = questions_tags.questionid
-           where tag = 'python')")       
+db.execute("select avg(upvotes) from users where userid in \
+           (select distinct ownerid from \
+           questions join questions_tags \
+           on questions.questionid = questions_tags.questionid \
+           where tag = 'python')")
 ```
 
 
