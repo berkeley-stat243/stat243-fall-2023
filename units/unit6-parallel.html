@@ -614,7 +614,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>One sets the <em>scheduler</em> to control how parallelization is done, whether to run code on multiple machines, and how many cores on each machine to use.</p>
 <p>For example to parallelize across multiple cores via separate Python processes, we’d do this.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dask.multiprocessing</span>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dask</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>dask.config.<span class="bu">set</span>(scheduler<span class="op">=</span><span class="st">'processes'</span>, num_workers <span class="op">=</span> <span class="dv">4</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>This table shows the different types of schedulers.</p>
@@ -641,7 +641,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>no</td>
 </tr>
 <tr class="even">
-<td>threads</td>
+<td>threads (1)</td>
 <td>threads within current Python session</td>
 <td>no</td>
 <td>no</td>
@@ -653,7 +653,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <td>yes</td>
 </tr>
 <tr class="even">
-<td>distributed</td>
+<td>distributed (2)</td>
 <td>Python sessions across multiple nodes</td>
 <td>yes</td>
 <td>yes</td>
@@ -672,10 +672,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Here’s a toy example that shows that the <code>numpy</code> package and a global variable <code>n</code> are automatically available in the worker processes without any action on our part.</p>
 <p>Note the use of the <code>@delayed</code> decorator to flag the function so that it operates in a lazy manner for use with Dask’s parallelization capabilities.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dask.multiprocessing</span>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dask</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dask.config.<span class="bu">set</span>(scheduler<span class="op">=</span><span class="st">'processes'</span>, num_workers <span class="op">=</span> <span class="dv">4</span>, chunksize <span class="op">=</span> <span class="dv">1</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;dask.config.set object at 0x7f343be636d0&gt;</code></pre>
+<pre><code>&lt;dask.config.set object at 0x7fcf3a8fa950&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">10</span></span>
@@ -692,7 +692,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>tasks</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[Delayed('myfun-0b8a5e45-9801-44c7-9a97-d81aa01be377'), Delayed('myfun-6de7ba18-2d58-4abb-b130-2f1f87bac2ef'), Delayed('myfun-dfba72ba-a973-4de0-9e2f-038a1ff1d944'), Delayed('myfun-96b89c6a-f4dc-437c-8053-50e6301d9a1e'), Delayed('myfun-1c79bf94-49f6-4323-b767-2f9eeb50bad5'), Delayed('myfun-1e4e0459-3607-404d-805a-6ca8f82c1bc3'), Delayed('myfun-21100b7e-5acb-439c-a472-4ee319277df6'), Delayed('myfun-ee6454e0-e38a-4511-9c40-35ee586e07bb')]</code></pre>
+<pre><code>[Delayed('myfun-266ad51d-0510-4b2d-b3f9-f81111f23a43'), Delayed('myfun-dae4552a-c761-44c2-b36d-00b11e66eb8c'), Delayed('myfun-a0619074-54b7-4059-aa13-b947ab8f4373'), Delayed('myfun-73e59ded-c670-4dad-a1d3-290ebbc7238e'), Delayed('myfun-410e8ef9-6bce-4458-beb9-0b31c12765ce'), Delayed('myfun-b89e7dc1-e909-40e4-905e-8a742312587d'), Delayed('myfun-8dd285e4-bc61-4496-b1d4-f97b3d2c8ed9'), Delayed('myfun-fa9f57ec-23c9-4a16-a87a-0cd11ed549f2')]</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> dask.compute(tasks)  <span class="co"># compute all in parallel</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -750,7 +750,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="gpus-and-linear-algebra" class="level3">
 <h3 class="anchored" data-anchor-id="gpus-and-linear-algebra">GPUs and linear algebra</h3>
 <p>Linear algebra with large matrices is often a very good use case for GPUs.</p>
-<p>Here’s an example of using the GPU to multiply large matrices using PyTorch. We could do this similarly with Tensorflow or JAX.</p>
+<p>Here’s an example of using the GPU to multiply large matrices using PyTorch. We could do this similarly with Tensorflow or JAX. I’ve just inserted the timing from running this on an SCF machine with a powerful GPU.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> torch</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -768,7 +768,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> torch.matmul(x, y)</span>
 <span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>end.record()</span>
 <span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>torch.cuda.synchronize()</span>
-<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(start.elapsed_time(end)) </span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(start.elapsed_time(end))   <span class="co"># 120 ms.</span></span>
 <span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a><span class="co">## Compare to CPU:</span></span>
 <span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>cpu <span class="op">=</span> torch.device(<span class="st">"cpu"</span>)</span>
@@ -781,7 +781,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>z <span class="op">=</span> torch.matmul(x, y)</span>
 <span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>end.record()</span>
 <span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>torch.cuda.synchronize()</span>
-<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(start.elapsed_time(end)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(start.elapsed_time(end))   <span class="co"># 18 sec.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>The GPU calculation takes 100-200 milliseconds (ms), while the CPU calculation took 18 seconds using two CPU cores. That’s a speed-up of more than 100x!</p>
 <p>For a careful comparison between GPU and CPU, we’d want to consider the effect of using 4-byte floating point numbers for the GPU calculation.</p>
@@ -808,7 +808,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>dask.config.<span class="bu">set</span>(scheduler<span class="op">=</span><span class="st">'processes'</span>, num_workers <span class="op">=</span> <span class="dv">3</span>, chunksize <span class="op">=</span> <span class="dv">1</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;dask.config.set object at 0x7f343be6a450&gt;</code></pre>
+<pre><code>&lt;dask.config.set object at 0x7fcf39ddca50&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">100000000</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
@@ -819,7 +819,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> dask.compute(tasks)</span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>5.634941816329956</code></pre>
+<pre><code>3.77193284034729</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> gen_and_mean(np.random.normal, n, <span class="dv">0</span>, <span class="dv">1</span>)</span>
@@ -827,7 +827,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> gen_and_mean(np.random.uniform, n, <span class="dv">0</span>, <span class="dv">1</span>)</span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>6.987336874008179</code></pre>
+<pre><code>5.227169752120972</code></pre>
 </div>
 </div>
 <p>Question: Why might this not have shown a perfect three-fold speedup?</p>
@@ -835,7 +835,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="lazy-evaluation-synchronicity-and-blocking" class="level3">
 <h3 class="anchored" data-anchor-id="lazy-evaluation-synchronicity-and-blocking">Lazy evaluation, synchronicity, and blocking</h3>
 <p>If we look at the delayed objects, we see that each one is a representation of the computation that needs to be done and that execution happens lazily. Also note that <code>dask.compute</code> executes <em>synchronously</em>, which means the main process waits until the <code>dask.compute</code> call is complete before allowing other commands to be run. This synchronous evaluation is also called a <em>blocking</em> call because execution of the task in the worker processes blocks the main process. In contrast, if control returns to the user before the worker processes are done, that would be <em>asynchronous</em> evaluation (aka, a <em>non-blocking</em> call).</p>
-<p>Note: the use of <code>chunksize = 1</code> forces Dask to immediately start one task on each worker. Without that argument, by default it groups tasks so as to reduce the overhead of starting each task individually, but when we have few tasks, that prevents effective parallelization.</p>
+<p>Note: the use of <code>chunksize = 1</code> forces Dask to immediately start one task on each worker. Without that argument, by default it groups tasks so as to reduce the overhead of starting each task individually, but when we have few tasks, that prevents effective parallelization. We’ll discuss this in much more detail in Scenario 4.</p>
 </section>
 </section>
 <section id="scenario-3-10-fold-cv-and-10-or-fewer-cores" class="level2">
@@ -931,7 +931,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> c.gather(tasks)  </span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)  <span class="co"># 1.0 sec. </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>1.017920970916748</code></pre>
+<pre><code>0.8273491859436035</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>cluster.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -943,7 +943,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>dask.config.<span class="bu">set</span>(scheduler<span class="op">=</span><span class="st">'processes'</span>, num_workers <span class="op">=</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;dask.config.set object at 0x7f3426f4ca50&gt;</code></pre>
+<pre><code>&lt;dask.config.set object at 0x7fcf24074a50&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> myfun(idx):</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>   <span class="cf">return</span> np.random.normal(size <span class="op">=</span> n)</span>
@@ -958,14 +958,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> dask.compute(tasks)  <span class="co"># compute all in parallel</span></span>
 <span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)   <span class="co"># 3.4 sec.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>1.983659029006958</code></pre>
+<pre><code>1.7053916454315186</code></pre>
 </div>
 </div>
 <p>To force dynamic allocation, we can set <code>chunksize = 1</code> (as was shown in our original example of using the <code>processes</code> scheduler).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>dask.config.<span class="bu">set</span>(scheduler<span class="op">=</span><span class="st">'processes'</span>, num_workers <span class="op">=</span> <span class="dv">4</span>, chunksize <span class="op">=</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;dask.config.set object at 0x7f3426f5d8d0&gt;</code></pre>
+<pre><code>&lt;dask.config.set object at 0x7fcf25a04a50&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>tasks <span class="op">=</span> []</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="bu">len</span>(n)</span>
@@ -976,7 +976,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> dask.compute(tasks)  <span class="co"># compute all in parallel</span></span>
 <span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>2.0525612831115723</code></pre>
+<pre><code>1.7510926723480225</code></pre>
 </div>
 </div>
 </section>
@@ -1073,7 +1073,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>dask.config.<span class="bu">set</span>(scheduler<span class="op">=</span><span class="st">'processes'</span>, num_workers <span class="op">=</span> n_cores, chunksize <span class="op">=</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;dask.config.set object at 0x7f3426f36b50&gt;</code></pre>
+<pre><code>&lt;dask.config.set object at 0x7fcf24074a50&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>tasks <span class="op">=</span> []</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="dv">8</span></span>
@@ -1084,7 +1084,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb39-7"><a href="#cb39-7" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> dask.compute(tasks)</span>
 <span id="cb39-8"><a href="#cb39-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>6.963299512863159</code></pre>
+<pre><code>6.555651903152466</code></pre>
 </div>
 </div>
 <p>A better approach is to use the <code>distributed</code> scheduler (which is fine to use on a single machine or multiple machines), which makes one copy per worker instead of one per task, provided you apply <code>delayed()</code> to the global data object.</p>
@@ -1110,7 +1110,7 @@ Consider scattering data ahead of time and using futures.
 </div>
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>2.6095426082611084</code></pre>
+<pre><code>1.1413829326629639</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>cluster.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -1120,7 +1120,7 @@ Consider scattering data ahead of time and using futures.
 <div class="cell">
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>dask.config.<span class="bu">set</span>(scheduler<span class="op">=</span><span class="st">'threads'</span>, num_workers <span class="op">=</span> n_cores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;dask.config.set object at 0x7f3426f36890&gt;</code></pre>
+<pre><code>&lt;dask.config.set object at 0x7fcf240eca50&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>tasks <span class="op">=</span> []</span>
 <span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="dv">8</span></span>
@@ -1130,18 +1130,18 @@ Consider scattering data ahead of time and using futures.
 <span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
 <span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> dask.compute(tasks)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>139862319923824
-139862319923824
-139862319923824
-139862319923824
-139862319923824
-139862319923824
-139862319923824
-139862319923824</code></pre>
+<pre><code>140527666660240
+140527666660240
+140527666660240
+140527666660240
+140527666660240
+140527666660240
+140527666660240
+140527666660240</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.13245940208435059</code></pre>
+<pre><code>0.06332826614379883</code></pre>
 </div>
 </div>
 </section>
