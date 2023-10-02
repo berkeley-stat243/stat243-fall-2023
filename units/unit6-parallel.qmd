@@ -370,7 +370,7 @@ processes, we'd do this.
 
 ```{python}
 #| eval: false
-import dask.multiprocessing
+import dask
 dask.config.set(scheduler='processes', num_workers = 4)  
 ```
 
@@ -379,9 +379,9 @@ This table shows the different types of schedulers.
 |      Type     |               Description              |  Multi-node |  Copies of objects made? |
 |  -------------| ---------------------------------------| ------------| -------------------------|
 |   synchronous |        not in parallel (serial)        |      no     |            no |
-|    threads    |  threads within current Python session |      no     |            no |
+|    threads (1)|threads within current Python session   |      no     |            no |
 |    processes  |       background Python sessions       |      no     |            yes |
-|   distributed |  Python sessions across multiple nodes |     yes     |            yes |
+|distributed (2)|Python sessions across multiple nodes   |     yes     |            yes |
 
 
 Comments:
@@ -408,7 +408,7 @@ Here's a toy example that shows that the `numpy` package and a global variable `
 Note the use of the `@delayed` decorator to flag the function so that it operates in a lazy manner for use with Dask's parallelization capabilities.
 
 ```{python}
-import dask.multiprocessing
+import dask
 dask.config.set(scheduler='processes', num_workers = 4, chunksize = 1)  
 
 import numpy as np
@@ -529,7 +529,8 @@ serially.
 Linear algebra with large matrices is often a very good use case for GPUs.
 
 Here's an example of using the GPU to multiply large matrices using PyTorch.
-We could do this similarly with Tensorflow or JAX.
+We could do this similarly with Tensorflow or JAX. I've just inserted the timing
+from running this on an SCF machine with a powerful GPU.
 
 ```{python}
 #| eval: false
@@ -549,7 +550,7 @@ start.record()
 z = torch.matmul(x, y)
 end.record()
 torch.cuda.synchronize()
-print(start.elapsed_time(end)) 
+print(start.elapsed_time(end))   # 120 ms.
 
 ## Compare to CPU:
 cpu = torch.device("cpu")
@@ -562,7 +563,7 @@ start.record()
 z = torch.matmul(x, y)
 end.record()
 torch.cuda.synchronize()
-print(start.elapsed_time(end)) 
+print(start.elapsed_time(end))   # 18 sec.
 ```
 
 The GPU calculation takes 100-200 milliseconds (ms), while the CPU calculation
@@ -633,7 +634,7 @@ a *blocking* call because execution of the task in the worker processes blocks t
 In contrast, if control returns to the user before the worker processes are done, that would be
 *asynchronous* evaluation (aka, a *non-blocking* call).
 
-Note: the use of `chunksize = 1` forces Dask to immediately start one task on each worker. Without that argument, by default it groups tasks so as to reduce the overhead of starting each task individually, but when we have few tasks, that prevents effective parallelization.
+Note: the use of `chunksize = 1` forces Dask to immediately start one task on each worker. Without that argument, by default it groups tasks so as to reduce the overhead of starting each task individually, but when we have few tasks, that prevents effective parallelization. We'll discuss this in much more detail in Scenario 4.
 
 ## Scenario 3: 10-fold CV and 10 or fewer cores
 

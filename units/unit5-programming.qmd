@@ -3287,6 +3287,57 @@ timeit.timeit("x[keys.index('500')]", number = 10**6, globals = {'x':x, 'keys':k
 
 As a further point of contrast, if we look up elements by name in R in named vectors or lists, that is much slower than looking up by index, because R doesn't use hashing in that context and  has to scan through the objects one by one until it finds the one with the name it is looking for. This stands in contrast to R and Python being able to directly go to the position of interest based on the index of an array, or to the hash-based lookup in a Python dictionary or an R environment.
 
+### Hashing (including name lookup)
+
+Above I mentioned that Python uses hashing to store and lookup values
+by key in a dictionary. 
+I'll briefly describe what hashing is here, because it is a commonly-used
+strategy in programming in general.
+
+A hash function is a function that takes as input some data and maps it
+to a fixed-length output that can be used as a shortened reference to
+the data. (The function should be deterministic, always returing the same
+output for a given input.) We've seen this in the context of git commits where each
+commit was labeled with a long base-16 number. This also comes up when
+verifying files on the Internet. You can compute the hash value on the
+file you get and check that it is the same as the hash value associated
+with the legitimate copy of the file.
+
+While there are various uses of hashing, for our purposes here, hashing can allow one to look up values by their
+name via a hash table. The idea is that you have a set of key-value
+pairs (sometimes called a dictionary) where the key is the name
+associated with the value and the value is some arbitrary object.
+You want to be able to quickly find the value/object quickly.
+
+Hashing allows one to quickly determine an index associated with the key
+and therefore quickly find the relevant value based on the index. For
+example, one approach is to compute the hash as a function of the key
+and then take the remainder when dividing by the number of possible results
+(here the fact that the result is a fixed-length output is important) to get the index.
+Here's the procedure in pseudocode:
+
+```
+    hash = hashfunc(key) 
+    index = hash %% array_size 
+    ## %% is modulo operator - it gives the remainder
+```
+
+In general, there will be collisions -- multiple keys will be assigned to the
+same index. However with a good hash function, usually there will be a small number of keys associated
+with a given bucket. So each bucket will contain a list of a small number of values and the associated keys.
+(The buckets might contain the actual values or they might contain the addresses of where the values are actually stored
+if the values are complicated objects.) Then determining the correct value (or the required address) within
+a given bucket is fast even with simple linear search through the items one by one.
+Put another way, the
+hash function distributes the keys amongst an array of buckets and
+allows one to look up the appropriate bucket quickly based on the
+computed index value. When the hash table is properly set up, the cost
+of looking up a value does not depend on the number of key-value pairs
+stored.
+
+Python uses hashing to look up the value  based on the key in a given dictionary, and similarly when looking up variables in namespaces. This allows Python to retrieve objects very quickly.
+
+
 ## Additional general strategies for efficiency
 
 It's also useful to be aware of some other strategies for improving efficiency.
@@ -3337,9 +3388,9 @@ Suppose we instead do the looping manually.
 
 ```{python, cache-aware3}
 timeit.timeit('[np.mean(A[:,col]) for col in range(A.shape[1])]',
-    setup = 'import numpy as np', number=10, globals = {'A': A})   # 5.10 sec.
+    setup = 'import numpy as np', number=10, globals = {'A': A})   
 timeit.timeit('[np.mean(tA[row,:]) for row in range(tA.shape[0])]',
-    setup = 'import numpy as np', number=10, globals = {'tA': tA})  # 5.06 sec.
+    setup = 'import numpy as np', number=10, globals = {'tA': tA})  
 ```
 
 Indeed, the row-wise calculations are faster, particularly if we do it manually. So that suggests numpy might be doing something clever in its implementation of `mean` with the `axis` argument.
@@ -3374,55 +3425,6 @@ How does that affect the downsides mentioned above?
 
 Combining loops is called 'fusing' and is an [important optimization that Julia can do](https://docs.julialang.org/en/v1/manual/performance-tips/#More-dots:-Fuse-vectorized-operations), as shown in [this demo](https://berkeley-scf.github.io/tutorial-parallelization/parallel-julia#4-loops-and-fused-operations). It’s also a [key optimization done by XLA](https://www.tensorflow.org/xla), a compiler used with Tensorflow, so one approach to getting loop fusion in Python is to use Tensorflow for such calculations within Python rather than simply using numpy.
 
-### Hashing (including name lookup)
-
-Above I mentioned that Python uses hashing to store and lookup values
-by key in a dictionary. 
-I'll briefly describe what hashing is here, because it is a commonly-used
-strategy in programming in general.
-
-A hash function is a function that takes as input some data and maps it
-to a fixed-length output that can be used as a shortened reference to
-the data. (The function should be deterministic, always returing the same
-output for a given input.) We've seen this in the context of git commits where each
-commit was labeled with a long base-16 number. This also comes up when
-verifying files on the Internet. You can compute the hash value on the
-file you get and check that it is the same as the hash value associated
-with the legitimate copy of the file.
-
-While there are various uses of hashing, for our purposes here, hashing can allow one to look up values by their
-name via a hash table. The idea is that you have a set of key-value
-pairs (sometimes called a dictionary) where the key is the name
-associated with the value and the value is some arbitrary object.
-You want to be able to quickly find the value/object quickly.
-
-Hashing allows one to quickly determine an index associated with the key
-and therefore quickly find the relevant value based on the index. For
-example, one approach is to compute the hash as a function of the key
-and then take the remainder when dividing by the number of possible results
-(here the fact that the result is a fixed-length output is important) to get the index.
-Here's the procedure in pseudocode:
-
-```
-    hash = hashfunc(key) 
-    index = hash %% array_size 
-    ## %% is modulo operator - it gives the remainder
-```
-
-In general, there will be collisions -- multiple keys will be assigned to the
-same index. However with a good hash function, usually there will be a small number of keys associated
-with a given bucket. So each bucket will contain a list of a small number of values and the associated keys.
-(The buckets might contain the actual values or they might contain the addresses of where the values are actually stored
-if the values are complicated objects.) Then determining the correct value (or the required address) within
-a given bucket is fast even with simple linear search through the items one by one.
-Put another way, the
-hash function distributes the keys amongst an array of buckets and
-allows one to look up the appropriate bucket quickly based on the
-computed index value. When the hash table is properly set up, the cost
-of looking up a value does not depend on the number of key-value pairs
-stored.
-
-Python uses hashing to look up the value  based on the key in a given dictionary, and similarly when looking up variables in namespaces. This allows Python to retrieve objects very quickly.
 
 ### Lazy evaluation
 
