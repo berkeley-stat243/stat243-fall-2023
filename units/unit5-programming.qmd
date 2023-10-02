@@ -3354,14 +3354,15 @@ There's a nice example of the importance of the cache at [the bottom of this blo
 
 If you know the size of the cache, you can try to design your code so that in a given part of your code you access data structures that will fit in the cache. This sort of thing is generally more relevant if you're coding in a language like C. But it can matter sometimes in interpreted languages too.
 
-Let's see what happens in Python.
+Let's see what happens in Python. By default, matrices in numpy are row-major, also called "C order".
+I'll create a long matrix with a small number of very long columns and a wide matrix with a small number of very long rows.
 
 ```{python, cache-aware}
 nr = 800000
 nc = 100
 
-A = np.random.normal(size=(nr, nc))
-tA = np.random.normal(size=(nc, nr))  
+A = np.random.normal(size=(nr, nc))   # long matrix
+tA = np.random.normal(size=(nc, nr))  # wide matrix
 
 ## Verify that A is row-major using `.flags` (notice the `C_CONTIGUOUS: True`).
 A.flags
@@ -3370,30 +3371,37 @@ A.flags
 Note that I didn't use `A.T` or `np.transpose` as that doesn't make a copy in memory and so the transposed
 matrix doesn't end up being row-major. You can use `A.flags` and A.T.flags` to see this.
 
-Now let's time things.
+Now let's time calculating the sum by column in the long matrix vs. the sum by row in the wide matrix. Exactly the same number of arithmetic operations needs to be done in an equivalent manner for the two cases.
+We want to use a large enough matrix so the entire matrix doesn't fit in the cache,
+but not so large that the example takes a long time or a huge amount of memory.
+We'll use a rectangular matrix, such that the summation for a single column of the long matrix
+or a single row of the wide matrix involves many numbers, but there are a limited number of such
+summations. This focuses the example on the efficiency of the column-wise vs. row-wise summation
+rather than any issues that might be involved in managing large numbers of such summations (e.g.,
+doing many, many summations that involve just a few numbers).
 
 ```{python, cache-aware2}
-# Define the mean calculations as functions
-def mean_by_column():
-    return np.mean(A, axis=0)
+# Define the sum calculations as functions
+def sum_by_column():
+    return np.sum(A, axis=0)
 
-def mean_by_row():
-    return np.mean(tA, axis=1)
+def sum_by_row():
+    return np.sum(tA, axis=1)
 
-timeit.timeit(mean_by_column, number=10)
-timeit.timeit(mean_by_row, number=10)
+timeit.timeit(sum_by_column, number=10)  # potentially slow
+timeit.timeit(sum_by_row, number=10)
 ```
 
 Suppose we instead do the looping manually.
 
 ```{python, cache-aware3}
-timeit.timeit('[np.mean(A[:,col]) for col in range(A.shape[1])]',
+timeit.timeit('[np.sum(A[:,col]) for col in range(A.shape[1])]',
     setup = 'import numpy as np', number=10, globals = {'A': A})   
-timeit.timeit('[np.mean(tA[row,:]) for row in range(tA.shape[0])]',
+timeit.timeit('[np.sum(tA[row,:]) for row in range(tA.shape[0])]',
     setup = 'import numpy as np', number=10, globals = {'tA': tA})  
 ```
 
-Indeed, the row-wise calculations are faster, particularly if we do it manually. So that suggests numpy might be doing something clever in its implementation of `mean` with the `axis` argument.
+Indeed, the row-wise calculations are much faster when done manually. However, when done with the `axis` argument in `np.sum` there is little difference. So that suggests numpy might be doing something clever in its implementation of `sum` with the `axis` argument.
 
 > **Challenge**: suppose you were writing code for this kind of use case. How could you set up your calculations to do either row-wise or column-wise operations in a way that processes each number sequentially based on the order in which the numbers are stored. For example suppose the values are stored row-major but you want the column sums.
 

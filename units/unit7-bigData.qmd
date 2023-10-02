@@ -1,7 +1,7 @@
 ---
 title: "Big data and databases"
 author: "Chris Paciorek"
-date: "2023-07-26"
+date: "2023-10-02"
 format:
   pdf:
     documentclass: article
@@ -230,7 +230,7 @@ Unit 6 on parallelization gives an overview of using Dask in similar
  for flexible parallelization
 on different kinds of computational resources (in particular,
 parallelizing across multiple cores on one machine versus parallelizing
-across multiple cores across multiple machines/ndoes).
+across multiple cores across multiple machines/nodes).
 
 Here we'll see the use of Dask to work with distributed datasets. Dask
 can process datasets (potentially very large ones) by parallelizing
@@ -552,7 +552,7 @@ information about disk caching see the tutorial.
 
 You can interact with databases in a variety of database systems
 (*DBMS*=database management system). Some popular systems are SQLite,
-MySQL, PostgreSQL, Oracle and Microsoft Access. We'll concentrate on
+DuckDB, MySQL, PostgreSQL, Oracle and Microsoft Access. We'll concentrate on
 accessing data in a database rather than management of databases. SQL is
 the Structured Query Language and is a special-purpose high-level
 language for managing databases and making queries. Variations on SQL
@@ -577,6 +577,11 @@ stores the database and to which you can connect to using the SQLite
 shell, R, Python, etc. However, it does not have some useful
 functionality that other DBMS have. For example, you can't use `ALTER
 TABLE` to modify column types or drop columns.
+
+A good alternative to SQLite that I encourage you to consider is DuckDB. DuckDB stores data column-wise, which can lead to big speedups when doing queries operating on large portions of tables (so-called “online analytical processing” (OLAP)). Another nice feature of DuckDB is that it can interact
+with data on disk without always having to read all the data into memory.
+In fact, ideally we'd use it for this class, but I haven't had time
+to create a DuckDB version of the StackOverflow database.
 
 ## Database schema and normalization
 
@@ -798,8 +803,8 @@ one table to primary keys in another table. The schema in the actual
 database of Stack Overflow data we'll use in the examples here is similar
 to but not identical to that.
 
-You can download a [copy of the SQLite version of the Stack Overflow 2016
-database](http://www.stat.berkeley.edu/share/paciorek/stackoverflow-2016.db).
+You can download a [copy of the SQLite version of the Stack Overflow 2021
+database](http://www.stat.berkeley.edu/share/paciorek/stackoverflow-2021.db).
 
 ## Accessing databases in Python
 
@@ -824,14 +829,29 @@ You can access and navigate an SQLite database from Python as follows.
 ```{python}
 import sqlite3 as sq
 dir_path = '../data'  # Replace with the actual path
-db_filename = 'stackoverflow-2016.db'
+db_filename = 'stackoverflow-2021.db'
 
 con = sq.connect(os.path.join(dir_path, db_filename))
 db = con.cursor()
 db.execute("select * from questions limit 5")  # simple query 
 db.fetchall() # retrieve results
 
-## http://www.stat.berkeley.edu/share/paciorek/stackoverflow-2016.db
+## http://www.stat.berkeley.edu/share/paciorek/stackoverflow-2021.db
+```
+
+Alternatively, we could use DuckDB. However, I don't have a DuckDB
+version of the StackOverflow database, so one can't actually run this code.
+
+```{python}
+#| eval: false
+import duckdb as dd
+dir_path = '../data'  # Replace with the actual path
+db_filename = 'stackoverflow-2021.duckdb'  # This doesn't exist.
+
+con = dd.connect(os.path.join(dir_path, db_filename))
+db = con.cursor()
+db.execute("select * from questions limit 5")  # simple query 
+db.fetchall() # retrieve results
 ```
 
 
@@ -1177,6 +1197,68 @@ so you'd only want to create it if you were doing multiple queries
 that could take advantage of the index. See the databases tutorial
 for more discussion of how using indexes in a lookup is not always advantageous.
 
+## Set operations: union, intersect, except
+
+You can do set operations like union, intersection, and set difference using the UNION, INTERSECT, and EXCEPT keywords on tables that have the same schema (same column names and types), though most often these would be used on single columns (i.e., single-column tables).
+
+> **Note**: While one can often set up an equivalent query without using INTERSECT or UNION, set operations can be very handy. In the example below one could do it with a self-join, joining a table to itself, but the syntax is often more complicated.
+
+Suppose we want to know the names of all individuals who have asked both an R question and a Python question. We can do this with INTERSECT:
+
+
+```{python}
+#| eval: false
+result1 = db.execute("select displayname, userid from
+                     questions Q join users U on U.userid = Q.ownerid
+                     join questions_tags T on Q.questionid = T.questionid
+                     where tag = 'r'
+                     intersect
+                     select displayname, userid from
+                     questions Q join users U on U.userid = Q.ownerid
+                     join questions_tags T on Q.questionid = T.questionid
+                     where tag = 'python'")
+```
+
+## Subqueries
+
+A subquery is a full query that is embedded in a larger query. 
+
+### Subqueries in the FROM statement
+
+We can use subqueries in the FROM statement to create a temporary table to use in a query. Here we'll do it in the context of a join.
+
+> **Challenge**: What does the following do?
+
+
+```{python}
+#| eval: false
+db.execute("select * from questions join answers A
+           on questions.questionid = A.questionid
+           join
+           (select ownerid, count(*) as n_answered from answers
+           group by ownerid order by n_answered desc limit 1000) most_responsive
+           on A.ownerid = most_responsive.ownerid")
+```
+
+It might be hard to just come up with that full query all at once. A good strategy is probably to think about creating a view that is the result of the inner query and then have the outer query use that. You can then piece together the complicated query in a modular way. For big databases, you are likely to want to submit this as a single query and not two queries so that the SQL optimizer can determine the best way to do the operations. But you want to start with code that you're confident will give you the right answer!
+
+Note we could also have done that query using a subquery in the WHERE statement, as discussed in the next section. 
+
+### Subqueries in the WHERE statement
+
+Instead of a join, we can use subqueries as a way to combine information across tables, with the subquery involved in a WHERE statement. The subquery creates a set and we then can check for inclusion in (or exclusion from with `not in`) that set.
+
+For example, suppose we want to know the average number of UpVotes for users who have posted a question with the tag "python".
+
+```{python}
+db.execute("select avg(upvotes) from users where userid in
+           (select distinct ownerid from
+           questions join questions_tags
+           on questions.questionid = questions_tags.questionid
+           where tag = 'python')")       
+```
+
+
 ## Creating database tables
 
 One can create tables from within the 'sqlite' command line interfaces
@@ -1187,10 +1269,25 @@ from a Pandas dataframe.
 ```{python, eval=FALSE}
 ## create data frame 'student_data' in some fashion
 con = sq.connect(db_path)
-student_data.to_sql('student', con if_exists='replace', index=False)
+student_data.to_sql('student', con, if_exists='replace', index=False)
 ```
 
-# 4. Sparsity
+# 4. Recent tools and data storage formats
+
+There has been a lot of work in recent years to provide file formats and tools for working with very large datasets in ways other than traditional databases, often optimized for speed when doing large-scale analytics on the data.
+
+Rather than being stored in a formal database, data are often stored in multiple files, often using Parquet ([discussed in Unit 2](unit2-dataTech.html#csv-vs.-specialized-formats-such-as-parquet) or CSV as the file format. When stored in the cloud, this is often referred to as a *data lake*. 
+
+We'll briefly discuss *Apache Arrow*. Apache Arrow provides efficient data structures for working with data in memory, usable via the `PyArrow` package in Python (and the `arrow` package in R). Data are stored by column, with values in a column stored sequentially and in such a way that one can access a specific value without reading the other values in the column (O(1) lookup).
+
+Arrow is designed to read data from various file formats, including Parquet, native Arrow format, and text files. In general Arrow will only read data from disk as needed, avoiding keeping the entire dataset in memory. Here's a [good discussion comparing different file formats](https://stackoverflow.com/questions/56472727/difference-between-apache-parquet-and-arrow).
+
+After loading the data in (which doesn’t initially involve actually reading the data from disk), you can then operate on the resulting object. PyArrow will only read the data it needs for your computations (how much has to be read depends on the file format, with the native `arrow` format best in this regard), which can reduce I/O and memory usage.
+
+*Polars* is advertised as a very fast in-memory package for working with dataframes (i.e., an alternative to Pandas) that provides a Python interface. It uses the Arrow columnar format. It also provides a lazy execution model like Spark or Dask that allows for automatic optimization of queries.
+
+
+# 5. Sparsity
 
 A lot of statistical methods are based on sparse matrices. These
 include:
@@ -1217,7 +1314,7 @@ post](http://blog.revolutionanalytics.com/2011/05/the-neflix-prize-big-data-svd-
 describing the use of sparse matrix manipulations for analysis of the
 Netflix Prize data.
 
-# 5. Using statistical concepts to deal with computational bottlenecks
+# 6. Using statistical concepts to deal with computational bottlenecks
 
 As statisticians, we have a variety of statistical/probabilistic tools
 that can aid in dealing with big data.
