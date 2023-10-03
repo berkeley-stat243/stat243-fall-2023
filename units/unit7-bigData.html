@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Chris Paciorek">
-<meta name="dcterms.date" content="2023-07-26">
+<meta name="dcterms.date" content="2023-10-02">
 
 <title>Statistics 243 Fall 2023 - Big data and databases</title>
 <style>
@@ -384,10 +384,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#temporary-tables-and-views" id="toc-temporary-tables-and-views" class="nav-link" data-scroll-target="#temporary-tables-and-views">Temporary tables and views</a></li>
   <li><a href="#more-on-joins" id="toc-more-on-joins" class="nav-link" data-scroll-target="#more-on-joins">More on joins</a></li>
   <li><a href="#indexes" id="toc-indexes" class="nav-link" data-scroll-target="#indexes">Indexes</a></li>
+  <li><a href="#set-operations-union-intersect-except" id="toc-set-operations-union-intersect-except" class="nav-link" data-scroll-target="#set-operations-union-intersect-except">Set operations: union, intersect, except</a></li>
+  <li><a href="#subqueries" id="toc-subqueries" class="nav-link" data-scroll-target="#subqueries">Subqueries</a>
+  <ul class="collapse">
+  <li><a href="#subqueries-in-the-from-statement" id="toc-subqueries-in-the-from-statement" class="nav-link" data-scroll-target="#subqueries-in-the-from-statement">Subqueries in the FROM statement</a></li>
+  <li><a href="#subqueries-in-the-where-statement" id="toc-subqueries-in-the-where-statement" class="nav-link" data-scroll-target="#subqueries-in-the-where-statement">Subqueries in the WHERE statement</a></li>
+  </ul></li>
   <li><a href="#creating-database-tables" id="toc-creating-database-tables" class="nav-link" data-scroll-target="#creating-database-tables">Creating database tables</a></li>
   </ul></li>
-  <li><a href="#sparsity" id="toc-sparsity" class="nav-link" data-scroll-target="#sparsity">4. Sparsity</a></li>
-  <li><a href="#using-statistical-concepts-to-deal-with-computational-bottlenecks" id="toc-using-statistical-concepts-to-deal-with-computational-bottlenecks" class="nav-link" data-scroll-target="#using-statistical-concepts-to-deal-with-computational-bottlenecks">5. Using statistical concepts to deal with computational bottlenecks</a></li>
+  <li><a href="#recent-tools-and-data-storage-formats" id="toc-recent-tools-and-data-storage-formats" class="nav-link" data-scroll-target="#recent-tools-and-data-storage-formats">4. Recent tools and data storage formats</a></li>
+  <li><a href="#sparsity" id="toc-sparsity" class="nav-link" data-scroll-target="#sparsity">5. Sparsity</a></li>
+  <li><a href="#using-statistical-concepts-to-deal-with-computational-bottlenecks" id="toc-using-statistical-concepts-to-deal-with-computational-bottlenecks" class="nav-link" data-scroll-target="#using-statistical-concepts-to-deal-with-computational-bottlenecks">6. Using statistical concepts to deal with computational bottlenecks</a></li>
   </ul>
 <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="unit7-bigData.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
     </div>
@@ -413,7 +420,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 26, 2023</p>
+      <p class="date">October 2, 2023</p>
     </div>
   </div>
   
@@ -483,7 +490,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="using-dask-for-big-data-processing" class="level2">
 <h2 class="anchored" data-anchor-id="using-dask-for-big-data-processing">Using Dask for big data processing</h2>
-<p>Unit 6 on parallelization gives an overview of using Dask in similar for flexible parallelization on different kinds of computational resources (in particular, parallelizing across multiple cores on one machine versus parallelizing across multiple cores across multiple machines/ndoes).</p>
+<p>Unit 6 on parallelization gives an overview of using Dask in similar for flexible parallelization on different kinds of computational resources (in particular, parallelizing across multiple cores on one machine versus parallelizing across multiple cores across multiple machines/nodes).</p>
 <p>Here we’ll see the use of Dask to work with distributed datasets. Dask can process datasets (potentially very large ones) by parallelizing operations across subsets of the data using multiple cores on one or more machines.</p>
 <p>Like Spark, Dask automatically reads data from files in parallel and operates on <em>chunks</em> (also called <em>partitions</em> or <em>shards</em>) of the full dataset in parallel. There are two big advantages of this:</p>
 <ul>
@@ -678,11 +685,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="interacting-with-a-database" class="level2">
 <h2 class="anchored" data-anchor-id="interacting-with-a-database">Interacting with a database</h2>
-<p>You can interact with databases in a variety of database systems (<em>DBMS</em>=database management system). Some popular systems are SQLite, MySQL, PostgreSQL, Oracle and Microsoft Access. We’ll concentrate on accessing data in a database rather than management of databases. SQL is the Structured Query Language and is a special-purpose high-level language for managing databases and making queries. Variations on SQL are used in many different DBMS.</p>
+<p>You can interact with databases in a variety of database systems (<em>DBMS</em>=database management system). Some popular systems are SQLite, DuckDB, MySQL, PostgreSQL, Oracle and Microsoft Access. We’ll concentrate on accessing data in a database rather than management of databases. SQL is the Structured Query Language and is a special-purpose high-level language for managing databases and making queries. Variations on SQL are used in many different DBMS.</p>
 <p>Queries are the way that the user gets information (often simply subsets of tables or information merged across tables). The result of an SQL query is in general another table, though in some cases it might have only one row and/or one column.</p>
 <p>Many DBMS have a client-server model. Clients connect to the server, with some authentication, and make requests (i.e., queries).</p>
 <p>There are often multiple ways to interact with a DBMS, including directly using command line tools provided by the DBMS or via Python or R, among others.</p>
 <p>We’ll concentrate on SQLite (because it is simple to use on a single machine). SQLite is quite nice in terms of being self-contained - there is no server-client model, just a single file on your hard drive that stores the database and to which you can connect to using the SQLite shell, R, Python, etc. However, it does not have some useful functionality that other DBMS have. For example, you can’t use <code>ALTER TABLE</code> to modify column types or drop columns.</p>
+<p>A good alternative to SQLite that I encourage you to consider is DuckDB. DuckDB stores data column-wise, which can lead to big speedups when doing queries operating on large portions of tables (so-called “online analytical processing” (OLAP)). Another nice feature of DuckDB is that it can interact with data on disk without always having to read all the data into memory. In fact, ideally we’d use it for this class, but I haven’t had time to create a DuckDB version of the StackOverflow database.</p>
 </section>
 <section id="database-schema-and-normalization" class="level2">
 <h2 class="anchored" data-anchor-id="database-schema-and-normalization">Database schema and normalization</h2>
@@ -718,16 +726,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>…</li>
 <li>teacher age n</li>
 </ul>
-<p>There are a lot of problems with this:</p>
+<p>There are a lot of problems with this (to be filled out in class):</p>
 <ol type="1">
-<li>A lot of information is repeated across rows (e.g., teacher age for students who have the same teacher)
-<ul>
-<li>this is a waste of space</li>
-<li>it is hard/error-prone to update values in the database (e.g., after a teacher’s birthday), because a given value needs to be updated in multiple places</li>
-</ul></li>
-<li>There are potentially a lot of empty cells (e.g., for a student who takes fewer than ‘n’ classes). This will generally result in a waste of space.</li>
-<li>It’s hard to see the information that is not organized uniquely by row – i.e., it’s much easier to understand the information at the student level than the teacher level</li>
-<li>We have to know in advance how big ‘n’ is. Then if a single student takes more than ‘n’ classes, the whole database needs to be restructured.</li>
+<li>???</li>
+<li>???</li>
+<li>???</li>
 </ol>
 <p>It would get even worse if there was a field related to teachers for which a given teacher could have multiple values (e.g., teachers could be in multiple departments). This would lead to even more redundancy - each student-class-teacher combination would be crossed with all of the departments for the teacher (so-called multivalued dependency in database theory).</p>
 <p>An alternative organization of the data would be to have each row represent the enrollment of a student in a class.</p>
@@ -840,7 +843,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>As we’ve discussed neither of those schema is particularly desirable.</p>
 <p><strong>Challenge</strong>: How would you devise a schema to normalize the data. I.e., what set of tables do you think we should create?</p>
 <p>You can view <a href="normalized_example.png">one reasonable schema</a>. The lines between tables indicate the relationship of foreign keys in one table to primary keys in another table. The schema in the actual database of Stack Overflow data we’ll use in the examples here is similar to but not identical to that.</p>
-<p>You can download a <a href="http://www.stat.berkeley.edu/share/paciorek/stackoverflow-2016.db">copy of the SQLite version of the Stack Overflow 2016 database</a>.</p>
+<p>You can download a <a href="http://www.stat.berkeley.edu/share/paciorek/stackoverflow-2021.db">copy of the SQLite version of the Stack Overflow 2021 database</a>.</p>
 </section>
 <section id="accessing-databases-in-python" class="level2">
 <h2 class="anchored" data-anchor-id="accessing-databases-in-python">Accessing databases in Python</h2>
@@ -851,66 +854,77 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sqlite3 <span class="im">as</span> sq</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>dir_path <span class="op">=</span> <span class="st">'../data'</span>  <span class="co"># Replace with the actual path</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>db_filename <span class="op">=</span> <span class="st">'stackoverflow-2016.db'</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>db_filename <span class="op">=</span> <span class="st">'stackoverflow-2021.db'</span></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> sq.<span class="ex">connect</span>(os.path.join(dir_path, db_filename))</span>
 <span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>db <span class="op">=</span> con.cursor()</span>
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select * from questions limit 5"</span>)  <span class="co"># simple query </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;sqlite3.Cursor object at 0x7f706a4fcd40&gt;</code></pre>
+<pre><code>&lt;sqlite3.Cursor object at 0x7fae309a8d40&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>db.fetchall() <span class="co"># retrieve results</span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">## http://www.stat.berkeley.edu/share/paciorek/stackoverflow-2016.db</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co">## http://www.stat.berkeley.edu/share/paciorek/stackoverflow-2021.db</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[(34552550, '2016-01-01 00:00:03', 0, 108, 'Scope between methods', 5684416), (34552551, '2016-01-01 00:00:07', 1, 151, 'Rails - Unknown Attribute - Unable to add a new field to a form on create/update', 2457617), (34552552, '2016-01-01 00:00:39', 2, 1942, "Selenium Firefox webdriver won't load a blank page after changing Firefox preferences", 5732525), (34552554, '2016-01-01 00:00:50', 0, 153, 'Android Studio styles.xml Error', 5735112), (34552555, '2016-01-01 00:00:51', -1, 54, 'Java: reference to non-finial local variables inside a thread', 4646288)]</code></pre>
+<pre><code>[(65534165.0, '2021-01-01 22:15:54', 0.0, 112.0, 2.0, 0.0, None, "Can't update a value in sqlite3", 13189393.0), (65535296.0, '2021-01-02 01:33:13', 2.0, 1109.0, 0.0, 0.0, None, 'Install and run ROS on Google Colab', 14924336.0), (65535910.0, '2021-01-02 04:01:34', -1.0, 110.0, 1.0, 8.0, 0.0, 'Operators on date/time fields', 651174.0), (65535916.0, '2021-01-02 04:03:20', 1.0, 35.0, 1.0, 0.0, None, 'Plotting values normalised', 14695007.0), (65536749.0, '2021-01-02 07:03:04', 0.0, 108.0, 1.0, 5.0, None, 'Export C# to word with template', 14899717.0)]</code></pre>
 </div>
+</div>
+<p>Alternatively, we could use DuckDB. However, I don’t have a DuckDB version of the StackOverflow database, so one can’t actually run this code.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> duckdb <span class="im">as</span> dd</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>dir_path <span class="op">=</span> <span class="st">'../data'</span>  <span class="co"># Replace with the actual path</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>db_filename <span class="op">=</span> <span class="st">'stackoverflow-2021.duckdb'</span>  <span class="co"># This doesn't exist.</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> dd.<span class="ex">connect</span>(os.path.join(dir_path, db_filename))</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>db <span class="op">=</span> con.cursor()</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select * from questions limit 5"</span>)  <span class="co"># simple query </span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>db.fetchall() <span class="co"># retrieve results</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can (fairly) easily see the tables (this is easier from R):</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> db_list_tables(db):</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    db.execute(<span class="st">"SELECT name FROM sqlite_master WHERE type='table';"</span>)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>    tables <span class="op">=</span> db.fetchall()</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [table[<span class="dv">0</span>] <span class="cf">for</span> table <span class="kw">in</span> tables]</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>db_list_tables(db)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> db_list_tables(db):</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    db.execute(<span class="st">"SELECT name FROM sqlite_master WHERE type='table';"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    tables <span class="op">=</span> db.fetchall()</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [table[<span class="dv">0</span>] <span class="cf">for</span> table <span class="kw">in</span> tables]</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>db_list_tables(db)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>['questions', 'answers', 'questions_tags', 'users']</code></pre>
 </div>
 </div>
 <p>and the fields in table, presuming you’ve just queried the table:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select * from questions limit 5"</span>)</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># If you've already queried a table, see `description` for the fields:</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select * from questions limit 5"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># If you've already queried a table, see `description` for the fields:</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;sqlite3.Cursor object at 0x7f706a4fcd40&gt;</code></pre>
+<pre><code>&lt;sqlite3.Cursor object at 0x7fae309a8d40&gt;</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>[item[<span class="dv">0</span>] <span class="cf">for</span> item <span class="kw">in</span> db.description]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>[item[<span class="dv">0</span>] <span class="cf">for</span> item <span class="kw">in</span> db.description]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>['questionid', 'creationdate', 'score', 'viewcount', 'title', 'ownerid']</code></pre>
+<pre><code>['questionid', 'creationdate', 'score', 'viewcount', 'answercount', 'commentcount', 'favoritecount', 'title', 'ownerid']</code></pre>
 </div>
 </div>
 <p>Here’s how to make a basic SQL query. One can either make the query and get the results in one go or make the query and separately fetch the results. Here we’ve selected the first five rows (and all columns, based on the * wildcard) and brought them into Python as list of tuples.</p>
-<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-15_29e8e56134e57950dd8891a5f8a96f71">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> db.execute(<span class="st">"select * from questions limit 5"</span>).fetchall()  <span class="co"># simple query </span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-16_9412a3d2ae20cb96095e12bb5ee35433">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> db.execute(<span class="st">"select * from questions limit 5"</span>).fetchall()  <span class="co"># simple query </span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'list'&gt;</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(results[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(results[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>&lt;class 'tuple'&gt;</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>query <span class="op">=</span> db.execute(<span class="st">"select * from questions"</span>)  <span class="co"># simple query </span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>results2 <span class="op">=</span> query.fetchmany(<span class="dv">5</span>)</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>results <span class="op">==</span> results2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>query <span class="op">=</span> db.execute(<span class="st">"select * from questions"</span>)  <span class="co"># simple query </span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>results2 <span class="op">=</span> query.fetchmany(<span class="dv">5</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>results <span class="op">==</span> results2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>True</code></pre>
 </div>
 </div>
 <p>To disconnect from the database:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>db.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>db.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="basic-sql-for-choosing-rows-and-columns-from-a-table" class="level2">
@@ -920,17 +934,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Note</strong>: An <em>imperative</em> language is one where you provide the sequence of commands you want to be run, in order. A <em>declarative</em> language is one where you declare what result you want and rely on the system that interprets the commands how to actually do it. Most of the languages we’re generally familiar with are imperative. (That said, even in languages like Python, function calls in many ways simply say what we want rather than exactly how the computer should carry out the granular operations.)</p>
 </blockquote>
 <p>Here are some examples using the Stack Overflow database.</p>
-<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-17_a0887a2a5c0337ee7da509d88536b802">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">## find the largest viewcounts in the questions table</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>db.execute(</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="st">'select title, viewcount from questions order by viewcount desc limit 10'</span>).fetchall()</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co">## now get the questions that are viewed the most</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-18_e5aaeabcfffd30f504d12bfe60f2b05a">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co">## find the largest viewcounts in the questions table</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>db.execute(</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="st">'select title, viewcount from questions order by viewcount desc limit 10'</span>).fetchall()</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="co">## now get the questions that are viewed the most</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[('How to solve "server DNS address could not be found" error in windows 10?', 196469), ("Code signing is required for product type 'Application' in SDK 'iOS 10.0' - StickerPackExtension requires a development team error", 174790), ('"Gradle Version 2.10 is required." Error', 134399), ("Android- Error:Execution failed for task ':app:transformClassesWithDexForRelease'", 129874), ('Fatal error: Uncaught Error: Call to undefined function mysql_connect()', 129624), ('Unsupported major.minor version 52.0 in my app', 127764), ("Response to preflight request doesn't pass access control check AngularJs", 126752), ('NPM vs. Bower vs. Browserify vs. Gulp vs. Grunt vs. Webpack', 112000), ('Git refusing to merge unrelated histories', 109422), ('"SyntaxError: Unexpected token &lt; in JSON at position 0" in React App', 106995)]</code></pre>
+<pre><code>[('Message "Support for password authentication was removed. Please use a personal access token instead."', 1236876.0), ('Error message "error:0308010C:digital envelope routines::unsupported"', 816368.0), ('Crbug/1173575, non-JS module files deprecated. chromewebdata/(index)꞉5305:9:5551', 610026.0), ("TypeError: Cannot read properties of undefined (reading 'id')", 505992.0), ("× TypeError: Cannot read properties of undefined (reading 'map')", 458856.0), ('Android Studio Error "Android Gradle plugin requires Java 11 to run. You are currently using Java 1.8"', 445775.0), ('Android Studio error "Installed Build Tools revision 31.0.0 is corrupted"', 426798.0), ('TypeError: this.getOptions is not a function', 315861.0), ('How can I resolve the error "The minCompileSdk (31) specified in a dependency\'s AAR metadata" in native Java or Kotlin?', 307961.0), ('I am getting error "cmdline-tools component is missing" after installing Flutter and Android Studio... I added the Android SDK. How can I solve them?', 303399.0)]</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">'select * from questions where viewcount &gt; 100000'</span>).fetchall()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">'select * from questions where viewcount &gt; 100000'</span>).fetchall()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[(35429801, '2016-02-16 10:21:09', 400, 100125, 'This action could not be completed. Try Again (-22421)', 5881764), (37280274, '2016-05-17 15:21:49', 23, 106995, '"SyntaxError: Unexpected token &lt; in JSON at position 0" in React App', 4043633), (37937984, '2016-06-21 07:23:00', 202, 109422, 'Git refusing to merge unrelated histories', 2670370), (35062852, '2016-01-28 13:28:39', 730, 112000, 'NPM vs. Bower vs. Browserify vs. Gulp vs. Grunt vs. Webpack', 2761509), (35588699, '2016-02-23 21:37:06', 57, 126752, "Response to preflight request doesn't pass access control check AngularJs", 2896963), (35990995, '2016-03-14 15:01:17', 104, 127764, 'Unsupported major.minor version 52.0 in my app', 1629278), (34579099, '2016-01-03 16:55:16', 8, 129624, 'Fatal error: Uncaught Error: Call to undefined function mysql_connect()', 3656666), (35890257, '2016-03-09 11:25:05', 51, 129874, "Android- Error:Execution failed for task ':app:transformClassesWithDexForRelease'", 1118886), (34814368, '2016-01-15 15:24:36', 206, 134399, '"Gradle Version 2.10 is required." Error', 3319176), (37806538, '2016-06-14 08:16:21', 223, 174790, "Code signing is required for product type 'Application' in SDK 'iOS 10.0' - StickerPackExtension requires a development team error", 1554347), (36668374, '2016-04-16 18:57:19', 20, 196469, 'How to solve "server DNS address could not be found" error in windows 10?', 1707976)]</code></pre>
+<pre><code>[(65547199.0, '2021-01-03 06:22:52', 124.0, 110832.0, 7.0, 2.0, 0.0, 'Using Bootstrap 5 with Vue 3', 11232893.0), (65549858.0, '2021-01-03 12:30:19', 52.0, 130479.0, 11.0, 0.0, 0.0, '"ERESOLVE unable to resolve dependency tree" when installing npm react-facebook-login', 12425004.0), (65630743.0, '2021-01-08 14:20:57', 77.0, 107140.0, 19.0, 4.0, 0.0, 'How to solve flutter web api cors error only with dart code?', 12373446.0), (65632698.0, '2021-01-08 16:22:59', 74.0, 101044.0, 9.0, 1.0, 0.0, 'How to open a link in a new Tab in NextJS?', 9578961.0), (65896334.0, '2021-01-26 05:33:33', 111.0, 141899.0, 12.0, 7.0, 0.0, 'Python Pip broken with sys.stderr.write(f"ERROR: {exc}")', 202576.0), (65908987.0, '2021-01-26 20:42:25', 238.0, 215399.0, 9.0, 1.0, 0.0, "How can I open Visual Studio Code's 'settings.json' file?", 793320.0), (65980952.0, '2021-01-31 15:36:21', 22.0, 141857.0, 10.0, 1.0, 0.0, 'Python: Could not install packages due to an OSError: [Errno 2] No such file or directory', 14489450.0), (66020820.0, '2021-02-03 03:27:19', 161.0, 174829.0, 3.0, 0.0, 0.0, 'npm: When to use `--force` and `--legacy-peer-deps`', 7824245.0), (66029781.0, '2021-02-03 14:41:21', 20.0, 107446.0, 6.0, 1.0, 0.0, 'Appcenter iOS install error "this app cannot be installed because its integrity could not be verified"', 462440.0), (66060487.0, '2021-02-05 09:11:48', 188.0, 241216.0, 19.0, 0.0, 0.0, 'ValueError: numpy.ndarray size changed, may indicate binary incompatibility. Expected 88 from C header, got 80 from PyObject', 15150567.0), (66082397.0, '2021-02-06 21:58:06', 333.0, 315861.0, 17.0, 1.0, 0.0, 'TypeError: this.getOptions is not a function', 14337399.0), (66146088.0, '2021-02-10 22:32:45', 152.0, 175983.0, 17.0, 2.0, 0.0, 'Docker - failed to compute cache key: not found - runs fine in Visual Studio', 7419676.0), (66231282.0, '2021-02-16 19:54:53', 70.0, 116757.0, 10.0, 0.0, 0.0, 'How to add a GitHub personal access token to Visual Studio Code', 1186050.0), (66239691.0, '2021-02-17 10:03:55', 323.0, 261165.0, 6.0, 5.0, 0.0, "What does npm install --legacy-peer-deps do exactly? When is it recommended / What's a potential use case?", 15093141.0), (66252333.0, '2021-02-18 01:32:39', 21.0, 127736.0, 7.0, 0.0, 0.0, 'ERROR NullInjectorError: R3InjectorError(AppModule)', 14629851.0), (66366582.0, '2021-02-25 10:15:20', 90.0, 123630.0, 18.0, 5.0, 0.0, 'Github - unexpected disconnect while reading sideband packet', 11839478.0), (66597544.0, '2021-03-12 09:44:52', 29.0, 100293.0, 25.0, 4.0, 0.0, "ENOENT: no such file or directory, lstat '/Users/Desktop/node_modules'", 15124187.0), (66629862.0, '2021-03-14 21:43:50', 285.0, 117306.0, 9.0, 9.0, 0.0, "Cannot determine the organization name for this 'dev.azure.com' remote url", 11124332.0), (66662820.0, '2021-03-16 20:19:44', 104.0, 129848.0, 11.0, 0.0, 0.0, "M1 docker preview and keycloak 'image's platform (linux/amd64) does not match the detected host platform (linux/arm64/v8)' Issue", 4100000.0), (66666134.0, '2021-03-17 02:24:45', 159.0, 273201.0, 11.0, 2.0, 0.0, 'How to install homebrew on M1 mac', 15411878.0), (66801256.0, '2021-03-25 14:10:21', 143.0, 210144.0, 3.0, 8.0, 0.0, 'java.lang.IllegalAccessError: class lombok.javac.apt.LombokProcessor cannot access class com.sun.tools.javac.processing.JavacProcessingEnvironment', 12586904.0), (66835173.0, '2021-03-27 19:11:42', 158.0, 286886.0, 16.0, 0.0, 0.0, 'How to change background color of Elevated Button in Flutter from function?', 13628530.0), (66894200.0, '2021-03-31 19:33:26', 161.0, 263037.0, 13.0, 4.0, 0.0, 'Error message "go: go.mod file not found in current directory or any parent directory; see \'go help modules\'"', 4159198.0), (66964492.0, '2021-04-06 07:34:31', 40.0, 146006.0, 15.0, 2.0, 0.0, "ImportError: cannot import name 'get_config' from 'tensorflow.python.eager.context'", 5111234.0), (66980512.0, '2021-04-07 06:17:01', 739.0, 445775.0, 41.0, 0.0, 0.0, 'Android Studio Error "Android Gradle plugin requires Java 11 to run. You are currently using Java 1.8"', 11899911.0), (66989383.0, '2021-04-07 15:35:14', 54.0, 104476.0, 5.0, 0.0, 0.0, 'Could not resolve dependency: npm ERR! peer @angular/compiler@"11.2.8"', 12380096.0), (66992420.0, '2021-04-07 18:51:41', 86.0, 103193.0, 12.0, 1.0, 0.0, 'when I try to "sync project with gradle files" a warning pops up', 15576934.0), (67001968.0, '2021-04-08 10:19:41', 153.0, 141177.0, 17.0, 8.0, 0.0, 'How to disable maven blocking external HTTP repositories?', 5428154.0), (67045607.0, '2021-04-11 13:34:53', 204.0, 125367.0, 18.0, 1.0, 0.0, 'How to resolve "Missing PendingIntent mutability flag" lint warning in android api 30+?', 2652368.0), (67079327.0, '2021-04-13 17:02:54', 151.0, 278432.0, 13.0, 7.0, 0.0, 'How can I fix "unsupported class file major version 60" in IntelliJ IDEA?', 32914.0), (67191286.0, '2021-04-21 07:37:43', 142.0, 610026.0, 44.0, 8.0, 0.0, 'Crbug/1173575, non-JS module files deprecated. chromewebdata/(index)꞉5305:9:5551', 8732988.0), (67201708.0, '2021-04-21 18:39:28', 86.0, 105762.0, 2.0, 0.0, 0.0, 'Go update all modules', 1002260.0), (67246010.0, '2021-04-24 18:12:35', 41.0, 119121.0, 8.0, 0.0, 0.0, 'Error message "The server selected protocol version TLS10 is not accepted by client preferences"', 2153306.0), (67346232.0, '2021-05-01 12:23:44', 207.0, 276806.0, 60.0, 3.0, 0.0, 'Android Emulator issues in new versions - The emulator process has terminated', 13546747.0), (67352418.0, '2021-05-02 02:11:58', 74.0, 144925.0, 8.0, 1.0, 0.0, 'How to add SCSS styles to a React project?', 10836598.0), (67399785.0, '2021-05-05 10:45:12', 47.0, 151502.0, 12.0, 2.0, 0.0, 'How to solve npm install error “npm ERR! code 1”', 15841778.0), (67412084.0, '2021-05-06 05:00:27', 251.0, 286810.0, 14.0, 11.0, 0.0, 'Android Studio error: "Manifest merger failed: Apps targeting Android 12"', 15150212.0), (67440510.0, '2021-05-07 19:12:35', 10.0, 165243.0, 10.0, 2.0, 0.0, "cv2.error: OpenCV(4.5.2) .error: (-215:Assertion failed) !_src.empty() in function 'cv::cvtColor'", 15866017.0), (67448034.0, '2021-05-08 13:21:36', 180.0, 214970.0, 34.0, 4.0, 0.0, '"Module was compiled with an incompatible version of Kotlin. The binary version of its metadata is 1.5.1, expected version is 1.1.16"', 14099703.0), (67501093.0, '2021-05-12 09:42:06', 47.0, 149690.0, 5.0, 4.0, 0.0, 'Passthrough is not supported, GL is disabled', 15519827.0), (67505347.0, '2021-05-12 14:11:11', 165.0, 105852.0, 12.0, 5.0, 0.0, 'Non-nullable property must contain a non-null value when exiting constructor. Consider declaring the property as nullable', 1977871.0), (67507452.0, '2021-05-12 16:23:28', 89.0, 135460.0, 16.0, 0.0, 0.0, 'No spring.config.import property has been defined', 15816596.0), (67698176.0, '2021-05-26 03:33:11', 134.0, 119615.0, 14.0, 0.0, 0.0, 'Error loading webview: Error: Could not register service workers: TypeError: Failed to register a ServiceWorker for scope', 7148467.0), (67699823.0, '2021-05-26 06:45:07', 204.0, 178718.0, 21.0, 3.0, 0.0, 'Module was compiled with an incompatible version of Kotlin. The binary version of its metadata is 1.5.1, expected version is 1.1.15', 11576007.0), (67782975.0, '2021-06-01 05:03:24', 69.0, 114886.0, 15.0, 0.0, 0.0, 'How to fix the \'\'module java.base does not "opens java.io" to unnamed module \'\' error in Android Studio?', 14620854.0), (67899129.0, '2021-06-09 07:03:22', 35.0, 111003.0, 6.0, 0.0, 0.0, 'Postfix and OpenJDK 11: "No appropriate protocol (protocol is disabled or cipher suites are inappropriate)"', 1465758.0), (67900692.0, '2021-06-09 08:49:35', 259.0, 121306.0, 25.0, 3.0, 0.0, 'Latest version of Xcode stuck on installation (12.5)', 8612435.0), (68166721.0, '2021-06-28 16:12:46', 34.0, 116051.0, 8.0, 1.0, 0.0, 'CUDA error: device-side assert triggered on Colab', 5080195.0), (68191392.0, '2021-06-30 08:45:37', 242.0, 121764.0, 25.0, 22.0, 0.0, 'Password authentication is temporarily disabled as part of a brownout. Please use a personal access token instead', 15507251.0), (68236007.0, '2021-07-03 11:50:25', 318.0, 303399.0, 20.0, 1.0, 0.0, 'I am getting error "cmdline-tools component is missing" after installing Flutter and Android Studio... I added the Android SDK. How can I solve them?', 11993020.0), (68260784.0, '2021-07-05 18:40:58', 117.0, 219591.0, 8.0, 0.0, 0.0, 'npm WARN old lockfile The package-lock.json file was created with an old version of npm', 12530530.0), (68387270.0, '2021-07-15 02:45:41', 464.0, 426798.0, 34.0, 8.0, 0.0, 'Android Studio error "Installed Build Tools revision 31.0.0 is corrupted"', 11957368.0), (68397062.0, '2021-07-15 15:55:59', 50.0, 108364.0, 8.0, 1.0, 0.0, 'Could not initialize class org.apache.maven.plugin.war.util.WebappStructureSerializer\t-Maven Configuration Problem Any solution?', 16456713.0), (68486207.0, '2021-07-22 14:02:27', 54.0, 130114.0, 8.0, 0.0, 0.0, 'Import could not be resolved/could not be resolved from source Pylance in VS Code using Python 3.9.2 on Windows 10', 14132348.0), (68554294.0, '2021-07-28 04:09:31', 188.0, 154478.0, 32.0, 24.0, 0.0, 'android:exported needs to be explicitly specified for &lt;activity&gt;. Apps targeting Android 12 and higher are required to specify', 14280831.0), (68673221.0, '2021-08-05 20:37:54', 62.0, 103200.0, 4.0, 4.0, 0.0, "WARNING: Running pip as the 'root' user", 15037284.0), (68775869.0, '2021-08-13 16:49:34', 1286.0, 1236876.0, 47.0, 18.0, 0.0, 'Message "Support for password authentication was removed. Please use a personal access token instead."', 15573670.0), (68836551.0, '2021-08-18 17:01:31', 53.0, 117984.0, 9.0, 1.0, 0.0, "Keras AttributeError: 'Sequential' object has no attribute 'predict_classes'", 10377186.0), (68857411.0, '2021-08-20 05:33:34', 41.0, 122460.0, 4.0, 3.0, 0.0, 'npm WARN deprecated tar@2.2.2: This version of tar is no longer supported, and will not receive security updates. Please upgrade asap', 14930713.0), (68958221.0, '2021-08-27 19:00:39', 80.0, 111679.0, 22.0, 3.0, 0.0, 'MongoParseError: options useCreateIndex, useFindAndModify are not supported', 12459536.0), (68959632.0, '2021-08-27 21:43:39', 35.0, 505992.0, 4.0, 2.0, 0.0, "TypeError: Cannot read properties of undefined (reading 'id')", 16261380.0), (69033022.0, '2021-09-02 15:18:46', 96.0, 114598.0, 30.0, 10.0, 0.0, 'Message "error: resource android:attr/lStar not found"', 16813382.0), (69034879.0, '2021-09-02 17:36:44', 218.0, 307961.0, 8.0, 1.0, 0.0, 'How can I resolve the error "The minCompileSdk (31) specified in a dependency\'s AAR metadata" in native Java or Kotlin?', 8359705.0), (69041454.0, '2021-09-03 08:01:10', 91.0, 102261.0, 9.0, 11.0, 0.0, 'Error: require() of ES modules is not supported when importing node-fetch', 16821219.0), (69080597.0, '2021-09-06 21:56:50', 58.0, 458856.0, 22.0, 4.0, 0.0, "× TypeError: Cannot read properties of undefined (reading 'map')", 16846583.0), (69081410.0, '2021-09-07 00:51:50', 134.0, 296364.0, 3.0, 2.0, 0.0, 'Error [ERR_REQUIRE_ESM]: require() of ES Module not supported', 16847125.0), (69139074.0, '2021-09-11 00:12:49', 8.0, 109316.0, 3.0, 0.0, 0.0, "ERROR TypeError: Cannot read properties of undefined (reading 'title')", 16723200.0), (69163511.0, '2021-09-13 13:25:07', 224.0, 136939.0, 13.0, 0.0, 0.0, "Build was configured to prefer settings repositories over project repositories but repository 'maven' was added by build file 'build.gradle'", 12886431.0), (69390676.0, '2021-09-30 10:34:46', 121.0, 121388.0, 14.0, 2.0, 0.0, 'How to use appsettings.json in Asp.net core 6 Program.cs file', 10336618.0), (69394001.0, '2021-09-30 14:28:21', 34.0, 117452.0, 10.0, 1.0, 0.0, 'How to fix? "kex_exchange_identification: read: Connection reset by peer"', 8939187.0), (69394632.0, '2021-09-30 15:07:50', 249.0, 242414.0, 12.0, 1.0, 0.0, 'Webpack build failing with ERR_OSSL_EVP_UNSUPPORTED', 17044429.0), (69564817.0, '2021-10-14 03:41:23', 48.0, 100499.0, 4.0, 0.0, 0.0, "TypeError: load() missing 1 required positional argument: 'Loader' in Google Colab", 17147261.0), (69567381.0, '2021-10-14 08:22:53', 102.0, 132221.0, 16.0, 1.0, 0.0, 'Getting "Cannot read property \'pickAlgorithm\' of null" error in react native', 15269749.0), (69665222.0, '2021-10-21 16:00:47', 90.0, 165387.0, 13.0, 0.0, 0.0, 'Node.js 17.0.1 Gatsby error - "digital envelope routines::unsupported ... ERR_OSSL_EVP_UNSUPPORTED"', 7002673.0), (69692842.0, '2021-10-23 23:39:57', 843.0, 816368.0, 43.0, 10.0, 0.0, 'Error message "error:0308010C:digital envelope routines::unsupported"', 14994086.0), (69722872.0, '2021-10-26 12:10:04', 184.0, 130738.0, 10.0, 1.0, 0.0, 'ASP.NET Core 6 how to access Configuration during startup', 1977871.0), (69773547.0, '2021-10-29 18:49:01', 62.0, 108232.0, 14.0, 1.0, 0.0, 'Visual Studio 2019 Not Showing .NET 6 Framework', 1407658.0), (69832748.0, '2021-11-03 23:06:48', 98.0, 140728.0, 16.0, 0.0, 0.0, 'Error "Error: A &lt;Route&gt; is only ever to be used as the child of &lt;Routes&gt; element"', 13149387.0), (69843615.0, '2021-11-04 17:44:31', 72.0, 102942.0, 6.0, 0.0, 0.0, "Switch' is not exported from 'react-router-dom'", 8467488.0), (69854011.0, '2021-11-05 13:26:59', 137.0, 107635.0, 7.0, 1.0, 0.0, 'Matched leaf route at location "/" does not have an element', 16102215.0), (69864165.0, '2021-11-06 12:55:13', 160.0, 149243.0, 18.0, 0.0, 0.0, 'Error: [PrivateRoute] is not a &lt;Route&gt; component. All component children of &lt;Routes&gt; must be a &lt;Route&gt; or &lt;React.Fragment&gt;', 16830299.0), (69868956.0, '2021-11-07 00:34:29', 145.0, 221716.0, 9.0, 4.0, 0.0, 'How can I redirect in React Router v6?', 2000548.0), (69875125.0, '2021-11-07 17:53:49', 78.0, 105208.0, 4.0, 1.0, 0.0, 'find_element_by_* commands are deprecated in Selenium', 17351258.0), (69875520.0, '2021-11-07 18:45:12', 150.0, 180541.0, 13.0, 1.0, 0.0, 'Unable to negotiate with 40.74.28.9 port 22: no matching host key type found. Their offer: ssh-rsa', 7122272.0), (70000324.0, '2021-11-17 07:23:39', 120.0, 112536.0, 3.0, 0.0, 0.0, 'What is "crypt key missing" error in Pgadmin4 and how to resolve it?', 10279487.0), (70036953.0, '2021-11-19 15:09:03', 90.0, 103677.0, 14.0, 5.0, 0.0, "Spring Boot 2.6.0 / Spring fox 3 - Failed to start bean 'documentationPluginsBootstrapper'", 306436.0), (70281346.0, '2021-12-08 20:29:31', 150.0, 155000.0, 12.0, 5.0, 0.0, 'Node.js Sass version 7.0.0 is incompatible with ^4.0.0 || ^5.0.0 || ^6.0.0', 13765920.0), (70319606.0, '2021-12-11 22:44:15', 115.0, 110984.0, 5.0, 0.0, 0.0, "ImportError: cannot import name 'url' from 'django.conf.urls' after upgrading to Django 4.0", 113962.0), (70358643.0, '2021-12-15 04:58:02', 233.0, 107966.0, 6.0, 4.0, 0.0, '"You are running create-react-app 4.0.3 which is behind the latest release (5.0.0)"', 14426381.0), (70368760.0, '2021-12-15 18:37:56', 163.0, 164918.0, 21.0, 2.0, 0.0, 'React Uncaught ReferenceError: process is not defined', 14880787.0), (70538793.0, '2021-12-31 03:41:36', 40.0, 103218.0, 9.0, 1.0, 0.0, 'remote: Write access to repository not granted. fatal: unable to access', 10781286.0)]</code></pre>
 </div>
 </div>
 <p>Let’s lay out the various verbs in SQL. Here’s the form of a standard query (though the ORDER BY is often omitted and sorting is computationally expensive):</p>
@@ -979,11 +993,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="grouping-stratifying">Grouping / stratifying</h2>
 <p>A common pattern of operation is to stratify the dataset, i.e., collect it into mutually exclusive and exhaustive subsets. One would then generally do some operation on each subset. In SQL this is done with the GROUP BY keyword.</p>
 <p>Here’s a basic example where we count the occurrences of different tags. Note that we use <code>as</code> to define a name for the new column that is created based on the aggregation operation (<code>count</code> in this case).</p>
-<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-18_f06aeba64194464f5d7e5de5d3398e75">
-<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select tag, count(*) as n from questions_tags </span><span class="ch">\</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="st">           group by tag order by n desc limit 25"</span>).fetchall()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-19_5ef03dd95883d733fcab7677ba5b747d">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select tag, count(*) as n from questions_tags </span><span class="ch">\</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="st">           group by tag order by n desc limit 25"</span>).fetchall()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[('javascript', 290966), ('java', 219155), ('android', 184272), ('php', 177969), ('python', 171745), ('c#', 163637), ('html', 126851), ('jquery', 123707), ('ios', 95722), ('css', 86470), ('angularjs', 76951), ('c++', 76260), ('mysql', 75458), ('swift', 61485), ('sql', 58346), ('node.js', 52827), ('r', 48079), ('arrays', 46739), ('json', 45250), ('ruby-on-rails', 39036), ('sql-server', 37077), ('c', 36080), ('asp.net', 35610), ('excel', 29924), ('angular2', 28832)]</code></pre>
+<pre><code>[('python', 255614), ('javascript', 182006), ('java', 89097), ('reactjs', 83180), ('html', 69401), ('c#', 67633), ('android', 55422), ('r', 51688), ('node.js', 50231), ('php', 48782), ('css', 48021), ('c++', 46267), ('pandas', 45862), ('sql', 43598), ('python-3.x', 42014), ('flutter', 39243), ('typescript', 33583), ('arrays', 29960), ('angular', 29783), ('django', 29228), ('mysql', 26562), ('dataframe', 25283), ('c', 24965), ('json', 24510), ('swift', 23008)]</code></pre>
 </div>
 </div>
 <p>In general <code>GROUP BY</code> statements will involve some aggregation operation on the subsets. Options include: <code>COUNT</code>, <code>MIN</code>, <code>MAX</code>, <code>AVG</code>, <code>SUM</code>.</p>
@@ -993,15 +1007,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="getting-unique-results-distinct" class="level2">
 <h2 class="anchored" data-anchor-id="getting-unique-results-distinct">Getting unique results (DISTINCT)</h2>
 <p>A useful SQL keyword is <code>DISTINCT</code>, which allows you to eliminate duplicate rows from any table (or remove duplicate values when one only has a single column or set of values).</p>
-<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-19_2b8f206e6a3b58a039377709de913bdc">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>tag_names <span class="op">=</span> db.execute(<span class="st">"select distinct tag from questions_tags"</span>).fetchall()</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>tag_names[<span class="dv">0</span>:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-20_b4ed957dc9c4ff6758a7539962e6bba8">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>tag_names <span class="op">=</span> db.execute(<span class="st">"select distinct tag from questions_tags"</span>).fetchall()</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>tag_names[<span class="dv">0</span>:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[('c#',), ('razor',), ('flags',), ('javascript',), ('rxjs',)]</code></pre>
+<pre><code>[('sorting',), ('visual-c++',), ('mfc',), ('cgridctrl',), ('css',)]</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select count(distinct tag) from questions_tags"</span>).fetchall()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select count(distinct tag) from questions_tags"</span>).fetchall()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[(41006,)]</code></pre>
+<pre><code>[(42137,)]</code></pre>
 </div>
 </div>
 </section>
@@ -1011,43 +1025,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The syntax generally looks like this (again the <code>WHERE</code> and <code>ORDER BY</code> are optional):</p>
 <pre><code>SELECT &lt;column(s)&gt; FROM &lt;table1&gt; JOIN &lt;table2&gt; ON &lt;columns to match on&gt; WHERE &lt;condition(s) on column(s)&gt; ORDER BY &lt;column(s)&gt;</code></pre>
 <p>Let’s see some joins using the different syntax on the Stack Overflow database. In particular let’s select only the questions with the tag python.</p>
-<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-20_7115de6b95adc60327baf41045f22c98">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">=</span> db.execute(<span class="st">"select * from questions join questions_tags </span><span class="ch">\</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="st">        on questions.questionid = questions_tags.questionid </span><span class="ch">\</span></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="st">        where tag = 'python'"</span>).fetchall()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-21_1c104053588e685e0aad6db1b5bb6d11">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">=</span> db.execute(<span class="st">"select * from questions join questions_tags </span><span class="ch">\</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="st">        on questions.questionid = questions_tags.questionid </span><span class="ch">\</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="st">        where tag = 'python'"</span>).fetchall()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>It turns out you can do it without using the JOIN keyword.</p>
-<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-21_28ec8e4a3030dddbc670c322d77ded25">
-<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>result2 <span class="op">=</span> db.execute(<span class="st">"select * from questions, questions_tags </span><span class="ch">\</span></span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="st">        where questions.questionid = questions_tags.questionid and </span><span class="ch">\</span></span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="st">        tag = 'python'"</span>).fetchall()</span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>result1[<span class="dv">0</span>:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-22_2f9271547db0038fe70c242a46da2a8f">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>result2 <span class="op">=</span> db.execute(<span class="st">"select * from questions, questions_tags </span><span class="ch">\</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="st">        where questions.questionid = questions_tags.questionid and </span><span class="ch">\</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="st">        tag = 'python'"</span>).fetchall()</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>result1[<span class="dv">0</span>:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[(34553559, '2016-01-01 04:34:34', 3, 96, 'Python nested loops only working on the first pass', 845642, 34553559, 'python'), (34556493, '2016-01-01 13:22:06', 2, 30, 'bool operator in for Timestamp in Series does not work', 4458602, 34556493, 'python'), (34557898, '2016-01-01 16:36:04', 3, 143, 'Pairwise haversine distance calculation', 2927983, 34557898, 'python'), (34560088, '2016-01-01 21:10:32', 1, 126, "Stopwatch (chronometre) doesn't work", 5736692, 34560088, 'python'), (34560213, '2016-01-01 21:25:26', 1, 127, 'How to set the type of a pyqtSignal (variable of class X) that takes a X instance as argument', 5636400, 34560213, 'python')]</code></pre>
+<pre><code>[(65526804.0, '2021-01-01 01:54:10', 0.0, 2087.0, 3.0, 3.0, None, 'How to play an audio file starting at a specific time', 14718094.0, 65526804.0, 'python'), (65527402.0, '2021-01-01 05:14:22', 1.0, 56.0, 1.0, 0.0, None, 'Join dataframe columns in python', 1492229.0, 65527402.0, 'python'), (65529525.0, '2021-01-01 12:06:43', 1.0, 175.0, 1.0, 0.0, None, 'Issues with pygame.time.get_ticks()', 13720770.0, 65529525.0, 'python'), (65529971.0, '2021-01-01 13:14:40', 1.0, 39.0, 0.0, 1.0, None, 'How to check if Windows prompts a notification box using python?', 13845215.0, 65529971.0, 'python'), (65532644.0, '2021-01-01 18:46:52', -2.0, 49.0, 1.0, 1.0, None, 'How I divide this text file in a Dataframe?', 14122166.0, 65532644.0, 'python')]</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">==</span> result2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">==</span> result2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>True</code></pre>
 </div>
 </div>
 <p>Here’s a three-way join (using both types of syntax) with some additional use of aliases to abbreviate table names. What does this query ask for?</p>
-<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-22_ec930e09602907b09bf7f4cc1bcdbb91">
-<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">=</span> db.execute(<span class="st">"select * from </span><span class="ch">\</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="st">        questions Q </span><span class="ch">\</span></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="st">        join questions_tags T on Q.questionid = T.questionid </span><span class="ch">\</span></span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true" tabindex="-1"></a><span class="st">        join users U on Q.ownerid = U.userid </span><span class="ch">\</span></span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true" tabindex="-1"></a><span class="st">        where tag = 'python' and </span><span class="ch">\</span></span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true" tabindex="-1"></a><span class="st">        age &gt; 60"</span>).fetchall()</span>
-<span id="cb47-7"><a href="#cb47-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-8"><a href="#cb47-8" aria-hidden="true" tabindex="-1"></a>result2 <span class="op">=</span> db.execute(<span class="st">"select * from </span><span class="ch">\</span></span>
-<span id="cb47-9"><a href="#cb47-9" aria-hidden="true" tabindex="-1"></a><span class="st">        questions Q, questions_tags T, users U where </span><span class="ch">\</span></span>
-<span id="cb47-10"><a href="#cb47-10" aria-hidden="true" tabindex="-1"></a><span class="st">        Q.questionid = T.questionid and </span><span class="ch">\</span></span>
-<span id="cb47-11"><a href="#cb47-11" aria-hidden="true" tabindex="-1"></a><span class="st">        Q.ownerid = U.userid and </span><span class="ch">\</span></span>
-<span id="cb47-12"><a href="#cb47-12" aria-hidden="true" tabindex="-1"></a><span class="st">        tag = 'python' and </span><span class="ch">\</span></span>
-<span id="cb47-13"><a href="#cb47-13" aria-hidden="true" tabindex="-1"></a><span class="st">        age &gt; 60"</span>).fetchall()</span>
-<span id="cb47-14"><a href="#cb47-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb47-15"><a href="#cb47-15" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">==</span> result2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-23_55bdb9999f8e4bf9a03b5f33aebdaef0">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">=</span> db.execute(<span class="st">"select * from </span><span class="ch">\</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="st">        questions Q </span><span class="ch">\</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="st">        join questions_tags T on Q.questionid = T.questionid </span><span class="ch">\</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="st">        join users U on Q.ownerid = U.userid </span><span class="ch">\</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="st">        where tag = 'python' and </span><span class="ch">\</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a><span class="st">        age &gt; 60"</span>).fetchall()</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>result2 <span class="op">=</span> db.execute(<span class="st">"select * from </span><span class="ch">\</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="st">        questions Q, questions_tags T, users U where </span><span class="ch">\</span></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a><span class="st">        Q.questionid = T.questionid and </span><span class="ch">\</span></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="st">        Q.ownerid = U.userid and </span><span class="ch">\</span></span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a><span class="st">        tag = 'python' and </span><span class="ch">\</span></span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a><span class="st">        age &gt; 60"</span>).fetchall()</span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">==</span> result2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>True</code></pre>
 </div>
@@ -1059,20 +1073,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="temporary-tables-and-views">Temporary tables and views</h2>
 <p>You can think of a view as a temporary table that is the result of a query and can be used in subsequent queries. In any given query you can use both views and tables. The advantage is that they provide modularity in our querying. For example, if a given operation (portion of a query) is needed repeatedly, one could abstract that as a view and then make use of that view.</p>
 <p>Suppose we always want the age and displayname of owners of questions to be readily available. Once we have the view we can query it like a regular table.</p>
-<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-23_86410da9ce70903f0b1bb03d49cd0a19">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"create view questionsAugment as select </span><span class="ch">\</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="st">                questionid, questions.creationdate, score, viewcount, </span><span class="ch">\</span></span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a><span class="st">                title, ownerid, age, displayname </span><span class="ch">\</span></span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="st">                from questions join users </span><span class="ch">\</span></span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a><span class="st">                on questions.ownerid = users.userid"</span>)</span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="co">## you'll see the return value is '0'</span></span>
-<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>               </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-24_2408be7262b52970d6873de07fed466c">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"create view questionsAugment as select </span><span class="ch">\</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="st">                questionid, questions.creationdate, score, viewcount, </span><span class="ch">\</span></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="st">                title, ownerid, age, displayname </span><span class="ch">\</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="st">                from questions join users </span><span class="ch">\</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a><span class="st">                on questions.ownerid = users.userid"</span>)</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a><span class="co">## you'll see the return value is '0'</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>               </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;sqlite3.Cursor object at 0x7f706a4fcd40&gt;</code></pre>
+<pre><code>&lt;sqlite3.Cursor object at 0x7fbf81208d40&gt;</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select * from questionsAugment where age &gt; 70 limit 5"</span>).fetchall()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select * from questionsAugment where age &gt; 70 limit 5"</span>).fetchall()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[(36143022, '2016-03-21 22:44:16', 2, 158, 'Record aggregate with dynamic choice', 40851, 71, 'Simon Wright'), (40596400, '2016-11-14 19:30:32', 1, 28, 'Why does Xcode report "Variable \'tuple.0\' used before being initialized" after I\'ve assigned all elements of a Swift tuple?', 74966, 71, 'hkatz'), (40612851, '2016-11-15 14:51:51', 1, 32, 'Converting a Swift array of Ints into an array of its running subtotals', 74966, 71, 'hkatz'), (38532865, '2016-07-22 18:10:34', 0, 134, 'Algorithm to generate all permutations of pairs without repetition', 98062, 71, 'Rocky Luck'), (36189874, '2016-03-23 22:25:56', 0, 32, 'Mediawiki 1.26.2 upgrade - categories listed in a single column', 332786, 71, 'Sakshale')]</code></pre>
+<pre><code>[]</code></pre>
 </div>
 </div>
 <p>One use of a view would be to create a mega table that stores all the information from multiple tables in the (unnormalized) form you might have if you simply had one data frame in Python or R.</p>
@@ -1086,14 +1100,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Simply listing two or more tables separated by commas as we saw earlier is the same as a <em>cross join</em>. Alternatively, listing two or more tables separated by commas, followed by conditions that equate rows in one table to rows in another is equivalent to an <em>inner join</em>.</p>
 <p>In general, inner joins can be seen as a form of cross join followed by a condition that enforces matching between the rows of the table. More broadly, here are four equivalent joins that all perform the equivalent of an inner join:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>## explicit <span class="kw">inner</span> <span class="kw">join</span>:</span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="op">*</span> <span class="kw">from</span> table1 <span class="kw">join</span> table2 <span class="kw">on</span> table1.<span class="kw">id</span> <span class="op">=</span> table2.<span class="kw">id</span> </span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>## non<span class="op">-</span>explicit <span class="kw">join</span> <span class="kw">without</span> <span class="kw">JOIN</span></span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="op">*</span> <span class="kw">from</span> table1, table2 <span class="kw">where</span> table1.<span class="kw">id</span> <span class="op">=</span> table2.<span class="kw">id</span> </span>
-<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>## <span class="kw">cross</span><span class="op">-</span><span class="kw">join</span> followed <span class="kw">by</span> matching</span>
-<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="op">*</span> <span class="kw">from</span> table1 <span class="kw">cross</span> <span class="kw">join</span> table2 <span class="kw">where</span> table1.<span class="kw">id</span> <span class="op">=</span> table2.<span class="kw">id</span> </span>
-<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>## explicit <span class="kw">inner</span> <span class="kw">join</span> <span class="kw">with</span> <span class="st">'using'</span></span>
-<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="op">*</span> <span class="kw">from</span> table1 <span class="kw">join</span> table2 <span class="kw">using</span>(<span class="kw">id</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode sql code-with-copy"><code class="sourceCode sql"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>## explicit <span class="kw">inner</span> <span class="kw">join</span>:</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="op">*</span> <span class="kw">from</span> table1 <span class="kw">join</span> table2 <span class="kw">on</span> table1.<span class="kw">id</span> <span class="op">=</span> table2.<span class="kw">id</span> </span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>## non<span class="op">-</span>explicit <span class="kw">join</span> <span class="kw">without</span> <span class="kw">JOIN</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="op">*</span> <span class="kw">from</span> table1, table2 <span class="kw">where</span> table1.<span class="kw">id</span> <span class="op">=</span> table2.<span class="kw">id</span> </span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>## <span class="kw">cross</span><span class="op">-</span><span class="kw">join</span> followed <span class="kw">by</span> matching</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="op">*</span> <span class="kw">from</span> table1 <span class="kw">cross</span> <span class="kw">join</span> table2 <span class="kw">where</span> table1.<span class="kw">id</span> <span class="op">=</span> table2.<span class="kw">id</span> </span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>## explicit <span class="kw">inner</span> <span class="kw">join</span> <span class="kw">with</span> <span class="st">'using'</span></span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a><span class="kw">select</span> <span class="op">*</span> <span class="kw">from</span> table1 <span class="kw">join</span> table2 <span class="kw">using</span>(<span class="kw">id</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Challenge</strong>: Create a view with one row for every question-tag pair, including questions without any tags.</p>
 <p><strong>Challenge</strong>: Write a query that would return the displaynames of all of the users who have <em>never</em> posted a question. The NULL keyword will come in handy it’s like ‘NA’ in R. Hint: NULLs should be produced if you do an outer join.</p>
@@ -1104,33 +1118,97 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>DBMS use indexing to provide sub-linear time lookup. Without indexes, a database needs to scan through every row sequentially, which is called linear time lookup if there are n rows, the lookup is O(n) in computational cost. With indexes, lookup may be logarithmic O(log(n)) (if using tree-based indexes) or constant time O(1) (if using hash-based indexes). A binary tree-based search is logarithmic; at each step through the tree you can eliminate half of the possibilities.</p>
 <p>Here’s how we create an index, with some time comparison for a simple query.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> db.execute(</span>
-<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"select * from questions where viewcount &gt; 10000"</span>).fetchall()</span>
-<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)  <span class="co"># 10 seconds</span></span>
-<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
-<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>db.execute(</span>
-<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"create index count_index on questions (viewcount)"</span>) <span class="co"># 19 seconds</span></span>
-<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)  <span class="co"># 10 seconds</span></span>
-<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
-<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a>db.execute(</span>
-<span id="cb54-11"><a href="#cb54-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"select * from questions where viewcount &gt; 10000"</span>).fetchall()  <span class="co"># 3 seconds</span></span>
-<span id="cb54-12"><a href="#cb54-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)  <span class="co"># 10 seconds</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> db.execute(</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">"select * from questions where viewcount &gt; 10000"</span>).fetchall()</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)  <span class="co"># 10 seconds</span></span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true" tabindex="-1"></a>db.execute(</span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true" tabindex="-1"></a>  <span class="st">"create index count_index on questions (viewcount)"</span>) <span class="co"># 19 seconds</span></span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)  <span class="co"># 10 seconds</span></span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>db.execute(</span>
+<span id="cb55-11"><a href="#cb55-11" aria-hidden="true" tabindex="-1"></a>  <span class="st">"select * from questions where viewcount &gt; 10000"</span>).fetchall()  <span class="co"># 3 seconds</span></span>
+<span id="cb55-12"><a href="#cb55-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)  <span class="co"># 10 seconds</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>In other contexts, an index can save huge amounts of time. So if you’re working with a database and speed is important, check to see if there are indexes. That said, as seen above it takes time to create the index, so you’d only want to create it if you were doing multiple queries that could take advantage of the index. See the databases tutorial for more discussion of how using indexes in a lookup is not always advantageous.</p>
+</section>
+<section id="set-operations-union-intersect-except" class="level2">
+<h2 class="anchored" data-anchor-id="set-operations-union-intersect-except">Set operations: union, intersect, except</h2>
+<p>You can do set operations like union, intersection, and set difference using the UNION, INTERSECT, and EXCEPT keywords on tables that have the same schema (same column names and types), though most often these would be used on single columns (i.e., single-column tables).</p>
+<blockquote class="blockquote">
+<p><strong>Note</strong>: While one can often set up an equivalent query without using INTERSECT or UNION, set operations can be very handy. In the example below one could do it with a self-join, joining a table to itself, but the syntax is often more complicated.</p>
+</blockquote>
+<p>Consider the following example of using <code>INTERSECT</code>. What does it return?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">=</span> db.execute(<span class="st">"select displayname, userid from </span><span class="ch">\</span></span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="st">                     questions Q join users U on U.userid = Q.ownerid </span><span class="ch">\</span></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a><span class="st">                     join questions_tags T on Q.questionid = T.questionid </span><span class="ch">\</span></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="st">                     where tag = 'r' </span><span class="ch">\</span></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a><span class="st">                     intersect </span><span class="ch">\</span></span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a><span class="st">                     select displayname, userid from </span><span class="ch">\</span></span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a><span class="st">                     questions Q join users U on U.userid = Q.ownerid </span><span class="ch">\</span></span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a><span class="st">                     join questions_tags T on Q.questionid = T.questionid </span><span class="ch">\</span></span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a><span class="st">                     where tag = 'python'"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="subqueries" class="level2">
+<h2 class="anchored" data-anchor-id="subqueries">Subqueries</h2>
+<p>A subquery is a full query that is embedded in a larger query. These can be quite handy in building up complicated queries. One could instead use temporary tables, but it often is easier to write all in one query (and that let’s the database’s query optimizer operate on the entire query).</p>
+<section id="subqueries-in-the-from-statement" class="level3">
+<h3 class="anchored" data-anchor-id="subqueries-in-the-from-statement">Subqueries in the FROM statement</h3>
+<p>We can use subqueries in the FROM statement to create a temporary table to use in a query. Here we’ll do it in the context of a join.</p>
+<blockquote class="blockquote">
+<p><strong>Challenge</strong>: What does the following do?</p>
+</blockquote>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select * from questions join answers A </span><span class="ch">\</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a><span class="st">           on questions.questionid = A.questionid </span><span class="ch">\</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a><span class="st">           join </span><span class="ch">\</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a><span class="st">           (select ownerid, count(*) as n_answered from answers </span><span class="ch">\</span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a><span class="st">           group by ownerid order by n_answered desc limit 1000) most_responsive </span><span class="ch">\</span></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a><span class="st">           on A.ownerid = most_responsive.ownerid"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>It might be hard to just come up with that full query all at once. A good strategy is probably to think about creating a view that is the result of the inner query and then have the outer query use that. You can then piece together the complicated query in a modular way. For big databases, you are likely to want to submit this as a single query and not two queries so that the SQL optimizer can determine the best way to do the operations. But you want to start with code that you’re confident will give you the right answer!</p>
+<p>Note we could also have done that query using a subquery in the WHERE statement, as discussed in the next section.</p>
+</section>
+<section id="subqueries-in-the-where-statement" class="level3">
+<h3 class="anchored" data-anchor-id="subqueries-in-the-where-statement">Subqueries in the WHERE statement</h3>
+<p>Instead of a join, we can use subqueries as a way to combine information across tables, with the subquery involved in a WHERE statement. The subquery creates a set and we then can check for inclusion in (or exclusion from with <code>not in</code>) that set.</p>
+<p>For example, suppose we want to know the average number of UpVotes for users who have posted a question with the tag “python”.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select avg(upvotes) from users where userid in </span><span class="ch">\</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="st">           (select distinct ownerid from </span><span class="ch">\</span></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a><span class="st">           questions join questions_tags </span><span class="ch">\</span></span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a><span class="st">           on questions.questionid = questions_tags.questionid </span><span class="ch">\</span></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a><span class="st">           where tag = 'python')"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>&lt;sqlite3.Cursor object at 0x7fae309a8d40&gt;</code></pre>
+</div>
+</div>
+</section>
 </section>
 <section id="creating-database-tables" class="level2">
 <h2 class="anchored" data-anchor-id="creating-database-tables">Creating database tables</h2>
 <p>One can create tables from within the ‘sqlite’ command line interfaces (discussed in the tutorial), but often one would do this from Python or R. Here’s the syntax from Python, creating the table from a Pandas dataframe.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="co">## create data frame 'student_data' in some fashion</span></span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> sq.<span class="ex">connect</span>(db_path)</span>
-<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>student_data.to_sql(<span class="st">'student'</span>, con if_exists<span class="op">=</span><span class="st">'replace'</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="co">## create data frame 'student_data' in some fashion</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>con <span class="op">=</span> sq.<span class="ex">connect</span>(db_path)</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>student_data.to_sql(<span class="st">'student'</span>, con, if_exists<span class="op">=</span><span class="st">'replace'</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
+<section id="recent-tools-and-data-storage-formats" class="level1">
+<h1>4. Recent tools and data storage formats</h1>
+<p>There has been a lot of work in recent years to provide file formats and tools for working with very large datasets in ways other than traditional databases, often optimized for speed when doing large-scale analytics on the data.</p>
+<p>Rather than being stored in a formal database, data are often stored in multiple files, often using Parquet (<a href="unit2-dataTech.html#csv-vs.-specialized-formats-such-as-parquet">discussed in Unit 2</a> or CSV as the file format. When stored in the cloud, this is often referred to as a <em>data lake</em>.</p>
+<p>We’ll briefly discuss <em>Apache Arrow</em>. Apache Arrow provides efficient data structures for working with data in memory, usable via the <code>PyArrow</code> package in Python (and the <code>arrow</code> package in R). Data are stored by column, with values in a column stored sequentially and in such a way that one can access a specific value without reading the other values in the column (O(1) lookup).</p>
+<p>Arrow is designed to read data from various file formats, including Parquet, native Arrow format, and text files. In general Arrow will only read data from disk as needed, avoiding keeping the entire dataset in memory. Here’s a <a href="https://stackoverflow.com/questions/56472727/difference-between-apache-parquet-and-arrow">good discussion comparing different file formats</a>.</p>
+<p>After loading the data in (which doesn’t initially involve actually reading the data from disk), you can then operate on the resulting object. PyArrow will only read the data it needs for your computations (how much has to be read depends on the file format, with the native <code>arrow</code> format best in this regard), which can reduce I/O and memory usage.</p>
+<p><em>Polars</em> is advertised as a very fast in-memory package for working with dataframes (i.e., an alternative to Pandas) that provides a Python interface. It uses the Arrow columnar format. It also provides a lazy execution model like Spark or Dask that allows for automatic optimization of queries.</p>
+</section>
 <section id="sparsity" class="level1">
-<h1>4. Sparsity</h1>
+<h1>5. Sparsity</h1>
 <p>A lot of statistical methods are based on sparse matrices. These include:</p>
 <ul>
 <li>Matrices representing the neighborhood structure (i.e., conditional dependence structure) of networks/graphs.</li>
@@ -1143,7 +1221,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Here’s a <a href="http://blog.revolutionanalytics.com/2011/05/the-neflix-prize-big-data-svd-and-r.html">blog post</a> describing the use of sparse matrix manipulations for analysis of the Netflix Prize data.</p>
 </section>
 <section id="using-statistical-concepts-to-deal-with-computational-bottlenecks" class="level1">
-<h1>5. Using statistical concepts to deal with computational bottlenecks</h1>
+<h1>6. Using statistical concepts to deal with computational bottlenecks</h1>
 <p>As statisticians, we have a variety of statistical/probabilistic tools that can aid in dealing with big data.</p>
 <ol type="1">
 <li>Usually we take samples because we cannot collect data on the entire population. But we can just as well take a sample because we don’t have the ability to process the data from the entire population. We can use standard uncertainty estimates to tell us how close to the true quantity we are likely to be. And we can always take a bigger sample if we’re not happy with the amount of uncertainty.</li>
