@@ -16,12 +16,8 @@ format:
     code-block-background: true
 execute:
   freeze: auto
+engine: knitr
 ---
-
-```{r, fake-setup, echo=FALSE}
-## For some reason we need an R chunk in the doc or get result seen in `error.log`.
-z <- 1
-```
 
 ```{python, setup, echo=FALSE}
 import os, time
