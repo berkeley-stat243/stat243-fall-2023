@@ -169,9 +169,8 @@ The basic steps of *MapReduce* are as follows:
     key
 -   write out the {key,result} pair
 
-A similar paradigm that is implemented in *dplyr* is the
-[split-apply-combine strategy](http://www.jstatsoft.org/v40/i01/paper),
-discussed a bit in Unit 5.
+A similar paradigm that is implemented in `pandas` and `dplyr` is the
+[split-apply-combine strategy](http://www.jstatsoft.org/v40/i01/paper).
 
 A few additional comments. In our map function, we could exclude values
 or transform them in some way, including producing multiple records from
@@ -191,8 +190,7 @@ one can compute the partial sums on each worker and then just add up the
 partial sums.
 
 Note that as discussed in Unit 5 the concepts of *map* and *reduce* are core concepts in
-functional programming, and the various `apply` and `lapply` style commands are base R's
-version of a map operation.
+functional programming, and of course Python provides the `map` function.
 
 *Hadoop* is an infrastructure for enabling MapReduce across a network of
 machines. The basic idea is to hide the complexity of distributing the
@@ -222,8 +220,7 @@ for users to debug.
 
 ## Using Dask for big data processing
 
-Unit 6 on parallelization gives an overview of using Dask in similar
- for flexible parallelization
+Unit 6 on parallelization gives an overview of using Dask for flexible parallelization
 on different kinds of computational resources (in particular,
 parallelizing across multiple cores on one machine versus parallelizing
 across multiple cores across multiple machines/nodes).
@@ -316,8 +313,15 @@ You should see this:
     ...
 ```
 
-Note: calling compute twice is a bad idea as Dask will read in the data
+Note: calling `compute` twice is a bad idea as Dask will read in the data
 twice - more on this in a bit.
+
+> **Warning**
+> Think carefully about the size of the result from calling `compute`. The
+> result will be returned as a standard Python object, not distributed across
+> multiple workers (and possibly machines), and with the object entirely in memory.
+> It's easy to accidentally return an entire giant dataset.
+
 
 ### Dask bags
 
@@ -327,7 +331,7 @@ make sense to ask for the i'th element.
 You can think of operations on Dask bags as being like parallel map
 operations on lists in Python or R.
 
-By default bags are handled via the `multiprocessing` scheduler.
+By default bags are handled via the `processes` scheduler.
 
 Let's see some basic operations on a large dataset of Wikipedia log
 files. You can get a subset of the Wikipedia data
@@ -383,7 +387,7 @@ Note that it is quite inefficient to do the `find()` (and implicitly
 reading the data in) and then compute on top of that intermediate result
 in two separate calls to `compute()`. Rather, we should set up the code
 so that all the operations are set up before a single call to
-`compute()`. More on this the [Dask/future tutorial](https://berkeley-scf.github.io/tutorial-dask-future/python-dask#63-avoid-repeated-calculations-by-embedding-tasks-within-one-call-to-compute)
+`compute()`. This is discussed in detail in the [Dask/future tutorial](https://berkeley-scf.github.io/tutorial-dask-future/python-dask#63-avoid-repeated-calculations-by-embedding-tasks-within-one-call-to-compute).
 
 Since the data are just treated as raw strings, we might want to
 introduce structure by converting each line to a tuple and then
@@ -536,13 +540,14 @@ student information with information about the teacher(s) who taught the
 students. Databases are set up to allow for fast querying and merging
 (called joins in database terminology).
 
+### Memory and disk use
+
 Formally, databases are stored on disk, while Python and R store
 datasets in memory. This would suggest that databases will be slow to
 access their data but will be able to store more data than can be loaded
 into an Python or R session. However, databases can be quite fast due in
-part to disk caching by the operating system as well as careful
-implementation of good algorithms for database operations. For more
-information about disk caching see the tutorial.
+part to [disk caching by the operating system](unit5-programming.html#monitoring-overall-memory-use-on-a-unix-style-computer) as well as careful
+implementation of good algorithms for database operations. 
 
 ## Interacting with a database
 
@@ -744,7 +749,7 @@ I've obtained data from [Stack Overflow](https://stackoverflow.com), the
 popular website for asking coding questions, and placed it into a
 normalized database. The SQLite version has metadata (i.e., it lacks the
 actual text of the questions and answers) on all of the questions and
-answers posted in 2016.
+answers posted in 2021.
 
 We'll explore SQL functionality using this example database.
 
@@ -809,8 +814,6 @@ syntax regardless of the back-end. The Python function calls that wrap
 around the SQL syntax will also look the same regardless of the back-end
 (basically `execute("SOME SQL STATEMENT")`).
 
-[TODO: look into SQLAlchemy]
-
 With SQLite, Python processes make calls against the stand-alone SQLite
 database (.db) file, so there are no SQLite-specific processes. With a
 client-server DBMS like PostgreSQL, Python processes call out to separate
@@ -823,13 +826,12 @@ You can access and navigate an SQLite database from Python as follows.
 import sqlite3 as sq
 dir_path = '../data'  # Replace with the actual path
 db_filename = 'stackoverflow-2021.db'
+## download from http://www.stat.berkeley.edu/share/paciorek/stackoverflow-2021.db
 
 con = sq.connect(os.path.join(dir_path, db_filename))
 db = con.cursor()
 db.execute("select * from questions limit 5")  # simple query 
 db.fetchall() # retrieve results
-
-## http://www.stat.berkeley.edu/share/paciorek/stackoverflow-2021.db
 ```
 
 Alternatively, we could use DuckDB. However, I don't have a DuckDB
@@ -859,14 +861,17 @@ def db_list_tables(db):
 db_list_tables(db)
 ```
 
-and the fields in table, presuming you've just queried the table:
+We can see the fields in table, either by grabbing a few records:
 
 ```{python}
 db.execute("select * from questions limit 5")
-# If you've already queried a table, see `description` for the fields:
-[item[0] for item in db.description]
 ```
 
+or, if you've just queried the table, looking at `description`:
+
+```{python}
+[item[0] for item in db.description]
+```
 
 Here's how to make a basic SQL query. One can either make the query and
 get the results in one go or make the query and separately fetch the
@@ -897,7 +902,7 @@ SQL is a declarative language that tells the database system what
 results you want. The system then parses the SQL syntax and determines
 how to implement the query.
 
-> **Note**: An *imperative* language is one where you provide the sequence of commands you want to be run, in order. A *declarative* language is one where you declare what result you want and rely on the system that interprets the commands how to actually do it. Most of the languages we're generally familiar with are imperative. (That said, even in languages like Python, function calls in many ways simply say what we want rather than exactly how the computer should carry out the granular operations.)
+> **Note**: An *imperative* language is one where you provide the sequence of commands you want to be run, in order. A *declarative* language is one where you declare what result you want and rely on the system that interprets the commands to determine how to actually do it. Most of the languages we're generally familiar with are imperative. (That said, even in languages like Python, function calls in many ways simply say what we want rather than exactly how the computer should carry out the granular operations.)
 
 Here are some examples using the Stack Overflow database.
 
@@ -919,7 +924,7 @@ SELECT <column(s)> FROM <table> WHERE <condition(s) on column(s)> ORDER BY <colu
 ```
 
 SQL keywords are often written in ALL CAPITALS, although I won't
-necessarily do that here.
+necessarily do that in this document.
 
 And here is a table of some important keywords:
 
@@ -944,8 +949,15 @@ Some other keywords are: `DISTINCT`, `ON`, `JOIN`, `GROUP BY`, `AS`, `USING`, `U
 
 A common pattern of operation is to stratify the dataset, i.e., collect
 it into mutually exclusive and exhaustive subsets. One would then
-generally do some operation on each subset. In SQL this is done with the
+generally do some (reduction) operation on each subset (e.g., counting records, calculating the mean of a column, taking the max of a column). In SQL this is done with the
 GROUP BY keyword.
+
+The basic syntax looks like this:
+
+```
+SELECT <reduction_operation>(<column(s)>) FROM <table> GROUP BY <column(s)>
+```
+
 
 Here's a basic example where we count the occurrences of different tags.
 Note that we use `as` to define a name for the new column that is
@@ -953,7 +965,8 @@ created based on the aggregation operation (`count` in this case).
 
 ```{python, cache=TRUE}
 db.execute("select tag, count(*) as n from questions_tags \
-           group by tag order by n desc limit 25").fetchall()
+           group by tag \
+           order by n desc limit 25").fetchall()
 ```
 
 
@@ -989,7 +1002,8 @@ The syntax generally looks like this (again the `WHERE` and `ORDER BY` are
 optional):
 
 ```
-SELECT <column(s)> FROM <table1> JOIN <table2> ON <columns to match on> WHERE <condition(s) on column(s)> ORDER BY <column(s)>
+SELECT <column(s)> FROM <table1> JOIN <table2> ON <columns to match on>
+WHERE <condition(s) on column(s)> ORDER BY <column(s)>
 ```
 
 Let's see some joins using the different syntax on the Stack Overflow
@@ -1082,7 +1096,7 @@ db.execute("drop view if exists questionsAugment") # drop so can create again in
 We've seen a bunch of joins but haven't discussed the full taxonomy of
 types of joins. There are various possibilities for how to do a join
 depending on whether there are rows in one table that do not match any
-rows in another table.
+rows in the other table.
 
 **Inner joins**: In database terminology an inner join is when the
 result has a row for each match of a row in one table with the rows in
@@ -1109,8 +1123,8 @@ do not correspond to question, so a right outer join should be the same
 as an inner join.
 
 **Cross joins**: A cross join gives the Cartesian product of the two
-tables, namely the pairwise combination of every row from each table,
-analogous to `expand.grid()` in R. I.e., take a row from the first table
+tables, namely the pairwise combination of every row from each table.
+I.e., take a row from the first table
 and pair it with each row from the second table, then repeat that for
 all rows from the first table. Since cross joins pair each row in one
 table with all the rows in another table, the resulting table can be
@@ -1192,7 +1206,7 @@ for more discussion of how using indexes in a lookup is not always advantageous.
 
 ## Set operations: union, intersect, except
 
-You can do set operations like union, intersection, and set difference using the UNION, INTERSECT, and EXCEPT keywords on tables that have the same schema (same column names and types), though most often these would be used on single columns (i.e., single-column tables).
+You can do set operations like union, intersection, and set difference using the UNION, INTERSECT, and EXCEPT keywords, respectively, on tables that have the same schema (same column names and types), though most often these would be used on single columns (i.e., single-column tables).
 
 > **Note**: While one can often set up an equivalent query without using INTERSECT or UNION, set operations can be very handy. In the example below one could do it with a self-join, joining a table to itself, but the syntax is often more complicated.
 
@@ -1249,7 +1263,7 @@ db.execute("select avg(upvotes) from users where userid in \
            (select distinct ownerid from \
            questions join questions_tags \
            on questions.questionid = questions_tags.questionid \
-           where tag = 'python')")
+           where tag = 'python')").fetchall()
 ```
 
 
@@ -1270,7 +1284,7 @@ student_data.to_sql('student', con, if_exists='replace', index=False)
 
 There has been a lot of work in recent years to provide file formats and tools for working with very large datasets in ways other than traditional databases, often optimized for speed when doing large-scale analytics on the data.
 
-Rather than being stored in a formal database, data are often stored in multiple files, often using Parquet ([discussed in Unit 2](unit2-dataTech.html#csv-vs.-specialized-formats-such-as-parquet) or CSV as the file format. When stored in the cloud, this is often referred to as a *data lake*. 
+Rather than being stored in a formal database, data are often stored in multiple files, often using Parquet ([discussed in Unit 2](unit2-dataTech.html#csv-vs.-specialized-formats-such-as-parquet)) or CSV as the file format. When stored in the cloud, this is often referred to as a *data lake*. 
 
 We'll briefly discuss *Apache Arrow*. Apache Arrow provides efficient data structures for working with data in memory, usable via the `PyArrow` package in Python (and the `arrow` package in R). Data are stored by column, with values in a column stored sequentially and in such a way that one can access a specific value without reading the other values in the column (O(1) lookup).
 
