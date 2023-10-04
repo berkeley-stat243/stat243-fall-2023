@@ -481,7 +481,7 @@ are
 
 -   Intel's *MKL*; available for educational use for free
 -   *OpenBLAS*; open source and free
--   *vecLib* for Macs; provided with your Mac
+-   Apple's Accelerate framework BLAS (*vecLib*) for Macs; provided with your Mac
 
 In addition to being fast when used on a single core, all of these BLAS
 libraries are threaded - if your computer has multiple cores and there
@@ -744,19 +744,21 @@ n = np.repeat([10**7, 10**5, 10**5, 10**5], 4)
 
 def fun(i):
     print(f"Working on {i}.")
-    return np.mean(scipy.special.loggamma(np.exp(np.random.normal(size = n[i]))))
+    return np.mean(scipy.special.gammaln(np.exp(np.random.normal(size = n[i]))))
     
 
 t0 = time.time()
 out = fun(1)
+print(time.time() - t0)
 
 t0 = time.time()
 out = fun(5)
+print(time.time() - t0)
 
 t0 = time.time()
 tasks = c.map(fun, range(len(n)))
 results = c.gather(tasks)  
-print(time.time() - t0)  # 1.0 sec. 
+print(time.time() - t0)  # 0.8 sec. 
 
 cluster.close()
 ```
@@ -773,10 +775,6 @@ Next, note that by default the ‘processes’ scheduler sets up tasks in batche
 ```{python}
 dask.config.set(scheduler='processes', num_workers = 4)
 
-def myfun(idx):
-   return np.random.normal(size = n)
-
-
 tasks = []
 p = len(n)
 for i in range(p):
@@ -784,12 +782,13 @@ for i in range(p):
 
 t0 = time.time()
 results = dask.compute(tasks)  # compute all in parallel
-print(time.time() - t0)   # 3.4 sec.
+print(time.time() - t0)   # 2.6 sec.
 ```
 
 To force dynamic allocation, we can set `chunksize = 1` (as was shown in our original example of using the `processes` scheduler).
 
 ```{python}
+#| eval: false
 dask.config.set(scheduler='processes', num_workers = 4, chunksize = 1)
 
 tasks = []
@@ -797,9 +796,7 @@ p = len(n)
 for i in range(p):
     tasks.append(dask.delayed(fun)(i))  # add lazy task
 
-t0 = time.time()
 results = dask.compute(tasks)  # compute all in parallel
-print(time.time() - t0)
 ```
 
 ### Choosing static vs. dynamic allocation in Dask
