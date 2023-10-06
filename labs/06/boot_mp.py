@@ -1,3 +1,4 @@
+from multiprocessing import Pool
 import numpy as np
 import time
 from sklearn.linear_model import LinearRegression
@@ -17,16 +18,11 @@ def bootstrapLM(i):
     reg = LinearRegression().fit(X[bootstrap_sample,:], Y[bootstrap_sample])
     return (reg.intercept_, reg.coef_)
 
-
-# number of tasks
 b = 10
 
-from dask.distributed import Client, LocalCluster
-cluster = LocalCluster(n_workers = 4)
-c = Client(cluster)
-
-# create parallel tasks
+# run sequentially
 t0 = time.time()
-tasks = c.map(bootstrapLM, range(b))
-results = c.gather(tasks)
+with Pool(5) as p:
+    p.map(bootstrapLM, range(b))
 print("time for {} bootstrap samples (in parallel):".format(b), time.time() - t0) 
+

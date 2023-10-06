@@ -17,7 +17,6 @@ def bootstrapLM(i):
     reg = LinearRegression().fit(X[bootstrap_sample,:], Y[bootstrap_sample])
     return (reg.intercept_, reg.coef_)
 
-
 # number of tasks
 b = 10
 
