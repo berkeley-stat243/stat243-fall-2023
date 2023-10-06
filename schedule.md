@@ -12,7 +12,7 @@ Submit your solutions on Gradescope and (for problem sets but not assignments) v
 
 Problem set solutions need to follow the rules discussed in Lab 1 (Sep. 1) and documented [here](howtos/ps-submission).
 
-| Assignment  | Date | Time | 
+| Assignment | Date | Time | 
 |----|----|----|
 | bash shell tutorial and [bash shell problems (first 10)](https://berkeley-scf.github.io/tutorial-using-bash/exercises) (reading some of tutorial before Wed. Aug. 30 recommended); see Details below | Friday Sep. 1 | 10 am |
 | [regular expression reading and problems](ps/regex); See Details below | Friday Sep. 8 | 10 am | 
