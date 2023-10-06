@@ -107,7 +107,7 @@ For info on using `ssh` (including on Windows), see
 For example, I'll use `ssh` to connect to the `dorothy` node:
 
 ```bash
-james@pop-os:~$ ssh jpduncan@dorothy.berkeley.edu
+james@pop-os:~$ ssh <scf-username>@dorothy.berkeley.edu
 The authenticity of host 'dorothy.berkeley.edu (128.32.135.58)' can't be established.
 ED25519 key fingerprint is SHA256:rOY7ED/iIiTgI++Y4XHmiEl+tC+OmSGBvWp03CSII5E.
 This key is not known by any other names
@@ -128,15 +128,15 @@ you're done. If you were successful, you should see a welcome message and your
 shell prompt, like:
 
 ```bash
-jpduncan@dorothy:~$
+<scf-username>@dorothy:~$
 ```
 
 To get your bearings, you can type `pwd` to see where your home directory is
 located on the SCF cluster filesystem:
 
 ```bash
-jpduncan@dorothy:~$ pwd
-/accounts/grad/jpduncan
+<scf-username>@dorothy:~$ pwd
+/accounts/grad/<scf-username>
 ```
 
 Your home directory is likely also in the `/accounts/grad/` directory, as mine
@@ -174,7 +174,7 @@ you have used and available using the `quota` command, which will show your home
 directory usage and quota on the line for the `accounts` filesystem.
 
 ```bash
-jpduncan@dorothy:~$ quota
+<scf-username>@dorothy:~$ quota
 FILESYSTEM	USE     	QUOTA   	%
   accounts	5.29 G  	20 G    	26.5
 ```
@@ -212,27 +212,27 @@ files between your local machine and a remote host.
 
 The syntax for `scp` is `scp <from-place> <to-place>`, and you'll typically use
 `scp` on your local machine. For example, we'll show how to transfer the file
-`data.csv` (you can find it [here](https://github.com/berkeley-stat243/stat243-fall-2022/tree/main/labs/06))
+`data.csv` (you can find it [here](https://github.com/berkeley-stat243/stat243-fall-2023/tree/main/labs/06))
 :
 
 ### To SCF while on your local machine
 
 ```bash
 # transfer to my home directory without renaming the file 
-scp data.csv jpduncan@dorothy.berkeley.edu:~/
+scp data.csv <scf-username>@dorothy.berkeley.edu:~/
 
 # transfer to the data/ subdirectory and rename the file
-scp data.csv jpduncan@dorothy.berkeley.edu:~/data/new_name.csv
+scp data.csv <scf-username>@dorothy.berkeley.edu:~/data/new_name.csv
 
 # transfer to the dorothy-specific /tmp/ directory
-scp data.csv jpduncan@dorothy.berkeley.edu:/tmp/
+scp data.csv <scf-username>@dorothy.berkeley.edu:/tmp/
 ```
 
 ### From SCF while on your local machine
 
 ```bash
 # now <from-place> is a path in my home directory on the SCF 
-scp jpduncan@dorothy.berkeley.edu:~/data/new_name.csv ~/Desktop/data_scf.csv
+scp <scf-username>@dorothy.berkeley.edu:~/data/new_name.csv ~/Desktop/data_scf.csv
 ```
 
 For more information, see
@@ -246,7 +246,7 @@ is a better option than either `scp` or `sftp`.
 :::{.callout-tip}
 
 For this section, you'll need to have some of [this week's
-materials](https://github.com/berkeley-stat243/stat243-fall-2022/tree/main/labs/06)
+materials](https://github.com/berkeley-stat243/stat243-fall-2023/tree/main/labs/06)
 in your home directory on the SCF cluster.
 
 To get them, you can (and probably should) clone the course repo to your home directory
@@ -324,7 +324,7 @@ sbatch submit.sh
 Once you run that, your job will be queued. To check it's status, you can use `squeue`:
 
 ```bash
-squeue -u jpduncan # use your username, not mine
+squeue -u <scf-username> # use your username, not mine
 ```
 
 And now you wait. Go get a cup of coffee or get some rest! Then check back
@@ -434,12 +434,9 @@ You can either do 1. on your local machine and transfer the file to the SCF
 cluster, or you can do it remotely. 2 - 4 should be done on the SCF.
 
 1. Create a submission `submitBoot.sh` that will execute the code in `boot.R`.
-  To do this I suggest copying the text from `submitR.sh` and updating a couple
+  To do this I suggest copying the text from `submit_py.sh` or `submitR.sh` and updating a couple
   lines:
   - Change `job-name` to whatever you want to call this job.
-  - Change `rEx.err` and `rEx.out` to `boot.err` and `boot.out`. Note these
-  files can be useful for fixing bugs, particularly when executing shell scripts.
-  These files show errors and output printed to the terminal.
   - Change time to `00:10:00` just in case your code runs longer than one minute.
   - Change the `--cpus-per-task` to 3. This is where you are telling Slurm to
   execute in parallel on 3 CPUs.
@@ -447,9 +444,9 @@ cluster, or you can do it remotely. 2 - 4 should be done on the SCF.
 `boot.Rout` file will contain all of code, messages, errors, etc. from the R
 session.
 
-2. Call `sbatch submitBoot.sh` to execute the R script `boot.R`.
+1. Call `sbatch submitBoot.sh` to execute the R script `boot.R`.
 
-3. Check that the execution worked by examining the `.Rout` file.
+2. Check that the execution worked by examining the `.Rout` file.
 
-4. Time allowing: Update the parallel code to use the `future` package
+3. Time allowing: Update the parallel code to use the `future` package
    and compare the results.
