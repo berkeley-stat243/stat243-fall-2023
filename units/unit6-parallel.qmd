@@ -489,11 +489,11 @@ are free resources, your linear algebra will use multiple cores,
 provided your program is linked against the threaded BLAS installed on
 your machine and provided the shell environment variable `OMP_NUM_THREADS` is
 not set to one. (Macs make use of `VECLIB_MAXIMUM_THREADS` rather than
-`OMP_NUM_THREADS`.)
+`OMP_NUM_THREADS` and if MKL is being used, then one needs `MKL_NUM_THREADS`)
 
-For parallel (threaded) linear algebra in Python, one can use an optimized BLAS with the `numpy` and
-`scipy` packages, on either Linux or using the Mac's *vecLib* BLAS.
-Details will depend on how you install Python, numpy, and scipy.
+For parallel (threaded) linear algebra in Python, one can use an optimized BLAS with the `numpy` and (therefore)
+`scipy` packages, on Linux or using the Mac's *vecLib* BLAS.
+Details will depend on how you install Python, numpy, and scipy. More details on figuring out what BLAS is being used and how to install a fast threaded BLAS on your own computer are [here](https://statistics.berkeley.edu/computing/faqs/linear-algebra-and-parallelized-linear-algebra-using-blas).
 
 Dask and some other packages also provide threading, but pure Python code is not threaded.
 

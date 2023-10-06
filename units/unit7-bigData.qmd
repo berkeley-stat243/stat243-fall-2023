@@ -279,11 +279,10 @@ air = ddf.read_csv(path + '*.csv.bz2',
       compression = 'bz2',
       encoding = 'latin1', # (unexpected) latin1 value(s) in TailNum field in 2001
       dtype = {'Distance': 'float64', 'CRSElapsedTime': 'float64',
-      'TailNum': 'object', 'CancellationCode': 'object'})
-# specify dtypes so Pandas doesn't complain about column type heterogeneity
+      'TailNum': 'object', 'CancellationCode': 'object', 'DepDelay': 'float64'})
+# specify some dtypes so Pandas doesn't complain about column type heterogeneity
 air
 ```
-
 
 Dask will reads the data in parallel from the various .csv.bz2 files
 (unzipping on the fly), but note the caveat in the previous section
@@ -293,8 +292,27 @@ However, recall that Dask uses delayed evaluation. In this case, the reading is 
 `compute()` is called. For that matter, the various other calculations
 (`max`, `groupby`, `mean`) shown below are only done after `compute()` is called.
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
+import time
+
+t0 = time.time()
 air.DepDelay.max().compute()   # this takes a while
+print(time.time() - t0)
+
+t0 = time.time()
+air.DepDelay.mean().compute()   # this takes a while
+print(time.time() - t0)
+
+air.DepDelay.median().compute() 
+```
+
+We'll discuss in class why Dask won't do the median. Consider the discussion about moving data in the earlier section on MapReduce.
+
+Next let's see a full split-apply-combine (aka MapReduce) type of analysis.
+
+```{python}
+#| eval: false
 sub = air[(air.UniqueCarrier == 'UA') & (air.Origin == 'SFO')]
 byDest = sub.groupby('Dest').DepDelay.mean()
 byDest.compute()               # this takes a while too
