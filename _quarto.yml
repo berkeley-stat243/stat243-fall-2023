@@ -63,6 +63,8 @@ website:
           text: "Lab 3: Debugging"
         - file: labs/lab5-codereview.md
           text: "Lab 5: Code Reviews"
+        - file: labs/06/scf.qmd
+          text: "Lab 6: SCF and Parallel Computing"
     - id: howtos
       title: "How tos"
       contents:
