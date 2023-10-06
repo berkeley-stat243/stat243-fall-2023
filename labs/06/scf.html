@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Andrew Vaughn, James Duncan">
+<meta name="dcterms.date" content="2022-10-07">
+
+<title>Statistics 243 Fall 2023 - SCF Computing Cluster</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../labs/lab5-codereview.html" rel="prev">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Statistics 243 Fall 2023</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../syllabus.html" rel="" target="">
+ <span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../office_hours.html" rel="" target="">
+ <span class="menu-text">Office hours</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../schedule.html" rel="" target="">
+ <span class="menu-text">Schedule</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-units" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Units</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-units">    
+        <li>
+    <a class="dropdown-item" href="../../units/unit1-intro.html" rel="" target="">
+ <span class="dropdown-text">Unit 1 (UNIX intro)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../units/unit2-dataTech.html" rel="" target="">
+ <span class="dropdown-text">Unit 2 (Data technologies)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../units/unit3-bash.html" rel="" target="">
+ <span class="dropdown-text">Unit 3 (Bash shell)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../units/unit4-goodPractices.html" rel="" target="">
+ <span class="dropdown-text">Unit 4 (Good practices)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../units/unit5-programming.html" rel="" target="">
+ <span class="dropdown-text">Unit 5 (Programming)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../units/unit6-parallel.html" rel="" target="">
+ <span class="dropdown-text">Unit 6 (Parallelization)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../units/unit7-bigData.html" rel="" target="">
+ <span class="dropdown-text">Unit 7 (Databases)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../units/unit8-numbers.html" rel="" target="">
+ <span class="dropdown-text">Unit 8 (Precision)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../units/unit9-sim.html" rel="" target="">
+ <span class="dropdown-text">Unit 9 (Simulation)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../units/unit10-linalg.html" rel="" target="">
+ <span class="dropdown-text">Unit 10 (Linear Algebra)</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-labs" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Labs</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-labs">    
+        <li>
+    <a class="dropdown-item" href="../../labs/lab0-setup.html" rel="" target="">
+ <span class="dropdown-text">Lab 0: Setup</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/lab1-submission.html" rel="" target="">
+ <span class="dropdown-text">Lab 1: Problem set submission</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/lab2-testing.html" rel="" target="">
+ <span class="dropdown-text">Lab 2: Assertions, Exceptions, and Testing</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/lab3-debugging.html" rel="" target="">
+ <span class="dropdown-text">Lab 3: Debugging</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/lab5-codereview.html" rel="" target="">
+ <span class="dropdown-text">Lab 5: Code Reviews</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/06/scf.html" rel="" target="">
+ <span class="dropdown-text">Lab 6: SCF and Parallel Computing</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-how-tos" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">How tos</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-how-tos">    
+        <li>
+    <a class="dropdown-item" href="../../howtos/accessingPython.html" rel="" target="">
+ <span class="dropdown-text">Accessing Python</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../howtos/accessingUnixCommandLine.html" rel="" target="">
+ <span class="dropdown-text">Accessing the Unix Command Line</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../howtos/gitInstall.html" rel="" target="">
+ <span class="dropdown-text">Installing Git</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../howtos/quartoInstall.html" rel="" target="">
+ <span class="dropdown-text">Installing Quarto</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../howtos/ps-submission.html" rel="" target="">
+ <span class="dropdown-text">Problem Set Submissions</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">Windows</li>
+        <li>
+    <a class="dropdown-item" href="../../howtos/windowsAndLinux.html" rel="" target="">
+ <span class="dropdown-text">Installing the Linux Subsystem on Windows</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="https://edstem.org/us/courses/42474/discussion/" rel="" target="">
+ <span class="menu-text">Discussion</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://statistics.berkeley.edu/computing/training/tutorials" rel="" target="">
+ <span class="menu-text">Tutorials</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/berkeley-stat243/stat243-fall-2023" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../labs/06/scf.html">Lab 6: SCF and Parallel Computing</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab0-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 0: Setup</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab1-submission.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 1: Problem set submission</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab2-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 2: Assertions, Exceptions, and Testing</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab3-debugging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 3: Debugging</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab5-codereview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 5: Code Reviews</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/06/scf.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Lab 6: SCF and Parallel Computing</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#scf-cluster-capabilities-and-hardware" id="toc-scf-cluster-capabilities-and-hardware" class="nav-link" data-scroll-target="#scf-cluster-capabilities-and-hardware">SCF cluster capabilities and hardware</a></li>
+  <li><a href="#your-on-the-scf" id="toc-your-on-the-scf" class="nav-link" data-scroll-target="#your-on-the-scf">Your <code>~/</code> on the SCF</a>
+  <ul class="collapse">
+  <li><a href="#logging-in" id="toc-logging-in" class="nav-link" data-scroll-target="#logging-in">Logging in</a>
+  <ul class="collapse">
+  <li><a href="#other-login-nodes" id="toc-other-login-nodes" class="nav-link" data-scroll-target="#other-login-nodes">Other login nodes</a></li>
+  </ul></li>
+  <li><a href="#disk-space" id="toc-disk-space" class="nav-link" data-scroll-target="#disk-space">Disk space</a></li>
+  <li><a href="#data-transfer-scp-sftp" id="toc-data-transfer-scp-sftp" class="nav-link" data-scroll-target="#data-transfer-scp-sftp">Data transfer: SCP / SFTP</a>
+  <ul class="collapse">
+  <li><a href="#to-scf-while-on-your-local-machine" id="toc-to-scf-while-on-your-local-machine" class="nav-link" data-scroll-target="#to-scf-while-on-your-local-machine">To SCF while on your local machine</a></li>
+  <li><a href="#from-scf-while-on-your-local-machine" id="toc-from-scf-while-on-your-local-machine" class="nav-link" data-scroll-target="#from-scf-while-on-your-local-machine">From SCF while on your local machine</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#running-jobs-on-the-scf" id="toc-running-jobs-on-the-scf" class="nav-link" data-scroll-target="#running-jobs-on-the-scf">Running jobs on the SCF</a>
+  <ul class="collapse">
+  <li><a href="#non-interactive-jobs-sbatch" id="toc-non-interactive-jobs-sbatch" class="nav-link" data-scroll-target="#non-interactive-jobs-sbatch">Non-interactive jobs: <code>sbatch</code></a></li>
+  <li><a href="#interactive-jobs" id="toc-interactive-jobs" class="nav-link" data-scroll-target="#interactive-jobs">Interactive jobs</a></li>
+  <li><a href="#specifying-resources" id="toc-specifying-resources" class="nav-link" data-scroll-target="#specifying-resources">Specifying resources</a></li>
+  <li><a href="#monitoring-your-jobs" id="toc-monitoring-your-jobs" class="nav-link" data-scroll-target="#monitoring-your-jobs">Monitoring your jobs</a></li>
+  </ul></li>
+  <li><a href="#exercise" id="toc-exercise" class="nav-link" data-scroll-target="#exercise">Exercise</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="scf.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">SCF Computing Cluster</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Andrew Vaughn, James Duncan </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 7, 2022</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p><a href="./scf.pdf" class="btn btn-primary">PDF</a></p>
+<section id="overview" class="level1">
+<h1>Overview</h1>
+<p>Today we’ll discuss the Statistical Computing Facility’s (SCF) cluster, which is administrated by the Department of Statistics. Much of this material comes directly from the SCF’s documentation; see the links below for more details:</p>
+<ul>
+<li><a href="https://statistics.berkeley.edu/computing/getting-started">SCF homepage</a></li>
+<li><a href="https://statistics.berkeley.edu/computing/servers/cluster">SCF Linux cluster</a></li>
+<li><a href="https://statistics.berkeley.edu/computing/faqs">SCF FAQs and How-Tos</a></li>
+<li><a href="https://berkeley-scf.github.io/tutorial-parallelization/parallel-R">SCF Parallel processing in R tutorial</a></li>
+<li><a href="https://statistics.berkeley.edu/computing/how-get-help">How to get help on the SCF</a></li>
+<li><a href="https://jupyter.stat.berkeley.edu/">SCF JupyterHub</a></li>
+</ul>
+</section>
+<section id="scf-cluster-capabilities-and-hardware" class="level1">
+<h1>SCF cluster capabilities and hardware</h1>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Clusters, partitions, and nodes! Oh my!
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>A <strong>cluster</strong> is a collection of computing <strong>nodes</strong>. A node is analogous to a laptop or desktop computer, with an operating system, RAM, CPUs, and sometimes GPUs.</p>
+<p><img src="./images/cluster.png" class="img-fluid"> <a href="https://hbctraining.github.io/Intro-to-shell-flipped/lessons/08_HPC_intro_and_terms.html">Image source</a></p>
+<p>Nodes with similar capabilities or access policies are often grouped together as a <strong>partition</strong>. This allows cluster users to request the resources they need – such as number of CPU <strong>cores</strong> – from a pool of nodes, rather than specify a specific one.</p>
+</div>
+</div>
+</div>
+<p>The SCF cluster has 1064 cores, across 7 partitions with more than 26 nodes, but for this class we’ll use the <code>low</code> partition. It’s the default, so you won’t need to do anything special to use it for your jobs (we’ll explain how to submit jobs later on).</p>
+<p>The <code>low</code> partition has the following resources:</p>
+<ul>
+<li>8 nodes</li>
+<li>32 cores per node</li>
+<li>256 GB RAM per node</li>
+</ul>
+<p>The SCF Linux cluster uses a batch job scheduler called <a href="https://en.wikipedia.org/wiki/Slurm_Workload_Manager">Slurm</a>, commonly used by large computer centers in both academia and industry. Although the SCF cluster has much greater computational capacity than our personal computers, it is a shared resource with many users. With Slurm, the cluster is able to schedule jobs asynchronously, balancing resource allocations so that everyone gets a turn. This also means that when you submit a job, it may not run until many minutes or hours later. Be sure to give yourself enough time!</p>
+<!--
+## Compute servers
+
+On the other hand, the SCF cluster also has a number of interactive computing
+servers. If you've already used `ssh` to access the cluster, then you may
+already be familiar with some of them as a subset are also used as login nodes.
+After logging, you can run `sitehosts compute` to see which nodes are intended
+as computing nodes. Currently:
+
+
+Before using one of the compute servers, be sure to read through
+[Compute Server Policies](https://statistics.berkeley.edu/computing/faqs/what-are-policies-using-compute-servers)
+-->
+</section>
+<section id="your-on-the-scf" class="level1">
+<h1>Your <code>~/</code> on the SCF</h1>
+<p>Nodes in the SCF cluster use the Linux distribution Ubuntu. Every user has a private home directory which, as usual on Linux-based OSes, has the shortcut <code>~/</code>. In this section, we’ll give an overview of access, disk space, and remote file transfers to and from your SCF home directory.</p>
+<section id="logging-in" class="level2">
+<h2 class="anchored" data-anchor-id="logging-in">Logging in</h2>
+<p>The SCF has a number of <strong>login nodes</strong> which you can access via <code>ssh</code>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For info on using <code>ssh</code> (including on Windows), see <a href="https://statistics.berkeley.edu/computing/ssh">here</a>.</p>
+</div>
+</div>
+<p>For example, I’ll use <code>ssh</code> to connect to the <code>dorothy</code> node:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">james@pop-os:~$</span> ssh jpduncan@dorothy.berkeley.edu</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">The</span> authenticity of host <span class="st">'dorothy.berkeley.edu (128.32.135.58)'</span> can<span class="st">'t be established.</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="st">ED25519 key fingerprint is SHA256:rOY7ED/iIiTgI++Y4XHmiEl+tC+OmSGBvWp03CSII5E.</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="st">This key is not known by any other names</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="st">Are you sure you want to continue connecting (yes/no/[fingerprint])? yes</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="st">Warning: Permanently added '</span>dorothy.berkeley.edu<span class="st">' (ED25519) to the list of known hosts.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Notice that upon first connecting to a server you haven’t visited there is a warning that the “authenticity of the host … can’t be established”. So long as you have typed in the hostname correctly (<code>dorothy.berkeley.edu</code>, in this case), and trust the host (we trust the SCF!) then you can type <code>yes</code> to add the host to your known hosts file (found on your local machine at <code>~/.ssh/known_hosts</code>).</p>
+<p>You’ll then be asked to enter your password for the SCF cluster. For privacy, you won’t see anything happen in your terminal when you type it in, so type carefully (you can use <code>Backspace</code> if you make a mistake) and press <code>Enter</code> when you’re done. If you were successful, you should see a welcome message and your shell prompt, like:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jpduncan@dorothy:~$</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To get your bearings, you can type <code>pwd</code> to see where your home directory is located on the SCF cluster filesystem:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jpduncan@dorothy:~$</span> pwd</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/accounts/grad/jpduncan</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Your home directory is likely also in the <code>/accounts/grad/</code> directory, as mine is.</p>
+<section id="other-login-nodes" class="level3">
+<h3 class="anchored" data-anchor-id="other-login-nodes">Other login nodes</h3>
+<div class="callout callout-style-default callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Important
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Don’t run computationally intensive tasks on the login nodes!</p>
+<p>They are shared by all the SCF users, and should only be used for non-intensive interactive work such as job submission and monitoring, basic compilation, managing your disk space, and transferring data to/from the server.</p>
+</div>
+</div>
+<p>If for some reason <code>dorothy</code> is not working for you, the SCF has a number of nodes which can be accessed from your local machine with commands of the form <code>ssh &lt;scf-username&gt;@&lt;hostname&gt;.berkeley.edu</code>. Currently, these are:</p>
+<ul>
+<li><code>aragorn</code></li>
+<li><code>arwen</code></li>
+<li><code>dorothy</code></li>
+<li><code>gandalf</code></li>
+<li><code>gollum</code></li>
+<li><code>hermione</code></li>
+<li><code>quidditch</code></li>
+<li><code>radagast</code></li>
+<li><code>shelob</code></li>
+</ul>
+</section>
+</section>
+<section id="disk-space" class="level2">
+<h2 class="anchored" data-anchor-id="disk-space">Disk space</h2>
+<p>Your home directory has a limited amount of disk space; you can check how much you have used and available using the <code>quota</code> command, which will show your home directory usage and quota on the line for the <code>accounts</code> filesystem.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jpduncan@dorothy:~$</span> quota</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">FILESYSTEM</span>  USE         QUOTA       %</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">accounts</span>  5.29 G      20 G        26.5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>accounts</code> filesystem is accessible from all the nodes on the SCF cluster. This means that regardless of which login or compute node you use, you will have access to the files in your home directory. Moreover, your home directory is backed up regularly, so you are protected from accidental data loss.</p>
+<p>If you’re running out of space, you should try to selectively delete large files that you no longer need. See <a href="https://statistics.berkeley.edu/computing/faqs/how-do-i-manage-my-data">here</a> for some tips on finding large files. If all else fails, you can request additional space or request access the <code>/scratch</code> filesystem. The latter is a good place for large datasets, but note that <code>/scratch</code> is not backed up, unlike your home directory. See the previous link for more info.</p>
+<p>For temporary files (e.g., intermediate results of a computation that you don’t need to store for later), every machine has a <code>/tmp</code> filesystem. However, <code>/tmp</code> is <em>always linked to the specific machine</em> you are on, meaning that if you put something in <code>/tmp</code> on <code>dorothy</code> and then later go to <code>aragorn</code>, you won’t find your files in the <code>/tmp</code> directory there. If you go back to <code>dorothy</code>, you will likely find them again, but <code>/tmp</code> is automatically wiped when a machine reboots, so only use it for files you don’t care about preserving!</p>
+</section>
+<section id="data-transfer-scp-sftp" class="level2">
+<h2 class="anchored" data-anchor-id="data-transfer-scp-sftp">Data transfer: SCP / SFTP</h2>
+<p>We can use the <code>scp</code> and <code>sftp</code> protocols to transfer files to and from any login node on the SCF cluster. <code>scp</code> is a shell program that should be available by default on macOS and Linux, while on Windows you can use <a href="https://winscp.net/eng/index.php">WinSCP</a>. WinSCP can also do <code>sftp</code> transfers, or you can use <a href="https://filezilla-project.org/">FileZilla</a> on any platform for <code>sftp</code>. Both WinSCP and FileZilla have a GUI that allows you to drag and drop files between your local machine and a remote host.</p>
+<p>The syntax for <code>scp</code> is <code>scp &lt;from-place&gt; &lt;to-place&gt;</code>, and you’ll typically use <code>scp</code> on your local machine. For example, we’ll show how to transfer the file <code>data.csv</code> (you can find it <a href="https://github.com/berkeley-stat243/stat243-fall-2022/tree/main/labs/06">here</a>) :</p>
+<section id="to-scf-while-on-your-local-machine" class="level3">
+<h3 class="anchored" data-anchor-id="to-scf-while-on-your-local-machine">To SCF while on your local machine</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># transfer to my home directory without renaming the file </span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> data.csv jpduncan@dorothy.berkeley.edu:~/</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># transfer to the data/ subdirectory and rename the file</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> data.csv jpduncan@dorothy.berkeley.edu:~/data/new_name.csv</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># transfer to the dorothy-specific /tmp/ directory</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> data.csv jpduncan@dorothy.berkeley.edu:/tmp/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="from-scf-while-on-your-local-machine" class="level3">
+<h3 class="anchored" data-anchor-id="from-scf-while-on-your-local-machine">From SCF while on your local machine</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># now &lt;from-place&gt; is a path in my home directory on the SCF </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> jpduncan@dorothy.berkeley.edu:~/data/new_name.csv ~/Desktop/data_scf.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>For more information, see <a href="https://statistics.berkeley.edu/computing/copying-files">here</a>. In particular, if you have a very large dataset to transfer, <a href="https://statistics.berkeley.edu/computing/faqs/using-globus-file-transfers">Globus</a> is a better option than either <code>scp</code> or <code>sftp</code>.</p>
+</section>
+</section>
+</section>
+<section id="running-jobs-on-the-scf" class="level1">
+<h1>Running jobs on the SCF</h1>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For this section, you’ll need to have some of <a href="https://github.com/berkeley-stat243/stat243-fall-2022/tree/main/labs/06">this week’s materials</a> in your home directory on the SCF cluster.</p>
+<p>To get them, you can (and probably should) clone the course repo to your home directory on the SCF cluster:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># first ssh to an SCF login node: ssh &lt;scf-username&gt;@&lt;host-name&gt;.berkeley.edu</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> ~/ <span class="co"># or a subdirectory if you prefer</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> clone https://github.com/berkeley-stat243/stat243-fall-2022.git</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># or git@github.com:berkeley-stat243/stat243-fall-2022.git if you use SSH with git</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># the files you need are here</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> stat243-fall-2022/labs/06/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<p>As mentioned before, the SCF cluster uses Slurm to schedule jobs. We’ll learn some Slurm commands now.</p>
+<section id="non-interactive-jobs-sbatch" class="level3">
+<h3 class="anchored" data-anchor-id="non-interactive-jobs-sbatch">Non-interactive jobs: <code>sbatch</code></h3>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This is the best option when you have a long-running job where no</p>
+</div>
+</div>
+<p>The first command is <code>sbatch</code>. To use <code>sbatch</code>, you will first create a bash script (you can do this on the SCF cluster if you know how to use a shell text editor like <code>nano</code>, or just do it locally and transfer the file to the SCF via one of the methods discussed before).</p>
+<p>In the course repo, you will find an example bash script called <code>submit.sh</code>. Here’s what it contains:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">################</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co"># SBATCH OPTIONS</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">################</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --job-name=example # job name for queue (optional)</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --partition=low    # partition (optional, default=low) </span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --error=ex.err     # file for stderr (optional)</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --output=ex.out    # file for stdout (optional)</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --time=00:01:00    # max runtime of job hours:minutes:seconds</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --nodes=1          # use 1 node</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --ntasks=1         # use 1 task</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="co">#SBATCH --cpus-per-task=1  # use 1 CPU core</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="co">###################</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Command(s) to run</span></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="co">###################</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a><span class="ex">./example.sh</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>example.sh</code> script creates a file called <code>testFile.txt</code> and appends some output to that file. Note that since <code>submit.sh</code> is itself a bash script, you could have just put the contents of <code>example.sh</code> directly in <code>submit.sh</code>, but it is good practice to keep your computational code separate from your Slurm batch submission scripts.</p>
+<p>Now we can submit the job using the Slurm command <code>sbatch</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sbatch</span> submit.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Once you run that, your job will be queued. To check it’s status, you can use <code>squeue</code>:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> jpduncan <span class="co"># use your username, not mine</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And now you wait. Go get a cup of coffee or get some rest! Then check back later.</p>
+</section>
+<section id="interactive-jobs" class="level3">
+<h3 class="anchored" data-anchor-id="interactive-jobs">Interactive jobs</h3>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Interactive jobs are the best option when you need to do many short but computationally intensive tasks which require your hands at the keyboard.</p>
+</div>
+</div>
+<section id="srun" class="level4">
+<h4 class="anchored" data-anchor-id="srun"><code>srun</code></h4>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This is the best option when you want to work at the Linux command line and don’t need a GUI, e.g.&nbsp;when debugging components of larger non-interactive job.</p>
+</div>
+</div>
+<p>To run an interactive job via Slurm, you can use the <code>srun</code> command:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ssh -Y &lt;scf-username&gt;@dorothy.berkeley.edu</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 10 minute time limit</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="ex">srun</span>  <span class="at">-t</span> 00:10:00 <span class="at">-N</span> 1 <span class="at">-n</span> 1 <span class="at">-c</span> 1 <span class="at">--pty</span> /bin/bash</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># uses resources already made available from the previous srun command</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="ex">srun</span> <span class="at">--pty</span> <span class="at">--x11</span><span class="op">=</span>first matlab <span class="co"># interactive matlab job</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Here we used the -Y flag to <code>ssh</code> to run software with a GUI, such as MATLAB, which allows the GUI to open in our local machine while still running computations on the SCF cluster. For this to work, you’ll need X server software on your own machine to manage the graphical windows. For Windows, your options include eXceed or Xming and for Mac, there is XQuartz.</p>
+</section>
+<section id="jupyterhub-for-rstudio-or-jupyter-notebooks" class="level4">
+<h4 class="anchored" data-anchor-id="jupyterhub-for-rstudio-or-jupyter-notebooks">JupyterHub for RStudio or Jupyter Notebooks</h4>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This is the best option when you want to interact with the RStudio or Jupyter GUI while doing your computations or debugging.</p>
+</div>
+</div>
+<p>The SCF’s <a href="https://jupyter.stat.berkeley.edu/">JupyterHub</a> is another resource for interactive computing on the SCF, allowing you to use RStudio or Jupyter on one of the cluster’s computing nodes.</p>
+</section>
+</section>
+<section id="specifying-resources" class="level3">
+<h3 class="anchored" data-anchor-id="specifying-resources">Specifying resources</h3>
+<p>If you are submitting a job that uses multiple cores or nodes, you may need to carefully specify the resources you need. The key flags for use in your job script are:</p>
+<ul>
+<li><code>--nodes</code> (or <code>-N</code>): indicates the number of nodes to use</li>
+<li><code>--ntasks-per-node</code>: indicates the number of tasks (i.e., processes) one wants to run on each node</li>
+<li><code>--cpus-per-task</code> (or <code>-c</code>): indicates the number of CPUs to be used for each task</li>
+</ul>
+<p>In addition, in some cases it can make sense to use the <code>--ntasks</code> (or <code>-n</code>) option to indicate the total number of tasks and let the scheduler determine how many nodes and tasks per node are needed. In general <code>--cpus-per-task</code> will be 1 except when running threaded code. When setting up parallel R code, you can find out how many cores there are on the node assigned to you with:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>ncores <span class="ot">&lt;-</span> <span class="fu">Sys.getenv</span>(<span class="st">"SLURM_CPUS_ON_NODE"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>SLURM_CPUS_ON_NODE</code> environment variable is set by Slurm when the job starts running, and therefore can be accessed within your jobs. In addition to <code>SLURM_CPUS_ON_NODE</code> here are some other variables that may be useful: <code>SLURM_NTASKS</code>, <code>SLURM_CPUS_PER_TASK</code>, <code>SLURM_NODELIST</code>, <code>SLURM_NNODES</code>.</p>
+</section>
+<section id="monitoring-your-jobs" class="level3">
+<h3 class="anchored" data-anchor-id="monitoring-your-jobs">Monitoring your jobs</h3>
+<p>As we saw, the basic command for seeing what is running on the system is <code>squeue</code>:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">squeue</span> <span class="co"># this shows all the queued jobs!</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> SCF_USERNAME <span class="co"># this shows your jobs</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>To see what nodes are available in a given partition, you can use <code>sinfo</code>:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sinfo</span> <span class="at">-p</span> low</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Finally, you can cancel a job with <code>scancel</code>.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># you can find your job ID using `squeue`</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="ex">scancel</span> YOUR_JOB_ID</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>See the “How to Monitor Jobs” section of the SCF’s documentation on <a href="https://statistics.berkeley.edu/computing/servers/cluster">this page</a> for some more info.</p>
+</section>
+</section>
+<section id="exercise" class="level1">
+<h1>Exercise</h1>
+<p>You can either do 1. on your local machine and transfer the file to the SCF cluster, or you can do it remotely. 2 - 4 should be done on the SCF.</p>
+<ol type="1">
+<li>Create a submission <code>submitBoot.sh</code> that will execute the code in <code>boot.R</code>. To do this I suggest copying the text from <code>submitR.sh</code> and updating a couple lines:</li>
+</ol>
+<ul>
+<li>Change <code>job-name</code> to whatever you want to call this job.</li>
+<li>Change <code>rEx.err</code> and <code>rEx.out</code> to <code>boot.err</code> and <code>boot.out</code>. Note these files can be useful for fixing bugs, particularly when executing shell scripts. These files show errors and output printed to the terminal.</li>
+<li>Change time to <code>00:10:00</code> just in case your code runs longer than one minute.</li>
+<li>Change the <code>--cpus-per-task</code> to 3. This is where you are telling Slurm to execute in parallel on 3 CPUs.</li>
+<li>Change the last line <code>R CMD BATCH --no-save boot.R boot.Rout</code>. The <code>boot.Rout</code> file will contain all of code, messages, errors, etc. from the R session.</li>
+</ul>
+<ol start="2" type="1">
+<li><p>Call <code>sbatch submitBoot.sh</code> to execute the R script <code>boot.R</code>.</p></li>
+<li><p>Check that the execution worked by examining the <code>.Rout</code> file.</p></li>
+<li><p>Time allowing: Update the parallel code to use the <code>future</code> package and compare the results.</p></li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../labs/lab5-codereview.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Lab 5: Code Reviews</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
