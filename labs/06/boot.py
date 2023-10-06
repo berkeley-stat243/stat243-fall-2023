@@ -15,5 +15,5 @@ Y = -10 + 3 * X[:,0] + 5 * X[:,1] - 2* X[:,2] + np.random.normal(size = n)
 def bootstrapLM(i):
     print("task number",i)
     bootstrap_sample = np.random.randint(n, size=n)
-    reg = LinearRegression().fit(X[bootstrap_sample,:], Y[bootstrap_sample])
+    reg = LinearRegression(n_jobs=1).fit(X[bootstrap_sample,:], Y[bootstrap_sample])
     return (reg.intercept_, reg.coef_)
