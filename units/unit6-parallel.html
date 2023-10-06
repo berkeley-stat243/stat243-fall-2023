@@ -679,7 +679,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> dask</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dask.config.<span class="bu">set</span>(scheduler<span class="op">=</span><span class="st">'processes'</span>, num_workers <span class="op">=</span> <span class="dv">4</span>, chunksize <span class="op">=</span> <span class="dv">1</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;dask.config.set object at 0x7fe799bf5890&gt;</code></pre>
+<pre><code>&lt;dask.config.set object at 0x7fcd37ff9d10&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">10</span></span>
@@ -696,7 +696,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>tasks</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[Delayed('myfun-b8f00c11-0d97-4e01-9e5a-eb5dd43e8ff8'), Delayed('myfun-0aeb8c07-e414-4a6b-a2fe-68facbbc185a'), Delayed('myfun-3ee36473-2637-49e3-bb20-abddbb9b154b'), Delayed('myfun-2cb32fe7-e2a1-4e67-9ea0-c90e0f46c465'), Delayed('myfun-dd8ab5aa-2a2a-427e-a1f9-4bd00c4b28bd'), Delayed('myfun-15d7b5d4-3f82-4c63-b52e-3d2667d3ff73'), Delayed('myfun-8744ad14-8520-4ec3-bc1a-9a61d7cace59'), Delayed('myfun-bce6688a-3124-458e-9056-f661f0660896')]</code></pre>
+<pre><code>[Delayed('myfun-fb6d5933-5a6e-455f-87c2-aee3ca9aadd3'), Delayed('myfun-62938a41-9c82-4e80-b9ee-09aba30dcbfb'), Delayed('myfun-91faca5a-ff4b-4eef-8736-acf786d1cbe3'), Delayed('myfun-e85f3b84-3ce1-477f-91a4-9069abb33748'), Delayed('myfun-1d342e40-ff5d-41a1-b10c-7f686d8714c0'), Delayed('myfun-73e39dc6-32fb-4cc5-9e8a-03e8ace1db71'), Delayed('myfun-e984bae0-6a28-480e-9165-86a980f5198e'), Delayed('myfun-b57c623a-d447-4d68-ae93-479e96cc5546')]</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> dask.compute(tasks)  <span class="co"># compute all in parallel</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -732,8 +732,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><em>OpenBLAS</em>; open source and free</li>
 <li>Apple’s Accelerate framework BLAS (<em>vecLib</em>) for Macs; provided with your Mac</li>
 </ul>
-<p>In addition to being fast when used on a single core, all of these BLAS libraries are threaded - if your computer has multiple cores and there are free resources, your linear algebra will use multiple cores, provided your program is linked against the threaded BLAS installed on your machine and provided the shell environment variable <code>OMP_NUM_THREADS</code> is not set to one. (Macs make use of <code>VECLIB_MAXIMUM_THREADS</code> rather than <code>OMP_NUM_THREADS</code>.)</p>
-<p>For parallel (threaded) linear algebra in Python, one can use an optimized BLAS with the <code>numpy</code> and <code>scipy</code> packages, on either Linux or using the Mac’s <em>vecLib</em> BLAS. Details will depend on how you install Python, numpy, and scipy.</p>
+<p>In addition to being fast when used on a single core, all of these BLAS libraries are threaded - if your computer has multiple cores and there are free resources, your linear algebra will use multiple cores, provided your program is linked against the threaded BLAS installed on your machine and provided the shell environment variable <code>OMP_NUM_THREADS</code> is not set to one. (Macs make use of <code>VECLIB_MAXIMUM_THREADS</code> rather than <code>OMP_NUM_THREADS</code> and if MKL is being used, then one needs <code>MKL_NUM_THREADS</code>)</p>
+<p>For parallel (threaded) linear algebra in Python, one can use an optimized BLAS with the <code>numpy</code> and (therefore) <code>scipy</code> packages, on Linux or using the Mac’s <em>vecLib</em> BLAS. Details will depend on how you install Python, numpy, and scipy. More details on figuring out what BLAS is being used and how to install a fast threaded BLAS on your own computer are <a href="https://statistics.berkeley.edu/computing/faqs/linear-algebra-and-parallelized-linear-algebra-using-blas">here</a>.</p>
 <p>Dask and some other packages also provide threading, but pure Python code is not threaded.</p>
 <p>Here’s some code that illustrates the speed of using a threaded BLAS:</p>
 <div class="cell">
@@ -812,7 +812,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>dask.config.<span class="bu">set</span>(scheduler<span class="op">=</span><span class="st">'processes'</span>, num_workers <span class="op">=</span> <span class="dv">3</span>, chunksize <span class="op">=</span> <span class="dv">1</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;dask.config.set object at 0x7fe798f18dd0&gt;</code></pre>
+<pre><code>&lt;dask.config.set object at 0x7fcd37ffe810&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">100000000</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
@@ -823,7 +823,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> dask.compute(tasks)</span>
 <span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>3.4461417198181152</code></pre>
+<pre><code>3.6668434143066406</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> gen_and_mean(np.random.normal, n, <span class="dv">0</span>, <span class="dv">1</span>)</span>
@@ -831,7 +831,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>s <span class="op">=</span> gen_and_mean(np.random.uniform, n, <span class="dv">0</span>, <span class="dv">1</span>)</span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>5.45417332649231</code></pre>
+<pre><code>5.191020488739014</code></pre>
 </div>
 </div>
 <p>Question: Why might this not have shown a perfect three-fold speedup?</p>
@@ -927,7 +927,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.5567622184753418</code></pre>
+<pre><code>0.5563864707946777</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>out <span class="op">=</span> fun(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -936,14 +936,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.010216951370239258</code></pre>
+<pre><code>0.01022791862487793</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>tasks <span class="op">=</span> c.<span class="bu">map</span>(fun, <span class="bu">range</span>(<span class="bu">len</span>(n)))</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> c.gather(tasks)  </span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)  <span class="co"># 0.8 sec. </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.7237234115600586</code></pre>
+<pre><code>0.8854873180389404</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>cluster.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -955,7 +955,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>dask.config.<span class="bu">set</span>(scheduler<span class="op">=</span><span class="st">'processes'</span>, num_workers <span class="op">=</span> <span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;dask.config.set object at 0x7fe784d70f50&gt;</code></pre>
+<pre><code>&lt;dask.config.set object at 0x7fcd2391ac50&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>tasks <span class="op">=</span> []</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="bu">len</span>(n)</span>
@@ -966,7 +966,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> dask.compute(tasks)  <span class="co"># compute all in parallel</span></span>
 <span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)   <span class="co"># 2.6 sec.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>1.8978867530822754</code></pre>
+<pre><code>1.7515089511871338</code></pre>
 </div>
 </div>
 <p>To force dynamic allocation, we can set <code>chunksize = 1</code> (as was shown in our original example of using the <code>processes</code> scheduler).</p>
@@ -1074,7 +1074,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>dask.config.<span class="bu">set</span>(scheduler<span class="op">=</span><span class="st">'processes'</span>, num_workers <span class="op">=</span> n_cores, chunksize <span class="op">=</span> <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;dask.config.set object at 0x7fe784d33d50&gt;</code></pre>
+<pre><code>&lt;dask.config.set object at 0x7fcd2310e810&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>tasks <span class="op">=</span> []</span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="dv">8</span></span>
@@ -1085,7 +1085,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> dask.compute(tasks)</span>
 <span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>6.360953092575073</code></pre>
+<pre><code>6.334888458251953</code></pre>
 </div>
 </div>
 <p>A better approach is to use the <code>distributed</code> scheduler (which is fine to use on a single machine or multiple machines), which makes one copy per worker instead of one per task, provided you apply <code>delayed()</code> to the global data object.</p>
@@ -1111,7 +1111,7 @@ Consider scattering data ahead of time and using futures.
 </div>
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>1.1266448497772217</code></pre>
+<pre><code>1.1176700592041016</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>cluster.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -1121,7 +1121,7 @@ Consider scattering data ahead of time and using futures.
 <div class="cell">
 <div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>dask.config.<span class="bu">set</span>(scheduler<span class="op">=</span><span class="st">'threads'</span>, num_workers <span class="op">=</span> n_cores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;dask.config.set object at 0x7fe784d17d50&gt;</code></pre>
+<pre><code>&lt;dask.config.set object at 0x7fcd2311e810&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>tasks <span class="op">=</span> []</span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>p <span class="op">=</span> <span class="dv">8</span></span>
@@ -1131,18 +1131,18 @@ Consider scattering data ahead of time and using futures.
 <span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
 <span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> dask.compute(tasks)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>140632342276368
-140632342276368
-140632342276368
-140632342276368
-140632342276368
-140632342276368
-140632342276368
-140632342276368</code></pre>
+<pre><code>140519032960464
+140519032960464
+140519032960464
+140519032960464
+140519032960464
+140519032960464
+140519032960464
+140519032960464</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(time.time() <span class="op">-</span> t0)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.06380653381347656</code></pre>
+<pre><code>0.06301546096801758</code></pre>
 </div>
 </div>
 </section>
