@@ -462,7 +462,7 @@ Note
 </div>
 </div>
 <p>For example, I’ll use <code>ssh</code> to connect to the <code>dorothy</code> node:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">james@pop-os:~$</span> ssh jpduncan@dorothy.berkeley.edu</span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">james@pop-os:~$</span> ssh <span class="op">&lt;</span>scf-username<span class="op">&gt;</span>@dorothy.berkeley.edu</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">The</span> authenticity of host <span class="st">'dorothy.berkeley.edu (128.32.135.58)'</span> can<span class="st">'t be established.</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="st">ED25519 key fingerprint is SHA256:rOY7ED/iIiTgI++Y4XHmiEl+tC+OmSGBvWp03CSII5E.</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="st">This key is not known by any other names</span></span>
@@ -470,10 +470,10 @@ Note
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="st">Warning: Permanently added '</span>dorothy.berkeley.edu<span class="st">' (ED25519) to the list of known hosts.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Notice that upon first connecting to a server you haven’t visited there is a warning that the “authenticity of the host … can’t be established”. So long as you have typed in the hostname correctly (<code>dorothy.berkeley.edu</code>, in this case), and trust the host (we trust the SCF!) then you can type <code>yes</code> to add the host to your known hosts file (found on your local machine at <code>~/.ssh/known_hosts</code>).</p>
 <p>You’ll then be asked to enter your password for the SCF cluster. For privacy, you won’t see anything happen in your terminal when you type it in, so type carefully (you can use <code>Backspace</code> if you make a mistake) and press <code>Enter</code> when you’re done. If you were successful, you should see a welcome message and your shell prompt, like:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jpduncan@dorothy:~$</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>scf-username<span class="op">&gt;</span>@dorothy:~$</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>To get your bearings, you can type <code>pwd</code> to see where your home directory is located on the SCF cluster filesystem:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jpduncan@dorothy:~$</span> pwd</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/accounts/grad/jpduncan</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>scf-username<span class="op">&gt;</span>@dorothy:~$ <span class="bu">pwd</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">/accounts/grad/</span><span class="op">&lt;</span>scf-username<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Your home directory is likely also in the <code>/accounts/grad/</code> directory, as mine is.</p>
 <section id="other-login-nodes" class="level3">
 <h3 class="anchored" data-anchor-id="other-login-nodes">Other login nodes</h3>
@@ -508,7 +508,7 @@ Important
 <section id="disk-space" class="level2">
 <h2 class="anchored" data-anchor-id="disk-space">Disk space</h2>
 <p>Your home directory has a limited amount of disk space; you can check how much you have used and available using the <code>quota</code> command, which will show your home directory usage and quota on the line for the <code>accounts</code> filesystem.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jpduncan@dorothy:~$</span> quota</span>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">&lt;</span>scf-username<span class="op">&gt;</span>@dorothy:~$ <span class="ex">quota</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">FILESYSTEM</span>  USE         QUOTA       %</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="ex">accounts</span>  5.29 G      20 G        26.5</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The <code>accounts</code> filesystem is accessible from all the nodes on the SCF cluster. This means that regardless of which login or compute node you use, you will have access to the files in your home directory. Moreover, your home directory is backed up regularly, so you are protected from accidental data loss.</p>
@@ -518,22 +518,22 @@ Important
 <section id="data-transfer-scp-sftp" class="level2">
 <h2 class="anchored" data-anchor-id="data-transfer-scp-sftp">Data transfer: SCP / SFTP</h2>
 <p>We can use the <code>scp</code> and <code>sftp</code> protocols to transfer files to and from any login node on the SCF cluster. <code>scp</code> is a shell program that should be available by default on macOS and Linux, while on Windows you can use <a href="https://winscp.net/eng/index.php">WinSCP</a>. WinSCP can also do <code>sftp</code> transfers, or you can use <a href="https://filezilla-project.org/">FileZilla</a> on any platform for <code>sftp</code>. Both WinSCP and FileZilla have a GUI that allows you to drag and drop files between your local machine and a remote host.</p>
-<p>The syntax for <code>scp</code> is <code>scp &lt;from-place&gt; &lt;to-place&gt;</code>, and you’ll typically use <code>scp</code> on your local machine. For example, we’ll show how to transfer the file <code>data.csv</code> (you can find it <a href="https://github.com/berkeley-stat243/stat243-fall-2022/tree/main/labs/06">here</a>) :</p>
+<p>The syntax for <code>scp</code> is <code>scp &lt;from-place&gt; &lt;to-place&gt;</code>, and you’ll typically use <code>scp</code> on your local machine. For example, we’ll show how to transfer the file <code>data.csv</code> (you can find it <a href="https://github.com/berkeley-stat243/stat243-fall-2023/tree/main/labs/06">here</a>) :</p>
 <section id="to-scf-while-on-your-local-machine" class="level3">
 <h3 class="anchored" data-anchor-id="to-scf-while-on-your-local-machine">To SCF while on your local machine</h3>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># transfer to my home directory without renaming the file </span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> data.csv jpduncan@dorothy.berkeley.edu:~/</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> data.csv <span class="op">&lt;</span>scf-username<span class="op">&gt;</span>@dorothy.berkeley.edu:~/</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># transfer to the data/ subdirectory and rename the file</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> data.csv jpduncan@dorothy.berkeley.edu:~/data/new_name.csv</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> data.csv <span class="op">&lt;</span>scf-username<span class="op">&gt;</span>@dorothy.berkeley.edu:~/data/new_name.csv</span>
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># transfer to the dorothy-specific /tmp/ directory</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> data.csv jpduncan@dorothy.berkeley.edu:/tmp/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> data.csv <span class="op">&lt;</span>scf-username<span class="op">&gt;</span>@dorothy.berkeley.edu:/tmp/</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </section>
 <section id="from-scf-while-on-your-local-machine" class="level3">
 <h3 class="anchored" data-anchor-id="from-scf-while-on-your-local-machine">From SCF while on your local machine</h3>
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># now &lt;from-place&gt; is a path in my home directory on the SCF </span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> jpduncan@dorothy.berkeley.edu:~/data/new_name.csv ~/Desktop/data_scf.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">scp</span> <span class="op">&lt;</span>scf-username<span class="op">&gt;</span>@dorothy.berkeley.edu:~/data/new_name.csv ~/Desktop/data_scf.csv</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>For more information, see <a href="https://statistics.berkeley.edu/computing/copying-files">here</a>. In particular, if you have a very large dataset to transfer, <a href="https://statistics.berkeley.edu/computing/faqs/using-globus-file-transfers">Globus</a> is a better option than either <code>scp</code> or <code>sftp</code>.</p>
 </section>
 </section>
@@ -550,7 +550,7 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>For this section, you’ll need to have some of <a href="https://github.com/berkeley-stat243/stat243-fall-2022/tree/main/labs/06">this week’s materials</a> in your home directory on the SCF cluster.</p>
+<p>For this section, you’ll need to have some of <a href="https://github.com/berkeley-stat243/stat243-fall-2023/tree/main/labs/06">this week’s materials</a> in your home directory on the SCF cluster.</p>
 <p>To get them, you can (and probably should) clone the course repo to your home directory on the SCF cluster:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># first ssh to an SCF login node: ssh &lt;scf-username&gt;@&lt;host-name&gt;.berkeley.edu</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -605,7 +605,7 @@ Tip
 <p>Now we can submit the job using the Slurm command <code>sbatch</code>:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">sbatch</span> submit.sh</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Once you run that, your job will be queued. To check it’s status, you can use <code>squeue</code>:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> jpduncan <span class="co"># use your username, not mine</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">squeue</span> <span class="at">-u</span> <span class="op">&lt;</span>scf-username<span class="op">&gt;</span> # use your username, not mine</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>And now you wait. Go get a cup of coffee or get some rest! Then check back later.</p>
 </section>
 <section id="interactive-jobs" class="level3">
@@ -695,16 +695,15 @@ Tip
 <h1>Exercise</h1>
 <p>You can either do 1. on your local machine and transfer the file to the SCF cluster, or you can do it remotely. 2 - 4 should be done on the SCF.</p>
 <ol type="1">
-<li>Create a submission <code>submitBoot.sh</code> that will execute the code in <code>boot.R</code>. To do this I suggest copying the text from <code>submitR.sh</code> and updating a couple lines:</li>
+<li>Create a submission <code>submitBoot.sh</code> that will execute the code in <code>boot.R</code>. To do this I suggest copying the text from <code>submit_py.sh</code> or <code>submitR.sh</code> and updating a couple lines:</li>
 </ol>
 <ul>
 <li>Change <code>job-name</code> to whatever you want to call this job.</li>
-<li>Change <code>rEx.err</code> and <code>rEx.out</code> to <code>boot.err</code> and <code>boot.out</code>. Note these files can be useful for fixing bugs, particularly when executing shell scripts. These files show errors and output printed to the terminal.</li>
 <li>Change time to <code>00:10:00</code> just in case your code runs longer than one minute.</li>
 <li>Change the <code>--cpus-per-task</code> to 3. This is where you are telling Slurm to execute in parallel on 3 CPUs.</li>
 <li>Change the last line <code>R CMD BATCH --no-save boot.R boot.Rout</code>. The <code>boot.Rout</code> file will contain all of code, messages, errors, etc. from the R session.</li>
 </ul>
-<ol start="2" type="1">
+<ol type="1">
 <li><p>Call <code>sbatch submitBoot.sh</code> to execute the R script <code>boot.R</code>.</p></li>
 <li><p>Check that the execution worked by examining the <code>.Rout</code> file.</p></li>
 <li><p>Time allowing: Update the parallel code to use the <code>future</code> package and compare the results.</p></li>
