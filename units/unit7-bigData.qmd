@@ -270,7 +270,8 @@ Here's an example of reading from a dataset of flight delays (about 11
 GB data). You can get the data
 [here](https://www.stat.berkeley.edu/share/paciorek/1987-2008.csvs.tgz).
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 import dask
 dask.config.set(scheduler='threads', num_workers = 4)  
 import dask.dataframe as ddf
@@ -315,7 +316,8 @@ Next let's see a full split-apply-combine (aka MapReduce) type of analysis.
 #| eval: false
 sub = air[(air.UniqueCarrier == 'UA') & (air.Origin == 'SFO')]
 byDest = sub.groupby('Dest').DepDelay.mean()
-byDest.compute()               # this takes a while too
+results = byDest.compute()            # this takes a while too
+results
 ```
 
 
@@ -357,7 +359,8 @@ files. You can get a subset of the Wikipedia data
 
 Here we again read the data in (which Dask will do in parallel):
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 import dask.multiprocessing
 dask.config.set(scheduler='processes', num_workers = 4)  
 import dask.bag as db
@@ -365,13 +368,14 @@ import dask.bag as db
 ## path = '/scratch/users/paciorek/wikistats/dated_2017/'
 ## For demo we'll just use a small subset
 path = '/scratch/users/paciorek/wikistats/dated_2017_small/dated/'
-wiki = db.read_text(path + 'part-0000*gz')
+wiki = db.read_text(path + 'part-0*gz')
 ```
 
 
 Here we'll just count the number of records.
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 import time
 t0 = time.time()
 wiki.count().compute()
@@ -381,7 +385,8 @@ time.time() - t0   # 136 sec. for full data
 
 And here is a more realistic example of filtering (subsetting).
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 import re
 def find(line, regex = 'Armenia'):
     vals = line.split(' ')
@@ -411,7 +416,8 @@ Since the data are just treated as raw strings, we might want to
 introduce structure by converting each line to a tuple and then
 converting to a data frame.
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 def make_tuple(line):
     return(tuple(line.split(' ')))
 
@@ -447,7 +453,8 @@ Let's first see operations on a single node, using a single 13 GB two-dimensiona
 array. Again, Dask uses lazy evaluation, so creation of the array
 doesn't happen until an operation requiring output is done.
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 import dask
 dask.config.set(scheduler = 'threads', num_workers = 4) 
 import dask.array as da
@@ -466,7 +473,8 @@ up by row, but this doesn't seem to actually make a difference,
 presumably because the mean calculation can be done in pieces and only a
 small number of summary statistics moved between workers.
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 import dask
 dask.config.set(scheduler='threads', num_workers = 4)  
 import dask.array as da
@@ -485,7 +493,8 @@ timing the actual row mean calculations.
 
 But this doesn't really clarify the story...
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 import dask
 dask.config.set(scheduler='threads', num_workers = 4)  
 import dask.array as da
@@ -511,7 +520,8 @@ Dask will avoid storing all the chunks in memory. (It appears to just
 generate them on the fly.) Here we have an 80 GB array but we never use
 more than a few GB of memory (based on `top` or `free -h`).
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 import dask
 dask.config.set(scheduler='threads', num_workers = 4)  
 import dask.array as da
@@ -752,7 +762,8 @@ determine the class grade). More specifically we need a query that:
  rows in `ClassAssignment` where `Student.ID` is the same as `ClassAssignment.student_ID` and
  - filters the rows based on `Student.grade_level`:
 
-```{sql, eval=FALSE}
+```{sql}
+#| eval: false
 SELECT Student.ID, grade FROM Student, ClassAssignment WHERE 
   Student.ID = ClassAssignment.student_ID and Student.grade_level = 9;
 ```
@@ -879,13 +890,7 @@ def db_list_tables(db):
 db_list_tables(db)
 ```
 
-We can see the fields in table, either by grabbing a few records:
-
-```{python}
-db.execute("select * from questions limit 5")
-```
-
-or, if you've just queried the table, looking at `description`:
+To see the fields in the table, if you've just queried the table, you can look at `description`:
 
 ```{python}
 [item[0] for item in db.description]
@@ -896,7 +901,8 @@ get the results in one go or make the query and separately fetch the
 results. Here we've selected the first five rows (and all columns, based
 on the \* wildcard) and brought them into Python as list of tuples.
 
-```{python, cache=TRUE}
+```{python}
+#| cache: true
 results = db.execute("select * from questions limit 5").fetchall()  # simple query 
 type(results)
 type(results[0])
@@ -909,7 +915,8 @@ results == results2
 
 To disconnect from the database:
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 db.close()
 ```
 
@@ -924,7 +931,8 @@ how to implement the query.
 
 Here are some examples using the Stack Overflow database.
 
-```{python, cache=TRUE}
+```{python}
+#| cache: true
 ## find the largest viewcounts in the questions table
 db.execute(
 'select title, viewcount from questions order by viewcount desc limit 10').fetchall()
@@ -981,7 +989,8 @@ Here's a basic example where we count the occurrences of different tags.
 Note that we use `as` to define a name for the new column that is
 created based on the aggregation operation (`count` in this case).
 
-```{python, cache=TRUE}
+```{python}
+#| cache: true
 db.execute("select tag, count(*) as n from questions_tags \
            group by tag \
            order by n desc limit 25").fetchall()
@@ -1002,7 +1011,8 @@ A useful SQL keyword is `DISTINCT`, which allows you to eliminate
 duplicate rows from any table (or remove duplicate values when one only
 has a single column or set of values).
 
-```{python, cache=TRUE}
+```{python}
+#| cache: true
 tag_names = db.execute("select distinct tag from questions_tags").fetchall()
 tag_names[0:5]
 db.execute("select count(distinct tag) from questions_tags").fetchall()
@@ -1028,7 +1038,8 @@ Let's see some joins using the different syntax on the Stack Overflow
 database. In particular let's select only the questions with the tag
 python.
 
-```{python, cache=TRUE}
+```{python}
+#| cache: true
 result1 = db.execute("select * from questions join questions_tags \
         on questions.questionid = questions_tags.questionid \
         where tag = 'python'").fetchall()
@@ -1037,7 +1048,8 @@ result1 = db.execute("select * from questions join questions_tags \
 
 It turns out you can do it without using the JOIN keyword.
 
-```{python, cache=TRUE}
+```{python}
+#| cache: true
 result2 = db.execute("select * from questions, questions_tags \
         where questions.questionid = questions_tags.questionid and \
         tag = 'python'").fetchall()
@@ -1051,7 +1063,8 @@ Here's a three-way join (using both types of syntax) with some
 additional use of aliases to abbreviate table names. What does this
 query ask for?
 
-```{python, cache=TRUE}
+```{python}
+#| cache: true
 result1 = db.execute("select * from \
         questions Q \
         join questions_tags T on Q.questionid = T.questionid \
@@ -1089,7 +1102,8 @@ Suppose we always want the age and displayname of owners of questions to
 be readily available. Once we have the view we can query it like a
 regular table.
 
-```{python, cache=TRUE}
+```{python}
+#| cache: true
 db.execute("create view questionsAugment as select \
                 questionid, questions.creationdate, score, viewcount, \
                 title, ownerid, age, displayname \
@@ -1161,7 +1175,8 @@ a condition that enforces matching between the rows of the table. More
 broadly, here are four equivalent joins that all perform the equivalent
 of an inner join:
 
-```{sql, eval=FALSE}
+```{sql}
+#| eval: false
 ## explicit inner join:
 select * from table1 join table2 on table1.id = table2.id 
 ## non-explicit join without JOIN
@@ -1199,7 +1214,8 @@ through the tree you can eliminate half of the possibilities.
 Here's how we create an index, with some time comparison for a simple
 query.
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 t0 = time.time()
 results = db.execute(
   "select * from questions where viewcount > 10000").fetchall()
@@ -1292,7 +1308,8 @@ One can create tables from within the 'sqlite' command line interfaces
 Python or R. Here's the syntax from Python, creating the table
 from a Pandas dataframe.
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 ## create data frame 'student_data' in some fashion
 con = sq.connect(db_path)
 student_data.to_sql('student', con, if_exists='replace', index=False)
