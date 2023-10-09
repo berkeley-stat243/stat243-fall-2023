@@ -929,15 +929,18 @@ how to implement the query.
 
 > **Note**: An *imperative* language is one where you provide the sequence of commands you want to be run, in order. A *declarative* language is one where you declare what result you want and rely on the system that interprets the commands to determine how to actually do it. Most of the languages we're generally familiar with are imperative. (That said, even in languages like Python, function calls in many ways simply say what we want rather than exactly how the computer should carry out the granular operations.)
 
-Here are some examples using the Stack Overflow database.
+Here are some examples using the Stack Overflow database of getting questions that
+have been viewed a lot (the `viewcount` field is large).
 
 ```{python}
 #| cache: true
-## find the largest viewcounts in the questions table
+## Get the questions fo for which the viewcount field is large.
+db.execute('select * from questions where viewcount > 100000').fetchall()
+
+## Find the 10 largest viewcounts (and associated titles) in the questions table,
+## by sorting in descending order based on viewcount and returning the first 10.
 db.execute(
 'select title, viewcount from questions order by viewcount desc limit 10').fetchall()
-## now get the questions that are viewed the most
-db.execute('select * from questions where viewcount > 100000').fetchall()
 ```
 
 
@@ -963,7 +966,7 @@ And here is a table of some important keywords:
 |            ORDER BY          |                sort based on columns   |
 
 
-For comparisons in a `WHERE` clause, some common syntax for setting
+For logical comparisons in a `WHERE` clause, some common syntax for setting
 conditions includes `LIKE` (for patterns), `=`, `>`, `<`, `>=`, `<=`, `!=`.
 
 Some other keywords are: `DISTINCT`, `ON`, `JOIN`, `GROUP BY`, `AS`, `USING`, `UNION`,
@@ -1013,8 +1016,10 @@ has a single column or set of values).
 
 ```{python}
 #| cache: true
+## Get the unique tags from the questions_tags table.
 tag_names = db.execute("select distinct tag from questions_tags").fetchall()
 tag_names[0:5]
+## Count the number of unique tags.
 db.execute("select count(distinct tag) from questions_tags").fetchall()
 ```
 
@@ -1036,7 +1041,7 @@ WHERE <condition(s) on column(s)> ORDER BY <column(s)>
 
 Let's see some joins using the different syntax on the Stack Overflow
 database. In particular let's select only the questions with the tag
-python.
+'python'.
 
 ```{python}
 #| cache: true
