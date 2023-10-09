@@ -888,7 +888,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>db <span class="op">=</span> con.cursor()</span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select * from questions limit 5"</span>)  <span class="co"># simple query </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;sqlite3.Cursor object at 0x7fb11c3c0d40&gt;</code></pre>
+<pre><code>&lt;sqlite3.Cursor object at 0x7fa40344cd40&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>db.fetchall() <span class="co"># retrieve results</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -955,8 +955,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><strong>Note</strong>: An <em>imperative</em> language is one where you provide the sequence of commands you want to be run, in order. A <em>declarative</em> language is one where you declare what result you want and rely on the system that interprets the commands to determine how to actually do it. Most of the languages we’re generally familiar with are imperative. (That said, even in languages like Python, function calls in many ways simply say what we want rather than exactly how the computer should carry out the granular operations.)</p>
 </blockquote>
 <p>Here are some examples using the Stack Overflow database of getting questions that have been viewed a lot (the <code>viewcount</code> field is large).</p>
-<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-19_3098562c9e844778fcb4e32fb995e547">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Get the questions fo for which the viewcount field is large.</span></span>
+<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-19_783dec20c78fe43ab90c9c6f71ed4bb5">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co">## Get the questions (* indicates all fields) for which the viewcount field is large.</span></span>
 <span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">'select * from questions where viewcount &gt; 100000'</span>).fetchall()</span>
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co">## Find the 10 largest viewcounts (and associated titles) in the questions table,</span></span>
@@ -1026,7 +1026,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>[('python', 255614), ('javascript', 182006), ('java', 89097), ('reactjs', 83180), ('html', 69401), ('c#', 67633), ('android', 55422), ('r', 51688), ('node.js', 50231), ('php', 48782), ('css', 48021), ('c++', 46267), ('pandas', 45862), ('sql', 43598), ('python-3.x', 42014), ('flutter', 39243), ('typescript', 33583), ('arrays', 29960), ('angular', 29783), ('django', 29228), ('mysql', 26562), ('dataframe', 25283), ('c', 24965), ('json', 24510), ('swift', 23008)]</code></pre>
 </div>
 </div>
-<p>In general <code>GROUP BY</code> statements will involve some aggregation operation on the subsets. Options include: <code>COUNT</code>, <code>MIN</code>, <code>MAX</code>, <code>AVG</code>, <code>SUM</code>.</p>
+<p>In general <code>GROUP BY</code> statements will involve some aggregation operation on the subsets. Options include: <code>COUNT</code>, <code>MIN</code>, <code>MAX</code>, <code>AVG</code>, <code>SUM</code>. The number of results will be the same as the number of groups; in the example above there should be one result per tag.</p>
 <p>If you filter after using <code>GROUP BY</code>, you need to use <code>having</code> instead of <code>where</code>.</p>
 <p><strong>Challenge</strong>: Write a query that will count the number of answers for each question, returning the most answered questions.</p>
 </section>
@@ -1053,7 +1053,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The syntax generally looks like this (again the <code>WHERE</code> and <code>ORDER BY</code> are optional):</p>
 <pre><code>SELECT &lt;column(s)&gt; FROM &lt;table1&gt; JOIN &lt;table2&gt; ON &lt;columns to match on&gt;
 WHERE &lt;condition(s) on column(s)&gt; ORDER BY &lt;column(s)&gt;</code></pre>
-<p>Let’s see some joins using the different syntax on the Stack Overflow database. In particular let’s select only the questions with the tag ‘python’.</p>
+<p>Let’s see some joins using the different syntax on the Stack Overflow database. In particular let’s select only the questions with the tag ‘python’. By selecting <code>*</code> we are selecting all columns from both the questions and questions_tags tables.</p>
 <div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-22_d666a06aada28a69434c799887892553">
 <div class="sourceCode cell-code" id="cb43"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">=</span> db.execute(<span class="st">"select * from questions join questions_tags </span><span class="ch">\</span></span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="st">        on questions.questionid = questions_tags.questionid </span><span class="ch">\</span></span>
