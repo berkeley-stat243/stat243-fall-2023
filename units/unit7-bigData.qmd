@@ -934,7 +934,7 @@ have been viewed a lot (the `viewcount` field is large).
 
 ```{python}
 #| cache: true
-## Get the questions fo for which the viewcount field is large.
+## Get the questions (* indicates all fields) for which the viewcount field is large.
 db.execute('select * from questions where viewcount > 100000').fetchall()
 
 ## Find the 10 largest viewcounts (and associated titles) in the questions table,
@@ -1002,6 +1002,8 @@ db.execute("select tag, count(*) as n from questions_tags \
 
 In general `GROUP BY` statements will involve some aggregation operation
 on the subsets. Options include: `COUNT`, `MIN`, `MAX`, `AVG`, `SUM`.
+The number of results will be the same as the number of groups; in the example
+above there should be one result per tag.
 
 If you filter after using `GROUP BY`, you need to use `having` instead of `where`.
 
@@ -1041,7 +1043,8 @@ WHERE <condition(s) on column(s)> ORDER BY <column(s)>
 
 Let's see some joins using the different syntax on the Stack Overflow
 database. In particular let's select only the questions with the tag
-'python'.
+'python'. By selecting `*` we are selecting all columns from
+both the questions and questions_tags tables.
 
 ```{python}
 #| cache: true
