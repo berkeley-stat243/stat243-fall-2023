@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Andrew Vaughn, James Duncan">
+<meta name="author" content="Andrew Vaughn, James Duncan, modified for python by Ahmed Eldeeb">
 <meta name="dcterms.date" content="2022-10-07">
 
 <title>Statistics 243 Fall 2023 - SCF Computing Cluster</title>
@@ -370,7 +370,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Andrew Vaughn, James Duncan </p>
+             <p>Andrew Vaughn, James Duncan, modified for python by Ahmed Eldeeb </p>
           </div>
   </div>
     
@@ -695,18 +695,17 @@ Tip
 <h1>Exercise</h1>
 <p>You can either do 1. on your local machine and transfer the file to the SCF cluster, or you can do it remotely. 2 - 4 should be done on the SCF.</p>
 <ol type="1">
-<li>Create a submission <code>submitBoot.sh</code> that will execute the code in <code>boot.R</code>. To do this I suggest copying the text from <code>submit_py.sh</code> or <code>submitR.sh</code> and updating a couple lines:</li>
+<li>Create a submission <code>submitBoot.sh</code> that will execute the code in <code>boot_proc.py</code>. To do this I suggest copying the text from <code>submit_py.sh</code> or <code>submitR.sh</code> and updating a couple lines:</li>
 </ol>
 <ul>
 <li>Change <code>job-name</code> to whatever you want to call this job.</li>
 <li>Change time to <code>00:10:00</code> just in case your code runs longer than one minute.</li>
 <li>Change the <code>--cpus-per-task</code> to 3. This is where you are telling Slurm to execute in parallel on 3 CPUs.</li>
-<li>Change the last line <code>R CMD BATCH --no-save boot.R boot.Rout</code>. The <code>boot.Rout</code> file will contain all of code, messages, errors, etc. from the R session.</li>
+<li>Change the last line <code>python boot_serial.py</code>.</li>
 </ul>
 <ol type="1">
-<li><p>Call <code>sbatch submitBoot.sh</code> to execute the R script <code>boot.R</code>.</p></li>
-<li><p>Check that the execution worked by examining the <code>.Rout</code> file.</p></li>
-<li><p>Time allowing: Update the parallel code to use the <code>future</code> package and compare the results.</p></li>
+<li><p>Call <code>sbatch submitBoot.sh</code> to execute the R script <code>boot_proc.py</code>.</p></li>
+<li><p>Check that the execution worked by examining the <code>py.out</code> file.</p></li>
 </ol>
 
 
