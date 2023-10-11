@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Statistics 243 Fall 2023 - Problem Set 5</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Statistics 243 Fall 2023</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../syllabus.html" rel="" target="">
+ <span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../office_hours.html" rel="" target="">
+ <span class="menu-text">Office hours</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../schedule.html" rel="" target="">
+ <span class="menu-text">Schedule</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-units" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Units</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-units">    
+        <li>
+    <a class="dropdown-item" href="../units/unit1-intro.html" rel="" target="">
+ <span class="dropdown-text">Unit 1 (UNIX intro)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit2-dataTech.html" rel="" target="">
+ <span class="dropdown-text">Unit 2 (Data technologies)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit3-bash.html" rel="" target="">
+ <span class="dropdown-text">Unit 3 (Bash shell)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit4-goodPractices.html" rel="" target="">
+ <span class="dropdown-text">Unit 4 (Good practices)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit5-programming.html" rel="" target="">
+ <span class="dropdown-text">Unit 5 (Programming)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit6-parallel.html" rel="" target="">
+ <span class="dropdown-text">Unit 6 (Parallelization)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit7-bigData.html" rel="" target="">
+ <span class="dropdown-text">Unit 7 (Databases)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit8-numbers.html" rel="" target="">
+ <span class="dropdown-text">Unit 8 (Precision)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit9-sim.html" rel="" target="">
+ <span class="dropdown-text">Unit 9 (Simulation)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit10-linalg.html" rel="" target="">
+ <span class="dropdown-text">Unit 10 (Linear Algebra)</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-labs" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Labs</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-labs">    
+        <li>
+    <a class="dropdown-item" href="../labs/lab0-setup.html" rel="" target="">
+ <span class="dropdown-text">Lab 0: Setup</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/lab1-submission.html" rel="" target="">
+ <span class="dropdown-text">Lab 1: Problem set submission</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/lab2-testing.html" rel="" target="">
+ <span class="dropdown-text">Lab 2: Assertions, Exceptions, and Testing</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/lab3-debugging.html" rel="" target="">
+ <span class="dropdown-text">Lab 3: Debugging</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/lab5-codereview.html" rel="" target="">
+ <span class="dropdown-text">Lab 5: Code Reviews</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/06/scf.html" rel="" target="">
+ <span class="dropdown-text">Lab 6: SCF and Parallel Computing</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-how-tos" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">How tos</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-how-tos">    
+        <li>
+    <a class="dropdown-item" href="../howtos/accessingPython.html" rel="" target="">
+ <span class="dropdown-text">Accessing Python</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/accessingUnixCommandLine.html" rel="" target="">
+ <span class="dropdown-text">Accessing the Unix Command Line</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/gitInstall.html" rel="" target="">
+ <span class="dropdown-text">Installing Git</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/quartoInstall.html" rel="" target="">
+ <span class="dropdown-text">Installing Quarto</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/ps-submission.html" rel="" target="">
+ <span class="dropdown-text">Problem Set Submissions</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">Windows</li>
+        <li>
+    <a class="dropdown-item" href="../howtos/windowsAndLinux.html" rel="" target="">
+ <span class="dropdown-text">Installing the Linux Subsystem on Windows</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="https://edstem.org/us/courses/42474/discussion/" rel="" target="">
+ <span class="menu-text">Discussion</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://statistics.berkeley.edu/computing/training/tutorials" rel="" target="">
+ <span class="menu-text">Tutorials</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/berkeley-stat243/stat243-fall-2023" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+    <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="ps5.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Problem Set 5</h1>
+<p class="subtitle lead">Due Friday Oct.&nbsp;27, 10 am</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="comments" class="level2">
+<h2 class="anchored" data-anchor-id="comments">Comments</h2>
+<ul>
+<li>This covers material in Units 6 and 7 (and a bit into Unit 9).</li>
+<li>It’s due at 10 am (Pacific) on October 27, both submitted as a PDF to Gradescope as well as committed to your GitHub repository.</li>
+<li>Please see PS1 for formatting and attribution requirements.</li>
+<li>Running parallel code, working with large datasets, and using shared computers can result in delays and unexpected problems. Don’t wait until the last minute. The lengthy time period to complete this problem set is simply a logistical result of when the quiz is scheduled – you should start on the problem set before the quiz. We are happy to help troubleshoot problems you may have with accessing the SCF, running parallel Python code, submitting jobs to the SCF cluster, etc. We will not be happy to do so if it is clear that you started at the last minute.</li>
+<li>Given that you’ll be running batch jobs and operating on remote servers, for problems 1 and 2 you’ll need to provide your code in chunks with <code>#| eval: false</code>. You can paste in any output you need to demonstrate your work. Remember that you can use “```” to delineate blocks of text you want printed verbatim.</li>
+<li>To monitor an <code>sbatch</code> job, see <a href="https://statistics.berkeley.edu/computing/servers/cluster/monitoring">this SCF doc</a>.</li>
+</ul>
+</section>
+<section id="problems" class="level2">
+<h2 class="anchored" data-anchor-id="problems">Problems</h2>
+<ol type="1">
+<li><p>This problem asks you to use Dask to process some Wikipedia traffic data and makes use of tools discussed in Section on October 6. The files in <code>/scratch/users/paciorek/wikistats/dated_2017_small/dated</code> (on the SCF) contain data on the number of visits to different Wikipedia pages on November 4, 2008 (which was the date of the US election in 2008 in which Barack Obama was elected). The columns are: date, time, language, webpage, number of hits, and page size. (Note that the Unit 7 Dask bag example and Question 2 below use a larger set of the same data.)</p>
+<ol type="a">
+<li><p>In an interactive session on the SCF Linux cluster (ideally on the <code>low</code> partition, but if necessary on the <code>high</code> partition), started using <code>srun</code> (with four cores requested) as discussed in Section:</p>
+<ol type="i">
+<li>Copy the <em>data</em> files to a subdirectory of the <code>/tmp</code> directory of the machine your interactive session is running on. (Keep your <em>code</em> files in your home directory.) Putting the files on the local hard drive of the machine you are computing on reduces the amount of copying data across the network (in the situation where you read the data into your program multiple times) and should speed things up in step ii.</li>
+<li>Write efficient Python code to do the following: Using the <code>dask</code> package as seen in Unit 6, with either <code>map</code> or a list of delayed tasks, write code that, in parallel, reads in the space-delimited files and filters to only the rows that refer to pages where “Barack_Obama” appears in the page title (column 4). You can use the code from Unit 6 as a template. Collect all the results into a single data frame. In your <code>srun</code> invocation and in your code, please use four cores in your parallelization so that other cores are saved for use by other users/students. IMPORTANT: before running the code on the full set of data, please test your code on a small subset first (and test your function on a single input file serially).</li>
+<li>Tabulate the number of hits for each hour of the day. (I don’t care how you do this - using either Python or R is fine.) Make a (time-series) plot showing how the number of visits varied over the day. Note that the time zone is UTC/GMT, so you won’t actually see the evening times when Obama’s victory was announced - we’ll see that in Question 2. Feel free to do this step outside the context of the parallelization. You’ll want to use datetime functions from Pandas or the <code>datetime</code> package to manipulate the timing information (i.e., don’t use string manipulations).</li>
+<li>Remove the files from <code>/tmp</code>.</li>
+</ol>
+<p>Tips:</p>
+<ol type="1">
+<li>In general, keep in mind various ideas from Unit 2 about reading data from files. A couple things that posed problems when I was prototyping this in using <code>pandas.read_csv</code> were that there are lines with fewer than six fields and that there are lines that have quotes that should be treated as part of the text of the fields and not as separators. To get things to work ok, I needed to set the <code>dtype</code> to <code>str</code> for the first two fields (for ease of dealing with the date/time info later) but NOT set the <code>dtype</code> for the other fields, and to use the <code>quoting</code> argument to handle the literal quotes.</li>
+<li>When starting your <code>srun</code> session, please include the flag <code>--mem-per-cpu=5G</code> when submitting the Slurm job. In general one doesn’t need to request memory when submitting jobs to the SCF cluster but there is a weird interaction between Dask and Slurm that I don’t quite understand that requires this.</li>
+</ol></li>
+<li><p>Now replicate steps (i) and (ii) but using <code>sbatch</code> to submit your job as a batch job to the SCF Linux cluster, where step (ii) involves running Python from the command line. You don’t need to make the plot again. As discussed <a href="https://docs.dask.org/en/stable/scheduling.html?highlight=__name__#standalone-python-scripts">here in the Dask documentation</a>, put your Python/Dask code inside an <code>if __name__ == '__main__'</code> block.</p>
+<p>Note that you need to copy the files to <code>/tmp</code> in your submission script, so that the files are copied to <code>/tmp</code> on whichever node of the SCF cluster your job gets run on. Make sure that as part of your <code>sbatch</code> script you remove the files in <code>/tmp</code> at the end of the script. (Why? In general <code>/tmp</code> is cleaned out when a machine is rebooted, but this might take a while to happen and many of you will be copying files to the same hard drive so otherwise <code>/tmp</code> could run out of space.)</p></li>
+</ol></li>
+<li><p>Consider the Wikipedia traffic data for October 15-November 2008 (already available in <code>/var/local/s243/wikistats/dated_2017_sub</code> on any of the SCF cluster nodes in the low or high partitions). Again, explore the variation over time in the number of visits to Barack Obama-related Wikipedia sites, based on searching for “Barack_Obama” on English language Wikipedia pages. You should use Dask with distributed data structures to do the reading and filtering, as seen in Unit 7. Then group by day-hour (it’s fine to do the grouping/counting in Python in a way that doesn’t use Dask data structures). You can do this either in an interactive session using <code>srun</code> or a batch job using <code>sbatch</code>. And if you use <code>srun</code>, you can run Python itself either interactively or as a background job. Time how long it takes to do the Dask part of the computations to get a sense for how much time is involved working with this much data. Once you have done the filtering and gotten the counts for each day-hour, you can simply use standard Python or R code on your laptop to do some plotting to show how the traffic varied over the days of the full month-long time period and particularly over the hours of November 3-5, 2008 (election day was November 4 and Obama’s victory was declared at 11 pm Eastern time on November 4).</p>
+<p>Notes:</p>
+<ul>
+<li>There are various ways to do this using Dask bags or Dask data frames, but I think the easiest in terms of using code that you’ve seen in Unit 7 is to read the data in and do the filtering using a Dask bag and then convert the Dask bag to a Dask dataframe to do the grouping and summarization. Alternatively you should be able to use <code>foldby()</code> from <code>dask.bag</code>, but figuring out what arguments to pass to <code>foldby()</code> is a bit involved.</li>
+<li>Make sure to test your code on a portion of the data before doing computation on the full dataset. Reading and filtering the whole dataset will take something like 30 minutes with 16 cores. You MUST test on a small number of files on your laptop or on one of the stand-alone SCF machines (e.g., radagast, gandalf, arwen) before trying to run the code on the full 40 GB (zipped) of data. For testing, the files are also available in <code>/scratch/users/paciorek/wikistats/dated_2017_sub</code>.</li>
+<li>When doing the full computation via your Slurm job submission:
+<ul>
+<li>Don’t copy the data (unlike in Question 1) to avoid overloading our disks with each student having their own copy. Just use the data from <code>/var/local/s243/wikistats/dated_2017_sub</code>.</li>
+<li>Please do not use more than 16 cores in your Slurm job submissions so that cores are available for your classmates. If your job is stuck in the queue you may want to run it with 8 rather than 16 cores.</li>
+<li>As discussed in Section, when you use <code>sbatch</code> to submit a job to the SCF cluster or <code>srun</code> to run interactively, you should be using the <code>--cpus-per-task</code> flag to specify the number of cores that your computation will use. In your Python code, you can then either hard-code that same number of cores as the number of workers or (better) you can use the <code>SLURM_CPUS_PER_TASK</code> shell environment variable to tell Dask how many workers to start.</li>
+</ul></li>
+</ul></li>
+<li><p>SQL practice.</p>
+<ol type="a">
+<li>Using the Stack Overflow database, write SQL code that will determine how many users have asked both R- and Python-related questions (not necessarily, but possibly, about R and Python in the same question). There are various ways to do this; you might do this in a single query (for which there are various options), but it’s perfectly fine to create one or more views and then use those views to get the result as a subsequent query. (Hint: if you do this using joins, you’ll probably need to do the equivalent of a self join at some point.)</li>
+<li>Extend your query to include only users who have asked questions about R (that are not also about Python) and questions about Python (that are not also about R). How many such users are there?</li>
+</ol></li>
+<li><p>(Please wait to work on this until the week of Oct.&nbsp;23 if you can.) This question prepares for the discussion of a simulation study in section on Friday October 27. The goal of the problem is to think carefully about the design and interpretation of simulation studies, which we’ll talk about in Unit 9, in particular in Section on Friday October 27. In particular, we’ll work with Cao et al.&nbsp;(2015), an article in the Journal of the Royal Statistical Society, Series B, which is a leading statistics journal. The article is available as <code>cao_etal_2015.pdf</code> under the <code>ps</code> directory on GitHub. Read Sections 1, 2.1, and 4 of the article. Also read Section 2 of Unit 9.</p>
+<p>You don’t need to understand their method for fitting the regression (i.e., you can treat it as some black box algorithm) or the theoretical development. In particular, you don’t need to know what an estimating equation is - you can think of it as an alternative to maximum likelihood or to least squares for estimating the parameters of the statistical model. Equation 3 on page 759 is analogous to taking the sum of squares for a regression model, differentiating with respect to <span class="math inline">\(\beta\)</span>, and setting equal to zero to solve to get <span class="math inline">\(\hat{\beta}\)</span>. In Equation 3, to find <span class="math inline">\(\hat{\beta}\)</span> one sets the equation equal to zero and solves for <span class="math inline">\(\beta\)</span>. As far as the kernel, its role is to weight each pair of observation and covariate value. This downweights pairs where the covariate is measured at a very different time than the observation.</p>
+<p>Briefly (a few sentences for each of the three questions below) answer the following questions.</p>
+<ol type="a">
+<li>What are the goals of their simulation study, and what are the metrics that they consider in assessing their method?</li>
+<li>What choices did the authors have to make in designing their simulation study? What are the key aspects of the data generating mechanism that might affect their assessment of their method?</li>
+<li>Consider their Tables reporting the simulation results. For a method to be a good method, what would one want to see numerically in these columns?</li>
+</ol></li>
+</ol>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
