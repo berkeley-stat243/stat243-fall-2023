@@ -17,4 +17,4 @@
 # Command(s) to run
 ###################
 
-python boot.py > boot.out
+python boot_serial.py

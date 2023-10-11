@@ -1,6 +1,6 @@
 ---
 title: "SCF Computing Cluster"
-author: "Andrew Vaughn, James Duncan"
+author: "Andrew Vaughn, James Duncan, modified for python by Ahmed Eldeeb"
 date: "2022-10-07"
 format:
   pdf:
@@ -433,20 +433,16 @@ See the "How to Monitor Jobs" section of the SCF's documentation on [this page](
 You can either do 1. on your local machine and transfer the file to the SCF
 cluster, or you can do it remotely. 2 - 4 should be done on the SCF.
 
-1. Create a submission `submitBoot.sh` that will execute the code in `boot.R`.
+1. Create a submission `submitBoot.sh` that will execute the code in `boot_proc.py`.
   To do this I suggest copying the text from `submit_py.sh` or `submitR.sh` and updating a couple
   lines:
   - Change `job-name` to whatever you want to call this job.
   - Change time to `00:10:00` just in case your code runs longer than one minute.
   - Change the `--cpus-per-task` to 3. This is where you are telling Slurm to
   execute in parallel on 3 CPUs.
-  - Change the last line `R CMD BATCH --no-save boot.R boot.Rout`. The
-`boot.Rout` file will contain all of code, messages, errors, etc. from the R
-session.
+  - Change the last line `python boot_serial.py`.
 
-1. Call `sbatch submitBoot.sh` to execute the R script `boot.R`.
+1. Call `sbatch submitBoot.sh` to execute the R script `boot_proc.py`.
 
-2. Check that the execution worked by examining the `.Rout` file.
+2. Check that the execution worked by examining the `py.out` file.
 
-3. Time allowing: Update the parallel code to use the `future` package
-   and compare the results.
