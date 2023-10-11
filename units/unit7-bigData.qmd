@@ -1230,12 +1230,12 @@ results = db.execute(
 print(time.time() - t0)  # 10 seconds
 t0 = time.time()
 db.execute(
-  "create index count_index on questions (viewcount)") # 19 seconds
-print(time.time() - t0)  # 10 seconds
+  "create index count_index on questions (viewcount)")
+print(time.time() - t0)  # 19 seconds
 t0 = time.time()
 db.execute(
-  "select * from questions where viewcount > 10000").fetchall()  # 3 seconds
-print(time.time() - t0)  # 10 seconds
+  "select * from questions where viewcount > 10000").fetchall()  
+print(time.time() - t0)  # 3 seconds
 
 ```
 
@@ -1259,14 +1259,13 @@ Consider the following example of using `INTERSECT`. What does it return?
 #| eval: false
 result1 = db.execute("select displayname, userid from \
                      questions Q join users U on U.userid = Q.ownerid \
-                     join questions_tags T on Q.questionid = T.questionid \
-                     where tag = 'r' \
                      intersect \
                      select displayname, userid from \
-                     questions Q join users U on U.userid = Q.ownerid \
-                     join questions_tags T on Q.questionid = T.questionid \
-                     where tag = 'python'")
+                     answers A join users U on U.userid = A.ownerid")
+                     
 ```
+
+**Challenge**: what if you wanted to find users who had neither asked nor answered a question?
 
 ## Subqueries
 
