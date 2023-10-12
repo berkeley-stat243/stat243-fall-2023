@@ -1140,7 +1140,8 @@ One use of a view would be to create a mega table that stores all the
 information from multiple tables in the (unnormalized) form you might
 have if you simply had one data frame in Python or R.
 
-```{python, include=FALSE}
+```{python}
+#| include: false
 db.execute("drop view if exists questionsAugment") # drop so can create again in next step
 ```
 
