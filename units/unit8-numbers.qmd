@@ -1,7 +1,7 @@
 ---
 title: "Numbers on a computer"
 author: "Chris Paciorek"
-date: "2023-07-26"
+date: "2023-10-12"
 format:
   pdf:
     documentclass: article
@@ -16,21 +16,15 @@ format:
     code-block-background: true
 execute:
   freeze: auto
+engine: knitr
 ---
 
 [PDF](./unit8-numbers.pdf){.btn .btn-primary}
-
-```{r, fake-setup, echo=FALSE}
-## For some reason we need an R chunk in the doc or get result seen in `error.log`.
-z <- 1
-```
 
 ```{python, setup, echo=FALSE}
 import numpy as np
 import scipy.linalg
 import sys
-
-from bitstring import Bits
 ```    
 
 
@@ -43,30 +37,24 @@ References:
 A quick note that, as we've already seen, Python's version of scientific
 notation is `XeY`, which means $X\cdot10^{Y}$.
 
-A second note is that the concepts developed here apply outside of R,
-but we'll illustrate the principles of computer numbers using R. R makes
-use of the *double* and *int* types in C for the underlying
-representation of R's numbers in C variables, so what we'll really be
-seeing is how such types behave in C on most modern machines. The behavior
-of real-valued numbers in Python is essentially the same, but
-Python handles the integer type differently.
+A second note is that the concepts developed here apply outside of Python,
+but we'll illustrate the principles of computer numbers using Python.
+Python usually makes use of the *double* type (8 bytes) in C for the underlying
+representation of real-valued numbers in C variables, so what we'll really be
+seeing is how such types behave in C on most modern machines.
+It's actually a bit more complicated in that one can use real-valued numbers
+that use something other than 8 bytes in numpy by specifying a `dtype`.
 
-Videos (optional): 
-
-There are various videos from 2020 in the bCourses Media Gallery that you
-can use for reference if you want to. 
-
-  - Video 1. Bits, bytes, and integers
-  - Video 2. Double precision numbers: intro
-  - Video 3. Double precision numbers: details
-  - Video 4. Overflow and integers vs. doubles
+The handling of integers is even more complicated. In numpy, the default
+is 8 byte integers, but other integer dtypes are available. And in Python
+itself, integers can be arbitrarily large.
 
 # 1. Basic representations
 
 Everything in computer memory or on disk is stored in terms of bits. A
 *bit* is essentially a switch than can be either on or off. Thus
 everything is encoded as numbers in base 2, i.e., 0s and 1s. 8 bits make
-up a *byte*. For information stored as plain text (ASCII), each byte is
+up a *byte*. As discussed in Unit 2, for information stored as plain text (ASCII), each byte is
 used to encode a single character (as previously discussed, actually only 7 of the 8 bits are
 actually used, hence there are $2^{7}=128$ ASCII characters). One way to
 represent a byte is to write it in hexadecimal, rather than as 8 0/1
@@ -80,24 +68,20 @@ We'll create some helper functions to all us to look
 at the underlying binary representation.
 
 ```{python}
-## `Bits` is in the `bitstring` package
+from bitstring import Bits
+
 def bits(x):
     obj = Bits(float = x, length = 64)
     return(obj.bin)
-
-def bitsi(x, len = 64, hex = False):
-    obj = Bits(int = x, length = len)
-    if hex:
-       return(obj)
-    else:
-       return(obj.bin)
 
 def dg(x, form = '.20f'):
     print(format(x, form))
 ```
 
-Note that 'b' is encoded as 1
+Note that 'b' is encoded as one
 more than 'a', and similarly for '0', '1', and '2'.
+We could check these against, say, the Wikipedia
+table that shows the [ASCII encoding](https://en.wikipedia.org/wiki/ASCII).
 
 
 ```{python}
@@ -123,17 +107,15 @@ simply as the sign and then a number in base 2, integers (at least the
 negative ones) are actually stored in different binary encoding to
 facilitate arithmetic. 
 
+Here's what a 64-bit integer representation 
+the actual bits.
 
 ```{python}
-bitsi(0)
-bitsi(0, hex = True)
+np.binary_repr(0, width=64)
+np.binary_repr(1, width=64)
+np.binary_repr(2, width=64)
 
-bitsi(1)
-bitsi(1, hex = True)
-
-bitsi(2)
-
-bitsi(-1)
+np.binary_repr(-1, width=64)
 ```
 
 What do I mean about facilitating arithmetic? As an example, consider adding
@@ -154,23 +136,36 @@ a * a
 
 a = np.int64(34233332342343)
 a * a
+```
 
+That said, if we use Python's `int` rather than numpy's integers,
+we don't get overflow. But we do use more than 8 bytes that would be used
+by numpy.
+
+```{python}
+a = 34233332342343
+a * a
+sys.getsizeof(a)
+sys.getsizeof(a*a)
 ```
 
 
-Real numbers (or *floating points*) use a minimum of 4 bytes, for single
-precision floating points. (GPU calculations often use single precision.)
-In general (including in Python and R) 8 bytes are used to represent real
-numbers on a computer and these are called *double precision floating
-points* or *doubles*. Let's see some examples in Python of how much space
-different types of variables take up.
+In C, one generally works with 8 byte real-valued numbers (aka *floating point* numbers or *floats*).
+However, many years ago, an initial standard representation used 4 bytes. Then
+people started using 8 bytes, which became known as *double precision floating points*
+or *doubles*, whereas the 4-byte version became known as *single precision*.
+Now with GPUs, single precision is often used for speed and reduced memory use.
 
-Let's see how this plays out in terms of memory use in R.
+Let's see how this plays out in terms of memory use in Python.
 
 
 ```{python}
-doubleVec = np.random.normal(size = 100000)
-sys.getsizeof(doubleVec)
+x = np.random.normal(size = 100000)
+sys.getsizeof(x)
+x = np.array(np.random.normal(size = 100000), dtype = "float32")
+sys.getsizeof(x)
+x = np.array(np.random.normal(size = 100000), dtype = "float16")  
+sys.getsizeof(x)
 ```
 
 
@@ -186,24 +181,30 @@ Finally, `numpy` has some helper functions that can tell us
 about the characteristics of computer
 numbers on the machine that Python is running.
 
-So the max for a 32-bit (4-byte) integer is $2147483647=2^{31}-1$, which
-is consistent with 4 bytes.  Since we have both negative and
-positive numbers, we have $2\cdot2^{31}=2^{32}=(2^{8})^{4}$, i.e., 4
-bytes, with each byte having 8 bits.
 
 
 ```{python}
 np.iinfo(np.int32)
 np.iinfo(np.int64)
 
-bitsi(2147483647)
-bitsi(-2147483648)
+np.binary_repr(2147483647, width=32)
+np.binary_repr(-2147483648, width=32)
+np.binary_repr(2147483648, width=32)  # strange
+np.binary_repr(1, width=32)
+np.binary_repr(-1, width=32)
 ```
+
+So the max for a 32-bit (4-byte) integer is $2147483647=2^{31}-1$, which
+is consistent with 4 bytes.  Since we have both negative and
+positive numbers, we have $2\cdot2^{31}=2^{32}=(2^{8})^{4}$, i.e., 4
+bytes, with each byte having 8 bits.
 
 
 # 2. Floating point basics
 
 ## Representing real numbers
+
+### Initial exploration
 
 Reals (also called floating points) are stored on the computer as an
 approximation, albeit a very precise approximation. As an example, if we
@@ -229,7 +230,7 @@ np.float64(0.3) - np.float64(0.2) == np.float64(0.1)
 
 Next, let's consider the number of digits of accuracy
 we have for a variety of numbers. We'll use `format` within
-a handy wrapper function, `dg` to view as many digit as we want:
+a handy wrapper function, `dg`, defined earlier, to view as many digits as we want:
 
 ```{python}
 a = 0.3
@@ -252,14 +253,6 @@ dg(1234.1234)
 dg(1234.123412341234)
 ```
 
-Let's return to our comparison, `0.75-0.5 == 0.25`.
-
-```{python}
-dg(0.75)
-dg(0.50)
-```
-
-
 Notice that we can represent the result accurately only up to 16
 significant digits. This suggests no need to show more than 16
 significant digits and no need to print out any more when writing to a
@@ -267,6 +260,19 @@ file (except that if the number is bigger than $10^{16}$ then we need
 extra digits to correctly show the magnitude of the number if not using
 scientific notation). And of course, often we don't need anywhere near
 that many.
+
+Let's return to our comparison, `0.75-0.5 == 0.25`.
+
+```{python}
+dg(0.75)
+dg(0.50)
+```
+
+What's different about the numbers 0.75 and 0.5 compared to 0.3, 0.2,
+0.1?
+
+### Machine epsilon
+
 
 *Machine epsilon* is the term used for indicating the
 (relative) accuracy of real numbers and it is defined as the smallest
@@ -281,28 +287,31 @@ np.array(1e-15) + np.array(1.0)
 2e-16 + 1.0
 
 np.finfo(np.float64).eps
+```
+
+```{python}
 ## What about in single precision, e.g. on a GPU?
 np.finfo(np.float32).eps
 ```
 
-I'm not sure why `numpy` reports the the 'resolution' as `1e-15` when machine epsilon is
-actually about `2.2e-16`.
 
-#### Floating point representation
+### Floating point representation
 
 *Floating point* refers to the decimal point (or *radix* point since we'll
-be working with base 2 and *decimal* relates to 10). Consider Avogadro's
-number in terms of scientific notation: $+6.023\times10^{23}$. As a
+be working with base 2 and *decimal* relates to 10). 
+
+To proceed further we need to consider scientific notation, such as in writing Avogadro's
+number as $+6.023\times10^{23}$. As a
 baseline for what is about to follow note that we can express a decimal
 number in the following expansion
-$$6.03=6\times10^{0}+0\times10^{-1}+3\times10^{-2}$$ A real number on a
+$$6.037=6\times10^{0}+0\times10^{-1}+3\times10^{-2}+7\times10^{-3}$$ A real number on a
 computer is stored in what is basically scientific notation:
 $$\pm d_{0}.d_{1}d_{2}\ldots d_{p}\times b^{e}\label{eq:floatRep}$$
 where $b$ is the base, $e$ is an integer and $d_{i}\in\{0,\ldots,b-1\}$.
 $e$ is called the *exponent* and $d=d_{1}d_{2}\ldots d_{p}$ is called the *mantissa*.
 
 Let's consider the choices that the computer pioneers needed to make
-in using this system to represent numbers on a computer using base 2.
+in using this system to represent numbers on a computer using base 2 ($b=2$).
 First, we need to choose the number of bits to represent $e$ so that we
 can represent sufficiently large and small numbers. Second we need to
 choose the number of bits, $p$, to allocate to 
@@ -318,7 +327,7 @@ $0.12\times0.12=0.0144$ as
 $(1.20\times10^{-1})\times(1.20\times10^{-1})=1.44\times10^{-2}$, but if
 we had fixed the decimal point, we'd have $0.120\times0.120=0.014$ and
 we'd have lost a digit of accuracy. (Furthermore, we wouldn't be able
-to represent numbers bigger than $0.99$.
+to represent numbers bigger than $0.99$.)
 
 More specifically, the actual storage of a number on a computer these
 days is generally as a double in the form:
@@ -338,7 +347,7 @@ discussion we'll just think of $e$ in terms of its base 10
 representation, although it is of course represented in base 2.) This
 leaves $p=52 = 64-1-11$ bits for $d$.
 
-In this code I'll force storage as a double using by tacking on a decimal place, `.0`.
+In this code I force storage as a double by tacking on a decimal place, `.0`.
 
 ```{python}
 bits(2.0**(-1)) # 1/2
@@ -348,6 +357,13 @@ bits(2.0**1 + 2.0**0)  # 3
 bits(2.0**2)  # 4
 
 bits(-2)
+```
+
+Let's see that we can manually work out the bit-wise representation
+of 3.25:
+
+```{python}
+bits(3.25)
 ```
 
 **Question**: Given a fixed number of bits for a number, what is the
@@ -381,12 +397,11 @@ is this in base 10?
 
 
 ```{python}
+#| error: true
 1e308
 1e309
-try:
-    np.log10(2.0**1024)
-except:
-    print("Whoops -- that just barely overflowed.")
+
+np.log10(2.0**1024)
 np.log10(2.0**1023)
 
 np.finfo(np.float64)
@@ -395,13 +410,19 @@ np.finfo(np.float64)
 We could have been smarter about that calculation:
 $\log_{10}2^{1024}=\log_{2}2^{1024}/\log_{2}10=1024/3.32\approx308$. The
 result is analogous for the smallest number, so we have that floating
-points can range between $1\times10^{-308}$ and $1\times10^{308}$. Take
-a look at *.Machine\$double.xmax* and *.Machine.double.xmin*. Producing
+points can range between $1\times10^{-308}$ and $1\times10^{308}$,
+consistent with what numpy reports above. Producing
 something larger or smaller in magnitude than these values is called
-overflow and underflow respectively. When we overflow, R gives back an
-Inf or -Inf (and in other cases we might get an error message). When we
+overflow and underflow respectively. When we overflow or underflow, numpy gives an error
+(in contrast, R gives back `Inf`). When we
 underflow, we get back 0, which in particular can be a problem if we try
 to divide by the value.
+
+```{python}
+#| error: true
+np.array(10.0**309)
+np.array(1e-330)
+```
 
 ## Integers or floats?
 
@@ -409,23 +430,29 @@ Values stored as integers should overflow if they exceed the maximum integer.
 
 Should $2^{65}$ overflow?
 
-
-```{python, tidy=FALSE}
+```{python}
 np.log2(np.iinfo(np.int64).max)
 x = np.int64(2)
 # Yikes!
 x**64
-
-# Interesting:
-2**64
-2**100
-
-dg(2.0**64, '.2f')
-dg(2.0**100, '.2f')
-
 ```
 
-Doubles won't overflow until much larger values than 4- or 8-byte integers. However we need to think about
+Python's `int` type doesn't overflow.
+
+```{python}
+# Interesting:
+print(2**64)
+print(2**100)
+```
+
+Doubles won't overflow until much larger values than 4- or 8-byte integers. 
+
+```{python}
+dg(2.0**64, '.2f')
+dg(2.0**100, '.2f')
+```
+
+However we need to think about
 what integer-valued numbers can and can't be stored exactly in our base 2 representation of floating point numbers.
 It turns out that integer-valued numbers can be stored exactly as doubles when their absolute
 value is less than $2^{53}$.
@@ -482,8 +509,8 @@ dg(12345678123456780000.0 - 12345678123456770000.0)
 
 The spacing of possible computer numbers that have a magnitude of about
 1 leads us to another definition of *machine epsilon* (an alternative,
-but essentially equivalent definition to that given previously in this
-Unit). Machine epsilon tells us also about the relative spacing of
+but essentially equivalent definition to that given [previously](#machine-epsilon). 
+Machine epsilon tells us also about the relative spacing of
 numbers. First let's consider numbers of magnitude one. The difference
 between $1=1.00...00\times2^{0}$ and $1.000...01\times2^{0}$ is
 $\epsilon=1\times2^{-52}\approx2.2\times10^{-16}$. Machine epsilon gives
@@ -516,9 +543,9 @@ just seen:
 2.0**53
 2.0**53+1
 2.0**53+2
-2.0**54
-2.0**54+2
-2.0**54+4
+dg(2.0**54)
+dg(2.0**54+2)
+dg(2.0**54+4)
 
 bits(2**53)
 bits(2**53+1)
@@ -537,7 +564,7 @@ With a bit more work (e.g., using Mathematica), one can demonstrate that
 doubles in Python in general are represented as the nearest number that can
 stored with the 64-bit structure we have discussed and that the spacing
 is as we have discussed. The results below show the spacing that
-results, in base 10, for numbers around 0.1. The numbers R reports are
+results, in base 10, for numbers around 0.1. The numbers Python reports are
 spaced in increments of individual bits in the base 2 representation.
 
 
@@ -565,7 +592,8 @@ can be expressed exactly.)
 For higher precision floating point numbers you can make use of the `gmpy2`
 package.
 
-```{python, eval=FALSE}
+```{python}
+#| eval: false
 import gmpy2
 gmpy2.get_context().precision=200
 gmpy2.const_pi()
@@ -583,8 +611,7 @@ gmpy2.mpfr(".1234567812345678")
 As mentioned for integers, computer number arithmetic is not closed,
 unlike real arithmetic. For example, if we multiply two computer
 floating points, we can overflow and not get back another computer
-floating point. One term that is used, which might pop up in an error
-message (though probably not in R) is that an "exception" is "thrown".
+floating point. 
 
 Another mathematical concept we should consider here is that computer
 arithmetic does not obey the associative and distributive laws, i.e.,
@@ -604,7 +631,7 @@ dg(res2)
 ## Calculating with integers vs. floating points
 
 It's important to note that operations with integers are fast and exact
-(but can easily overflow) while operations with floating points are
+(but can easily overflow -- albeit not with Python's base `int`) while operations with floating points are
 slower and approximate. Because of this slowness, floating point
 operations (*flops*) dominate calculation intensity and are used as the
 metric for the amount of work being done - a multiplication (or
@@ -613,13 +640,15 @@ talk a lot about flops in the unit on linear algebra.
 
 ## Comparisons
 
-As we saw, we should never test `a==b` unless (1) *a* and *b* are
-represented as integers in R, (2) they are integer-valued but stored as
-doubles that are small enough that they can be stored exactly) or (3)
-they are decimal numbers that have been created in the same way (e.g.,
-`0.4-0.3==0.4-0.3` returns `TRUE` but `0.1==0.4-0.3` does not). Similarly we should be careful
-about testing `a==0`. And be careful of greater than/less than
-comparisons. For example, be careful of `x[ x < 0 ] = NA` if what you
+As we saw, we should never test `x == y` unless:
+
+  1. `x` and `y` are represented as integers, 
+  2. they are integer-valued but stored as doubles that are small enough that they can be stored exactly), or
+  3. they are decimal numbers that have been created in the same way (e.g., `0.4-0.3 == 0.4-0.3` returns `TRUE` but `0.1 == 0.4-0.3` does not). 
+
+Similarly we should be careful
+about testing `x == 0`. And be careful of greater than/less than
+comparisons. For example, be careful of `x[ x < 0 ] = np.nan` if what you
 are looking for is values that might be *mathematically* less than zero,
 rather than whatever is *numerically* less than zero.
 
@@ -628,6 +657,9 @@ rather than whatever is *numerically* less than zero.
 4 - 3 == 1
 4.0 - 3.0 == 1.0
 4.1 - 3.1 == 1.0
+
+0.4-0.3 == 0.1
+0.4-0.3 == 0.4-0.3
 ```
 
 One nice approach to checking for approximate equality is to make use of
@@ -638,8 +670,8 @@ being $x\epsilon$ (see above).
 
 
 ```{python}
-a = 12345678123456781000
-b = 12345678123456782000
+x = 12345678123456781000
+y = 12345678123456782000
 
 def approxEqual(a,b):
   if abs(a - b) < np.finfo(np.float64).eps * abs(a + b):
@@ -650,8 +682,8 @@ def approxEqual(a,b):
 
 approxEqual(a,b)
 
-a = 1234567812345678
-b = 1234567812345677
+x = 1234567812345678
+y = 1234567812345677
 
 approxEqual(a,b)   
 ```
@@ -659,13 +691,12 @@ approxEqual(a,b)
 Actually, we probably want to use a number slightly larger than
 machine epsilon to be safe. 
 
-Finally, in computing, we often encounter the use of an unusual integer
+Finally, sometimes we encounter the use of an unusual integer
 as a symbol for missing values. E.g., a datafile might store missing
-values as -9999. Testing for this using == with floats should generally be
-ok:` x [ x == -9999 ] = np.nan`, both because integers of this magnitude
-are stored exactly and because the -9999 values would presumably have
-been created in the same way. To be really careful, you can read in as
-character type and do the assessment before converting to numeric.
+values as -9999. Testing for this using `==` with floats should generally be
+ok:` x [ x == -9999 ] = np.nan`, because integers of this magnitude
+are stored exactly as floating point values. But to be really careful, you can read in as
+an integer or character type and do the assessment before converting to a float.
 
 ## Calculations
 
@@ -700,12 +731,12 @@ when in the following two situations.
     
     ```{python, tidy=FALSE}
     # catastrophic cancellation w/ small numbers
-    a = .000000000000123412341234
-    b = .000000000000123412340000
+    x = .000000000000123412341234
+    y = .000000000000123412340000
     
-    # so we know the right answer is .000000000000000000001234 EXACTLY  
+    # So we know the right answer is .000000000000000000001234 exactly.  
     
-    dg(a-b, '.35f')
+    dg(x-y, '.35f')
     ## [1] "0.00000000000000000000123399999315140"
     ```
 
@@ -731,7 +762,7 @@ when in the following two situations.
     
     ## Adding/subtracting a constant shouldn't change the result:
     x = x + 1e8
-    np.sum(x**2)-n*np.mean(x)**2  # the result of this is not good!
+    np.sum(x**2)-n*np.mean(x)**2  ## YIKES!
     np.sum((x - np.mean(x))**2)
     ```
 
@@ -766,7 +797,8 @@ when in the following two situations.
     the last calculation above, the smaller number is smaller than
     $1\times10^{-5}$ and so doing the subtraction has had no effect.
     This is analogous to trying to do $1+1\times10^{-16}$ and seeing
-    that the result is still 1.\
+    that the result is still 1.
+
     A work-around when we are adding numbers of very different
     magnitudes is to add a set of numbers in increasing order. However,
     if the numbers are all of similar magnitude, then by the time you
@@ -778,7 +810,7 @@ when in the following two situations.
 Given the limited *range* of computer numbers, be careful when you are:
 
 -   Multiplying or dividing many numbers, particularly large or small
-    ones. Never take the product of many large or small numbers as this
+    ones. **Never take the product of many large or small numbers** as this
     can cause over- or under-flow. Rather compute on the log scale and
     only at the end of your computations should you exponentiate. E.g.,
     $$\prod_{i}x_{i}/\prod_{j}y_{j}=\exp(\sum_{i}\log x_{i}-\sum_{j}\log y_{j})$$
@@ -820,15 +852,11 @@ correlation as a function of time (or distance in 1-d), which is
 positive) but not numerically positive definite:
 
 
-```{python, cache=TRUE}
-
-def custom_operation(a, b):
-    return abs(a - b)  # Custom pairwise operation
-
+```{python}
 xs = np.arange(100)
-dists = custom_operation(xs[:, np.newaxis], xs)
-corMat = np.exp(- (dists/10)**2) # this is a p.d. matrix (mathematically)
-scipy.linalg.eigvals(corMat)[80:99]  # but not numerically
+dists = np.abs(xs[:, np.newaxis] - xs)
+corr_matrix = np.exp(-(dists/10)**2)     # This is a p.d. matrix (mathematically).
+scipy.linalg.eigvals(corr_matrix)[80:99]  # But not numerically!
 ```
 
 ## Final note

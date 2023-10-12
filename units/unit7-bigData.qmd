@@ -894,6 +894,9 @@ To see the fields in the table, if you've just queried the table, you can look a
 
 ```{python}
 [item[0] for item in db.description]
+
+def get_fields():
+    return [item[0] for item in db.description]
 ```
 
 Here's how to make a basic SQL query. One can either make the query and
@@ -919,6 +922,15 @@ To disconnect from the database:
 #| eval: false
 db.close()
 ```
+
+It's convenient to get a Pandas dataframe back as the result. To that we can
+execute queries like this:
+
+```{python}
+import pandas as pd
+results = pd.read_sql("select * from questions limit 5", con)
+```
+
 
 
 ## Basic SQL for choosing rows and columns from a table
@@ -1051,6 +1063,7 @@ both the questions and questions_tags tables.
 result1 = db.execute("select * from questions join questions_tags \
         on questions.questionid = questions_tags.questionid \
         where tag = 'python'").fetchall()
+get_fields()
 ```
 
 
