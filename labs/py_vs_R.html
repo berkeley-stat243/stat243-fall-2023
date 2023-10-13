@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Zoe Vernon, Andrew Vaughn, James Duncan">
+<meta name="dcterms.date" content="2022-10-14">
 
-<title>Statistics 243 Fall 2023 - Assignment: regex problems</title>
+<title>Statistics 243 Fall 2023 - Lab 7: Python vs.&nbsp;R</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,6 +32,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
+<link href="../labs/06/scf.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -62,9 +65,10 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="../styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -233,27 +237,115 @@ ul.task-list li input[type="checkbox"] {
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../labs/py_vs_R.html">Lab 7: R vs.&nbsp;Python</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../labs/lab0-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 0: Setup</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../labs/lab1-submission.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 1: Problem set submission</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../labs/lab2-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 2: Assertions, Exceptions, and Testing</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../labs/lab3-debugging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 3: Debugging</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../labs/lab5-codereview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 5: Code Reviews</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../labs/06/scf.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 6: SCF and Parallel Computing</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../labs/py_vs_R.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Lab 7: R vs.&nbsp;Python</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-    <div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="regex.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></div>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#comparing-the-behavior-of-python-and-r" id="toc-comparing-the-behavior-of-python-and-r" class="nav-link active" data-scroll-target="#comparing-the-behavior-of-python-and-r">Comparing the Behavior of Python and R</a>
+  <ul class="collapse">
+  <li><a href="#instructions" id="toc-instructions" class="nav-link" data-scroll-target="#instructions">Instructions</a>
+  <ul class="collapse">
+  <li><a href="#no-shows" id="toc-no-shows" class="nav-link" data-scroll-target="#no-shows">No shows</a></li>
+  </ul></li>
+  <li><a href="#questions" id="toc-questions" class="nav-link" data-scroll-target="#questions">Questions</a>
+  <ul class="collapse">
+  <li><a href="#main-questions" id="toc-main-questions" class="nav-link" data-scroll-target="#main-questions">Main Questions</a></li>
+  <li><a href="#additional-questions" id="toc-additional-questions" class="nav-link" data-scroll-target="#additional-questions">Additional Questions</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="py_vs_R.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Assignment: regex problems</h1>
-<p class="subtitle lead">Due Friday Sep.&nbsp;8, 10 am</p>
+<h1 class="title">Lab 7: Python vs.&nbsp;R</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Zoe Vernon, Andrew Vaughn, James Duncan </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 14, 2022</p>
+    </div>
+  </div>
   
     
   </div>
@@ -261,22 +353,123 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="overview" class="level1">
-<h1>Overview</h1>
-<p>Read the <a href="https://berkeley-scf.github.io/tutorial-using-bash/regex">regular expression section of the bash shell tutorial</a> and provide regular expression syntax to match the strings in the following scenarios. Any reasonable syntax si fine, and even better, challenge yourself to figure out multiple ways to answer each question.</p>
-<p>This is an assignment, graded credit/no credit, and it does not need to follow the requirements for problem set submissions. Any format is fine (including hand-written and scanned).</p>
-</section>
-<section id="problems" class="level1">
-<h1>Problems</h1>
+<p><a href="./py_vs_R.pdf" class="btn btn-primary">PDF</a></p>
+<section id="comparing-the-behavior-of-python-and-r" class="level1">
+<h1>Comparing the Behavior of Python and R</h1>
+<p>This week, we will be exploring the behavior of Python for several common actions that we have previously covered in R. The final product of today’s work will be a PDF which is uploaded as a group submission to Gradescope.</p>
+<section id="instructions" class="level2">
+<h2 class="anchored" data-anchor-id="instructions">Instructions</h2>
+<p>Please carefully read the full instructions before starting the assignment, as you will need to decide with your group how to organize and combine your efforts.</p>
+<p>Your group is expected to work on this for <strong>~60 minutes</strong></p>
+<p>It’s OK if you don’t get through all of the questions in one hour (i.e., you can just submit what you have at the end of section), but it should be clear that you put some thought and effort into the questions your group worked on.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Do your best to document your efforts and insights as you go.</p>
+</div>
+</div>
 <ol type="1">
-<li>Match the strings “dog”, “Dog”, “dOg”, “doG”, “DOg”, etc. (The word ‘dog’ in any combination of lower and upper case.)</li>
-<li>Match the strings “cat”, “at”, and “t”.</li>
-<li>Match the strings “cat”, “caat”, “caaat”, etc.</li>
-<li>Match two words separated by any amount of whitespace.</li>
-<li>Match exactly two words separated by ay amount of whitespace and with or without whitespace at the beginning and end. (I.e., you shouldn’t match if there are three words.)</li>
+<li><p>We will separate into groups of (ideally) 2 or 3. I’ll try to make sure that each group has at least one person with some R experience.</p></li>
+<li><p>Groups should try to answer every question in the <a href="#main-questions">Main Questions</a> section. Here are some <strong>options</strong> for working through these questions:</p>
+<ul>
+<li><p>Option A – <strong>Many minds, one task</strong>: The group works together, discussing and answering each question sequentially.</p></li>
+<li><p>Option B – <strong>Divide, consult, conquer</strong>: Individual group members work on different questions, consulting with each other as they go or as needed.</p></li>
+</ul></li>
+<li><p>At the end of section (say, the last ~10-15 minutes), combine the solutions into <strong>one PDF</strong>. Each group member will then <strong>individually submit</strong> copies of this PDF on Gradescope.</p>
+<ul>
+<li>Make sure to include the name of each group member at the top of the PDF.</li>
+<li>How you create the PDF is up to you but some <strong>options</strong> are:
+<ol type="a">
+<li>(recommended) Using <strong>Google Docs</strong>.
+<ul>
+<li><em>Separate documents, then combine</em>: Each group member uses a separate Google Doc, then one person combines those documents into a final shared document.</li>
+<li><em>One document</em>: Everyone adds to a single document at the same time.</li>
+<li>You can take screenshots of code / outputs that you run in Jupyter or RStudio (alternatively, the IPython or R consoles), or just copy paste code and outputs directly to the document.</li>
+<li>When your final shared document is ready, each group member will export it to PDF and make individual submission to Gradescope.</li>
+</ul></li>
+<li>Create an <strong>R Markdown</strong> file with the code and render to PDF. This may be more of a headache to combine if each person is working separately.</li>
+</ol></li>
+</ul></li>
+</ol>
+<section id="no-shows" class="level3">
+<h3 class="anchored" data-anchor-id="no-shows">No shows</h3>
+<p>If you miss lab this week, you can form a group of 2-3 students and submit this assignment on Gradescope by Monday October 17th at 10pm.</p>
+</section>
+</section>
+<section id="questions" class="level2">
+<h2 class="anchored" data-anchor-id="questions">Questions</h2>
+<section id="main-questions" class="level3">
+<h3 class="anchored" data-anchor-id="main-questions">Main Questions</h3>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ideally, you will make it through all of these, although if you run out of time that is okay.</p>
+</div>
+</div>
+<ol type="1">
+<li><p>Do R functions behave like pass-by-value or pass-by-reference? In other words, if you pass in an object and modify it, does that affect the value of the object in the environment from which the function was called? Check this for a scalar, a list, and an R vector.</p></li>
+<li><p>Can R lists and vectors be modified in place, without copying the object?</p>
+<p>For this the function <code>.Internal(inspect)</code> will be helpful. Here’s an example for a list.</p></li>
+</ol>
+<pre><code>#| eval: false
+x &lt;- list(7, c('abc', 'def'), rnorm(5))
+.Internal(inspect(x))
+
+@5652776540f8 19 VECSXP g0c3 [REF(1)] (len=3, tl=0)
+@5652776b9740 14 REALSXP g0c1 [REF(3)] (len=1, tl=0) 7
+@56527580b0d8 16 STRSXP g0c2 [REF(1)] (len=2, tl=0)
+@5652776b97b0 09 CHARSXP g0c1 [REF(4),gp=0x60] [ASCII] [cached] "abc"
+@565275b60168 09 CHARSXP g0c1 [MARK,REF(14),gp=0x61] [ASCII] [cached] "def"
+@565275a97478 14 REALSXP g0c4 [REF(1)] (len=5, tl=0) -0.38248,-0.100364,-0.485605,1.15111,-0.111647
+
+#`5652776540f8` is the address of the overall list.
+#`5652776b9740` of the 1-element vector containing '7'.
+#`56527580b0d8` is the address of the character vector.
+#`565275a97478` is the address of the vector of random numbers.</code></pre>
+<ol start="3" type="1">
+<li><p>Does R behave similarly to Python in terms of storing strings, as seen in PS4?</p></li>
+<li><p>If you make a copy of an R vector does it use the same memory as the original vector and does changing an element of the original vector affect the copy of the vector?</p></li>
+<li><p>How does variable scoping work in R - does it use lexical scoping and look for variables in the environment where a function was defined?</p></li>
+<li><p>Can you create a closure with embedded data, like we did in Python?</p></li>
+</ol>
+</section>
+<section id="additional-questions" class="level3">
+<h3 class="anchored" data-anchor-id="additional-questions">Additional Questions</h3>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Work on these if you finish quickly/are curious</p>
+</div>
+</div>
+<ol type="1">
+<li><p>Consider the relative efficiency of <code>for</code> loops versus vectorized calculations vs.&nbsp;<code>apply</code> for numeric vectors in R and see how it compares to the equivalent operations in python.</p></li>
+<li><p>Can you determine if the speed of looking up values in a named vector varies with the size of the dictionary (this will indicate if something like hashing is going on or if the lookup has to scan through all the elements).</p></li>
 </ol>
 
 
+</section>
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -513,6 +706,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../labs/06/scf.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Lab 6: SCF and Parallel Computing</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
 </div> <!-- /content -->
 
 
