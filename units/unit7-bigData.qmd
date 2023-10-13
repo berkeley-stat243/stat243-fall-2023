@@ -655,11 +655,14 @@ organized per student, the data might have the following fields:
 -    ...
 -   teacher age n
 
-There are a lot of problems with this (to be filled out in class):
+There are a lot of problems with this:
 
-1. ???
-2. ???
-3. ???
+  1.  A lot of information is repeated across rows (e.g., teacher age for students who have the same teacher)
+    - this is a waste of space
+    - it is hard/error-prone to update values in the database (e.g., after a teacher's birthday), because a given value needs to be updated in multiple places
+  2.  There are potentially a lot of empty cells (e.g., for a student who takes fewer than 'n' classes). This will generally result in a waste of space.
+  3.  It's hard to see the information that is not organized uniquely by row -- i.e., it's much easier to understand the information at the student level than the teacher level
+  4.  We have to know in advance how big 'n' is. Then if a single student takes more than 'n' classes, the whole database needs to be restructured.
 
 It would get even worse if there was a field related to teachers for
 which a given teacher could have multiple values (e.g., teachers could
