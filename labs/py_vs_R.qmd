@@ -96,9 +96,10 @@ scalar, a list, and an R vector.
    Here's an example for a list.
    
 ```{r}
-   x <- list(7, c('abc', 'def'), rnorm(5))
-   
-   .Internal(inspect(x))
+#| eval: false
+x <- list(7, c('abc', 'def'), rnorm(5))
+.Internal(inspect(x))
+
 @5652776540f8 19 VECSXP g0c3 [REF(1)] (len=3, tl=0)
 @5652776b9740 14 REALSXP g0c1 [REF(3)] (len=1, tl=0) 7
 @56527580b0d8 16 STRSXP g0c2 [REF(1)] (len=2, tl=0)
