@@ -1091,14 +1091,14 @@ result1 = db.execute("select * from \
         join questions_tags T on Q.questionid = T.questionid \
         join users U on Q.ownerid = U.userid \
         where tag = 'python' and \
-        age > 60").fetchall()
+        viewcount > 1000").fetchall()
 
 result2 = db.execute("select * from \
         questions Q, questions_tags T, users U where \
         Q.questionid = T.questionid and \
         Q.ownerid = U.userid and \
         tag = 'python' and \
-        age > 60").fetchall()
+        viewcount > 1000").fetchall()
 
 result1 == result2
 ```
@@ -1132,7 +1132,7 @@ db.execute("create view questionsAugment as select \
                 on questions.ownerid = users.userid")
 ## you'll see the return value is '0'
                
-db.execute("select * from questionsAugment where age > 70 limit 5").fetchall()
+db.execute("select * from questionsAugment where viewcount > 1000 limit 5").fetchall()
 ```
 
 
@@ -1264,7 +1264,7 @@ for more discussion of how using indexes in a lookup is not always advantageous.
 
 You can do set operations like union, intersection, and set difference using the UNION, INTERSECT, and EXCEPT keywords, respectively, on tables that have the same schema (same column names and types), though most often these would be used on single columns (i.e., single-column tables).
 
-> **Note**: While one can often set up an equivalent query without using INTERSECT or UNION, set operations can be very handy. In the example below one could do it with a self-join, joining a table to itself, but the syntax is often more complicated.
+> **Note**: While one can often set up an equivalent query without using INTERSECT or UNION, set operations can be very handy. In the example below one could do it with a join, but the syntax is often more complicated.
 
 Consider the following example of using `INTERSECT`. What does it return?
 
