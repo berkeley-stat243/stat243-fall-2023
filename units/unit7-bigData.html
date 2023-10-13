@@ -754,11 +754,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>…</li>
 <li>teacher age n</li>
 </ul>
-<p>There are a lot of problems with this (to be filled out in class):</p>
+<p>There are a lot of problems with this:</p>
 <ol type="1">
-<li>???</li>
-<li>???</li>
-<li>???</li>
+<li>A lot of information is repeated across rows (e.g., teacher age for students who have the same teacher) - this is a waste of space - it is hard/error-prone to update values in the database (e.g., after a teacher’s birthday), because a given value needs to be updated in multiple places</li>
+<li>There are potentially a lot of empty cells (e.g., for a student who takes fewer than ‘n’ classes). This will generally result in a waste of space.</li>
+<li>It’s hard to see the information that is not organized uniquely by row – i.e., it’s much easier to understand the information at the student level than the teacher level</li>
+<li>We have to know in advance how big ‘n’ is. Then if a single student takes more than ‘n’ classes, the whole database needs to be restructured.</li>
 </ol>
 <p>It would get even worse if there was a field related to teachers for which a given teacher could have multiple values (e.g., teachers could be in multiple departments). This would lead to even more redundancy - each student-class-teacher combination would be crossed with all of the departments for the teacher (so-called multivalued dependency in database theory).</p>
 <p>An alternative organization of the data would be to have each row represent the enrollment of a student in a class.</p>
@@ -888,7 +889,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>db <span class="op">=</span> con.cursor()</span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select * from questions limit 5"</span>)  <span class="co"># simple query </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;sqlite3.Cursor object at 0x7f8ac84b8d40&gt;</code></pre>
+<pre><code>&lt;sqlite3.Cursor object at 0x7ff8707acd40&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>db.fetchall() <span class="co"># retrieve results</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
