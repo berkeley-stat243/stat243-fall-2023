@@ -888,7 +888,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>db <span class="op">=</span> con.cursor()</span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select * from questions limit 5"</span>)  <span class="co"># simple query </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;sqlite3.Cursor object at 0x7fd11cad4d40&gt;</code></pre>
+<pre><code>&lt;sqlite3.Cursor object at 0x7f8ac84b8d40&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>db.fetchall() <span class="co"># retrieve results</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1086,20 +1086,20 @@ WHERE &lt;condition(s) on column(s)&gt; ORDER BY &lt;column(s)&gt;</code></pre>
 </div>
 </div>
 <p>Here’s a three-way join (using both types of syntax) with some additional use of aliases to abbreviate table names. What does this query ask for?</p>
-<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-25_6bd30a1ce8c179bc3daafbdc086bcdcb">
+<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-25_17c784a349fe8ee6e5ea83c2b3478fa2">
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">=</span> db.execute(<span class="st">"select * from </span><span class="ch">\</span></span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="st">        questions Q </span><span class="ch">\</span></span>
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a><span class="st">        join questions_tags T on Q.questionid = T.questionid </span><span class="ch">\</span></span>
 <span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="st">        join users U on Q.ownerid = U.userid </span><span class="ch">\</span></span>
 <span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a><span class="st">        where tag = 'python' and </span><span class="ch">\</span></span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a><span class="st">        age &gt; 60"</span>).fetchall()</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a><span class="st">        viewcount &gt; 1000"</span>).fetchall()</span>
 <span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>result2 <span class="op">=</span> db.execute(<span class="st">"select * from </span><span class="ch">\</span></span>
 <span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a><span class="st">        questions Q, questions_tags T, users U where </span><span class="ch">\</span></span>
 <span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a><span class="st">        Q.questionid = T.questionid and </span><span class="ch">\</span></span>
 <span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a><span class="st">        Q.ownerid = U.userid and </span><span class="ch">\</span></span>
 <span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a><span class="st">        tag = 'python' and </span><span class="ch">\</span></span>
-<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a><span class="st">        age &gt; 60"</span>).fetchall()</span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a><span class="st">        viewcount &gt; 1000"</span>).fetchall()</span>
 <span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>result1 <span class="op">==</span> result2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1113,7 +1113,7 @@ WHERE &lt;condition(s) on column(s)&gt; ORDER BY &lt;column(s)&gt;</code></pre>
 <h2 class="anchored" data-anchor-id="temporary-tables-and-views">Temporary tables and views</h2>
 <p>You can think of a view as a temporary table that is the result of a query and can be used in subsequent queries. In any given query you can use both views and tables. The advantage is that they provide modularity in our querying. For example, if a given operation (portion of a query) is needed repeatedly, one could abstract that as a view and then make use of that view.</p>
 <p>Suppose we always want the age and displayname of owners of questions to be readily available. Once we have the view we can query it like a regular table.</p>
-<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-26_e8b2790c54191b6842269e5b7668be57">
+<div class="cell" data-hash="unit7-bigData_cache/html/unnamed-chunk-26_9fc868354918310bc94ca0160e9f4548">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"create view questionsAugment as select </span><span class="ch">\</span></span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="st">                questionid, questions.creationdate, score, viewcount, </span><span class="ch">\</span></span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="st">                title, ownerid, age, displayname </span><span class="ch">\</span></span>
@@ -1122,11 +1122,11 @@ WHERE &lt;condition(s) on column(s)&gt; ORDER BY &lt;column(s)&gt;</code></pre>
 <span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a><span class="co">## you'll see the return value is '0'</span></span>
 <span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>               </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;sqlite3.Cursor object at 0x7fd11cad4d40&gt;</code></pre>
+<pre><code>&lt;sqlite3.Cursor object at 0x7f8ac84b8d40&gt;</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select * from questionsAugment where age &gt; 70 limit 5"</span>).fetchall()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>db.execute(<span class="st">"select * from questionsAugment where viewcount &gt; 1000 limit 5"</span>).fetchall()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[]</code></pre>
+<pre><code>[(65535296.0, '2021-01-02 01:33:13', 2.0, 1109.0, 'Install and run ROS on Google Colab', 14924336.0, None, 'Gustavo Lima'), (65526407.0, '2021-01-01 00:03:01', 1.0, 2646.0, 'How to remove Branding WHMCS Ver 8.1 "Powered by WHMcomplete solutions"', 14920717.0, None, 'Blunch Restaurant'), (65526447.0, '2021-01-01 00:10:40', 7.0, 25536.0, 'React Router v5.2 - Blocking route change with createBrowserHistory and history.block', 10841085.0, None, 'user51462'), (65526500.0, '2021-01-01 00:22:41', 3.0, 2870.0, 'intellisense vscode not showing parameters nor documentation when hovering above with mouse', 13660865.0, None, 'albert chen'), (65526515.0, '2021-01-01 00:27:26', 2.0, 1568.0, 'How to identify time and space complexity of recursive backtracking algorithms with step-by-step analysis', 6801755.0, None, 'BlueTriangles')]</code></pre>
 </div>
 </div>
 <p>One use of a view would be to create a mega table that stores all the information from multiple tables in the (unnormalized) form you might have if you simply had one data frame in Python or R.</p>
@@ -1177,7 +1177,7 @@ WHERE &lt;condition(s) on column(s)&gt; ORDER BY &lt;column(s)&gt;</code></pre>
 <h2 class="anchored" data-anchor-id="set-operations-union-intersect-except">Set operations: union, intersect, except</h2>
 <p>You can do set operations like union, intersection, and set difference using the UNION, INTERSECT, and EXCEPT keywords, respectively, on tables that have the same schema (same column names and types), though most often these would be used on single columns (i.e., single-column tables).</p>
 <blockquote class="blockquote">
-<p><strong>Note</strong>: While one can often set up an equivalent query without using INTERSECT or UNION, set operations can be very handy. In the example below one could do it with a self-join, joining a table to itself, but the syntax is often more complicated.</p>
+<p><strong>Note</strong>: While one can often set up an equivalent query without using INTERSECT or UNION, set operations can be very handy. In the example below one could do it with a join, but the syntax is often more complicated.</p>
 </blockquote>
 <p>Consider the following example of using <code>INTERSECT</code>. What does it return?</p>
 <div class="cell">
