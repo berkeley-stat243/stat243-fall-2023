@@ -65,7 +65,7 @@ website:
           text: "Lab 5: Code Reviews"
         - file: labs/06/scf.qmd
           text: "Lab 6: SCF and Parallel Computing"
-        - file: labs/py_vs_R.md
+        - file: labs/py_vs_R.qmd
           text: "Lab 7: R vs. Python"
     - id: howtos
       title: "How tos"
