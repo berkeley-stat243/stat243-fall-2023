@@ -1,7 +1,7 @@
 ---
 title: "Simulation"
 author: "Chris Paciorek"
-date: "2023-07-26"
+date: "2023-10-17"
 format:
   pdf:
     documentclass: article
@@ -36,16 +36,6 @@ References:
 -   Gentle: Computational Statistics
 -   Monahan: Numerical Methods of Statistics
 
-Videos (optional): 
-
-There are various videos from 2020 in the bCourses Media Gallery that you
-can use for reference if you want to. 
-
-  - Video 1. Random number generation, part 1
-  - Video 2. Random number generation, part 2
-  - Video 3. Rejection sampling
-  - Video 4. Importance sampling
-
 Many (most?) statistical papers include a simulation (i.e., Monte Carlo)
 study. Many papers on machine learning methods also include a simulation
 study. The basic idea is that closed-form mathematical analysis of the properties of
@@ -66,14 +56,13 @@ assess/compare the method(s).
 Most simulation studies aim to approximate an integral, generally an
 expected value (mean, bias, variance, MSE, probability, etc.). In low
 dimensions, methods such as Gaussian quadrature are best for estimating
-an integral but these methods don't scale well (we'll discuss this in
-Unit 12 on integration/differentiation), so in higher dimensions we
+an integral but these methods don't scale well, so in higher dimensions (e.g., the usual situation with $n$ observations) we
 often use Monte Carlo techniques.
 
 To be more concrete:
 
 -   If we have a *method for estimating a model parameter* (including
-    uncertainty), such as a regression coefficient, what properties do
+    estimating uncertainty), such as a regression coefficient, what properties do
     we want the method to have and what criteria could we use?
 
 -   If we have a *prediction method* (including prediction uncertainty),
@@ -103,7 +92,7 @@ E\hat{\beta} & = & \beta\\
 \mbox{MSPE}(Y^{*})=E(Y^{*}-\hat{Y})^{2}) & = & \sigma^{2}(1+X^{*\top}(X^{\top}X)^{-1}X^{*}).\end{aligned}$$
 where $Y^{*}$is some new observation we'd like to predict given $X^{*}$.
 
-But suppose that we're interested in the properties of regression
+But suppose that we're interested in the properties of standard regression
 estimation when in reality the mean is not linear in $X$ or the
 properties of the errors are more complicated than having independent
 homoscedastic errors. (This is always the case, but the issue is how far
@@ -157,7 +146,8 @@ case, if we're interested in whether the regression estimator is biased,
 we want to know: $$\phi=E\hat{\beta},$$ where $h(Y) = \hat(\beta)$. We can use the Monte Carlo
 estimate of $\phi$:
 $$\hat{\phi}=\frac{1}{m}\sum_{i=1}^{m}h(Y_{i})=\frac{1}{m}\sum_{i=1}^{m}\hat{\beta}_{i}=\widehat{E(\hat{\beta})}.$$
-For the variance, we have
+
+If we are interested in the variance of the regression estimator, we have
 
 $$\phi=\mbox{Var}(\hat{\beta})=E_{f}((\hat{\beta}-E\hat{\beta})^{2})$$
 and we can use the Monte Carlo estimate of $\phi$:
@@ -175,7 +165,7 @@ Of course we want that $\hat{\phi}\approx1-\alpha$ for a $100(1-\alpha)$
 confidence interval. In the standard case of a 95% interval we want
 $\hat{\phi}\approx0.95$.
 
-### Simulation uncertainty
+### Simulation uncertainty (i.e., Monte Carlo uncertainty)
 
 Since $\hat{\phi}$ is simply an average of $m$ identically-distributed
 values, $h(Y_{1}),\ldots,h(Y_{m})$, the simulation variance of
@@ -197,8 +187,11 @@ very well-defined (as it is in survey sampling, but unlike in most other
 applications of statistics), because it comes from the RNG that we
 perform as part of our attempt to estimate $\phi$. Happily, we are in
 control of $m$, so in principle we can reduce the simulation error to as
-little as we desire. Unhappily, as usual, the standard error goes down
+little as we desire. Unhappily, as usual, the simulation standard error goes down
 with the square root of $m$.
+
+> **Important**: This is the uncertainty in our simulation-based estimate
+of some quantity (expectation) of interest. It is NOT the statistical uncertainty in a problem.
 
 #### Back to the regression example
 
@@ -508,7 +501,7 @@ is so that we can reproduce the simulation.
 Generating a sequence of random standard uniforms is the basis for all
 generation of random variables, since random uniforms (either a single
 one or more than one) can be used to generate values from other
-distributions. Most random numbers on a computer are pseudo-random. The
+distributions. Most random numbers on a computer are *pseudo-random*. The
 numbers are chosen from a deterministic stream of numbers that behave
 like random numbers but are actually a finite sequence (recall that both
 integers and real numbers on a computer are actually discrete and there
@@ -516,12 +509,15 @@ are finitely many distinct values), so it's actually possible to get
 repeats. The seed of a RNG is the place within that sequence where you
 start to use the pseudo-random numbers.
 
+### Sequential congruential generators
+
 Many RNG methods are sequential congruential methods. The basic idea is
 that the next value is $$u_{k}=f(u_{k-1},\ldots,u_{k-j})\mbox{mod}\,m$$
 for some function, $f$, and some positive integer $m$ . Often $j=1$.
 *mod* just means to take the remainder after dividing by $m$. One then
 generates the random standard uniform value as $u_{k}/m$, which by
-construction is in $[0,1]$.
+construction is in $[0,1]$. For our discussion below, it is important
+to distinguish the *state* ($u$) from the output of the RNG.
 
 Given the construction, such sequences are periodic if the subsequence
 ever reappears, which is of course guaranteed because there is a finite
@@ -530,18 +526,17 @@ are remainders of divisions by a fixed number . One key to a good random
 number generator (RNG) is to have a very long period.
 
 An example of a sequential congruential method is a basic linear
-congruential generator: $$u_{k}=(au_{k-1})\mbox{mod}\,m$$ with integer
-$a$, $m$, and $u_{i}$ values. Here the periodicity can't exceed $m-1$
+congruential generator: $$u_{k}=(au_{k-1}+c)\mbox{mod}\,m$$ with integer
+$a$, $m$, $c$, and $u_{k}$ values. Here the periodicity can't exceed $m-1$
 (the method is set up so that we never get $u_{k}=0$ as this causes the
 algorithm to break), so we only have $m-1$ possible values. The seed is
 the initial state, $u_{0}$ - i.e., the point in the sequence at which we
 start. By setting the seed you guarantee reproducibility since given a
-starting value, the sequence is deterministic. In general $a$ and $m$
-are chosen to be large, but of course they can't be too large if they
-are to be represented as computer integers. The standard values of $m$
+starting value, the sequence is deterministic. In general $a$, $c$ and $m$
+are chosen to be 'large'. The standard values of $m$
 are Mersenne primes, which have the form $2^{p}-1$ (but these are not
-prime for all $p$), with $m=2^{31}-1$ common. Here's an example of a
-linear congruential sampler:
+prime for all $p$). Here's an example of a
+linear congruential sampler (with $c=0$):
 
 ```{python, fig.height=5}
 n = 100
@@ -619,10 +614,19 @@ xyz[10, ]
 .Random.seed[2:4]
 ```
 
-By default (using `numpy.random.default_rng()`) numpy uses something called the [PCG-64 generator](https://numpy.org/doc/stable/reference/random/bit_generators/pcg64.html#numpy.random.PCG64).
-As discussed in the [PCG documentation](https://www.pcg-random.org/), it uses a linear congruential generator, which we've just seen.
-These generators are not great, but PCG then combines that with a [technique called *permutation functions*](https://www.pcg-random.org/pdf/hmc-cs-2014-0905.pdf) as the output function that translates the
-underlying sequence to the random number output.
+### Modern generators (PCG and Mersenne Twister)
+
+Recently [O'Neal proposed a new approach](https://www.pcg-random.org/pdf/hmc-cs-2014-0905.pdf) to using the linear congruential generator in a way that gives much better performance than the basic versions of such generators described above. This approach is now the default random number generator in numpy (see `numpy.random.default_rng()`), called the [PCG-64 generator](https://numpy.org/doc/stable/reference/random/bit_generators/pcg64.html#numpy.random.PCG64). 'PCG' stands for permutation congruential generator and encompasses a family of such generators.
+
+The idea of the PCG approach goes like this:
+
+  - Linear congruential generators (LCG) are simple and fast, but for small values of $m$ don't perform all that well statistically, in particular having values on a lattice as discussed above.
+  - Using a large value of $m$ can actually give good statistical performance.
+  - Applying a technique called  *permutation functions* to the state of the LCG in order to produce the output at each step (the random value returned to the user) can improve the statistical performance even further.
+
+Instead of using relatively small values of $m$ seen above, in the PCG approach one uses $m=2^k$, for 'large enough' $k$, usually 64 or 128. It turns out that if $m=2^k$ then the period of the $b$th bit of the state is $2^b$ where $b=1$ is the right-most bit. Small periods are of course bad for RNG, so the bits with small period cause the LCG to not perform well. Thankfully, one simple fix is simply to discard some number of the right-most bits (this is one form of *bit shift*). Note that if one does this, the output of the RNG is based on a subset of the bits, which means that the number of unique values that can be generated is smaller than the period. This is not a problem given we start with a state with a large number of bits (64 or 128 as mentioned above).
+
+O'Neal then goes further; instead of simply discarding bits, she propose to use some of the initial bits (which behave the most randomly) to either shift bits by a random amount or rotate bits by a random amount. This improves the statistical performance of the generator. The choice of how to do this gives the various members of the PCG family of generators. The details are fairly complicated (the PCG paper is 50-odd pages) and not important for our purposes here. 
 
 By default R uses something called the Mersenne twister, which is in the
 class of generalized feedback shift registers (GFSR). The basic idea of
@@ -657,21 +661,21 @@ Another approach is based on lava lamps!
 We can change the RNG for numpy using `np.random.<name_of_generator>` (e.g., `np.random.MT19937` for the Mersenne Twister).
 We can set the seed with `np.random.seed()` or with `np.random.default_rng()`. 
 
-In numpy, the *default_rng* RNG is PCG-64 It has a period of $2^{128}$ and supports
-advancing an arbitrary number of steps (useful for parallelization, as well
-as $2^{127}$ streams. The state of the PCG-64 RNG is represented by two
-128-bit unsigned integers. While the *default* is PCG-64, simply
+In numpy, the *default_rng* RNG is PCG-64. It has a period of $2^{128}$ and supports
+advancing an arbitrary number of steps, as well
+as $2^{127}$ streams (both useful for generating random numbers when parallelizing). The state of the PCG-64 RNG is represented by two
+128-bit unsigned integers, one the actual state and one the value of $c$ (the *increment*).
+
+Strangely, while the *default* is PCG-64, simply
 using the functions available via `np.random` to generate random numbers
-seems to actually use the Mersenne Twister, so the meaning if *default*
-seems odd here.
+seems to actually use the Mersenne Twister, so the meaning of *default*
+is unclear.
 
 In R, the default RNG is the Mersenne twister (`?RNGkind`), which is
-considered to be state-of-the-art -- it has some theoretical support,
+considered to be state-of-the-art (by some; O'Neal criticizes it). It has some theoretical support,
 has performed reasonably on standard tests of pseudorandom numbers and
 has been used without evidence of serious failure. Plus it's fast
-(because bitwise operations are fast). In fact this points out one of
-the nice features of R, which is that for something as important as
-this, the default is generally carefully chosen by R's developers. The
+(because bitwise operations are fast).  The
 particular Mersenne twister used has a periodicity of
 $2^{19937}-1\approx10^{6000}$. Practically speaking this means that if
 we generated one random uniform per nanosecond for 10 billion years,
@@ -686,7 +690,7 @@ sets as many actual seeds as required for the Mersenne Twister. Here I'll
 refer to the single integer passed in as *the* seed. Ideally,
 nearby seeds generally should not correspond to getting sequences from
 the stream that are closer to each other than far away seeds. According
-to Gentle (CS, p. 327) the input to `set.seed()` should be an integer,
+to Gentle (CS, p. 327) the input to `set.seed()` in R should be an integer,
 $i\in\{0,\ldots,1023\}$ , and each of these 1024 values produces
 positions in the RNG sequence that are "far away" from each other. I
 don't see any mention of this in the R documentation for `set.seed()`
@@ -714,13 +718,19 @@ np.random.seed(1)
 np.random.normal(size = 5)
 saved_state = np.random.get_state()
 np.random.normal(size = 5)
-## Some arbitrary use of random numbers:
-tmp = np.random.choice(np.arange(1, 51), size=2000, replace=True)
+```
+
+Now we'll do some arbitrary work with random numbers, and see that if we use the saved state
+we can pick up where we left off above.
+```{python}
+tmp = np.random.choice(np.arange(1, 51), size=2000, replace=True) # arbitrary work
+
+## Restore the state.
 np.random.set_state(saved_state)
 np.random.normal(size = 5)
 ```
 
-If we look at `saved_state, we see it actually corresponds to the Mersenne
+If we look at `saved_state`, we see it actually corresponds to the Mersenne
 Twister.
 
 To do the equivalent with the PCG-64:
@@ -735,19 +745,18 @@ rng.bit_generator.state = saved_state
 rng.normal(size = 5)
 
 saved_state
+saved_state['state']['state']   # actual state
+saved_state['state']['inc']     # increment ('c')
 ```
 
-I'm not sure how `saved_state` corresponds to the state as we
-saw when manually implementing linear congruential generators earlier.
+`saved_state` contains the actual state and the value of `c`, the increment. 
 
-The RNGs in R generally return 32-bit (4-byte) integers converted to
-doubles, so there are at most $2^{32}$ distinct values. This means you
-could get duplicated values in long runs, but this does not violate the
-comment about the periodicity because the two values after the two
-duplicated numbers will not be duplicates of each other -- note there is
-a distinction between the values as presented to the user and the values
-as generated by the RNG algorithm. I'm not sure about the situation
-in Python, though for the Mersenne Twister, it may be the same.
+The output of the PCG-64 is 64 bits while for the Mersenne Twister the output is 32 bits.
+This means you could get duplicated values in long runs, but this does not violate the
+comment about the periodicity of PCG-64 and Mersenne-Twister being longer than $2^64$ and $2^32$, because the two values after the two
+duplicated numbers will not be duplicates of each other -- as noted previously, there is
+a distinction between the output presented to the user and the state of
+the RNG algorithm.
 
 ## RNG in parallel
 
