@@ -1,5 +1,5 @@
 ---
-title: "Python vs. R"
+title: "Lab 7: Python vs. R"
 author: "Zoe Vernon, Andrew Vaughn, James Duncan"
 date: "2022-10-14"
 format:
@@ -94,24 +94,24 @@ scalar, a list, and an R vector.
    
    For this the function `.Internal(inspect)` will be helpful.
    Here's an example for a list.
-   
-   ```{r}
-   x <- list(7, c('abc', 'def'), rnorm(5))
-   
-   .Internal(inspect(x))
-@5652776540f8 19 VECSXP g0c3 [REF(1)] (len=3, tl=0)
-  @5652776b9740 14 REALSXP g0c1 [REF(3)] (len=1, tl=0) 7
-  @56527580b0d8 16 STRSXP g0c2 [REF(1)] (len=2, tl=0)
-    @5652776b97b0 09 CHARSXP g0c1 [REF(4),gp=0x60] [ASCII] [cached] "abc"
-    @565275b60168 09 CHARSXP g0c1 [MARK,REF(14),gp=0x61] [ASCII] [cached] "def"
-  @565275a97478 14 REALSXP g0c4 [REF(1)] (len=5, tl=0) -0.38248,-0.100364,-0.485605,1.15111,-0.111647
+
 ```
+#| eval: false
+x <- list(7, c('abc', 'def'), rnorm(5))
+.Internal(inspect(x))
 
-`5652776540f8` is the address of the overall list. 
-`5652776b9740` of the 1-element vector containing '7'.
-`56527580b0d8` is the address of the character vector.
-`565275a97478` is the address of the vector of random numbers
+@5652776540f8 19 VECSXP g0c3 [REF(1)] (len=3, tl=0)
+@5652776b9740 14 REALSXP g0c1 [REF(3)] (len=1, tl=0) 7
+@56527580b0d8 16 STRSXP g0c2 [REF(1)] (len=2, tl=0)
+@5652776b97b0 09 CHARSXP g0c1 [REF(4),gp=0x60] [ASCII] [cached] "abc"
+@565275b60168 09 CHARSXP g0c1 [MARK,REF(14),gp=0x61] [ASCII] [cached] "def"
+@565275a97478 14 REALSXP g0c4 [REF(1)] (len=5, tl=0) -0.38248,-0.100364,-0.485605,1.15111,-0.111647
 
+#`5652776540f8` is the address of the overall list.
+#`5652776b9740` of the 1-element vector containing '7'.
+#`56527580b0d8` is the address of the character vector.
+#`565275a97478` is the address of the vector of random numbers.
+```
 
 3. Does R behave similarly to Python in terms of storing strings, as seen in PS4?
 
