@@ -129,10 +129,10 @@ large to be stored as an integer of the particular length):
 
 ```{python}
 a = np.int32(3423333)
-a * a
+a * a       # overflows
 
 a = np.int64(3423333)
-a * a
+a * a       # doesn't overflow if we use 64 bit int
 
 a = np.int64(34233332342343)
 a * a
