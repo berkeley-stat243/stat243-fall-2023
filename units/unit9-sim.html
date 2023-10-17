@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Chris Paciorek">
-<meta name="dcterms.date" content="2023-07-10">
+<meta name="dcterms.date" content="2023-10-17">
 
 <title>Statistics 243 Fall 2023 - Simulation</title>
 <style>
@@ -366,7 +366,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#monte-carlo-mc-basics" id="toc-monte-carlo-mc-basics" class="nav-link" data-scroll-target="#monte-carlo-mc-basics">Monte Carlo (MC) basics</a>
   <ul class="collapse">
   <li><a href="#monte-carlo-overview" id="toc-monte-carlo-overview" class="nav-link" data-scroll-target="#monte-carlo-overview">Monte Carlo overview</a></li>
-  <li><a href="#simulation-uncertainty" id="toc-simulation-uncertainty" class="nav-link" data-scroll-target="#simulation-uncertainty">Simulation uncertainty</a></li>
+  <li><a href="#simulation-uncertainty-i.e.-monte-carlo-uncertainty" id="toc-simulation-uncertainty-i.e.-monte-carlo-uncertainty" class="nav-link" data-scroll-target="#simulation-uncertainty-i.e.-monte-carlo-uncertainty">Simulation uncertainty (i.e., Monte Carlo uncertainty)</a></li>
   <li><a href="#final-notes" id="toc-final-notes" class="nav-link" data-scroll-target="#final-notes">Final notes</a></li>
   </ul></li>
   <li><a href="#variance-reduction-optional" id="toc-variance-reduction-optional" class="nav-link" data-scroll-target="#variance-reduction-optional">Variance reduction (optional)</a></li>
@@ -384,7 +384,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#random-number-generation-rng" id="toc-random-number-generation-rng" class="nav-link" data-scroll-target="#random-number-generation-rng">4. Random number generation (RNG)</a>
   <ul class="collapse">
-  <li><a href="#generating-random-uniforms-on-a-computer" id="toc-generating-random-uniforms-on-a-computer" class="nav-link" data-scroll-target="#generating-random-uniforms-on-a-computer">Generating random uniforms on a computer</a></li>
+  <li><a href="#generating-random-uniforms-on-a-computer" id="toc-generating-random-uniforms-on-a-computer" class="nav-link" data-scroll-target="#generating-random-uniforms-on-a-computer">Generating random uniforms on a computer</a>
+  <ul class="collapse">
+  <li><a href="#sequential-congruential-generators" id="toc-sequential-congruential-generators" class="nav-link" data-scroll-target="#sequential-congruential-generators">Sequential congruential generators</a></li>
+  <li><a href="#modern-generators-pcg-and-mersenne-twister" id="toc-modern-generators-pcg-and-mersenne-twister" class="nav-link" data-scroll-target="#modern-generators-pcg-and-mersenne-twister">Modern generators (PCG and Mersenne Twister)</a></li>
+  </ul></li>
   <li><a href="#rng-in-python" id="toc-rng-in-python" class="nav-link" data-scroll-target="#rng-in-python">RNG in Python</a></li>
   <li><a href="#rng-in-parallel" id="toc-rng-in-parallel" class="nav-link" data-scroll-target="#rng-in-parallel">RNG in parallel</a></li>
   </ul></li>
@@ -422,7 +426,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 10, 2023</p>
+      <p class="date">October 17, 2023</p>
     </div>
   </div>
   
@@ -438,20 +442,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Gentle: Computational Statistics</li>
 <li>Monahan: Numerical Methods of Statistics</li>
 </ul>
-<p>Videos (optional):</p>
-<p>There are various videos from 2020 in the bCourses Media Gallery that you can use for reference if you want to.</p>
-<ul>
-<li>Video 1. Random number generation, part 1</li>
-<li>Video 2. Random number generation, part 2</li>
-<li>Video 3. Rejection sampling</li>
-<li>Video 4. Importance sampling</li>
-</ul>
 <p>Many (most?) statistical papers include a simulation (i.e., Monte Carlo) study. Many papers on machine learning methods also include a simulation study. The basic idea is that closed-form mathematical analysis of the properties of a statistical or machine learning method/model is often hard to do. Even if possible, it usually involves approximations or simplifications. A canonical situation in statistics is that we have an asymptotic result and we want to know what happens in finite samples, but often we do not even have the asymptotic result. Instead, we can estimate mathematical expressions using random numbers. So we design a simulation study to evaluate the method/model or compare multiple methods. The result is that the researcher carries out an experiment (on the computer, sometimes called <em>in silico</em>), generally varying different factors to see what has an effect on the outcome of interest.</p>
 <p>The basic strategy generally involves simulating data and then using the method(s) on the simulated data, summarizing the results to assess/compare the method(s).</p>
-<p>Most simulation studies aim to approximate an integral, generally an expected value (mean, bias, variance, MSE, probability, etc.). In low dimensions, methods such as Gaussian quadrature are best for estimating an integral but these methods don’t scale well (we’ll discuss this in Unit 12 on integration/differentiation), so in higher dimensions we often use Monte Carlo techniques.</p>
+<p>Most simulation studies aim to approximate an integral, generally an expected value (mean, bias, variance, MSE, probability, etc.). In low dimensions, methods such as Gaussian quadrature are best for estimating an integral but these methods don’t scale well, so in higher dimensions (e.g., the usual situation with <span class="math inline">\(n\)</span> observations) we often use Monte Carlo techniques.</p>
 <p>To be more concrete:</p>
 <ul>
-<li><p>If we have a <em>method for estimating a model parameter</em> (including uncertainty), such as a regression coefficient, what properties do we want the method to have and what criteria could we use?</p></li>
+<li><p>If we have a <em>method for estimating a model parameter</em> (including estimating uncertainty), such as a regression coefficient, what properties do we want the method to have and what criteria could we use?</p></li>
 <li><p>If we have a <em>prediction method</em> (including prediction uncertainty), what properties do we want the method to have and what criteria could we use?</p></li>
 <li><p>If we have a <em>method for doing a hypothesis test</em>, what criteria would we use to assess the hypothesis test? What properties do we want the test to have?</p></li>
 <li><p>If we have a <em>method for finding a confidence interval or a prediction interval</em>, what criteria would we use to assess the interval?</p></li>
@@ -464,7 +460,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 E\hat{\beta} &amp; = &amp; \beta\\
 \mbox{Var}(\hat{\beta})=E((\hat{\beta}-E\hat{\beta})^{2}) &amp; = &amp; \sigma^{2}(X^{\top}X)^{-1}\\
 \mbox{MSPE}(Y^{*})=E(Y^{*}-\hat{Y})^{2}) &amp; = &amp; \sigma^{2}(1+X^{*\top}(X^{\top}X)^{-1}X^{*}).\end{aligned}\]</span> where <span class="math inline">\(Y^{*}\)</span>is some new observation we’d like to predict given <span class="math inline">\(X^{*}\)</span>.</p>
-<p>But suppose that we’re interested in the properties of regression estimation when in reality the mean is not linear in <span class="math inline">\(X\)</span> or the properties of the errors are more complicated than having independent homoscedastic errors. (This is always the case, but the issue is how far from the truth the standard assumptions are.) Or suppose we have a modified procedure to produce <span class="math inline">\(\hat{\beta}\)</span>, such as a procedure that is robust to outliers. In those cases, we cannot compute the expectations above analytically.</p>
+<p>But suppose that we’re interested in the properties of standard regression estimation when in reality the mean is not linear in <span class="math inline">\(X\)</span> or the properties of the errors are more complicated than having independent homoscedastic errors. (This is always the case, but the issue is how far from the truth the standard assumptions are.) Or suppose we have a modified procedure to produce <span class="math inline">\(\hat{\beta}\)</span>, such as a procedure that is robust to outliers. In those cases, we cannot compute the expectations above analytically.</p>
 <p>Instead we decide to use a Monte Carlo estimate. To keep the notation more simple, let’s just consider one element of the vector <span class="math inline">\(\beta\)</span> (i.e., one of the regression coefficients) and continue to call that <span class="math inline">\(\beta\)</span>. If we randomly generate <span class="math inline">\(m\)</span> different datasets from some distribution <span class="math inline">\(f\)</span>, and <span class="math inline">\(\hat{\beta}_{i}\)</span> is the estimated coefficient based on the <span class="math inline">\(i\)</span>th dataset: <span class="math inline">\(Y_{i}=(y_{i1},y_{i2},\ldots,y_{in})\)</span>, then we can estimate <span class="math inline">\(E\hat{\beta}\)</span> under that distribution <span class="math inline">\(f\)</span> as <span class="math display">\[\widehat{E(\hat{\beta})}=\bar{\hat{\beta}}=\frac{1}{m}\sum_{i=1}^{m}\hat{\beta}_{i}\]</span> Or to estimate the variance, we have <span class="math display">\[\widehat{\mbox{Var}(\hat{\beta})}=\frac{1}{m}\sum_{i=1}^{m}(\hat{\beta}_{i}-\bar{\hat{\beta}})^{2}.\]</span> In evaluating the performance of regression under non-standard conditions or the performance of our robust regression procedure, what decisions do we have to make to be able to carry out our Monte Carlo procedure?</p>
 <p>Next let’s think about Monte Carlo methods in general.</p>
 </section>
@@ -477,18 +473,22 @@ E\hat{\beta} &amp; = &amp; \beta\\
 <p>Note that in most simulation studies, <span class="math inline">\(Y\)</span> is an entire dataset (predictors/covariates), and the “iid sample” means generating <span class="math inline">\(m\)</span> different datasets from <span class="math inline">\(f\)</span>, i.e., <span class="math inline">\(Y_{i}\in\{Y_{1},\ldots,Y_{m}\}\)</span> not <span class="math inline">\(m\)</span> different scalar values. If the dataset has <span class="math inline">\(n\)</span> observations, then <span class="math inline">\(Y_{i}=(Y_{i1},\ldots,Y_{in})\)</span>.</p>
 <section id="back-to-the-regression-example" class="level4">
 <h4 class="anchored" data-anchor-id="back-to-the-regression-example">Back to the regression example</h4>
-<p>Let’s relate that back to our regression example. In that particular case, if we’re interested in whether the regression estimator is biased, we want to know: <span class="math display">\[\phi=E\hat{\beta},\]</span> where <span class="math inline">\(h(Y) = \hat(\beta)\)</span>. We can use the Monte Carlo estimate of <span class="math inline">\(\phi\)</span>: <span class="math display">\[\hat{\phi}=\frac{1}{m}\sum_{i=1}^{m}h(Y_{i})=\frac{1}{m}\sum_{i=1}^{m}\hat{\beta}_{i}=\widehat{E(\hat{\beta})}.\]</span> For the variance, we have</p>
+<p>Let’s relate that back to our regression example. In that particular case, if we’re interested in whether the regression estimator is biased, we want to know: <span class="math display">\[\phi=E\hat{\beta},\]</span> where <span class="math inline">\(h(Y) = \hat(\beta)\)</span>. We can use the Monte Carlo estimate of <span class="math inline">\(\phi\)</span>: <span class="math display">\[\hat{\phi}=\frac{1}{m}\sum_{i=1}^{m}h(Y_{i})=\frac{1}{m}\sum_{i=1}^{m}\hat{\beta}_{i}=\widehat{E(\hat{\beta})}.\]</span></p>
+<p>If we are interested in the variance of the regression estimator, we have</p>
 <p><span class="math display">\[\phi=\mbox{Var}(\hat{\beta})=E_{f}((\hat{\beta}-E\hat{\beta})^{2})\]</span> and we can use the Monte Carlo estimate of <span class="math inline">\(\phi\)</span>: <span class="math display">\[\hat{\phi}=\frac{1}{m}\sum_{i=1}^{m}h(Y_{i})=\frac{1}{m}\sum_{i=1}^{m}(\hat{\beta}_{i}-E\hat{\beta})^{2}=\widehat{\mbox{Var}(\hat{\beta)}}\]</span> where <span class="math display">\[h(Y)=(\hat{\beta}-E\hat{\beta})^{2}.\]</span></p>
 <p>Finally note that we also need to use the Monte Carlo estimate of <span class="math inline">\(E\hat{\beta}\)</span> in the Monte Carlo estimation of the variance.</p>
 <p>We might also be interested in the coverage of a confidence interval. In that case we have <span class="math display">\[h(Y)=1_{\beta\in CI(Y)}\]</span> and we can estimate the coverage as <span class="math display">\[\hat{\phi}=\frac{1}{m}\sum_{i=1}^{m}1_{\beta\in CI(y_{i})}.\]</span> Of course we want that <span class="math inline">\(\hat{\phi}\approx1-\alpha\)</span> for a <span class="math inline">\(100(1-\alpha)\)</span> confidence interval. In the standard case of a 95% interval we want <span class="math inline">\(\hat{\phi}\approx0.95\)</span>.</p>
 </section>
 </section>
-<section id="simulation-uncertainty" class="level3">
-<h3 class="anchored" data-anchor-id="simulation-uncertainty">Simulation uncertainty</h3>
+<section id="simulation-uncertainty-i.e.-monte-carlo-uncertainty" class="level3">
+<h3 class="anchored" data-anchor-id="simulation-uncertainty-i.e.-monte-carlo-uncertainty">Simulation uncertainty (i.e., Monte Carlo uncertainty)</h3>
 <p>Since <span class="math inline">\(\hat{\phi}\)</span> is simply an average of <span class="math inline">\(m\)</span> identically-distributed values, <span class="math inline">\(h(Y_{1}),\ldots,h(Y_{m})\)</span>, the simulation variance of <span class="math inline">\(\hat{\phi}\)</span> is <span class="math inline">\(\mbox{Var}(\hat{\phi})=\sigma^{2}/m\)</span>, with <span class="math inline">\(\sigma^{2}=\mbox{Var}(h(Y))\)</span>. An estimator of <span class="math inline">\(\sigma^{2}=E_{f}((h(Y)-\phi)^{2})\)</span> is <span class="math display">\[\begin{aligned}
 \hat{\sigma}^{2} &amp; = &amp; \frac{1}{m-1}\sum_{i=1}^{m}(h(Y_{i})-\hat{\phi})^{2}\end{aligned}\]</span> So our MC simulation error is based on <span class="math display">\[\widehat{\mbox{Var}}(\hat{\phi})=\frac{\hat{\sigma}^{2}}{m}=\frac{1}{m(m-1)}\sum_{i=1}^{m}(h(Y_{i})-\hat{\phi})^{2}.\]</span> Note that this is particularly confusing if we have <span class="math inline">\(\hat{\phi}=\widehat{\mbox{Var}(\hat{\beta})}\)</span> because then we have <span class="math inline">\(\widehat{\mbox{Var}}(\hat{\phi})=\widehat{\mbox{Var}}(\widehat{\mbox{Var}(\hat{\beta})})\)</span>!</p>
 <p>The simulation variance is <span class="math inline">\(O(\frac{1}{m})\)</span> because we have <span class="math inline">\(m^{2}\)</span> in the denominator and a sum over <span class="math inline">\(m\)</span> terms in the numerator.</p>
-<p>Note that in the simulation setting, the randomness in the system is very well-defined (as it is in survey sampling, but unlike in most other applications of statistics), because it comes from the RNG that we perform as part of our attempt to estimate <span class="math inline">\(\phi\)</span>. Happily, we are in control of <span class="math inline">\(m\)</span>, so in principle we can reduce the simulation error to as little as we desire. Unhappily, as usual, the standard error goes down with the square root of <span class="math inline">\(m\)</span>.</p>
+<p>Note that in the simulation setting, the randomness in the system is very well-defined (as it is in survey sampling, but unlike in most other applications of statistics), because it comes from the RNG that we perform as part of our attempt to estimate <span class="math inline">\(\phi\)</span>. Happily, we are in control of <span class="math inline">\(m\)</span>, so in principle we can reduce the simulation error to as little as we desire. Unhappily, as usual, the simulation standard error goes down with the square root of <span class="math inline">\(m\)</span>.</p>
+<blockquote class="blockquote">
+<p><strong>Important</strong>: This is the uncertainty in our simulation-based estimate of some quantity (expectation) of interest. It is NOT the statistical uncertainty in a problem.</p>
+</blockquote>
 <section id="back-to-the-regression-example-1" class="level4">
 <h4 class="anchored" data-anchor-id="back-to-the-regression-example-1">Back to the regression example</h4>
 <p>Some examples of simulation variances we might be interested in in the regression example include:</p>
@@ -595,10 +595,12 @@ E\hat{\beta} &amp; = &amp; \beta\\
 <p>At the core of simulations is the ability to generate random numbers, and based on that, random variables. On a computer, our goal is to generate sequences of pseudo-random numbers that behave like random numbers but are replicable. The reason that replicability is important is so that we can reproduce the simulation.</p>
 <section id="generating-random-uniforms-on-a-computer" class="level2">
 <h2 class="anchored" data-anchor-id="generating-random-uniforms-on-a-computer">Generating random uniforms on a computer</h2>
-<p>Generating a sequence of random standard uniforms is the basis for all generation of random variables, since random uniforms (either a single one or more than one) can be used to generate values from other distributions. Most random numbers on a computer are pseudo-random. The numbers are chosen from a deterministic stream of numbers that behave like random numbers but are actually a finite sequence (recall that both integers and real numbers on a computer are actually discrete and there are finitely many distinct values), so it’s actually possible to get repeats. The seed of a RNG is the place within that sequence where you start to use the pseudo-random numbers.</p>
-<p>Many RNG methods are sequential congruential methods. The basic idea is that the next value is <span class="math display">\[u_{k}=f(u_{k-1},\ldots,u_{k-j})\mbox{mod}\,m\]</span> for some function, <span class="math inline">\(f\)</span>, and some positive integer <span class="math inline">\(m\)</span> . Often <span class="math inline">\(j=1\)</span>. <em>mod</em> just means to take the remainder after dividing by <span class="math inline">\(m\)</span>. One then generates the random standard uniform value as <span class="math inline">\(u_{k}/m\)</span>, which by construction is in <span class="math inline">\([0,1]\)</span>.</p>
+<p>Generating a sequence of random standard uniforms is the basis for all generation of random variables, since random uniforms (either a single one or more than one) can be used to generate values from other distributions. Most random numbers on a computer are <em>pseudo-random</em>. The numbers are chosen from a deterministic stream of numbers that behave like random numbers but are actually a finite sequence (recall that both integers and real numbers on a computer are actually discrete and there are finitely many distinct values), so it’s actually possible to get repeats. The seed of a RNG is the place within that sequence where you start to use the pseudo-random numbers.</p>
+<section id="sequential-congruential-generators" class="level3">
+<h3 class="anchored" data-anchor-id="sequential-congruential-generators">Sequential congruential generators</h3>
+<p>Many RNG methods are sequential congruential methods. The basic idea is that the next value is <span class="math display">\[u_{k}=f(u_{k-1},\ldots,u_{k-j})\mbox{mod}\,m\]</span> for some function, <span class="math inline">\(f\)</span>, and some positive integer <span class="math inline">\(m\)</span> . Often <span class="math inline">\(j=1\)</span>. <em>mod</em> just means to take the remainder after dividing by <span class="math inline">\(m\)</span>. One then generates the random standard uniform value as <span class="math inline">\(u_{k}/m\)</span>, which by construction is in <span class="math inline">\([0,1]\)</span>. For our discussion below, it is important to distinguish the <em>state</em> (<span class="math inline">\(u\)</span>) from the output of the RNG.</p>
 <p>Given the construction, such sequences are periodic if the subsequence ever reappears, which is of course guaranteed because there is a finite number of possible subsequence values given that all the <span class="math inline">\(u_{k}\)</span> values are remainders of divisions by a fixed number . One key to a good random number generator (RNG) is to have a very long period.</p>
-<p>An example of a sequential congruential method is a basic linear congruential generator: <span class="math display">\[u_{k}=(au_{k-1})\mbox{mod}\,m\]</span> with integer <span class="math inline">\(a\)</span>, <span class="math inline">\(m\)</span>, and <span class="math inline">\(u_{i}\)</span> values. Here the periodicity can’t exceed <span class="math inline">\(m-1\)</span> (the method is set up so that we never get <span class="math inline">\(u_{k}=0\)</span> as this causes the algorithm to break), so we only have <span class="math inline">\(m-1\)</span> possible values. The seed is the initial state, <span class="math inline">\(u_{0}\)</span> - i.e., the point in the sequence at which we start. By setting the seed you guarantee reproducibility since given a starting value, the sequence is deterministic. In general <span class="math inline">\(a\)</span> and <span class="math inline">\(m\)</span> are chosen to be large, but of course they can’t be too large if they are to be represented as computer integers. The standard values of <span class="math inline">\(m\)</span> are Mersenne primes, which have the form <span class="math inline">\(2^{p}-1\)</span> (but these are not prime for all <span class="math inline">\(p\)</span>), with <span class="math inline">\(m=2^{31}-1\)</span> common. Here’s an example of a linear congruential sampler:</p>
+<p>An example of a sequential congruential method is a basic linear congruential generator: <span class="math display">\[u_{k}=(au_{k-1}+c)\mbox{mod}\,m\]</span> with integer <span class="math inline">\(a\)</span>, <span class="math inline">\(m\)</span>, <span class="math inline">\(c\)</span>, and <span class="math inline">\(u_{k}\)</span> values. Here the periodicity can’t exceed <span class="math inline">\(m-1\)</span> (the method is set up so that we never get <span class="math inline">\(u_{k}=0\)</span> as this causes the algorithm to break), so we only have <span class="math inline">\(m-1\)</span> possible values. The seed is the initial state, <span class="math inline">\(u_{0}\)</span> - i.e., the point in the sequence at which we start. By setting the seed you guarantee reproducibility since given a starting value, the sequence is deterministic. In general <span class="math inline">\(a\)</span>, <span class="math inline">\(c\)</span> and <span class="math inline">\(m\)</span> are chosen to be ‘large’. The standard values of <span class="math inline">\(m\)</span> are Mersenne primes, which have the form <span class="math inline">\(2^{p}-1\)</span> (but these are not prime for all <span class="math inline">\(p\)</span>). Here’s an example of a linear congruential sampler (with <span class="math inline">\(c=0\)</span>):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">100</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>a <span class="op">=</span> <span class="dv">171</span></span>
@@ -641,13 +643,13 @@ E\hat{\beta} &amp; = &amp; \beta\\
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">4</span>)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>plt.hist(uFromNP, bins<span class="op">=</span><span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>(array([ 5.,  3.,  4.,  3.,  1.,  2.,  1.,  6.,  1.,  5.,  4.,  5., 10.,
-        6.,  6.,  6.,  6.,  2.,  4.,  2.,  5.,  5.,  3.,  1.,  4.]), array([0.00804239, 0.04698469, 0.085927  , 0.1248693 , 0.16381161,
-       0.20275391, 0.24169622, 0.28063852, 0.31958083, 0.35852313,
-       0.39746544, 0.43640774, 0.47535005, 0.51429236, 0.55323466,
-       0.59217697, 0.63111927, 0.67006158, 0.70900388, 0.74794619,
-       0.78688849, 0.8258308 , 0.8647731 , 0.90371541, 0.94265771,
-       0.98160002]), &lt;BarContainer object of 25 artists&gt;)</code></pre>
+<pre><code>(array([4., 4., 2., 4., 4., 5., 6., 2., 6., 5., 3., 5., 3., 2., 3., 8., 2.,
+       4., 3., 6., 5., 2., 3., 5., 4.]), array([0.00210722, 0.0415315 , 0.08095579, 0.12038008, 0.15980437,
+       0.19922866, 0.23865295, 0.27807724, 0.31750153, 0.35692581,
+       0.3963501 , 0.43577439, 0.47519868, 0.51462297, 0.55404726,
+       0.59347155, 0.63289584, 0.67232012, 0.71174441, 0.7511687 ,
+       0.79059299, 0.83001728, 0.86944157, 0.90886586, 0.94829015,
+       0.98771443]), &lt;BarContainer object of 25 artists&gt;)</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Value"</span>)<span class="op">;</span> plt.ylabel(<span class="st">"Frequency"</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -694,7 +696,18 @@ E\hat{\beta} &amp; = &amp; \beta\\
 <pre><code>[1] 24279 14851 10966</code></pre>
 </div>
 </div>
-<p>By default (using <code>numpy.random.default_rng()</code>) numpy uses something called the <a href="https://numpy.org/doc/stable/reference/random/bit_generators/pcg64.html#numpy.random.PCG64">PCG-64 generator</a>. As discussed in the <a href="https://www.pcg-random.org/">PCG documentation</a>, it uses a linear congruential generator, which we’ve just seen. These generators are not great, but PCG then combines that with a <a href="https://www.pcg-random.org/pdf/hmc-cs-2014-0905.pdf">technique called <em>permutation functions</em></a> as the output function that translates the underlying sequence to the random number output.</p>
+</section>
+<section id="modern-generators-pcg-and-mersenne-twister" class="level3">
+<h3 class="anchored" data-anchor-id="modern-generators-pcg-and-mersenne-twister">Modern generators (PCG and Mersenne Twister)</h3>
+<p>Recently <a href="https://www.pcg-random.org/pdf/hmc-cs-2014-0905.pdf">O’Neal proposed a new approach</a> to using the linear congruential generator in a way that gives much better performance than the basic versions of such generators described above. This approach is now the default random number generator in numpy (see <code>numpy.random.default_rng()</code>), called the <a href="https://numpy.org/doc/stable/reference/random/bit_generators/pcg64.html#numpy.random.PCG64">PCG-64 generator</a>. ‘PCG’ stands for permutation congruential generator and encompasses a family of such generators.</p>
+<p>The idea of the PCG approach goes like this:</p>
+<ul>
+<li>Linear congruential generators (LCG) are simple and fast, but for small values of <span class="math inline">\(m\)</span> don’t perform all that well statistically, in particular having values on a lattice as discussed above.</li>
+<li>Using a large value of <span class="math inline">\(m\)</span> can actually give good statistical performance.</li>
+<li>Applying a technique called <em>permutation functions</em> to the state of the LCG in order to produce the output at each step (the random value returned to the user) can improve the statistical performance even further.</li>
+</ul>
+<p>Instead of using relatively small values of <span class="math inline">\(m\)</span> seen above, in the PCG approach one uses <span class="math inline">\(m=2^k\)</span>, for ‘large enough’ <span class="math inline">\(k\)</span>, usually 64 or 128. It turns out that if <span class="math inline">\(m=2^k\)</span> then the period of the <span class="math inline">\(b\)</span>th bit of the state is <span class="math inline">\(2^b\)</span> where <span class="math inline">\(b=1\)</span> is the right-most bit. Small periods are of course bad for RNG, so the bits with small period cause the LCG to not perform well. Thankfully, one simple fix is simply to discard some number of the right-most bits (this is one form of <em>bit shift</em>). Note that if one does this, the output of the RNG is based on a subset of the bits, which means that the number of unique values that can be generated is smaller than the period. This is not a problem given we start with a state with a large number of bits (64 or 128 as mentioned above).</p>
+<p>O’Neal then goes further; instead of simply discarding bits, she propose to use some of the initial bits (which behave the most randomly) to either shift bits by a random amount or rotate bits by a random amount. This improves the statistical performance of the generator. The choice of how to do this gives the various members of the PCG family of generators. The details are fairly complicated (the PCG paper is 50-odd pages) and not important for our purposes here.</p>
 <p>By default R uses something called the Mersenne twister, which is in the class of generalized feedback shift registers (GFSR). The basic idea of a GFSR is to come up with a deterministic generator of bits (i.e., a way to generate sequences of 0s and 1s), <span class="math inline">\(B_{i}\)</span>, <span class="math inline">\(i=1,2,3,\ldots\)</span>. The pseudo-random numbers are then determined as sequential subsequences of length <span class="math inline">\(L\)</span> from <span class="math inline">\(\{B_{i}\}\)</span>, considered as a base-2 number and dividing by <span class="math inline">\(2^{L}\)</span> to get a number in <span class="math inline">\((0,1)\)</span>. In general the sequence of bits is generated by taking <span class="math inline">\(B_{i}\)</span> to be the <em>exclusive or</em> [i.e., 0+0 = 0; 0 + 1 = 1; 1 + 0 = 1; 1 + 1 = 0] summation of two previous bits further back in the sequence where the lengths of the lags are carefully chosen.</p>
 <p>numpy also provides access to the Mersenne Twister via the MT19937 generator; more on this below. It looks like PCG-64 only became available as of numpy version 1.17.</p>
 <section id="additional-notes" class="level4">
@@ -704,12 +717,14 @@ E\hat{\beta} &amp; = &amp; \beta\\
 <p>There have been some attempts to generate truly random numbers based on physical randomness. One that is based on quantum physics is <a href="http://www.idquantique.com/true-random-number-generator/quantis-usb-pcie-pci.html" class="uri">http://www.idquantique.com/true-random-number-generator/quantis-usb-pcie-pci.html</a>. Another approach is based on lava lamps!</p>
 </section>
 </section>
+</section>
 <section id="rng-in-python" class="level2">
 <h2 class="anchored" data-anchor-id="rng-in-python">RNG in Python</h2>
 <p>We can change the RNG for numpy using <code>np.random.&lt;name_of_generator&gt;</code> (e.g., <code>np.random.MT19937</code> for the Mersenne Twister). We can set the seed with <code>np.random.seed()</code> or with <code>np.random.default_rng()</code>.</p>
-<p>In numpy, the <em>default_rng</em> RNG is PCG-64 It has a period of <span class="math inline">\(2^{128}\)</span> and supports advancing an arbitrary number of steps (useful for parallelization, as well as <span class="math inline">\(2^{127}\)</span> streams. The state of the PCG-64 RNG is represented by two 128-bit unsigned integers. While the <em>default</em> is PCG-64, simply using the functions available via <code>np.random</code> to generate random numbers seems to actually use the Mersenne Twister, so the meaning if <em>default</em> seems odd here.</p>
-<p>In R, the default RNG is the Mersenne twister (<code>?RNGkind</code>), which is considered to be state-of-the-art – it has some theoretical support, has performed reasonably on standard tests of pseudorandom numbers and has been used without evidence of serious failure. Plus it’s fast (because bitwise operations are fast). In fact this points out one of the nice features of R, which is that for something as important as this, the default is generally carefully chosen by R’s developers. The particular Mersenne twister used has a periodicity of <span class="math inline">\(2^{19937}-1\approx10^{6000}\)</span>. Practically speaking this means that if we generated one random uniform per nanosecond for 10 billion years, then we would generate <span class="math inline">\(10^{25}\)</span> numbers, well short of the period. So we don’t need to worry about the periodicity! The seed for the Mersenne twister is a set of 624 32-bit integers plus a position in the set, where the position is <code>.Random.seed[2]</code>.</p>
-<p>For the Mersenne Twister, we can set the seed by passing an integer to <code>np.random.seed()</code> in Python or <code>set.seed()</code> in R, which then sets as many actual seeds as required for the Mersenne Twister. Here I’ll refer to the single integer passed in as <em>the</em> seed. Ideally, nearby seeds generally should not correspond to getting sequences from the stream that are closer to each other than far away seeds. According to Gentle (CS, p.&nbsp;327) the input to <code>set.seed()</code> should be an integer, <span class="math inline">\(i\in\{0,\ldots,1023\}\)</span> , and each of these 1024 values produces positions in the RNG sequence that are “far away” from each other. I don’t see any mention of this in the R documentation for <code>set.seed()</code> and furthermore, you can pass integers larger than 1023 to <code>set.seed()</code>, so I’m not sure how much to trust Gentle’s claim. More on generating parallel streams of random numbers below.</p>
+<p>In numpy, the <em>default_rng</em> RNG is PCG-64. It has a period of <span class="math inline">\(2^{128}\)</span> and supports advancing an arbitrary number of steps, as well as <span class="math inline">\(2^{127}\)</span> streams (both useful for generating random numbers when parallelizing). The state of the PCG-64 RNG is represented by two 128-bit unsigned integers, one the actual state and one the value of <span class="math inline">\(c\)</span> (the <em>increment</em>).</p>
+<p>Strangely, while the <em>default</em> is PCG-64, simply using the functions available via <code>np.random</code> to generate random numbers seems to actually use the Mersenne Twister, so the meaning of <em>default</em> is unclear.</p>
+<p>In R, the default RNG is the Mersenne twister (<code>?RNGkind</code>), which is considered to be state-of-the-art (by some; O’Neal criticizes it). It has some theoretical support, has performed reasonably on standard tests of pseudorandom numbers and has been used without evidence of serious failure. Plus it’s fast (because bitwise operations are fast). The particular Mersenne twister used has a periodicity of <span class="math inline">\(2^{19937}-1\approx10^{6000}\)</span>. Practically speaking this means that if we generated one random uniform per nanosecond for 10 billion years, then we would generate <span class="math inline">\(10^{25}\)</span> numbers, well short of the period. So we don’t need to worry about the periodicity! The seed for the Mersenne twister is a set of 624 32-bit integers plus a position in the set, where the position is <code>.Random.seed[2]</code>.</p>
+<p>For the Mersenne Twister, we can set the seed by passing an integer to <code>np.random.seed()</code> in Python or <code>set.seed()</code> in R, which then sets as many actual seeds as required for the Mersenne Twister. Here I’ll refer to the single integer passed in as <em>the</em> seed. Ideally, nearby seeds generally should not correspond to getting sequences from the stream that are closer to each other than far away seeds. According to Gentle (CS, p.&nbsp;327) the input to <code>set.seed()</code> in R should be an integer, <span class="math inline">\(i\in\{0,\ldots,1023\}\)</span> , and each of these 1024 values produces positions in the RNG sequence that are “far away” from each other. I don’t see any mention of this in the R documentation for <code>set.seed()</code> and furthermore, you can pass integers larger than 1023 to <code>set.seed()</code>, so I’m not sure how much to trust Gentle’s claim. More on generating parallel streams of random numbers below.</p>
 <p>So we get replicability by setting the seed to a specific value at the beginning of our simulation. We can then set the seed to that same value when we want to replicate the simulation.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)</span>
@@ -731,19 +746,23 @@ E\hat{\beta} &amp; = &amp; \beta\\
 <pre><code>array([ 1.62434536, -0.61175641, -0.52817175, -1.07296862,  0.86540763])</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>saved_state <span class="op">=</span> np.random.get_state()</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>np.random.normal(size <span class="op">=</span> <span class="dv">5</span>)</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co">## Some arbitrary use of random numbers:</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>array([-2.3015387 ,  1.74481176, -0.7612069 ,  0.3190391 , -0.24937038])</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>tmp <span class="op">=</span> np.random.choice(np.arange(<span class="dv">1</span>, <span class="dv">51</span>), size<span class="op">=</span><span class="dv">2000</span>, replace<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>np.random.set_state(saved_state)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>np.random.normal(size <span class="op">=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>np.random.normal(size <span class="op">=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>array([-2.3015387 ,  1.74481176, -0.7612069 ,  0.3190391 , -0.24937038])</code></pre>
 </div>
 </div>
-<p>If we look at `saved_state, we see it actually corresponds to the Mersenne Twister.</p>
+<p>Now we’ll do some arbitrary work with random numbers, and see that if we use the saved state we can pick up where we left off above.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>tmp <span class="op">=</span> np.random.choice(np.arange(<span class="dv">1</span>, <span class="dv">51</span>), size<span class="op">=</span><span class="dv">2000</span>, replace<span class="op">=</span><span class="va">True</span>) <span class="co"># arbitrary work</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co">## Restore the state.</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>np.random.set_state(saved_state)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>np.random.normal(size <span class="op">=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>array([-2.3015387 ,  1.74481176, -0.7612069 ,  0.3190391 , -0.24937038])</code></pre>
+</div>
+</div>
+<p>If we look at <code>saved_state</code>, we see it actually corresponds to the Mersenne Twister.</p>
 <p>To do the equivalent with the PCG-64:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">1</span>)</span>
@@ -766,9 +785,17 @@ E\hat{\beta} &amp; = &amp; \beta\\
 <div class="cell-output cell-output-stdout">
 <pre><code>{'bit_generator': 'PCG64', 'state': {'state': 216676376075457487203159048251690499413, 'inc': 194290289479364712180083596243593368443}, 'has_uint32': 0, 'uinteger': 0}</code></pre>
 </div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>saved_state[<span class="st">'state'</span>][<span class="st">'state'</span>]   <span class="co"># actual state</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>216676376075457487203159048251690499413</code></pre>
 </div>
-<p>I’m not sure how <code>saved_state</code> corresponds to the state as we saw when manually implementing linear congruential generators earlier.</p>
-<p>The RNGs in R generally return 32-bit (4-byte) integers converted to doubles, so there are at most <span class="math inline">\(2^{32}\)</span> distinct values. This means you could get duplicated values in long runs, but this does not violate the comment about the periodicity because the two values after the two duplicated numbers will not be duplicates of each other – note there is a distinction between the values as presented to the user and the values as generated by the RNG algorithm. I’m not sure about the situation in Python, though for the Mersenne Twister, it may be the same.</p>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>saved_state[<span class="st">'state'</span>][<span class="st">'inc'</span>]     <span class="co"># increment ('c')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>194290289479364712180083596243593368443</code></pre>
+</div>
+</div>
+<p><code>saved_state</code> contains the actual state and the value of <code>c</code>, the increment.</p>
+<p>The output of the PCG-64 is 64 bits while for the Mersenne Twister the output is 32 bits. This means you could get duplicated values in long runs, but this does not violate the comment about the periodicity of PCG-64 and Mersenne-Twister being longer than <span class="math inline">\(2^64\)</span> and <span class="math inline">\(2^32\)</span>, because the two values after the two duplicated numbers will not be duplicates of each other – as noted previously, there is a distinction between the output presented to the user and the state of the RNG algorithm.</p>
 </section>
 <section id="rng-in-parallel" class="level2">
 <h2 class="anchored" data-anchor-id="rng-in-parallel">RNG in parallel</h2>
@@ -783,8 +810,8 @@ E\hat{\beta} &amp; = &amp; \beta\\
 <p>The <em>mvtnorm</em> package supplies code for working with the density and CDF of multivariate normal and t distributions.</p>
 <p>To generate a multivariate normal, in Unit 10, we’ll see the standard method based on the Cholesky decomposition:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> np.linalg.cholesky(covMat) <span class="co"># L is lower-triangular</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> L <span class="op">@</span> np.random.normal(size <span class="op">=</span> covMat.shape[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> np.linalg.cholesky(covMat) <span class="co"># L is lower-triangular</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> L <span class="op">@</span> np.random.normal(size <span class="op">=</span> covMat.shape[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Side note: for a singular covariance matrix we can use the Cholesky with pivoting, setting as many rows to zero as the rank deficiency. Then when we generate the multivariate normals, they respect the constraints implicit in the rank deficiency. However, you’ll need to reorder the resulting vector because of the reordering involved in the pivoted Cholesky.</p>
 </section>
