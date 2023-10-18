@@ -399,8 +399,9 @@ is this in base 10?
 
 ```{python}
 #| error: true
-1e308
-1e309
+x = np.float64(10)
+x**308
+x**309
 
 np.log10(2.0**1024)
 np.log10(2.0**1023)
@@ -414,16 +415,17 @@ result is analogous for the smallest number, so we have that floating
 points can range between $1\times10^{-308}$ and $1\times10^{308}$,
 consistent with what numpy reports above. Producing
 something larger or smaller in magnitude than these values is called
-overflow and underflow respectively. When we overflow or underflow, numpy gives an error
-(in contrast, R gives back `Inf`). When we
-underflow, we get back 0, which in particular can be a problem if we try
-to divide by the value.
+overflow and underflow respectively.
+
+Let's see what happens when we underflow in numpy. Note that there is no warning.
 
 ```{python}
-#| error: true
-np.array(10.0**309)
-np.array(1e-330)
+x**(-308)
+x**(-330)
 ```
+
+Something subtle happens for numbers like $10^{-309}$ through $10^{-323}$. They can actually be represented despite what I said above. Investigating that may be an extra credit problem on a problem set.
+
 
 ## Integers or floats?
 
@@ -446,11 +448,12 @@ print(2**64)
 print(2**100)
 ```
 
-Doubles won't overflow until much larger values than 4- or 8-byte integers. 
+Of course, doubles won't overflow until much larger values than 4- or 8-byte integers because we know they can be as big as $10^308$.
 
 ```{python}
-dg(2.0**64, '.2f')
-dg(2.0**100, '.2f')
+x = np.float64(2)
+dg(x**64, '.2f')
+dg(x**100, '.2f')
 ```
 
 However we need to think about
@@ -674,19 +677,19 @@ being $x\epsilon$ (see above).
 x = 12345678123456781000
 y = 12345678123456782000
 
-def approxEqual(a,b):
+def approx_equal(a,b):
   if abs(a - b) < np.finfo(np.float64).eps * abs(a + b):
     print("approximately equal")
   else:
     print ("not equal")
 
 
-approxEqual(a,b)
+approx_equal(a,b)
 
 x = 1234567812345678
 y = 1234567812345677
 
-approxEqual(a,b)   
+approx_equal(a,b)   
 ```
 
 Actually, we probably want to use a number slightly larger than
