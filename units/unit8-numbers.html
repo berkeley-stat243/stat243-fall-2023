@@ -769,13 +769,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="overflow-and-underflow">Overflow and underflow</h2>
 <p>The largest and smallest numbers we can represent are <span class="math inline">\(2^{e_{\max}}\)</span> and <span class="math inline">\(2^{e_{\min}}\)</span> where <span class="math inline">\(e_{\max}\)</span> and <span class="math inline">\(e_{\min}\)</span> are the smallest and largest possible values of the exponent. Let’s consider the exponent and what we can infer about the range of possible numbers. With 11 bits for <span class="math inline">\(e\)</span>, we can represent <span class="math inline">\(\pm2^{10}=\pm1024\)</span> different exponent values (see <code>np.finfo(np.float64).maxexp</code>) (why is <code>np.finfo(np.float64).minexp</code> only -1022?). So the largest number we could represent is <span class="math inline">\(2^{1024}\)</span>. What is this in base 10?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="fl">1e308</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.float64(<span class="dv">10</span>)</span>
+<span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a>x<span class="op">**</span><span class="dv">308</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>1e+308</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="fl">1e309</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a>x<span class="op">**</span><span class="dv">309</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>inf</code></pre>
+<pre><code>inf
+
+&lt;string&gt;:1: RuntimeWarning: overflow encountered in double_scalars</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb119"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a>np.log10(<span class="fl">2.0</span><span class="op">**</span><span class="dv">1024</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
@@ -790,17 +793,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>finfo(resolution=1e-15, min=-1.7976931348623157e+308, max=1.7976931348623157e+308, dtype=float64)</code></pre>
 </div>
 </div>
-<p>We could have been smarter about that calculation: <span class="math inline">\(\log_{10}2^{1024}=\log_{2}2^{1024}/\log_{2}10=1024/3.32\approx308\)</span>. The result is analogous for the smallest number, so we have that floating points can range between <span class="math inline">\(1\times10^{-308}\)</span> and <span class="math inline">\(1\times10^{308}\)</span>, consistent with what numpy reports above. Producing something larger or smaller in magnitude than these values is called overflow and underflow respectively. When we overflow or underflow, numpy gives an error (in contrast, R gives back <code>Inf</code>). When we underflow, we get back 0, which in particular can be a problem if we try to divide by the value.</p>
+<p>We could have been smarter about that calculation: <span class="math inline">\(\log_{10}2^{1024}=\log_{2}2^{1024}/\log_{2}10=1024/3.32\approx308\)</span>. The result is analogous for the smallest number, so we have that floating points can range between <span class="math inline">\(1\times10^{-308}\)</span> and <span class="math inline">\(1\times10^{308}\)</span>, consistent with what numpy reports above. Producing something larger or smaller in magnitude than these values is called overflow and underflow respectively.</p>
+<p>Let’s see what happens when we underflow in numpy. Note that there is no warning.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb125"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb125-1"><a href="#cb125-1" aria-hidden="true" tabindex="-1"></a>np.array(<span class="fl">10.0</span><span class="op">**</span><span class="dv">309</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-error">
-<pre><code>Error: OverflowError: (34, 'Numerical result out of range')</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb127"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a>np.array(<span class="fl">1e-330</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb125"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb125-1"><a href="#cb125-1" aria-hidden="true" tabindex="-1"></a>x<span class="op">**</span>(<span class="op">-</span><span class="dv">308</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>array(0.)</code></pre>
+<pre><code>1e-308</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb127"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a>x<span class="op">**</span>(<span class="op">-</span><span class="dv">330</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0.0</code></pre>
 </div>
 </div>
+<p>Something subtle happens for numbers like <span class="math inline">\(10^{-309}\)</span> through <span class="math inline">\(10^{-323}\)</span>. They can actually be represented despite what I said above. Investigating that may be an extra credit problem on a problem set.</p>
 </section>
 <section id="integers-or-floats" class="level2">
 <h2 class="anchored" data-anchor-id="integers-or-floats">Integers or floats?</h2>
@@ -830,13 +835,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>1267650600228229401496703205376</code></pre>
 </div>
 </div>
-<p>Doubles won’t overflow until much larger values than 4- or 8-byte integers.</p>
+<p>Of course, doubles won’t overflow until much larger values than 4- or 8-byte integers because we know they can be as big as <span class="math inline">\(10^308\)</span>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb137"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb137-1"><a href="#cb137-1" aria-hidden="true" tabindex="-1"></a>dg(<span class="fl">2.0</span><span class="op">**</span><span class="dv">64</span>, <span class="st">'.2f'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb137"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb137-1"><a href="#cb137-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.float64(<span class="dv">2</span>)</span>
+<span id="cb137-2"><a href="#cb137-2" aria-hidden="true" tabindex="-1"></a>dg(x<span class="op">**</span><span class="dv">64</span>, <span class="st">'.2f'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>18446744073709551616.00</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb139"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb139-1"><a href="#cb139-1" aria-hidden="true" tabindex="-1"></a>dg(<span class="fl">2.0</span><span class="op">**</span><span class="dv">100</span>, <span class="st">'.2f'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb139"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb139-1"><a href="#cb139-1" aria-hidden="true" tabindex="-1"></a>dg(x<span class="op">**</span><span class="dv">100</span>, <span class="st">'.2f'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>1267650600228229401496703205376.00</code></pre>
 </div>
@@ -1096,21 +1102,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb232"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb232-1"><a href="#cb232-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">12345678123456781000</span></span>
 <span id="cb232-2"><a href="#cb232-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">12345678123456782000</span></span>
 <span id="cb232-3"><a href="#cb232-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb232-4"><a href="#cb232-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> approxEqual(a,b):</span>
+<span id="cb232-4"><a href="#cb232-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> approx_equal(a,b):</span>
 <span id="cb232-5"><a href="#cb232-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> <span class="bu">abs</span>(a <span class="op">-</span> b) <span class="op">&lt;</span> np.finfo(np.float64).eps <span class="op">*</span> <span class="bu">abs</span>(a <span class="op">+</span> b):</span>
 <span id="cb232-6"><a href="#cb232-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"approximately equal"</span>)</span>
 <span id="cb232-7"><a href="#cb232-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">else</span>:</span>
 <span id="cb232-8"><a href="#cb232-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span> (<span class="st">"not equal"</span>)</span>
 <span id="cb232-9"><a href="#cb232-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb232-10"><a href="#cb232-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb232-11"><a href="#cb232-11" aria-hidden="true" tabindex="-1"></a>approxEqual(a,b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb232-11"><a href="#cb232-11" aria-hidden="true" tabindex="-1"></a>approx_equal(a,b)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>not equal</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb234"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb234-1"><a href="#cb234-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">1234567812345678</span></span>
 <span id="cb234-2"><a href="#cb234-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> <span class="dv">1234567812345677</span></span>
 <span id="cb234-3"><a href="#cb234-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb234-4"><a href="#cb234-4" aria-hidden="true" tabindex="-1"></a>approxEqual(a,b)   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb234-4"><a href="#cb234-4" aria-hidden="true" tabindex="-1"></a>approx_equal(a,b)   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>not equal</code></pre>
 </div>
