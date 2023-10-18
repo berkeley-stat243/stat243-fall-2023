@@ -18,10 +18,6 @@ execute:
   freeze: auto
 ---
 
-```{r, fake-setup, echo=FALSE}
-## For some reason we need an R chunk in the doc or get result seen in `error.log`.
-z <- 1
-```
 
 ```{python, echo=FALSE}
 import numpy as np
