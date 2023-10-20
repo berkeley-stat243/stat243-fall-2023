@@ -461,7 +461,7 @@ E\hat{\beta} &amp; = &amp; \beta\\
 \mbox{Var}(\hat{\beta})=E((\hat{\beta}-E\hat{\beta})^{2}) &amp; = &amp; \sigma^{2}(X^{\top}X)^{-1}\\
 \mbox{MSPE}(Y^{*})=E(Y^{*}-\hat{Y})^{2}) &amp; = &amp; \sigma^{2}(1+X^{*\top}(X^{\top}X)^{-1}X^{*}).\end{aligned}\]</span> where <span class="math inline">\(Y^{*}\)</span>is some new observation we’d like to predict given <span class="math inline">\(X^{*}\)</span>.</p>
 <p>But suppose that we’re interested in the properties of standard regression estimation when in reality the mean is not linear in <span class="math inline">\(X\)</span> or the properties of the errors are more complicated than having independent homoscedastic errors. (This is always the case, but the issue is how far from the truth the standard assumptions are.) Or suppose we have a modified procedure to produce <span class="math inline">\(\hat{\beta}\)</span>, such as a procedure that is robust to outliers. In those cases, we cannot compute the expectations above analytically.</p>
-<p>Instead we decide to use a Monte Carlo estimate. To keep the notation more simple, let’s just consider one element of the vector <span class="math inline">\(\beta\)</span> (i.e., one of the regression coefficients) and continue to call that <span class="math inline">\(\beta\)</span>. If we randomly generate <span class="math inline">\(m\)</span> different datasets from some distribution <span class="math inline">\(f\)</span>, and <span class="math inline">\(\hat{\beta}_{i}\)</span> is the estimated coefficient based on the <span class="math inline">\(i\)</span>th dataset: <span class="math inline">\(Y_{i}=(y_{i1},y_{i2},\ldots,y_{in})\)</span>, then we can estimate <span class="math inline">\(E\hat{\beta}\)</span> under that distribution <span class="math inline">\(f\)</span> as <span class="math display">\[\widehat{E(\hat{\beta})}=\bar{\hat{\beta}}=\frac{1}{m}\sum_{i=1}^{m}\hat{\beta}_{i}\]</span> Or to estimate the variance, we have <span class="math display">\[\widehat{\mbox{Var}(\hat{\beta})}=\frac{1}{m}\sum_{i=1}^{m}(\hat{\beta}_{i}-\bar{\hat{\beta}})^{2}.\]</span> In evaluating the performance of regression under non-standard conditions or the performance of our robust regression procedure, what decisions do we have to make to be able to carry out our Monte Carlo procedure?</p>
+<p>Instead we decide to use a Monte Carlo estimate. To keep the notation more simple, let’s just consider one element of the vector <span class="math inline">\(\beta\)</span> (i.e., one of the regression coefficients) and continue to call that <span class="math inline">\(\beta\)</span>. If we randomly generate <span class="math inline">\(m\)</span> different datasets from some distribution <span class="math inline">\(f\)</span>, and <span class="math inline">\(\hat{\beta}_{i}\)</span> is the estimated coefficient based on the <span class="math inline">\(i\)</span>th dataset: <span class="math inline">\(Y_{i}=(y_{i1},y_{i2},\ldots,y_{in})\)</span>, then we can estimate <span class="math inline">\(E\hat{\beta}\)</span> under that distribution <span class="math inline">\(f\)</span> as <span class="math display">\[\hat{E}(\hat{\beta})=\bar{\hat{\beta}}=\frac{1}{m}\sum_{i=1}^{m}\hat{\beta}_{i}\]</span> Or to estimate the variance, we have <span class="math display">\[\widehat{\mbox{Var}}(\hat{\beta})=\frac{1}{m}\sum_{i=1}^{m}(\hat{\beta}_{i}-\bar{\hat{\beta}})^{2}.\]</span> In evaluating the performance of regression under non-standard conditions or the performance of our robust regression procedure, what decisions do we have to make to be able to carry out our Monte Carlo procedure?</p>
 <p>Next let’s think about Monte Carlo methods in general.</p>
 </section>
 <section id="monte-carlo-mc-basics" class="level2">
@@ -643,14 +643,13 @@ E\hat{\beta} &amp; = &amp; \beta\\
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">4</span>)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>plt.hist(uFromNP, bins<span class="op">=</span><span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>(array([6., 4., 1., 7., 3., 6., 3., 2., 3., 4., 4., 5., 2., 3., 2., 6., 4.,
-       5., 3., 6., 5., 6., 2., 4., 4.]), array([3.68753857e-04, 3.98033276e-02, 7.92379014e-02, 1.18672475e-01,
-       1.58107049e-01, 1.97541623e-01, 2.36976197e-01, 2.76410770e-01,
-       3.15845344e-01, 3.55279918e-01, 3.94714492e-01, 4.34149065e-01,
-       4.73583639e-01, 5.13018213e-01, 5.52452787e-01, 5.91887361e-01,
-       6.31321934e-01, 6.70756508e-01, 7.10191082e-01, 7.49625656e-01,
-       7.89060230e-01, 8.28494803e-01, 8.67929377e-01, 9.07363951e-01,
-       9.46798525e-01, 9.86233098e-01]), &lt;BarContainer object of 25 artists&gt;)</code></pre>
+<pre><code>(array([7., 1., 5., 3., 2., 3., 4., 4., 2., 2., 5., 2., 1., 4., 7., 5., 5.,
+       5., 2., 5., 7., 4., 4., 7., 4.]), array([0.01909301, 0.05792482, 0.09675663, 0.13558843, 0.17442024,
+       0.21325205, 0.25208386, 0.29091567, 0.32974748, 0.36857929,
+       0.40741109, 0.4462429 , 0.48507471, 0.52390652, 0.56273833,
+       0.60157014, 0.64040194, 0.67923375, 0.71806556, 0.75689737,
+       0.79572918, 0.83456099, 0.8733928 , 0.9122246 , 0.95105641,
+       0.98988822]), &lt;BarContainer object of 25 artists&gt;)</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Value"</span>)<span class="op">;</span> plt.ylabel(<span class="st">"Frequency"</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
