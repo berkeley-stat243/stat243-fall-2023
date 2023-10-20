@@ -139,7 +139,7 @@ dataset has $n$ observations, then $Y_{i}=(Y_{i1},\ldots,Y_{in})$.
 
 Let's relate that back to our regression example. In that particular
 case, if we're interested in whether the regression estimator is biased,
-we want to know: $$\phi=E\hat{\beta},$$ where $h(Y) = \hat(\beta)$. We can use the Monte Carlo
+we want to know: $$\phi=E\hat{\beta},$$ where $h(Y) = \hat{\beta}(Y)$. We can use the Monte Carlo
 estimate of $\phi$:
 $$\hat{\phi}=\frac{1}{m}\sum_{i=1}^{m}h(Y_{i})=\frac{1}{m}\sum_{i=1}^{m}\hat{\beta}_{i}=\widehat{E(\hat{\beta})}.$$
 
