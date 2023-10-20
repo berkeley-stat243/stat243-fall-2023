@@ -103,9 +103,9 @@ $\beta$. If we randomly generate $m$ different datasets from some
 distribution $f$, and $\hat{\beta}_{i}$ is the estimated coefficient
 based on the $i$th dataset: $Y_{i}=(y_{i1},y_{i2},\ldots,y_{in})$, then
 we can estimate $E\hat{\beta}$ under that distribution $f$ as
-$$\widehat{E(\hat{\beta})}=\bar{\hat{\beta}}=\frac{1}{m}\sum_{i=1}^{m}\hat{\beta}_{i}$$
+$$\hat{E}(\hat{\beta})=\bar{\hat{\beta}}=\frac{1}{m}\sum_{i=1}^{m}\hat{\beta}_{i}$$
 Or to estimate the variance, we have
-$$\widehat{\mbox{Var}(\hat{\beta})}=\frac{1}{m}\sum_{i=1}^{m}(\hat{\beta}_{i}-\bar{\hat{\beta}})^{2}.$$
+$$\widehat{\mbox{Var}}(\hat{\beta})=\frac{1}{m}\sum_{i=1}^{m}(\hat{\beta}_{i}-\bar{\hat{\beta}})^{2}.$$
 In evaluating the performance of regression under non-standard
 conditions or the performance of our robust regression procedure, what
 decisions do we have to make to be able to carry out our Monte Carlo
