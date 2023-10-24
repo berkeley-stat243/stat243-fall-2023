@@ -523,9 +523,8 @@ number generator (RNG) is to have a very long period.
 
 An example of a sequential congruential method is a basic linear
 congruential generator: $$u_{k}=(au_{k-1}+c)\mbox{mod}\,m$$ with integer
-$a$, $m$, $c$, and $u_{k}$ values. Here the periodicity can't exceed $m-1$
-(the method is set up so that we never get $u_{k}=0$ as this causes the
-algorithm to break), so we only have $m-1$ possible values. The seed is
+$a$, $m$, $c$, and $u_{k}$ values. (Note that in some cases $c=0$, in which case the periodicity can't exceed $m-1$ as the method is then set up so that we never get $u_{k}=0$ as this causes the
+algorithm to break.) The seed is
 the initial state, $u_{0}$ - i.e., the point in the sequence at which we
 start. By setting the seed you guarantee reproducibility since given a
 starting value, the sequence is deterministic. In general $a$, $c$ and $m$
@@ -612,7 +611,7 @@ xyz[10, ]
 
 ### Modern generators (PCG and Mersenne Twister)
 
-Recently [O'Neal proposed a new approach](https://www.pcg-random.org/pdf/hmc-cs-2014-0905.pdf) to using the linear congruential generator in a way that gives much better performance than the basic versions of such generators described above. This approach is now the default random number generator in numpy (see `numpy.random.default_rng()`), called the [PCG-64 generator](https://numpy.org/doc/stable/reference/random/bit_generators/pcg64.html#numpy.random.PCG64). 'PCG' stands for permutation congruential generator and encompasses a family of such generators.
+Somewhat recently [O'Neal (2014) proposed a new approach](https://www.pcg-random.org/pdf/hmc-cs-2014-0905.pdf) to using the linear congruential generator in a way that gives much better performance than the basic versions of such generators described above. This approach is now the default random number generator in numpy (see `numpy.random.default_rng()`), called the [PCG-64 generator](https://numpy.org/doc/stable/reference/random/bit_generators/pcg64.html#numpy.random.PCG64). 'PCG' stands for permutation congruential generator and encompasses a family of such generators.
 
 The idea of the PCG approach goes like this:
 
@@ -622,7 +621,7 @@ The idea of the PCG approach goes like this:
 
 Instead of using relatively small values of $m$ seen above, in the PCG approach one uses $m=2^k$, for 'large enough' $k$, usually 64 or 128. It turns out that if $m=2^k$ then the period of the $b$th bit of the state is $2^b$ where $b=1$ is the right-most bit. Small periods are of course bad for RNG, so the bits with small period cause the LCG to not perform well. Thankfully, one simple fix is simply to discard some number of the right-most bits (this is one form of *bit shift*). Note that if one does this, the output of the RNG is based on a subset of the bits, which means that the number of unique values that can be generated is smaller than the period. This is not a problem given we start with a state with a large number of bits (64 or 128 as mentioned above).
 
-O'Neal then goes further; instead of simply discarding bits, she propose to use some of the initial bits (which behave the most randomly) to either shift bits by a random amount or rotate bits by a random amount. This improves the statistical performance of the generator. The choice of how to do this gives the various members of the PCG family of generators. The details are fairly complicated (the PCG paper is 50-odd pages) and not important for our purposes here. 
+O'Neal then goes further; instead of simply discarding bits, she proposes to either shift bits by a random amount or rotate bits by a random amount, where the random amount is determined by a small number of the initial bits. This improves the statistical performance of the generator. The choice of how to do this gives the various members of the PCG family of generators. The details are fairly complicated (the PCG paper is 50-odd pages) and not important for our purposes here. 
 
 By default R uses something called the Mersenne twister, which is in the
 class of generalized feedback shift registers (GFSR). The basic idea of
@@ -749,7 +748,7 @@ saved_state['state']['inc']     # increment ('c')
 
 The output of the PCG-64 is 64 bits while for the Mersenne Twister the output is 32 bits.
 This means you could get duplicated values in long runs, but this does not violate the
-comment about the periodicity of PCG-64 and Mersenne-Twister being longer than $2^64$ and $2^32$, because the two values after the two
+comment about the periodicity of PCG-64 and Mersenne-Twister being longer than $2^{64}$ and $2^{32}$, because the two values after the two
 duplicated numbers will not be duplicates of each other -- as noted previously, there is
 a distinction between the output presented to the user and the state of
 the RNG algorithm.
@@ -851,8 +850,7 @@ in which inverse CDF suffers from numerical difficulties). Suppose the
 truncation point is greater than zero. Working with the standardized
 version of the normal, you can use an translated exponential with lower
 end point equal to the truncation point as the majorizing density
-(Robert 1995; Statistics and Computing, and see calculations in the demo
-code). For truncation less than zero, just make the values negative.
+[(Robert 1995; Statistics and Computing)](https://link.springer.com/article/10.1007/BF00143942). For truncation less than zero, just make the values negative.
 
 ## Adaptive rejection sampling (optional)
 
@@ -872,13 +870,14 @@ based on squeezing are not added to the set).
 
 ## Importance sampling
 
-Importance sampling (IS) allows us to estimate expected values, with
+Importance sampling (IS) allows us to estimate expected values. It's an
+extension of the simple Monte Carlo sampling we saw at the beginning of the unit, with
 some commonalities with rejection sampling.
 
-$$\phi=E_{f}(h(X))=\int h(x)\frac{f(x)}{g(x)}g(x)dx$$ so
-$\hat{\phi}=\frac{1}{m}\sum_{i}h(x_{i})\frac{f(x_{i})}{g(x_{i})}$ for
-$x_{i}$ drawn from $g(x)$, where $w_{i}=f(x_{i})/g(x_{i})$ act as
-weights. (Often in Bayesian contexts, we know $f(x)$ only up to a
+$$\phi=E_{f}(h(Y))=\int h(y)\frac{f(y)}{g(y)}g(y)dy$$ so
+$\hat{\phi}=\frac{1}{m}\sum_{i}h(y_{i})\frac{f(y_{i})}{g(y_{i})}$ for
+$y_{i}$ drawn from $g(y)$, where $w_{i}=f(y_{i})/g(y_{i})$ act as
+weights. (Often in Bayesian contexts, we know $f(y)$ only up to a
 normalizing constant. In this case we need to use
 $w_{i}^{*}=w_{i}/\sum_{j}w_{j}$.
 
@@ -886,20 +885,20 @@ Here we don't require the majorizing property, just that the densities
 have common support, but things can be badly behaved if we sample from a
 density with lighter tails than the density of interest. So in general
 we want $g$ to have heavier tails. More specifically for a low variance
-estimator of $\phi$, we would want that $f(x_{i})/g(x_{i})$ is large
-only when $h(x_{i})$ is very small, to avoid having overly influential
+estimator of $\phi$, we would want that $f(y_{i})/g(y_{i})$ is large
+only when $h(y_{i})$ is very small, to avoid having overly influential
 points.
 
 This suggests we can reduce variance in an IS context by oversampling
-$x$ for which $h(x)$ is large and undersampling when it is small, since
-$\mbox{Var}(\hat{\phi})=\frac{1}{m}\mbox{Var}(h(X)\frac{f(X)}{g(X)})$.
+$y$ for which $h(y)$ is large and undersampling when it is small, since
+$\mbox{Var}(\hat{\phi})=\frac{1}{m}\mbox{Var}(h(Y)\frac{f(Y)}{g(Y)})$.
 An example is that if $h$ is an indicator function that is 1 only for
 rare events, we should oversample rare events and then the IS estimator
 corrects for the oversampling.
 
 What if we actually want a sample from $f$ as opposed to estimating the
-expected value above? We can draw $x$ from the unweighted sample,
-$\{x_{i}\}$, with weights $\{w_{i}\}$. This is called sampling
+expected value above? We can draw $y$ from the unweighted sample,
+$\{y_{i}\}$, with weights $\{w_{i}\}$. This is called sampling
 importance resampling (SIR).
 
 ## Ratio of uniforms (optional)
