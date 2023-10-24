@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Chris Paciorek">
-<meta name="dcterms.date" content="2023-07-26">
+<meta name="dcterms.date" content="2023-10-24">
 
 <title>Statistics 243 Fall 2023 - Numerical linear algebra</title>
 <style>
@@ -438,7 +438,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 26, 2023</p>
+      <p class="date">October 24, 2023</p>
     </div>
   </div>
   
@@ -514,8 +514,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="norms" class="level2">
 <h2 class="anchored" data-anchor-id="norms">Norms</h2>
-<p><span class="math inline">\(\|x\|_{p}=(\sum_{i}|x_{i}|^{p})^{1/p}\)</span> and the standard (Euclidean) norm is <span class="math inline">\(\|x\|_{2}=\sqrt{\sum x_{i}^{2}}=\sqrt{x^{\top}x}\)</span>, just the length of the vector in Euclidean space, which we’ll refer to as <span class="math inline">\(\|x\|\)</span>, unless noted otherwise. One commonly used norm for a matrix is the Frobenius norm, <span class="math inline">\(\|A\|_{F}=(\sum_{i,j}a_{ij}^{2})^{1/2}\)</span>.</p>
-<p>In this Unit, we’ll make use of the <strong>induced matrix norm</strong>, which is defined relative to a corresponding vector norm, <span class="math inline">\(\|\cdot\|\)</span>, as: <span class="math display">\[\|A\|=\sup_{x\ne0}\frac{\|Ax\|}{\|x\|}\]</span> So we have <span class="math display">\[\|A\|_{2}=\sup_{x\ne0}\frac{\|Ax\|_{2}}{\|x\|_{2}}=\sup_{\|x\|_{2}=1}\|Ax\|_{2}\]</span> If you’re not familiar with the supremum (“sup” above), you can just think of it as taking the maximum.</p>
+<p>For a vector, <span class="math inline">\(\|x\|_{p}=(\sum_{i}|x_{i}|^{p})^{1/p}\)</span> and the standard (Euclidean) norm is <span class="math inline">\(\|x\|_{2}=\sqrt{\sum x_{i}^{2}}=\sqrt{x^{\top}x}\)</span>, just the length of the vector in Euclidean space, which we’ll refer to as <span class="math inline">\(\|x\|\)</span>, unless noted otherwise.</p>
+<p>One commonly used norm for a matrix is the Frobenius norm, <span class="math inline">\(\|A\|_{F}=(\sum_{i,j}a_{ij}^{2})^{1/2}\)</span>.</p>
+<p>In this Unit, we’ll often make use of the <strong>induced matrix norm</strong>, which is defined relative to a corresponding vector norm, <span class="math inline">\(\|\cdot\|\)</span>, as: <span class="math display">\[\|A\|=\sup_{x\ne0}\frac{\|Ax\|}{\|x\|}\]</span> So we have <span class="math display">\[\|A\|_{2}=\sup_{x\ne0}\frac{\|Ax\|_{2}}{\|x\|_{2}}=\sup_{\|x\|_{2}=1}\|Ax\|_{2}\]</span> If you’re not familiar with the supremum (“sup” above), you can just think of it as taking the maximum. In the case of the 2-norm, the norm turns out to be the largest singular value in the singular value decomposition (SVD) of the matrix.</p>
+<p>We can interpret the norm of a matrix as the most that the matrix can stretch a vector when multiplying by the vector (relative to the length of the vector).</p>
 <p>A property of any legitimate matrix norm (including the induced norm) is that <span class="math inline">\(\|AB\|\leq\|A\|\|B\|\)</span>. Also recall that norms must obey the triangle inequality, <span class="math inline">\(\|A+B\|\leq\|A\|+\|B\|\)</span>.</p>
 <p>A normalized vector is one with “length”, i.e., Euclidean norm, of one. We can easily normalize a vector: <span class="math inline">\(\tilde{x}=x/\|x\|\)</span></p>
 <p>The angle between two vectors is <span class="math display">\[\theta=\cos^{-1}\left(\frac{\langle x,y\rangle}{\sqrt{\langle x,x\rangle\langle y,y\rangle}}\right)\]</span></p>
@@ -603,6 +605,7 @@ A_{n1}B &amp; \cdots &amp; A_{nm}B
 <section id="interpreting-an-eigendecomposition" class="level2">
 <h2 class="anchored" data-anchor-id="interpreting-an-eigendecomposition">Interpreting an eigendecomposition</h2>
 <p>Let’s interpret the eigendecomposition in a generative context as a way of generating random vectors. We can generate <span class="math inline">\(y\)</span> s.t. <span class="math inline">\(\mbox{Cov}(y)=A\)</span> if we generate <span class="math inline">\(y=\Gamma\Lambda^{1/2}z\)</span> where <span class="math inline">\(\mbox{Cov}(z)=I\)</span> and <span class="math inline">\(\Lambda^{1/2}\)</span> is formed by taking the square roots of the eigenvalues. So <span class="math inline">\(\sqrt{\lambda_{i}}\)</span> is the standard deviation associated with the basis vector <span class="math inline">\(\Gamma_{\cdot i}\)</span>. That is, the <span class="math inline">\(z\)</span>’s provide the weights on the basis vectors, with scaling based on the eigenvalues. So <span class="math inline">\(y\)</span> is produced as a linear combination of eigenvectors as basis vectors, with the variance attributable to the basis vectors determined by the eigenvalues.</p>
+<p>To go the other direction, we can project a vector <span class="math inline">\(y\)</span> onto the space spanned by the eigenvectors: <span class="math inline">\(z = (\Gamma^{\top}\Gamma)^{-1}\Gamma^{\top}y = \Gamma^{\top}y\)</span>, where the simplification of course comes from <span class="math inline">\(\Gamma\)</span> being orthogonal.</p>
 <p>If <span class="math inline">\(x^{\top}Ax\geq0\)</span> then <span class="math inline">\(A\)</span> is nonnegative definite (also called positive semi-definite). In this case one or more eigenvalues can be zero. Let’s interpret this a bit more in the context of generating random vectors based on non-negative definite matrices, <span class="math inline">\(y=\Gamma\Lambda^{1/2}z\)</span> where <span class="math inline">\(\mbox{Cov}(z)=I\)</span>. Questions:</p>
 <ol type="1">
 <li><p>What does it mean when one or more eigenvalue (i.e., <span class="math inline">\(\lambda_{i}=\Lambda_{ii}\)</span>) is zero?</p></li>
@@ -649,7 +652,7 @@ A_{n1}B &amp; \cdots &amp; A_{nm}B
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> e[<span class="dv">1</span>] <span class="op">@</span> ((evals <span class="op">**</span> <span class="fl">0.5</span>) <span class="op">*</span> np.random.normal(size <span class="op">=</span> <span class="dv">5</span>))</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>y.<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>-5.551115123125783e-16</code></pre>
+<pre><code>1.1102230246251565e-15</code></pre>
 </div>
 </div>
 <p>In the second order case, we have two non-identifiabilities: for the sum and for the linear component of the variation in <span class="math inline">\(y\)</span> (linear in the indices of <span class="math inline">\(y\)</span>).</p>
@@ -695,7 +698,7 @@ A_{n1}B &amp; \cdots &amp; A_{nm}B
             }
         }</code></pre>
 <p>In this case the two approaches involve the same number of operations but the first might be better for row-major matrices (so might be how we would implement in C) and the second for column-major (so might be how we would implement in Fortran).</p>
-<p><strong>Challenge</strong>: check whether the second approach is faster in R. (Write the code just doing the outer loop and doing the inner loop using vectorized calculation.)</p>
+<p><strong>Challenge</strong>: check whether the first approach is faster in Python. (Write the code just doing the outer loop and doing the inner loop using vectorized calculation.)</p>
 <section id="general-computational-issues" class="level4">
 <h4 class="anchored" data-anchor-id="general-computational-issues">General computational issues</h4>
 <p>The same caveats we discussed in terms of computer arithmetic hold naturally for linear algebra, since this involves arithmetic with many elements. Good implementations of algorithms are aware of the danger of catastrophic cancellation and of the possibility of dividing by zero or by values that are near zero.</p>
@@ -723,7 +726,7 @@ A_{n1}B &amp; \cdots &amp; A_{nm}B
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>bPerturbed <span class="op">=</span> np.array([<span class="fl">32.1</span>, <span class="fl">22.9</span>, <span class="fl">33.1</span>, <span class="fl">30.9</span>])</span>
 <span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>xPerturbed <span class="op">=</span> np.linalg.solve(A, bPerturbed)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>What’s going on? Some manipulations with inequalities involving the induced matrix norm (for any chosen vector norm, but we might as well just think about the Euclidean norm) (see Gentle-CS Sec. 5.1) give <span class="math display">\[\frac{\|\delta x\|}{\|x\|}\leq\|A\|\|A^{-1}\|\frac{\|\delta b\|}{\|b\|}\]</span> where we define the condition number w.r.t. inversion as <span class="math inline">\(\mbox{cond}(A)\equiv\|A\|\|A^{-1}\|\)</span>. We’ll generally work with the <span class="math inline">\(L_{2}\)</span> norm, and for a nonsingular square matrix the result is that the condition number is the ratio of the absolute values of the largest and smallest magnitude eigenvalues. This makes sense since <span class="math inline">\(\|A\|_{2}\)</span> is the absolute value of the largest magnitude eigenvalue of <span class="math inline">\(A\)</span> and <span class="math inline">\(\|A^{-1}\|_{2}\)</span> that of the inverse of the absolute value of the smallest magnitude eigenvalue of <span class="math inline">\(A\)</span>.</p>
+<p>What’s going on? Some manipulations with inequalities involving the induced matrix norm (for any chosen vector norm, but we might as well just think about the Euclidean norm) (see Gentle-CS Sec. 5.1 or the derivation in class) give <span class="math display">\[\frac{\|\delta x\|}{\|x\|}\leq\|A\|\|A^{-1}\|\frac{\|\delta b\|}{\|b\|}\]</span> where we define the condition number w.r.t. inversion as <span class="math inline">\(\mbox{cond}(A)\equiv\|A\|\|A^{-1}\|\)</span>. We’ll generally work with the <span class="math inline">\(L_{2}\)</span> norm, and for a nonsingular square matrix the result is that the condition number is the ratio of the absolute values of the largest and smallest magnitude eigenvalues. This makes sense since <span class="math inline">\(\|A\|_{2}\)</span> is the absolute value of the largest magnitude eigenvalue of <span class="math inline">\(A\)</span> and <span class="math inline">\(\|A^{-1}\|_{2}\)</span> that of the inverse of the absolute value of the smallest magnitude eigenvalue of <span class="math inline">\(A\)</span>.</p>
 <p>We see in the code above that the large disparity in eigenvalues of <span class="math inline">\(A\)</span> leads to an effect predictable from our inequality above, with the condition number helping us find an upper bound.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>e <span class="op">=</span> np.linalg.eig(A)</span>
@@ -777,7 +780,7 @@ A_{n1}B &amp; \cdots &amp; A_{nm}B
 <pre><code>array([24.11293487,  7.7       ,  1.95366513])</code></pre>
 </div>
 </div>
-<p>The basic story is that simple strategies often solve the problem, and that you should be cognizant of the absolute and relative magnitudes involved in your calculations.</p>
+<p>The basic story is that simple strategies often solve the problem, and that you should be aware of the absolute and relative magnitudes involved in your calculations.</p>
 <p>One rule of thumb is to try to work with numbers whose magnitude is around 1. We can often scale the values in our problem in order to do this. I.e., change the units of your variables. Instead of personal income in dollars, use personal income in thousands or hundreds of thousands of dollars.</p>
 </section>
 </section>
@@ -969,8 +972,8 @@ A_{n1}B &amp; \cdots &amp; A_{nm}B
 <span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>e <span class="op">=</span> np.linalg.eig(C)</span>
 <span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>np.sort(e[<span class="dv">0</span>])[::<span class="op">-</span><span class="dv">1</span>][<span class="dv">96</span>:<span class="dv">100</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>array([-3.97281456e-16+0.00000000e+00j, -5.04026222e-16+2.43770877e-16j,
-       -5.04026222e-16-2.43770877e-16j, -6.63548161e-16+0.00000000e+00j])</code></pre>
+<pre><code>array([-4.16702596e-16+0.j, -5.38621518e-16+0.j, -6.26206506e-16+0.j,
+       -6.98611709e-16+0.j])</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    L <span class="op">=</span> np.linalg.cholesky(C)</span>
@@ -983,7 +986,7 @@ A_{n1}B &amp; \cdots &amp; A_{nm}B
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>vals <span class="op">=</span> np.<span class="bu">abs</span>(e[<span class="dv">0</span>])</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>np.<span class="bu">max</span>(vals)<span class="op">/</span>np.<span class="bu">min</span>(vals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>5.971220243671803e+17</code></pre>
+<pre><code>3.135151918122864e+18</code></pre>
 </div>
 </div>
 <p>I don’t see a way to use pivoting with the Cholesky in Python, but in R, one can do <code>chol(C, pivot = TRUE)</code>.</p>
@@ -1143,7 +1146,7 @@ In R, the following will do it (on the log scale), since <span class="math inlin
 <h4 class="anchored" data-anchor-id="computation">Computation</h4>
 <p>Computing from any of these diagonal or triangular matrices as the product of the diagonals is prone to overflow and underflow, so we <strong>always</strong> work on the log scale as the sum of the log of the values. When some of these may be negative, we can always keep track of the number of negative values and take the log of the absolute values.</p>
 <p>Often we will have the factorization as a result of other parts of the computation, so we get the determinant for free.</p>
-<p>We can use <code>np.linalg.logdet()</code> or (definitely not recommended) `np.linalg.det() to calculate the determinant in Python. These functions use the LU decomposition.</p>
+<p>We can use <code>np.linalg.logdet()</code> or (definitely not recommended) <code>np.linalg.det()</code> to calculate the determinant in Python. These functions use the LU decomposition.</p>
 </section>
 </section>
 </section>
@@ -1165,12 +1168,20 @@ In R, the following will do it (on the log scale), since <span class="math inlin
 <h2 class="anchored" data-anchor-id="singular-value-decomposition">Singular value decomposition</h2>
 <p>Let’s consider an <span class="math inline">\(n\times m\)</span> matrix, <span class="math inline">\(A\)</span>, with <span class="math inline">\(n\geq m\)</span> (if <span class="math inline">\(m&gt;n\)</span>, we can always work with <span class="math inline">\(A^{\top})\)</span>. This often is a matrix representing <span class="math inline">\(m\)</span> features of <span class="math inline">\(n\)</span> observations. We could have <span class="math inline">\(n\)</span> documents and <span class="math inline">\(m\)</span> words, or <span class="math inline">\(n\)</span> gene expression levels and <span class="math inline">\(m\)</span> experimental conditions, etc. <span class="math inline">\(A\)</span> can always be decomposed as <span class="math display">\[A=UDV^{\top}\]</span> where <span class="math inline">\(U\)</span> and <span class="math inline">\(V\)</span> are matrices with orthonormal columns (left and right eigenvectors) and <span class="math inline">\(D\)</span> is diagonal with non-negative values (which correspond to eigenvalues in the case of square <span class="math inline">\(A\)</span> and to squared eigenvalues of <span class="math inline">\(A^{\top}A\)</span>).</p>
 <p>The SVD can be represented in more than one way. One representation is <span class="math display">\[A_{n\times m}=U_{n\times k}D_{k\times k}V_{k\times m}^{\top}=\sum_{j=1}^{k}D_{jj}u_{j}v_{j}^{\top}\]</span> where <span class="math inline">\(u_{j}\)</span> and <span class="math inline">\(v_{j}\)</span> are the columns of <span class="math inline">\(U\)</span> and <span class="math inline">\(V\)</span> and where <span class="math inline">\(k\)</span> is the rank of <span class="math inline">\(A\)</span> (which is at most the minimum of <span class="math inline">\(n\)</span> and <span class="math inline">\(m\)</span> of course). The diagonal elements of <span class="math inline">\(D\)</span> are the singular values.</p>
+<p>That representation is as the sum of rank-one matrices (since each term is the scaled outer product of two vectors).</p>
 <p>If <span class="math inline">\(A\)</span> is positive semi-definite, the eigendecomposition is an SVD. Furthermore, <span class="math inline">\(A^{\top}A=VD^{2}V^{\top}\)</span> and <span class="math inline">\(AA^{\top}=UD^{2}U^{\top}\)</span>, so we can find the eigendecomposition of such matrices using the SVD of <span class="math inline">\(A\)</span> (for <span class="math inline">\(AA^{\top}\)</span> we need to fill out <span class="math inline">\(U\)</span> to have <span class="math inline">\(n\)</span> columns). Note that the squares of the singular values of <span class="math inline">\(A\)</span> are the eigenvalues of <span class="math inline">\(A^{\top}A\)</span> and <span class="math inline">\(AA^{\top}\)</span>.</p>
 <p>We can also fill out the matrices to get <span class="math display">\[A=U_{n\times n}D_{n\times m}V_{m\times m}^{\top}\]</span> where the added rows and columns of <span class="math inline">\(D\)</span> are zero with the upper left block the <span class="math inline">\(D_{k\times k}\)</span> from above.</p>
 <section id="uses" class="level4">
 <h4 class="anchored" data-anchor-id="uses">Uses</h4>
 <p>The SVD is an excellent way to determine a matrix rank and to construct a pseudo-inverse (<span class="math inline">\(A^{+}=VD^{+}U^{\top})\)</span>.</p>
-<p>We can use the SVD to approximate <span class="math inline">\(A\)</span> by taking <span class="math inline">\(A\approx\tilde{A}=\sum_{j=1}^{p}D_{jj}u_{j}v_{j}^{\top}\)</span> for <span class="math inline">\(p&lt;m\)</span>. This approximation holds in terms of the Frobenius norm for <span class="math inline">\(A-\tilde{A}\)</span>. As an example if we have a large image of dimension <span class="math inline">\(n\times m\)</span>, we could hold a compressed version by a rank-<span class="math inline">\(p\)</span> approximation using the SVD. The SVD is used a lot in clustering problems. For example, the Netflix prize was won based on a variant of SVD (in fact all of the top methods used variants on SVD, I believe).</p>
+<p>We can use the SVD to approximate <span class="math inline">\(A\)</span> by taking <span class="math inline">\(A\approx\tilde{A}=\sum_{j=1}^{p}D_{jj}u_{j}v_{j}^{\top}\)</span> for <span class="math inline">\(p&lt;m\)</span>. The Eckart-Minsky-Young theorem shows that the truncated SVD minimizes the Frobenius norm of <span class="math inline">\(A-\tilde{A}\)</span> over all possible rank-<span class="math inline">\(p\)</span> approximations. As an example if we have a large image of dimension <span class="math inline">\(n\times m\)</span>, we could hold a compressed version by a rank-<span class="math inline">\(p\)</span> approximation using the SVD. The SVD is used a lot in clustering problems. For example, the Netflix prize was won based on a variant of SVD (in fact all of the top methods used variants on SVD, I believe).</p>
+<p>Here’s another way to think about the SVD in terms of transformations and bases. Applying the SVD to a vector, $ UDV^{top}x$, carries out the following steps:</p>
+<ul>
+<li><span class="math inline">\(V^{top}x\)</span> expresses <span class="math inline">\(x\)</span> in terms of weights for the columns of <span class="math inline">\(V\)</span>.</li>
+<li>Multiplying the result by <span class="math inline">\(D\)</span> scales/stretches the weights.</li>
+<li>Multiplying by <span class="math inline">\(U\)</span> produces the result, which is a weighted combination of columns of <span class="math inline">\(U\)</span>, spanning the column-space of <span class="math inline">\(U\)</span>.</li>
+</ul>
+<p>So applying the SVD transforms <span class="math inline">\(x\)</span> from the column space of <span class="math inline">\(V\)</span> to the column space of <span class="math inline">\(U\)</span>.</p>
 </section>
 <section id="computation-2" class="level4">
 <h4 class="anchored" data-anchor-id="computation-2">Computation</h4>
@@ -1198,12 +1209,12 @@ A^{(j+1)} &amp; = &amp; R_{m-2}^{\top} R_{m-3}^{\top} \cdots R_{0}^{\top} A^{(j)
 <p>Scipy provides functionality for working with matrices in various ways, including the <a href="https://docs.scipy.org/doc/scipy/reference/sparse.html"><code>scipy.sparse</code> module</a>, which provides support for structured sparse matrices such as triangular and diagonal matrices as well as unstructured sparse matrices using various standard representations.</p>
 <p>Some useful packages in R for matrices are <em>Matrix</em>, <em>spam</em>, and <em>bdsmatrix</em>. <em>Matrix</em> can represent a variety of rectangular matrices, including triangular, orthogonal, diagonal, etc. and provides methods for various matrix calculations that are specific to the matrix type. <em>spam</em> handles general sparse matrices with fast matrix calculations, in particular a fast Cholesky decomposition. <em>bdsmatrix</em> focuses on block-diagonal matrices, which arise frequently in contexts where there is clustering that induces within-cluster correlation and cross-cluster independence.</p>
 <p>In general, matrix operations in Python and R go to compiled C or Fortran code without much intermediate Python or R code, so they can actually be pretty efficient and are based on the best algorithms developed by numerical experts. The core libraries that are used are LAPACK and BLAS (the Linear Algebra PACKage and the Basic Linear Algebra Subroutines). As we’ve discussed in the parallelization unit, one way to speed up code that relies heavily on linear algebra is to make sure you have a BLAS library tuned to your machine. These include OpenBLAS (open source), Intel’s MKL, AMD’s ACML, and Apple’s vecLib.</p>
-<p>If you use Conda, numpy will generally be linked against MKL. With pip it’s possible to install numpy so that it uses OpenBLAS. R can be linked to the shared object library file (<em>.so</em> file or <em>.dylib</em> on a Mac) for a fast BLAS. These BLAS libraries are also available in threaded versions that farm out the calculations across multiple cores or processors that share memory.</p>
+<p>If you use Conda, numpy will generally be linked against MKL or OpenBLAS (this will depend on the locations online of the packages being installed, i.e., the <em>channel(s)</em> used). With pip, numpy will generally be linked against OpenBLAS. it’s possible to install numpy so that it uses OpenBLAS. R can be linked to the shared object library file (<em>.so</em> file or <em>.dylib</em> on a Mac) for a fast BLAS. These BLAS libraries are also available in threaded versions that farm out the calculations across multiple cores or processors that share memory. More details are available in <a href="https://statistics.berkeley.edu/computing/faqs/linear-algebra-and-parallelized-linear-algebra-using-blas">this SCF documentation</a>.</p>
 <p>BLAS routines do vector operations (level 1), matrix-vector operations (level 2), and dense matrix-matrix operations (level 3). Often the name of the routine has as its first letter “d”, “s”, “c” to indicate the routine is double precision, single precision, or complex. LAPACK builds on BLAS to implement standard linear algebra routines such as eigendecomposition, solutions of linear systems, a variety of factorizations, etc.</p>
 </section>
 <section id="sparse-matrices" class="level2">
 <h2 class="anchored" data-anchor-id="sparse-matrices">Sparse matrices</h2>
-<p>As an example of exploiting sparsity, we can use a standard format (CSR = compressed sparse row) in the Scipy sparse module:</p>
+<p>As an example of exploiting sparsity, we can use a standard format (CSR = compressed sparse row) in the Scipy <code>sparse</code> module:</p>
 <p>Consider the matrix to be row-major and store the non-zero elements in order in an array called <code>data</code>. Then create a array called <em>indptr</em> that stores the position of the first element of each row. Finally, have a array, <em>indices</em> that tells the column identity of each element.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.sparse <span class="im">as</span> sparse</span>
