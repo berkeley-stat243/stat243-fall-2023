@@ -1,7 +1,7 @@
 ---
 title: "Numerical linear algebra"
 author: "Chris Paciorek"
-date: "2023-07-26"
+date: "2023-10-24"
 format:
   pdf:
     documentclass: article
@@ -179,18 +179,26 @@ them implicit. Ask me if it's not clear.
 
 ## Norms
 
-$\|x\|_{p}=(\sum_{i}|x_{i}|^{p})^{1/p}$ and the standard (Euclidean)
+For a vector, $\|x\|_{p}=(\sum_{i}|x_{i}|^{p})^{1/p}$ and the standard (Euclidean)
 norm is $\|x\|_{2}=\sqrt{\sum x_{i}^{2}}=\sqrt{x^{\top}x}$, just the
 length of the vector in Euclidean space, which we'll refer to as
-$\|x\|$, unless noted otherwise. One commonly used norm for a matrix is
+$\|x\|$, unless noted otherwise.
+
+One commonly used norm for a matrix is
 the Frobenius norm, $\|A\|_{F}=(\sum_{i,j}a_{ij}^{2})^{1/2}$.
 
-In this Unit, we'll make use of the **induced matrix norm**, which is
+In this Unit, we'll often make use of the **induced matrix norm**, which is
 defined relative to a corresponding vector norm, $\|\cdot\|$, as:
 $$\|A\|=\sup_{x\ne0}\frac{\|Ax\|}{\|x\|}$$ So we have
 $$\|A\|_{2}=\sup_{x\ne0}\frac{\|Ax\|_{2}}{\|x\|_{2}}=\sup_{\|x\|_{2}=1}\|Ax\|_{2}$$
 If you're not familiar with the supremum ("sup" above), you can just
-think of it as taking the maximum.
+think of it as taking the maximum. In the case of the 2-norm, the norm turns
+out to be the largest singular value in the singular value decomposition (SVD)
+of the matrix.
+
+We can interpret the norm of a matrix as the most that the matrix
+can stretch a vector when multiplying by the vector (relative to the
+length of the vector).
 
 A property of any legitimate matrix norm (including the induced norm) is
 that $\|AB\|\leq\|A\|\|B\|$. Also recall that norms must obey the triangle
@@ -438,6 +446,10 @@ produced as a linear combination of eigenvectors as basis vectors, with
 the variance attributable to the basis vectors determined by the
 eigenvalues.
 
+To go the other direction, we can project a vector $y$ onto the space 
+spanned by the eigenvectors: $z = (\Gamma^{\top}\Gamma)^{-1}\Gamma^{\top}y = \Gamma^{\top}y$,
+where the simplification of course comes from $\Gamma$ being orthogonal.
+
 If $x^{\top}Ax\geq0$ then $A$ is nonnegative definite (also called
 positive semi-definite). In this case one or more eigenvalues can be
 zero. Let's interpret this a bit more in the context of generating
@@ -612,8 +624,8 @@ but the first might be better for row-major matrices (so might be how we
 would implement in C) and the second for column-major (so might be how
 we would implement in Fortran). 
 
-**Challenge**: check whether the second
-approach is faster in R. (Write the code just doing the outer loop and
+**Challenge**: check whether the first
+approach is faster in Python. (Write the code just doing the outer loop and
 doing the inner loop using vectorized calculation.)
 
 #### General computational issues
@@ -662,7 +674,7 @@ xPerturbed = np.linalg.solve(A, bPerturbed)
 
 What's going on? Some manipulations with inequalities involving the
 induced matrix norm (for any chosen vector norm, but we might as well
-just think about the Euclidean norm) (see Gentle-CS Sec. 5.1) give
+just think about the Euclidean norm) (see Gentle-CS Sec. 5.1 or the derivation in class) give
 $$\frac{\|\delta x\|}{\|x\|}\leq\|A\|\|A^{-1}\|\frac{\|\delta b\|}{\|b\|}$$
 where we define the condition number w.r.t. inversion as
 $\mbox{cond}(A)\equiv\|A\|\|A^{-1}\|$. We'll generally work with the
@@ -746,7 +758,7 @@ with np.printoptions(suppress=True):
 
 
 The basic story is that simple strategies often solve the problem, and
-that you should be cognizant of the absolute and relative magnitudes
+that you should be aware of the absolute and relative magnitudes
 involved in your calculations.
 
 One rule of thumb is to try to work with numbers whose magnitude is
@@ -1438,7 +1450,7 @@ Often we will have the factorization as a result of other parts of the
 computation, so we get the determinant for free.
 
 We can use `np.linalg.logdet()` or (definitely not recommended)
-`np.linalg.det() to calculate the determinant in Python.
+`np.linalg.det()` to calculate the determinant in Python.
 These functions use the LU decomposition.
 
 
@@ -1546,6 +1558,9 @@ where $u_{j}$ and $v_{j}$ are the columns of $U$ and $V$ and where $k$
 is the rank of $A$ (which is at most the minimum of $n$ and $m$ of
 course). The diagonal elements of $D$ are the singular values.
 
+That representation is as the sum of rank-one matrices (since
+each term is the scaled outer product of two vectors). 
+
 If $A$ is positive semi-definite, the eigendecomposition is an SVD.
 Furthermore, $A^{\top}A=VD^{2}V^{\top}$ and $AA^{\top}=UD^{2}U^{\top}$,
 so we can find the eigendecomposition of such matrices using the SVD of
@@ -1565,12 +1580,22 @@ a pseudo-inverse ($A^{+}=VD^{+}U^{\top})$.
 
 We can use the SVD to approximate $A$ by taking
 $A\approx\tilde{A}=\sum_{j=1}^{p}D_{jj}u_{j}v_{j}^{\top}$ for $p<m$.
-This approximation holds in terms of the Frobenius norm for
-$A-\tilde{A}$. As an example if we have a large image of dimension
+The Eckart-Minsky-Young theorem shows that the truncated SVD
+minimizes the Frobenius norm of $A-\tilde{A}$ over all possible rank-$p$ approximations.
+As an example if we have a large image of dimension
 $n\times m$, we could hold a compressed version by a rank-$p$
 approximation using the SVD. The SVD is used a lot in clustering
 problems. For example, the Netflix prize was won based on a variant of
 SVD (in fact all of the top methods used variants on SVD, I believe).
+
+Here's another way to think about the SVD in terms of transformations and bases.
+Applying the SVD to a vector, $ UDV^{top}x$, carries out the following steps:
+
+ - $V^{top}x$ expresses $x$ in terms of weights for the columns of $V$.
+ - Multiplying the result by $D$ scales/stretches the weights.
+ - Multiplying by $U$ produces the result, which is a weighted combination of columns of $U$, spanning the column-space of $U$.
+
+So applying the SVD transforms $x$ from the column space of $V$ to the column space of $U$.
 
 #### Computation
 
@@ -1650,12 +1675,15 @@ we've discussed in the parallelization unit, one way to speed up code
 that relies heavily on linear algebra is to make sure you have a BLAS
 library tuned to your machine. These include OpenBLAS (open source), Intel's MKL, AMD's ACML, and Apple's vecLib. 
 
-If you use Conda, numpy will generally be linked against MKL. With pip
+If you use Conda, numpy will generally be linked against MKL or OpenBLAS (this will
+depend on the locations online of the packages being installed, i.e., the *channel(s)* used). With pip,
+numpy will generally be linked against OpenBLAS.
 it's possible to install numpy so that it uses OpenBLAS.
 R can be linked to the shared object library file
 (*.so* file or *.dylib* on a Mac) for a fast BLAS. These BLAS
 libraries are also available in threaded versions that farm out the
 calculations across multiple cores or processors that share memory.
+More details are available in [this SCF documentation](https://statistics.berkeley.edu/computing/faqs/linear-algebra-and-parallelized-linear-algebra-using-blas).
 
 BLAS routines do vector operations (level 1), matrix-vector operations
 (level 2), and dense matrix-matrix operations (level 3). Often the name
@@ -1668,7 +1696,7 @@ factorizations, etc.
 ## Sparse matrices
 
 As an example of exploiting sparsity, we can use a standard format (CSR = compressed sparse row)
-in the Scipy sparse module:
+in the Scipy `sparse` module:
 
 Consider the matrix to be row-major and store
 the non-zero elements in order in an array called `data`. Then create a
