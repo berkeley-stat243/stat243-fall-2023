@@ -643,13 +643,13 @@ E\hat{\beta} &amp; = &amp; \beta\\
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">4</span>)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>plt.hist(uFromNP, bins<span class="op">=</span><span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>(array([6., 5., 5., 6., 5., 3., 1., 5., 8., 4., 3., 0., 2., 2., 3., 5., 5.,
-       7., 4., 4., 3., 3., 2., 6., 3.]), array([0.01516659, 0.05451316, 0.09385973, 0.13320631, 0.17255288,
-       0.21189945, 0.25124602, 0.29059259, 0.32993916, 0.36928573,
-       0.40863231, 0.44797888, 0.48732545, 0.52667202, 0.56601859,
-       0.60536516, 0.64471174, 0.68405831, 0.72340488, 0.76275145,
-       0.80209802, 0.84144459, 0.88079116, 0.92013774, 0.95948431,
-       0.99883088]), &lt;BarContainer object of 25 artists&gt;)</code></pre>
+<pre><code>(array([8., 7., 1., 5., 7., 3., 2., 1., 5., 7., 3., 2., 2., 3., 2., 0., 2.,
+       6., 4., 7., 6., 5., 4., 3., 5.]), array([0.00396122, 0.04306257, 0.08216392, 0.12126527, 0.16036663,
+       0.19946798, 0.23856933, 0.27767068, 0.31677204, 0.35587339,
+       0.39497474, 0.43407609, 0.47317745, 0.5122788 , 0.55138015,
+       0.5904815 , 0.62958286, 0.66868421, 0.70778556, 0.74688691,
+       0.78598827, 0.82508962, 0.86419097, 0.90329232, 0.94239368,
+       0.98149503]), &lt;BarContainer object of 25 artists&gt;)</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Value"</span>)<span class="op">;</span> plt.ylabel(<span class="st">"Frequency"</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -849,20 +849,6 @@ E\hat{\beta} &amp; = &amp; \beta\\
 <p>If <span class="math inline">\(U\)</span> and <span class="math inline">\(V\)</span> are uniform in <span class="math inline">\(C=\{(u,v):\,0\leq u\leq\sqrt{f(v/u)}\)</span> then <span class="math inline">\(X=V/U\)</span> has density proportion to <span class="math inline">\(f\)</span>. The basic algorithm is to choose a rectangle that encloses <span class="math inline">\(C\)</span> and sample until we find <span class="math inline">\(u\leq f(v/u)\)</span>. Then we use <span class="math inline">\(x=v/u\)</span> as our RV. The larger region enclosing <span class="math inline">\(C\)</span> is the majorizing region and a simple approach (if <span class="math inline">\(f(x)\)</span>and <span class="math inline">\(x^{2}f(x)\)</span> are bounded in <span class="math inline">\(C\)</span>) is to choose the rectangle, <span class="math inline">\(0\leq u\leq\sup_{x}\sqrt{f(x)}\)</span>, <span class="math inline">\(\inf_{x}x\sqrt{f(x)}\leq v\leq\sup_{x}x\sqrt{f(x)}\)</span>.</p>
 <p>One can also consider truncating the rectangular region, depending on the features of <span class="math inline">\(f\)</span>.</p>
 <p>Monahan recommends the ratio of uniforms, particularly a version for discrete distributions (p.&nbsp;323 of the 2nd edition).</p>
-<p>Debugging:</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>u <span class="op">=</span> np.random.normal(size<span class="op">=</span><span class="dv">20</span>)</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>plt.hist(u)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>(array([1., 0., 2., 3., 2., 4., 0., 3., 2., 3.]), array([-2.06014071, -1.70791584, -1.35569098, -1.00346612, -0.65124125,
-       -0.29901639,  0.05320848,  0.40543334,  0.75765821,  1.10988307,
-        1.46210794]), &lt;BarContainer object of 10 artists&gt;)</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<p><img src="unit9-sim_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="960"></p>
-</div>
-</div>
 
 
 </section>
