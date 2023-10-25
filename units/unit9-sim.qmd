@@ -917,11 +917,3 @@ the features of $f$.
 
 Monahan recommends the ratio of uniforms, particularly a version for
 discrete distributions (p. 323 of the 2nd edition).
-
-Debugging:
-
-```{python}
-u = np.random.normal(size=20)
-plt.hist(u)
-plt.show()
-```
