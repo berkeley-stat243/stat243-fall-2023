@@ -213,8 +213,9 @@ $$\theta=\cos^{-1}\left(\frac{\langle x,y\rangle}{\sqrt{\langle x,x\rangle\langl
 ## Orthogonality
 
 Two vectors are orthogonal if $x^{\top}y=0$, in which case we say
-$x\perp y$. An **orthogonal matrix** is a matrix in which all of the
-columns are orthogonal to each other and normalized. Orthogonal matrices
+$x\perp y$. An **orthogonal matrix** is a square matrix in which all of the
+columns are orthogonal to each other and normalized. The same holds for
+the rows. Orthogonal matrices
 can be shown to have full rank. Furthermore if $A$ is orthogonal,
 $A^{\top}A=I$, so $A^{-1}=A^{\top}$. Given all this, the determinant of
 orthogonal $A$ is either 1 or -1. Finally the product of two orthogonal
