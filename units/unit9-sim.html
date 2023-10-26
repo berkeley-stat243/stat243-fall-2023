@@ -501,9 +501,9 @@ E\hat{\beta} &amp; = &amp; \beta\\
 <h4 class="anchored" data-anchor-id="back-to-the-regression-example-1">Back to the regression example</h4>
 <p>Some examples of simulation variances we might be interested in in the regression example include:</p>
 <ul>
-<li><p>Uncertainty in our estimate of bias: <span class="math inline">\(\widehat{\mbox{Var}}(\widehat{E(\hat{\beta})}-\beta)\)</span>.</p></li>
-<li><p>Uncertainty in the estimated variance of the estimated coefficient: <span class="math inline">\(\widehat{\mbox{Var}}(\widehat{\mbox{Var}(\hat{\beta})})\)</span>.</p></li>
-<li><p>Uncertainty in the estimated mean square prediction error: <span class="math inline">\(\widehat{\mbox{Var}}(\widehat{\mbox{MSPE}(Y^{*})})\)</span>.</p></li>
+<li><p>Uncertainty in our estimate of bias: <span class="math inline">\(\widehat{\mbox{Var}}(\hat{E}(\hat{\beta})-\beta)\)</span>.</p></li>
+<li><p>Uncertainty in the estimated variance of the estimated coefficient: <span class="math inline">\(\widehat{\mbox{Var}}(\widehat{\mbox{Var}}(\hat{\beta}))\)</span>.</p></li>
+<li><p>Uncertainty in the estimated mean square prediction error: <span class="math inline">\(\widehat{\mbox{Var}}(\widehat{\mbox{MSPE}}(Y^{*}))\)</span>.</p></li>
 </ul>
 <p>In all cases we have to estimate the simulation variance, hence the <span class="math inline">\(\widehat{\mbox{Var}}()\)</span> notation.</p>
 </section>
@@ -651,13 +651,13 @@ E\hat{\beta} &amp; = &amp; \beta\\
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">4</span>)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>plt.hist(uFromNP, bins<span class="op">=</span><span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>(array([5., 5., 5., 5., 3., 3., 6., 4., 5., 2., 3., 6., 4., 3., 8., 6., 2.,
-       2., 3., 4., 2., 3., 6., 0., 5.]), array([0.00250736, 0.04226924, 0.08203112, 0.12179301, 0.16155489,
-       0.20131677, 0.24107866, 0.28084054, 0.32060242, 0.36036431,
-       0.40012619, 0.43988807, 0.47964995, 0.51941184, 0.55917372,
-       0.5989356 , 0.63869749, 0.67845937, 0.71822125, 0.75798314,
-       0.79774502, 0.8375069 , 0.87726879, 0.91703067, 0.95679255,
-       0.99655443]), &lt;BarContainer object of 25 artists&gt;)</code></pre>
+<pre><code>(array([3., 5., 7., 2., 4., 3., 7., 5., 3., 5., 5., 5., 1., 4., 4., 4., 5.,
+       3., 8., 0., 4., 2., 1., 2., 8.]), array([0.0049552 , 0.04468369, 0.08441218, 0.12414066, 0.16386915,
+       0.20359764, 0.24332612, 0.28305461, 0.3227831 , 0.36251159,
+       0.40224007, 0.44196856, 0.48169705, 0.52142553, 0.56115402,
+       0.60088251, 0.640611  , 0.68033948, 0.72006797, 0.75979646,
+       0.79952494, 0.83925343, 0.87898192, 0.91871041, 0.95843889,
+       0.99816738]), &lt;BarContainer object of 25 artists&gt;)</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Value"</span>)<span class="op">;</span> plt.ylabel(<span class="st">"Frequency"</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -726,7 +726,7 @@ E\hat{\beta} &amp; = &amp; \beta\\
 </section>
 <section id="the-period-versus-the-number-of-unique-values-generated" class="level3">
 <h3 class="anchored" data-anchor-id="the-period-versus-the-number-of-unique-values-generated">The period versus the number of unique values generated</h3>
-<p>The output of the PCG-64 is 64 bits while for the Mersenne Twister the output is 32 bits. The result is that the generators generate fewer unique values than their periods. This means you could get duplicated values in long runs, but this does not violate the comment about the periodicity of PCG-64 and Mersenne-Twister being longer than <span class="math inline">\(2^{64}\)</span> and <span class="math inline">\(2^{32}\)</span>. Why not? Bbecause the two values after the two duplicated numbers will not be duplicates of each other – as noted previously, there is a distinction between the output presented to the user and the state of the RNG algorithm.</p>
+<p>The output of the PCG-64 is 64 bits while for the Mersenne Twister the output is 32 bits. The result is that the generators generate fewer unique values than their periods. This means you could get duplicated values in long runs, but this does not violate the comment about the periodicity of PCG-64 and Mersenne-Twister being longer than <span class="math inline">\(2^{64}\)</span> and <span class="math inline">\(2^{32}\)</span>. Why not? Because the two values after the two duplicated numbers will not be duplicates of each other – as noted previously, there is a distinction between the output presented to the user and the state of the RNG algorithm.</p>
 </section>
 <section id="the-seed-and-the-state" class="level3">
 <h3 class="anchored" data-anchor-id="the-seed-and-the-state">The seed and the state</h3>
@@ -759,7 +759,7 @@ E\hat{\beta} &amp; = &amp; \beta\\
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.Generator(np.random.PCG64(seed <span class="op">=</span> <span class="dv">1</span>))    <span class="co"># PCG-64</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>but below note that there is a simpler way to change to the PCG-64.</p>
-<p>Then to use that generator when doing operations that generate random numbers, we need to use methods accessed via the generator:</p>
+<p>Then to use that generator when doing operations that generate random numbers, we need to use methods accessed via the <code>Generator</code> object (<code>rng</code> here):</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>rng.random.normal(size <span class="op">=</span> <span class="dv">3</span>)     <span class="co"># Now generate based on chosen generator.</span></span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">## np.random.normal(size = 3)   # This will NOT use the chosen generator.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -848,6 +848,7 @@ E\hat{\beta} &amp; = &amp; \beta\\
 </div>
 </div>
 <p><code>saved_state</code> contains the actual state and the value of <code>c</code>, the increment.</p>
+<p>Question: how many bits does <code>saved_state['state']['state']</code> correspond to?</p>
 </section>
 </section>
 <section id="rng-in-parallel" class="level2">

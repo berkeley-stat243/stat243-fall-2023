@@ -605,7 +605,7 @@ A_{n1}B &amp; \cdots &amp; A_{nm}B
 <section id="interpreting-an-eigendecomposition" class="level2">
 <h2 class="anchored" data-anchor-id="interpreting-an-eigendecomposition">Interpreting an eigendecomposition</h2>
 <p>Let’s interpret the eigendecomposition in a generative context as a way of generating random vectors. We can generate <span class="math inline">\(y\)</span> s.t. <span class="math inline">\(\mbox{Cov}(y)=A\)</span> if we generate <span class="math inline">\(y=\Gamma\Lambda^{1/2}z\)</span> where <span class="math inline">\(\mbox{Cov}(z)=I\)</span> and <span class="math inline">\(\Lambda^{1/2}\)</span> is formed by taking the square roots of the eigenvalues. So <span class="math inline">\(\sqrt{\lambda_{i}}\)</span> is the standard deviation associated with the basis vector <span class="math inline">\(\Gamma_{\cdot i}\)</span>. That is, the <span class="math inline">\(z\)</span>’s provide the weights on the basis vectors, with scaling based on the eigenvalues. So <span class="math inline">\(y\)</span> is produced as a linear combination of eigenvectors as basis vectors, with the variance attributable to the basis vectors determined by the eigenvalues.</p>
-<p>To go the other direction, we can project a vector <span class="math inline">\(y\)</span> onto the space spanned by the eigenvectors: <span class="math inline">\(z = (\Gamma^{\top}\Gamma)^{-1}\Gamma^{\top}y = \Gamma^{\top}y\)</span>, where the simplification of course comes from <span class="math inline">\(\Gamma\)</span> being orthogonal.</p>
+<p>To go the other direction, we can project a vector <span class="math inline">\(y\)</span> onto the space spanned by the eigenvectors: <span class="math inline">\(w = (\Gamma^{\top}\Gamma)^{-1}\Gamma^{\top}y = \Gamma^{\top}y = \Lambda^{1/2}z\)</span>, where the simplification of course comes from <span class="math inline">\(\Gamma\)</span> being orthogonal.</p>
 <p>If <span class="math inline">\(x^{\top}Ax\geq0\)</span> then <span class="math inline">\(A\)</span> is nonnegative definite (also called positive semi-definite). In this case one or more eigenvalues can be zero. Let’s interpret this a bit more in the context of generating random vectors based on non-negative definite matrices, <span class="math inline">\(y=\Gamma\Lambda^{1/2}z\)</span> where <span class="math inline">\(\mbox{Cov}(z)=I\)</span>. Questions:</p>
 <ol type="1">
 <li><p>What does it mean when one or more eigenvalue (i.e., <span class="math inline">\(\lambda_{i}=\Lambda_{ii}\)</span>) is zero?</p></li>
@@ -652,7 +652,7 @@ A_{n1}B &amp; \cdots &amp; A_{nm}B
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> e[<span class="dv">1</span>] <span class="op">@</span> ((evals <span class="op">**</span> <span class="fl">0.5</span>) <span class="op">*</span> np.random.normal(size <span class="op">=</span> <span class="dv">5</span>))</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>y.<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>-2.220446049250313e-16</code></pre>
+<pre><code>-8.881784197001252e-16</code></pre>
 </div>
 </div>
 <p>In the second order case, we have two non-identifiabilities: for the sum and for the linear component of the variation in <span class="math inline">\(y\)</span> (linear in the indices of <span class="math inline">\(y\)</span>).</p>
