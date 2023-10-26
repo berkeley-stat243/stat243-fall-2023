@@ -387,9 +387,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#generating-random-uniforms-on-a-computer" id="toc-generating-random-uniforms-on-a-computer" class="nav-link" data-scroll-target="#generating-random-uniforms-on-a-computer">Generating random uniforms on a computer</a>
   <ul class="collapse">
   <li><a href="#sequential-congruential-generators" id="toc-sequential-congruential-generators" class="nav-link" data-scroll-target="#sequential-congruential-generators">Sequential congruential generators</a></li>
-  <li><a href="#modern-generators-pcg-and-mersenne-twister" id="toc-modern-generators-pcg-and-mersenne-twister" class="nav-link" data-scroll-target="#modern-generators-pcg-and-mersenne-twister">Modern generators (PCG and Mersenne Twister)</a></li>
+  <li><a href="#pcg-generators" id="toc-pcg-generators" class="nav-link" data-scroll-target="#pcg-generators">PCG generators</a></li>
+  <li><a href="#mersenne-twister" id="toc-mersenne-twister" class="nav-link" data-scroll-target="#mersenne-twister">Mersenne Twister</a></li>
+  <li><a href="#the-period-versus-the-number-of-unique-values-generated" id="toc-the-period-versus-the-number-of-unique-values-generated" class="nav-link" data-scroll-target="#the-period-versus-the-number-of-unique-values-generated">The period versus the number of unique values generated</a></li>
+  <li><a href="#the-seed-and-the-state" id="toc-the-seed-and-the-state" class="nav-link" data-scroll-target="#the-seed-and-the-state">The seed and the state</a></li>
   </ul></li>
-  <li><a href="#rng-in-python" id="toc-rng-in-python" class="nav-link" data-scroll-target="#rng-in-python">RNG in Python</a></li>
+  <li><a href="#rng-in-python" id="toc-rng-in-python" class="nav-link" data-scroll-target="#rng-in-python">RNG in Python</a>
+  <ul class="collapse">
+  <li><a href="#choosing-a-generator" id="toc-choosing-a-generator" class="nav-link" data-scroll-target="#choosing-a-generator">Choosing a generator</a></li>
+  <li><a href="#using-the-mersenne-twister" id="toc-using-the-mersenne-twister" class="nav-link" data-scroll-target="#using-the-mersenne-twister">Using the Mersenne Twister</a></li>
+  <li><a href="#using-pcg64" id="toc-using-pcg64" class="nav-link" data-scroll-target="#using-pcg64">Using PCG64</a></li>
+  </ul></li>
   <li><a href="#rng-in-parallel" id="toc-rng-in-parallel" class="nav-link" data-scroll-target="#rng-in-parallel">RNG in parallel</a></li>
   </ul></li>
   <li><a href="#generating-random-variables" id="toc-generating-random-variables" class="nav-link" data-scroll-target="#generating-random-variables">5. Generating random variables</a>
@@ -643,13 +651,13 @@ E\hat{\beta} &amp; = &amp; \beta\\
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">4</span>)</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>plt.hist(uFromNP, bins<span class="op">=</span><span class="dv">25</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>(array([5., 9., 1., 4., 2., 6., 4., 4., 5., 3., 3., 2., 2., 4., 5., 8., 1.,
-       3., 2., 6., 4., 3., 5., 5., 4.]), array([0.00489673, 0.04443965, 0.08398257, 0.12352549, 0.16306841,
-       0.20261133, 0.24215425, 0.28169717, 0.32124009, 0.36078301,
-       0.40032593, 0.43986885, 0.47941177, 0.51895469, 0.55849761,
-       0.59804053, 0.63758345, 0.67712637, 0.71666929, 0.75621221,
-       0.79575513, 0.83529805, 0.87484097, 0.91438389, 0.95392681,
-       0.99346973]), &lt;BarContainer object of 25 artists&gt;)</code></pre>
+<pre><code>(array([5., 5., 5., 5., 3., 3., 6., 4., 5., 2., 3., 6., 4., 3., 8., 6., 2.,
+       2., 3., 4., 2., 3., 6., 0., 5.]), array([0.00250736, 0.04226924, 0.08203112, 0.12179301, 0.16155489,
+       0.20131677, 0.24107866, 0.28084054, 0.32060242, 0.36036431,
+       0.40012619, 0.43988807, 0.47964995, 0.51941184, 0.55917372,
+       0.5989356 , 0.63869749, 0.67845937, 0.71822125, 0.75798314,
+       0.79774502, 0.8375069 , 0.87726879, 0.91703067, 0.95679255,
+       0.99655443]), &lt;BarContainer object of 25 artists&gt;)</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">"Value"</span>)<span class="op">;</span> plt.ylabel(<span class="st">"Frequency"</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -697,8 +705,8 @@ E\hat{\beta} &amp; = &amp; \beta\\
 </div>
 </div>
 </section>
-<section id="modern-generators-pcg-and-mersenne-twister" class="level3">
-<h3 class="anchored" data-anchor-id="modern-generators-pcg-and-mersenne-twister">Modern generators (PCG and Mersenne Twister)</h3>
+<section id="pcg-generators" class="level3">
+<h3 class="anchored" data-anchor-id="pcg-generators">PCG generators</h3>
 <p>Somewhat recently <a href="https://www.pcg-random.org/pdf/hmc-cs-2014-0905.pdf">O’Neal (2014) proposed a new approach</a> to using the linear congruential generator in a way that gives much better performance than the basic versions of such generators described above. This approach is now the default random number generator in numpy (see <code>numpy.random.default_rng()</code>), called the <a href="https://numpy.org/doc/stable/reference/random/bit_generators/pcg64.html#numpy.random.PCG64">PCG-64 generator</a>. ‘PCG’ stands for permutation congruential generator and encompasses a family of such generators.</p>
 <p>The idea of the PCG approach goes like this:</p>
 <ul>
@@ -708,98 +716,143 @@ E\hat{\beta} &amp; = &amp; \beta\\
 </ul>
 <p>Instead of using relatively small values of <span class="math inline">\(m\)</span> seen above, in the PCG approach one uses <span class="math inline">\(m=2^k\)</span>, for ‘large enough’ <span class="math inline">\(k\)</span>, usually 64 or 128. It turns out that if <span class="math inline">\(m=2^k\)</span> then the period of the <span class="math inline">\(b\)</span>th bit of the state is <span class="math inline">\(2^b\)</span> where <span class="math inline">\(b=1\)</span> is the right-most bit. Small periods are of course bad for RNG, so the bits with small period cause the LCG to not perform well. Thankfully, one simple fix is simply to discard some number of the right-most bits (this is one form of <em>bit shift</em>). Note that if one does this, the output of the RNG is based on a subset of the bits, which means that the number of unique values that can be generated is smaller than the period. This is not a problem given we start with a state with a large number of bits (64 or 128 as mentioned above).</p>
 <p>O’Neal then goes further; instead of simply discarding bits, she proposes to either shift bits by a random amount or rotate bits by a random amount, where the random amount is determined by a small number of the initial bits. This improves the statistical performance of the generator. The choice of how to do this gives the various members of the PCG family of generators. The details are fairly complicated (the PCG paper is 50-odd pages) and not important for our purposes here.</p>
-<p>By default R uses something called the Mersenne twister, which is in the class of generalized feedback shift registers (GFSR). The basic idea of a GFSR is to come up with a deterministic generator of bits (i.e., a way to generate sequences of 0s and 1s), <span class="math inline">\(B_{i}\)</span>, <span class="math inline">\(i=1,2,3,\ldots\)</span>. The pseudo-random numbers are then determined as sequential subsequences of length <span class="math inline">\(L\)</span> from <span class="math inline">\(\{B_{i}\}\)</span>, considered as a base-2 number and dividing by <span class="math inline">\(2^{L}\)</span> to get a number in <span class="math inline">\((0,1)\)</span>. In general the sequence of bits is generated by taking <span class="math inline">\(B_{i}\)</span> to be the <em>exclusive or</em> [i.e., 0+0 = 0; 0 + 1 = 1; 1 + 0 = 1; 1 + 1 = 0] summation of two previous bits further back in the sequence where the lengths of the lags are carefully chosen.</p>
-<p>numpy also provides access to the Mersenne Twister via the MT19937 generator; more on this below. It looks like PCG-64 only became available as of numpy version 1.17.</p>
+</section>
+<section id="mersenne-twister" class="level3">
+<h3 class="anchored" data-anchor-id="mersenne-twister">Mersenne Twister</h3>
+<p>A commonly used generator (including in both R and Python) is the Mersenne Twister. It’s the default in R and “sort of” the default in numpy (see next section for what I mean by “sort of”).</p>
+<p>The Mersenne Twister has some theoretical support, has performed reasonably on standard tests of pseudorandom numbers and has been used without evidence of serious failure. (But note that O’Neal criticizes it in <a href="https://www.pcg-random.org/pdf/hmc-cs-2014-0905.pdf">her technical report</a>.) Plus it’s fast (because bitwise operations are fast). The particular Mersenne twister used has a periodicity of <span class="math inline">\(2^{19937}-1\approx10^{6000}\)</span>. Practically speaking this means that if we generated one random uniform per nanosecond for 10 billion years, then we would generate <span class="math inline">\(10^{25}\)</span> numbers, well short of the period. So we don’t need to worry about the periodicity! The state (sometimes also called the seed) for the Mersenne twister is a set of 624 32-bit integers plus a position in the set, where the position is <code>.Random.seed[2]</code> in R and (I think) <code>np.random.get_state()[2]</code> in Python.</p>
+<p>The Mersenne twister is in the class of generalized feedback shift registers (GFSR). The basic idea of a GFSR is to come up with a deterministic generator of bits (i.e., a way to generate sequences of 0s and 1s), <span class="math inline">\(B_{i}\)</span>, <span class="math inline">\(i=1,2,3,\ldots\)</span>. The pseudo-random numbers are then determined as sequential subsequences of length <span class="math inline">\(L\)</span> from <span class="math inline">\(\{B_{i}\}\)</span>, considered as a base-2 number and dividing by <span class="math inline">\(2^{L}\)</span> to get a number in <span class="math inline">\((0,1)\)</span>. In general the sequence of bits is generated by taking <span class="math inline">\(B_{i}\)</span> to be the <em>exclusive or</em> [i.e., 0+0 = 0; 0 + 1 = 1; 1 + 0 = 1; 1 + 1 = 0] summation of two previous bits further back in the sequence where the lengths of the lags are carefully chosen.</p>
+<p>numpy provides access to the Mersenne Twister via the <code>MT19937</code> generator; more on this below. It looks like PCG-64 only became available as of numpy version 1.17.</p>
+</section>
+<section id="the-period-versus-the-number-of-unique-values-generated" class="level3">
+<h3 class="anchored" data-anchor-id="the-period-versus-the-number-of-unique-values-generated">The period versus the number of unique values generated</h3>
+<p>The output of the PCG-64 is 64 bits while for the Mersenne Twister the output is 32 bits. The result is that the generators generate fewer unique values than their periods. This means you could get duplicated values in long runs, but this does not violate the comment about the periodicity of PCG-64 and Mersenne-Twister being longer than <span class="math inline">\(2^{64}\)</span> and <span class="math inline">\(2^{32}\)</span>. Why not? Bbecause the two values after the two duplicated numbers will not be duplicates of each other – as noted previously, there is a distinction between the output presented to the user and the state of the RNG algorithm.</p>
+</section>
+<section id="the-seed-and-the-state" class="level3">
+<h3 class="anchored" data-anchor-id="the-seed-and-the-state">The seed and the state</h3>
+<p>Setting the seed picks a position in the periodic sequence of the RNG, i.e., in the state of the RNG. The state can be a single number or something much more complicated. As mentioned above, the state for the Mersenne Twister is a set of 624 32-bit integers plus a position in the set. For the PCG-64 in numpy, the state is two numbers – the actual state and the increment (<code>c</code> above). This means that when the user passes a single number as the seed, there needs to be a procedure that deterministically sets the state based on that single number seed. The details of this are not usually well-documented or viewable by the user.</p>
+<p>Ideally, nearby seeds generally should not correspond to getting sequences from the RNG stream that are closer to each other than far away seeds. According to Gentle (CS, p.&nbsp;327) the input to <code>set.seed()</code> in R should be an integer, <span class="math inline">\(i\in\{0,\ldots,1023\}\)</span> , and each of these 1024 values produces positions in the RNG sequence that are “far away” from each other. I don’t see any mention of this in the R documentation for <code>set.seed()</code> and furthermore, you can pass integers larger than 1023 to <code>set.seed()</code>, so I’m not sure how much to trust Gentle’s claim. More on generating parallel streams of random numbers below.</p>
+<p>When one invokes a RNG without a seed, RNG implementations generally have a method for choosing a seed (often based on the system clock). The numpy documentation says that it “mixes sources of entropy in a reproducible way” to do this.</p>
+<p>Generators should give you the same sequence of random numbers, starting at a given seed, whether you ask for a bunch of numbers at once, or sequentially ask for individual numbers.</p>
 <section id="additional-notes" class="level4">
 <h4 class="anchored" data-anchor-id="additional-notes">Additional notes</h4>
-<p>Generators should give you the same sequence of random numbers, starting at a given seed, whether you ask for a bunch of numbers at once, or sequentially ask for individual numbers.</p>
-<p>When one invokes a RNG without a seed, they generally have a method for choosing a seed, often based on the system clock.</p>
 <p>There have been some attempts to generate truly random numbers based on physical randomness. One that is based on quantum physics is <a href="http://www.idquantique.com/true-random-number-generator/quantis-usb-pcie-pci.html" class="uri">http://www.idquantique.com/true-random-number-generator/quantis-usb-pcie-pci.html</a>. Another approach is based on lava lamps!</p>
 </section>
 </section>
 </section>
 <section id="rng-in-python" class="level2">
 <h2 class="anchored" data-anchor-id="rng-in-python">RNG in Python</h2>
-<p>We can change the RNG for numpy using <code>np.random.&lt;name_of_generator&gt;</code> (e.g., <code>np.random.MT19937</code> for the Mersenne Twister). We can set the seed with <code>np.random.seed()</code> or with <code>np.random.default_rng()</code>.</p>
+<section id="choosing-a-generator" class="level3">
+<h3 class="anchored" data-anchor-id="choosing-a-generator">Choosing a generator</h3>
 <p>In numpy, the <em>default_rng</em> RNG is PCG-64. It has a period of <span class="math inline">\(2^{128}\)</span> and supports advancing an arbitrary number of steps, as well as <span class="math inline">\(2^{127}\)</span> streams (both useful for generating random numbers when parallelizing). The state of the PCG-64 RNG is represented by two 128-bit unsigned integers, one the actual state and one the value of <span class="math inline">\(c\)</span> (the <em>increment</em>).</p>
-<p>Strangely, while the <em>default</em> is PCG-64, simply using the functions available via <code>np.random</code> to generate random numbers seems to actually use the Mersenne Twister, so the meaning of <em>default</em> is unclear.</p>
-<p>In R, the default RNG is the Mersenne twister (<code>?RNGkind</code>), which is considered to be state-of-the-art (by some; O’Neal criticizes it). It has some theoretical support, has performed reasonably on standard tests of pseudorandom numbers and has been used without evidence of serious failure. Plus it’s fast (because bitwise operations are fast). The particular Mersenne twister used has a periodicity of <span class="math inline">\(2^{19937}-1\approx10^{6000}\)</span>. Practically speaking this means that if we generated one random uniform per nanosecond for 10 billion years, then we would generate <span class="math inline">\(10^{25}\)</span> numbers, well short of the period. So we don’t need to worry about the periodicity! The seed for the Mersenne twister is a set of 624 32-bit integers plus a position in the set, where the position is <code>.Random.seed[2]</code>.</p>
-<p>For the Mersenne Twister, we can set the seed by passing an integer to <code>np.random.seed()</code> in Python or <code>set.seed()</code> in R, which then sets as many actual seeds as required for the Mersenne Twister. Here I’ll refer to the single integer passed in as <em>the</em> seed. Ideally, nearby seeds generally should not correspond to getting sequences from the stream that are closer to each other than far away seeds. According to Gentle (CS, p.&nbsp;327) the input to <code>set.seed()</code> in R should be an integer, <span class="math inline">\(i\in\{0,\ldots,1023\}\)</span> , and each of these 1024 values produces positions in the RNG sequence that are “far away” from each other. I don’t see any mention of this in the R documentation for <code>set.seed()</code> and furthermore, you can pass integers larger than 1023 to <code>set.seed()</code>, so I’m not sure how much to trust Gentle’s claim. More on generating parallel streams of random numbers below.</p>
-<p>So we get replicability by setting the seed to a specific value at the beginning of our simulation. We can then set the seed to that same value when we want to replicate the simulation.</p>
+<p>However, while the <em>default</em> is PCG-64, simply using the functions available via <code>np.random</code> to generate random numbers seems to actually use the Mersenne Twister, so the meaning of <em>default</em> is tricky.</p>
+<p>I think that this text from <code>help(np.random)</code> explains what is going on:</p>
+<pre><code>   Legacy
+   ------
+    
+   For backwards compatibility with previous versions of numpy before 1.17, the
+   various aliases to the global `RandomState` methods are left alone and do not
+   use the new `Generator` API.</code></pre>
+<p>We can change to a specific RNG using syntax (the <code>Generator</code> API) like this:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>np.random.normal(size <span class="op">=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.Generator(np.random.MT19937(seed <span class="op">=</span> <span class="dv">1</span>))  <span class="co"># Mersenne Twister</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.Generator(np.random.PCG64(seed <span class="op">=</span> <span class="dv">1</span>))    <span class="co"># PCG-64</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>but below note that there is a simpler way to change to the PCG-64.</p>
+<p>Then to use that generator when doing operations that generate random numbers, we need to use methods accessed via the generator:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>rng.random.normal(size <span class="op">=</span> <span class="dv">3</span>)     <span class="co"># Now generate based on chosen generator.</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">## np.random.normal(size = 3)   # This will NOT use the chosen generator.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In R, the default RNG is the Mersenne twister (<code>?RNGkind</code>).</p>
+</section>
+<section id="using-the-mersenne-twister" class="level3">
+<h3 class="anchored" data-anchor-id="using-the-mersenne-twister">Using the Mersenne Twister</h3>
+<p>If we simply start using numpy or scipy to generate random numbers, we’ll be using the Mersenne Twister. I believe this is what the documentation mentioned above means by “aliases to the global <code>RandomState</code> methods”.</p>
+<p>We get replicability by setting the seed to a specific value at the beginning of our simulation. We can then set the seed to that same value when we want to replicate the simulation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>np.random.normal(size <span class="op">=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>array([ 1.62434536, -0.61175641, -0.52817175, -1.07296862,  0.86540763])</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>np.random.normal(size <span class="op">=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>np.random.normal(size <span class="op">=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>array([ 1.62434536, -0.61175641, -0.52817175, -1.07296862,  0.86540763])</code></pre>
 </div>
 </div>
 <p>We can also save the state of the RNG and pick up where we left off. So this code will pick where you had left off, ignoring what happened in between saving to <code>saved_state</code> and resetting.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>np.random.normal(size <span class="op">=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>np.random.normal(size <span class="op">=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>array([ 1.62434536, -0.61175641, -0.52817175, -1.07296862,  0.86540763])</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>saved_state <span class="op">=</span> np.random.get_state()</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>np.random.normal(size <span class="op">=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>saved_state <span class="op">=</span> np.random.get_state()</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>np.random.normal(size <span class="op">=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>array([-2.3015387 ,  1.74481176, -0.7612069 ,  0.3190391 , -0.24937038])</code></pre>
 </div>
 </div>
 <p>Now we’ll do some arbitrary work with random numbers, and see that if we use the saved state we can pick up where we left off above.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>tmp <span class="op">=</span> np.random.choice(np.arange(<span class="dv">1</span>, <span class="dv">51</span>), size<span class="op">=</span><span class="dv">2000</span>, replace<span class="op">=</span><span class="va">True</span>) <span class="co"># arbitrary work</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="co">## Restore the state.</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>np.random.set_state(saved_state)</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>np.random.normal(size <span class="op">=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>tmp <span class="op">=</span> np.random.choice(np.arange(<span class="dv">1</span>, <span class="dv">51</span>), size<span class="op">=</span><span class="dv">2000</span>, replace<span class="op">=</span><span class="va">True</span>) <span class="co"># arbitrary work</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co">## Restore the state.</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>np.random.set_state(saved_state)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>np.random.normal(size <span class="op">=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>array([-2.3015387 ,  1.74481176, -0.7612069 ,  0.3190391 , -0.24937038])</code></pre>
 </div>
 </div>
-<p>If we look at <code>saved_state</code>, we see it actually corresponds to the Mersenne Twister.</p>
-<p>To do the equivalent with the PCG-64:</p>
+<p>If we look at <code>saved_state</code>, we can confirm it actually corresponds to the Mersenne Twister.</p>
+</section>
+<section id="using-pcg64" class="level3">
+<h3 class="anchored" data-anchor-id="using-pcg64">Using PCG64</h3>
+<p>To use the PCG-64, we need to explicitly create and make use of the <code>Generator</code> object (<code>rng</code> here), which is the new numpy approach to handling RNG.</p>
+<p>We set the seed when setting up the generator via <code>np.random.default_rng(seed)</code> (or <code>np.random.Generator(np.random.PCG64(seed = 1))</code>).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(<span class="dv">1</span>)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>rng.normal(size <span class="op">=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(seed <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>rng.normal(size <span class="op">=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>array([ 0.34558419,  0.82161814,  0.33043708, -1.30315723,  0.90535587])</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>saved_state <span class="op">=</span> rng.bit_generator.state</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>rng.normal(size <span class="op">=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>rng <span class="op">=</span> np.random.default_rng(seed <span class="op">=</span> <span class="dv">1</span>)</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>rng.normal(size <span class="op">=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>array([ 0.34558419,  0.82161814,  0.33043708, -1.30315723,  0.90535587])</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>saved_state <span class="op">=</span> rng.bit_generator.state</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>rng.normal(size <span class="op">=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>array([ 0.44637457, -0.53695324,  0.5811181 ,  0.3645724 ,  0.2941325 ])</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>tmp <span class="op">=</span> rng.choice(np.arange(<span class="dv">1</span>, <span class="dv">51</span>), size<span class="op">=</span><span class="dv">2000</span>, replace<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>rng.bit_generator.state <span class="op">=</span> saved_state</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>rng.normal(size <span class="op">=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>tmp <span class="op">=</span> rng.choice(np.arange(<span class="dv">1</span>, <span class="dv">51</span>), size<span class="op">=</span><span class="dv">2000</span>, replace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>rng.bit_generator.state <span class="op">=</span> saved_state</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>rng.normal(size <span class="op">=</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>array([ 0.44637457, -0.53695324,  0.5811181 ,  0.3645724 ,  0.2941325 ])</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>saved_state</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>saved_state</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{'bit_generator': 'PCG64', 'state': {'state': 216676376075457487203159048251690499413, 'inc': 194290289479364712180083596243593368443}, 'has_uint32': 0, 'uinteger': 0}</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>saved_state[<span class="st">'state'</span>][<span class="st">'state'</span>]   <span class="co"># actual state</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>saved_state[<span class="st">'state'</span>][<span class="st">'state'</span>]   <span class="co"># actual state</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>216676376075457487203159048251690499413</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>saved_state[<span class="st">'state'</span>][<span class="st">'inc'</span>]     <span class="co"># increment ('c')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>saved_state[<span class="st">'state'</span>][<span class="st">'inc'</span>]     <span class="co"># increment ('c')</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>194290289479364712180083596243593368443</code></pre>
 </div>
 </div>
 <p><code>saved_state</code> contains the actual state and the value of <code>c</code>, the increment.</p>
-<p>The output of the PCG-64 is 64 bits while for the Mersenne Twister the output is 32 bits. This means you could get duplicated values in long runs, but this does not violate the comment about the periodicity of PCG-64 and Mersenne-Twister being longer than <span class="math inline">\(2^{64}\)</span> and <span class="math inline">\(2^{32}\)</span>, because the two values after the two duplicated numbers will not be duplicates of each other – as noted previously, there is a distinction between the output presented to the user and the state of the RNG algorithm.</p>
+</section>
 </section>
 <section id="rng-in-parallel" class="level2">
 <h2 class="anchored" data-anchor-id="rng-in-parallel">RNG in parallel</h2>
-<p>We can generally rely on the RNG in Python and R to give a reasonable set of values. One time when we want to think harder is when doing work with RNG in parallel on multiple processors. The worst thing that could happen is that one sets things up in such a way that every process is using the same sequence of random numbers. This could happen if you mistakenly set the same seed in each process, e.g., using <code>np.random.seed(1)</code> on every process. More details on parallel RNG are given in Unit 6.</p>
+<p>We can generally rely on the RNG in Python and R to give reasonable set of pseudo-random values. One time when we want to think harder is when doing work with RNG in parallel on multiple processors. The worst thing that could happen is that one sets things up in such a way that every process is using the same sequence of random numbers. This could happen if you mistakenly set the same seed in each process, e.g., using <code>np.random.seed(1)</code> on every process. Numpy now provides some nice functionality for parallel RNG, with more details given in the <a href="https://berkeley-scf.github.io/tutorial-parallelization/parallel-python#5-random-number-generation-rng-in-parallel">SCF parallelization tutorial</a>.</p>
 </section>
 </section>
 <section id="generating-random-variables" class="level1">
@@ -807,11 +860,11 @@ E\hat{\beta} &amp; = &amp; \beta\\
 <p>There are a variety of methods for generating from common distributions (normal, gamma, beta, Poisson, t, etc.). Since these tend to be built into Python and R and presumably use good algorithms, we won’t go into them. A variety of statistical computing and Monte Carlo books describe the various methods. Many are built on the relationships between different distributions - e.g., a beta random variable (RV) can be generated from two gamma RVs.</p>
 <section id="multivariate-distributions" class="level2">
 <h2 class="anchored" data-anchor-id="multivariate-distributions">Multivariate distributions</h2>
-<p>The <em>mvtnorm</em> package supplies code for working with the density and CDF of multivariate normal and t distributions.</p>
+<p>The <code>mvtnorm</code> package supplies code for working with the density and CDF of multivariate normal and t distributions.</p>
 <p>To generate a multivariate normal, in Unit 10, we’ll see the standard method based on the Cholesky decomposition:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> np.linalg.cholesky(covMat) <span class="co"># L is lower-triangular</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> L <span class="op">@</span> np.random.normal(size <span class="op">=</span> covMat.shape[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> np.linalg.cholesky(covMat) <span class="co"># L is lower-triangular</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> L <span class="op">@</span> np.random.normal(size <span class="op">=</span> covMat.shape[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Side note: for a singular covariance matrix we can use the Cholesky with pivoting, setting as many rows to zero as the rank deficiency. Then when we generate the multivariate normals, they respect the constraints implicit in the rank deficiency. However, you’ll need to reorder the resulting vector because of the reordering involved in the pivoted Cholesky.</p>
 </section>
