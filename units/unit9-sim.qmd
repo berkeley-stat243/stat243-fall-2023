@@ -195,13 +195,13 @@ Some examples of simulation variances we might be interested in in the
 regression example include:
 
 -   Uncertainty in our estimate of bias:
-    $\widehat{\mbox{Var}}(\widehat{E(\hat{\beta})}-\beta)$.
+    $\widehat{\mbox{Var}}(\hat{E}(\hat{\beta})-\beta)$.
 
 -   Uncertainty in the estimated variance of the estimated coefficient:
-    $\widehat{\mbox{Var}}(\widehat{\mbox{Var}(\hat{\beta})})$.
+    $\widehat{\mbox{Var}}(\widehat{\mbox{Var}}(\hat{\beta}))$.
 
 -   Uncertainty in the estimated mean square prediction error:
-    $\widehat{\mbox{Var}}(\widehat{\mbox{MSPE}(Y^{*})})$.
+    $\widehat{\mbox{Var}}(\widehat{\mbox{MSPE}}(Y^{*}))$.
 
 In all cases we have to estimate the simulation variance, hence the
 $\widehat{\mbox{Var}}()$ notation.
@@ -660,7 +660,7 @@ The output of the PCG-64 is 64 bits while for the Mersenne Twister the output is
 The result is that the generators generate fewer unique values than their periods.
 This means you could get duplicated values in long runs, but this does not violate the
 comment about the periodicity of PCG-64 and Mersenne-Twister being longer than $2^{64}$ and $2^{32}$.
-Why not? Bbecause the two values after the two
+Why not? Because the two values after the two
 duplicated numbers will not be duplicates of each other -- as noted previously, there is
 a distinction between the output presented to the user and the state of
 the RNG algorithm.
@@ -737,7 +737,7 @@ rng = np.random.Generator(np.random.PCG64(seed = 1))    # PCG-64
 but below note that there is a simpler way to change to the PCG-64.
 
 Then to use that generator when doing operations that generate random numbers, we need
-to use methods accessed via the generator:
+to use methods accessed via the `Generator` object (`rng` here):
 
 ```{python}
 #| eval: false
@@ -816,6 +816,7 @@ saved_state['state']['inc']     # increment ('c')
 
 `saved_state` contains the actual state and the value of `c`, the increment.
 
+Question: how many bits does `saved_state['state']['state']` correspond to?
 
 ## RNG in parallel
 

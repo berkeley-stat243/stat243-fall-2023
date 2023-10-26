@@ -19,11 +19,6 @@ execute:
 from: markdown+tex_math_single_backslash
 ---
 
-```{r, fake-setup, echo=FALSE}
-## For some reason we need an R chunk in the doc or get result seen in `error.log`.
-z <- 1
-```
-
 
 [PDF](./unit10-linalg.pdf){.btn .btn-primary}
 
@@ -448,7 +443,7 @@ the variance attributable to the basis vectors determined by the
 eigenvalues.
 
 To go the other direction, we can project a vector $y$ onto the space 
-spanned by the eigenvectors: $z = (\Gamma^{\top}\Gamma)^{-1}\Gamma^{\top}y = \Gamma^{\top}y$,
+spanned by the eigenvectors: $w = (\Gamma^{\top}\Gamma)^{-1}\Gamma^{\top}y = \Gamma^{\top}y = \Lambda^{1/2}z$,
 where the simplification of course comes from $\Gamma$ being orthogonal.
 
 If $x^{\top}Ax\geq0$ then $A$ is nonnegative definite (also called
