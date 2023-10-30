@@ -816,20 +816,21 @@ the remaining unknown in each row (each equation).
 How many multiplies and adds are done? Solving lower triangular systems
 is very similar and involves the same number of calculations.
 
-In R, *backsolve()* solves upper triangular systems and *forwardsolve()*
-solves lower triangular systems:
+In Scipy, we can use `linalg.solve_triangular` to solve triangular systems.
+The `trans` argument indicates whether to solve $Ax=b$ or $A^{\top}x=b$
+(so one wouldn't need to transpose before solving).
 
 ```{python}
 import scipy as sp
 np.random.seed(1)
 n = 20
 X = np.random.normal(size = (n,n))
-
 ## R has the `crossprod` function, which would be more efficient
 ## than having to transpose, but numpy doesn't seem to have an equivalent.
-X = X.T @ X
+A = X.T @ X  # produce a positive def. matrix 
+
 b = np.random.normal(size = n)
-L = np.linalg.cholesky(X) # L is upper-triangular
+L = np.linalg.cholesky(A) # L is lower-triangular
 U = L.T
 
 out1 = sp.linalg.solve_triangular(L, b, lower=True)
@@ -858,9 +859,9 @@ X = np.random.normal(size = (n,n))
 
 ## R has the `crossprod` function, which would be more efficient
 ## than having to transpose, but numpy doesn't seem to have an equivalent.
-X = X.T @ X
+A = X.T @ X
 b = np.random.normal(size = n)
-L = np.linalg.cholesky(X) # L is upper-triangular
+L = np.linalg.cholesky(A) # L is lower-triangular
 
 t0 = time.time()
 out1 = sp.linalg.solve_triangular(L, b, lower=True)
