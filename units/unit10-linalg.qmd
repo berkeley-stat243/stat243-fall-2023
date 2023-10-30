@@ -665,6 +665,9 @@ x = np.linalg.solve(A, b)
 
 bPerturbed = np.array([32.1, 22.9, 33.1, 30.9])
 xPerturbed = np.linalg.solve(A, bPerturbed)
+
+delta_b = bPerturbed - b
+delta_x = xPerturbed - x
 ```
 
 
@@ -688,12 +691,19 @@ condition number helping us find an upper bound.
 ```{python}
 e = np.linalg.eig(A)
 evals = e[0]
-norm2(x - xPerturbed)  ## delta x
-norm2(b - bPerturbed)  ## delta b
-norm2(x - xPerturbed)/norm2(x)
-(evals[0]/evals[2])*norm2(b - bPerturbed)/norm2(b)
-```
+print(evals)
 
+## relative perturbation in x much bigger than in b
+norm2(delta_x) / norm2(x)
+norm2(delta_b) / norm2(b)
+
+## ratio of relative perturbations
+(norm2(delta_x) / norm2(x)) / (norm2(delta_b) / norm2(b))
+
+## ratio of largest and smallest magnitude eigenvalues
+## confusingly evals[2] is the smallest, not evals[3]
+(evals[0]/evals[2])
+```
 
 The main use of these ideas for our purposes is in thinking about the
 numerical accuracy of a linear system solution (Gentle-NLA Sec 3.4). On
