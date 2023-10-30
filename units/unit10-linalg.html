@@ -652,7 +652,7 @@ A_{n1}B &amp; \cdots &amp; A_{nm}B
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> e[<span class="dv">1</span>] <span class="op">@</span> ((evals <span class="op">**</span> <span class="fl">0.5</span>) <span class="op">*</span> np.random.normal(size <span class="op">=</span> <span class="dv">5</span>))</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>y.<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>-8.881784197001252e-16</code></pre>
+<pre><code>-4.440892098500626e-16</code></pre>
 </div>
 </div>
 <p>In the second order case, we have two non-identifiabilities: for the sum and for the linear component of the variation in <span class="math inline">\(y\)</span> (linear in the indices of <span class="math inline">\(y\)</span>).</p>
@@ -858,18 +858,18 @@ A_{n1}B &amp; \cdots &amp; A_{nm}B
 <li>Repeat for all rows.</li>
 </ol>
 <p>How many multiplies and adds are done? Solving lower triangular systems is very similar and involves the same number of calculations.</p>
-<p>In R, <em>backsolve()</em> solves upper triangular systems and <em>forwardsolve()</em> solves lower triangular systems:</p>
+<p>In Scipy, we can use <code>linalg.solve_triangular</code> to solve triangular systems. The <code>trans</code> argument indicates whether to solve <span class="math inline">\(Ax=b\)</span> or <span class="math inline">\(A^{\top}x=b\)</span> (so one wouldn’t need to transpose before solving).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy <span class="im">as</span> sp</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)</span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>n <span class="op">=</span> <span class="dv">20</span></span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> np.random.normal(size <span class="op">=</span> (n,n))</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co">## R has the `crossprod` function, which would be more efficient</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co">## than having to transpose, but numpy doesn't seem to have an equivalent.</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> X.T <span class="op">@</span> X</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co">## R has the `crossprod` function, which would be more efficient</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co">## than having to transpose, but numpy doesn't seem to have an equivalent.</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> X.T <span class="op">@</span> X  <span class="co"># produce a positive def. matrix </span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> np.random.normal(size <span class="op">=</span> n)</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> np.linalg.cholesky(X) <span class="co"># L is upper-triangular</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> np.linalg.cholesky(A) <span class="co"># L is lower-triangular</span></span>
 <span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>U <span class="op">=</span> L.T</span>
 <span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a>out1 <span class="op">=</span> sp.linalg.solve_triangular(L, b, lower<span class="op">=</span><span class="va">True</span>)</span>
@@ -887,7 +887,7 @@ A_{n1}B &amp; \cdots &amp; A_{nm}B
 </div>
 <p><strong>To reiterate the distinction between matrix inversion and solving a system of equations, when we write <span class="math inline">\(U^{-1}b\)</span>, what we mean on a computer is to carry out the above algorithm, not to find the inverse and then multiply.</strong></p>
 <p>Here’s a good reason why.</p>
-<div class="cell" data-hash="unit10-linalg_cache/html/unnamed-chunk-8_7ccbe51b82e52914c07b0fb3445d1969">
+<div class="cell" data-hash="unit10-linalg_cache/html/unnamed-chunk-8_f07e7d0a3c06f8d614d02f9fd20f019d">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>np.random.seed(<span class="dv">1</span>)</span>
@@ -896,21 +896,21 @@ A_{n1}B &amp; \cdots &amp; A_{nm}B
 <span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="co">## R has the `crossprod` function, which would be more efficient</span></span>
 <span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="co">## than having to transpose, but numpy doesn't seem to have an equivalent.</span></span>
-<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> X.T <span class="op">@</span> X</span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a>A <span class="op">=</span> X.T <span class="op">@</span> X</span>
 <span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a>b <span class="op">=</span> np.random.normal(size <span class="op">=</span> n)</span>
-<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> np.linalg.cholesky(X) <span class="co"># L is upper-triangular</span></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>L <span class="op">=</span> np.linalg.cholesky(A) <span class="co"># L is lower-triangular</span></span>
 <span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
 <span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a>out1 <span class="op">=</span> sp.linalg.solve_triangular(L, b, lower<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>time.time() <span class="op">-</span> t0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>0.031229019165039062</code></pre>
+<pre><code>0.032052040100097656</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>t0 <span class="op">=</span> time.time()</span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>out2 <span class="op">=</span> np.linalg.inv(L) <span class="op">@</span> b</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>time.time() <span class="op">-</span> t0</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>3.1720523834228516</code></pre>
+<pre><code>4.630963087081909</code></pre>
 </div>
 </div>
 <p>That assumes you have <span class="math inline">\(L\)</span>, but we’ll see in a bit that even when one accounts for the creation of <span class="math inline">\(L\)</span>, you don’t want to invert matrices in order to solve systems of equations.</p>
@@ -972,8 +972,8 @@ A_{n1}B &amp; \cdots &amp; A_{nm}B
 <span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>e <span class="op">=</span> np.linalg.eig(C)</span>
 <span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>np.sort(e[<span class="dv">0</span>])[::<span class="op">-</span><span class="dv">1</span>][<span class="dv">96</span>:<span class="dv">100</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>array([-4.16702596e-16+0.j, -5.38621518e-16+0.j, -6.26206506e-16+0.j,
-       -6.98611709e-16+0.j])</code></pre>
+<pre><code>array([-3.97281456e-16+0.00000000e+00j, -5.04026222e-16+2.43770877e-16j,
+       -5.04026222e-16-2.43770877e-16j, -6.63548161e-16+0.00000000e+00j])</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    L <span class="op">=</span> np.linalg.cholesky(C)</span>
@@ -986,7 +986,7 @@ A_{n1}B &amp; \cdots &amp; A_{nm}B
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>vals <span class="op">=</span> np.<span class="bu">abs</span>(e[<span class="dv">0</span>])</span>
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>np.<span class="bu">max</span>(vals)<span class="op">/</span>np.<span class="bu">min</span>(vals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>3.135151918122864e+18</code></pre>
+<pre><code>5.971220243671803e+17</code></pre>
 </div>
 </div>
 <p>I don’t see a way to use pivoting with the Cholesky in Python, but in R, one can do <code>chol(C, pivot = TRUE)</code>.</p>
