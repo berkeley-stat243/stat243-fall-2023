@@ -734,6 +734,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>'0100000000001010000000000000000000000000000000000000000000000000'</code></pre>
 </div>
 </div>
+<p>So that is <span class="math inline">\(1.101 \times 2^{1024-1023} = 1\times 2^{1} + 1\times 2^{0} + 1\times 2^{-2}\)</span>, where the 2nd through 12th bits are <span class="math inline">\(10000000000\)</span>, which code for <span class="math inline">\(1\times 2^{10}=1024\)</span>.</p>
 <p><strong>Question</strong>: Given a fixed number of bits for a number, what is the tradeoff between using bits for the <span class="math inline">\(d\)</span> part vs.&nbsp;bits for the <span class="math inline">\(e\)</span> part?</p>
 <p>Let’s consider what can be represented exactly:</p>
 <div class="cell">
@@ -912,7 +913,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>10240.00000000000000000000</code></pre>
 </div>
 </div>
-<p>The spacing of possible computer numbers that have a magnitude of about 1 leads us to another definition of <em>machine epsilon</em> (an alternative, but essentially equivalent definition to that given <a href="#machine-epsilon">previously</a>. Machine epsilon tells us also about the relative spacing of numbers. First let’s consider numbers of magnitude one. The difference between <span class="math inline">\(1=1.00...00\times2^{0}\)</span> and <span class="math inline">\(1.000...01\times2^{0}\)</span> is <span class="math inline">\(\epsilon=1\times2^{-52}\approx2.2\times10^{-16}\)</span>. Machine epsilon gives the <em>absolute spacing</em> for numbers near 1 and the <em>relative spacing</em> for numbers with a different order of magnitude and therefore a different absolute magnitude of the error in representing a real. The relative spacing at <span class="math inline">\(x\)</span> is <span class="math display">\[\frac{(1+\epsilon)x-x}{x}=\epsilon\]</span> since the next largest number from <span class="math inline">\(x\)</span> is given by <span class="math inline">\((1+\epsilon)x\)</span>.</p>
+<p>The spacing of possible computer numbers that have a magnitude of about 1 leads us to another definition of <em>machine epsilon</em> (an alternative, but essentially equivalent definition to that given <a href="#machine-epsilon">previously</a>. Machine epsilon tells us also about the relative spacing of numbers.</p>
+<p>First let’s consider numbers of magnitude one. The next biggest number we can represent after <span class="math inline">\(1=1.00...00\times2^{0}\)</span> is <span class="math inline">\(1.000...01\times2^{0}\)</span>. The difference between those two numbers (i.e., the spacing) is <span class="math display">\[
+\begin{aligned}
+\epsilon &amp; = &amp;0.00...01 \times 2^{0} \\
+&amp; =&amp; 0 \times 2^{0} + 0 \times 2^{-1} + \cdots + 0\times 2^{-51} + 1\times2^{-52}\\
+&amp; =&amp; 1\times2^{-52}\\
+&amp; \approx &amp; 2.2\times10^{-16}.
+\end{aligned}
+\]</span></p>
+<p>Machine epsilon gives the <em>absolute spacing</em> for numbers near 1 and the <em>relative spacing</em> for numbers with a different order of magnitude and therefore a different absolute magnitude of the error in representing a real. The relative spacing at <span class="math inline">\(x\)</span> is <span class="math display">\[\frac{(1+\epsilon)x-x}{x}=\epsilon\]</span> since the next largest number from <span class="math inline">\(x\)</span> is given by <span class="math inline">\((1+\epsilon)x\)</span>.</p>
 <p>Suppose <span class="math inline">\(x=1\times10^{6}\)</span>. Then the absolute error in representing a number of this magnitude is <span class="math inline">\(x\epsilon\approx2\times10^{-10}\)</span>. (Actually the error would be one-half of the spacing, but that’s a minor distinction.) We can see by looking at the numbers in decimal form, where we are accurate to the order <span class="math inline">\(10^{-10}\)</span> but not <span class="math inline">\(10^{-11}\)</span>. This is equivalent to our discussion that we have only 16 digits of accuracy.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb165"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb165-1"><a href="#cb165-1" aria-hidden="true" tabindex="-1"></a>dg(<span class="fl">1000000.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
