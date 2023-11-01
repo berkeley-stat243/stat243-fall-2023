@@ -684,7 +684,7 @@ the absolute value of the largest magnitude eigenvalue of $A$ and
 $\|A^{-1}\|_{2}$ that of the inverse of the absolute value of the
 smallest magnitude eigenvalue of $A$.
 
-We see in the code above that the large disparity in eigenvalues of $A$
+We see in the code below that the large disparity in eigenvalues of $A$
 leads to an effect predictable from our inequality above, with the
 condition number helping us find an upper bound.
 
@@ -744,10 +744,18 @@ that centering and scaling the matrix columns makes a huge difference on
 the condition number
 
 ```{python}
+import statsmodels.api as sm
+
 t1 = np.arange(1990, 2011)  # naive covariate
 X1 = np.column_stack((np.ones(21), t1, t1 ** 2))
+
+beta = np.array([5, .1, .0001])
+y = X1 @ beta + np.random.normal(size = len(t1))
+
 e1 = np.linalg.eig(np.dot(X1.T, X1))
 np.sort(e1[0])[::-1]
+np.linalg.cond(np.dot(X1.T, X1))  # built-in!
+sm.OLS(y, X1).fit().params
 
 t2 = t1 - 2000              # centered
 X2 = np.column_stack((np.ones(21), t2, t2 ** 2))
@@ -761,6 +769,12 @@ e3 = np.linalg.eig(np.dot(X3.T, X3))
 with np.printoptions(suppress=True):
     np.sort(e3[0])[::-1]
 ```
+
+I haven't shown the OLS results for the transformed version
+of the problem because the transformations modify the true
+parameter values, so there is a bit of arithmetic to be done,
+but you should be able to verify that the second and third
+approaches give reasonable answers.
 
 
 The basic story is that simple strategies often solve the problem, and
@@ -954,6 +968,23 @@ multiply by minus one if there is an odd number of permutations. Or if
 we know the matrix is non-negative definite, we just take the absolute
 value of $|U|$. So Gaussian elimination provides a fast stable way to
 find the determinant.
+
+## When would we explicitly invert a matrix?
+
+In some cases (as we discussed in class) you actually need the inverse as
+the output (e.g., for estimating standard errors). 
+
+But if you are just needing the inverse to multiply it by a vector or another
+matrix, you're better off
+using a decomposition. Basically, one can work out that the cost of computing
+the inverse and doing subsequent multiplication with it is rather more 
+than computing the decomposition and doing subsequent multiplications with it,
+regardless of how many columns there are in the matrix you are multiplying by.
+
+With numpy, that may mean computing the decomposition and then 
+carrying out the steps to do the multiplication using the decomposition
+or using `np.linalg.solve(A, B)` which, as mentioned above, uses the LU behind the scenes. 
+One would not do  `np.linalg.inv(A) @ B`.
 
 ## Cholesky decomposition
 
