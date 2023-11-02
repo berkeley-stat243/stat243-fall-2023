@@ -274,11 +274,17 @@ $|A|=|A^{\top}|$, which can be seen using the QR decomposition for $A$
 and understanding properties of determinants of triangular matrices (in
 this case $R$) and orthogonal matrices (in this case $Q$).
 
+## Transposes and inverses
+
 For square, invertible matrices, we have that
 $(A^{-1})^{\top}=(A^{\top})^{-1}$. Why? Since we have
 $(AB)^{\top}=B^{\top}A^{\top}$, we have:
 $$A^{\top}(A^{-1})^{\top}=(A^{-1}A)^{\top}=I$$ so
 $(A^{\top})^{-1}=(A^{-1})^{\top}$.
+
+For two invertible matrices, we have that
+$(AB)^{-1} = B^{-1}A^{-1}$ since
+$B^{-1}A^{-1} AB = I$.
 
 #### Other matrix multiplications
 
@@ -1003,18 +1009,19 @@ diagonals to be positive). One algorithm for computing $U$ is:
 
 We can then solve a system of equations as: $U^{-1}(U^{\top-1}b)$.
 
-Since numpy's `cholesky` gives $L = U^\top$, let's instead solve
-the system as: $L^{\top-1}(L^{-1}b)$, which
-in Python can be done in either of the following ways:
+Confusingly, while numpy's `cholesky` gives $L = U^\top$, scipy 
+can return either $L$ or $U$ but defaults to $U$.
+
+Here are two ways we can use the Cholesky to solve a system of equations:
 
 ```{python, eval=FALSE}
-L = sp.linalg.cholesky(A)
+U = sp.linalg.cholesky(A)
 sp.linalg.solve_triangular(L.T, 
-          sp.linalg.solve_triangular(L, b, lower=True),
+          sp.linalg.solve_triangular(U, b, lower=False, trans='T'),
           lower=False)
 
-c, low = sp.linalg.cho_factor(A)
-sp.linalg.cho_solve((c, low), b)
+U, lower = sp.linalg.cho_factor(A)
+sp.linalg.cho_solve((U, lower), b)
 ```
 
 
@@ -1031,7 +1038,7 @@ also a method for finding the Cholesky without square roots.
 The standard algorithm for generating $y\sim\mathcal{N}(0,A)$ is:
 
 ```{python, eval=FALSE}
-L = sp.linalg.cholesky(A)
+L = sp.linalg.cholesky(A, lower=True)
 y = L @ np.random.normal(size = n)
 ```
 
@@ -1041,13 +1048,19 @@ be spent?
 If a regression design matrix, $X$, is full rank, then $X^{\top}X$ is
 positive definite, so we could find
 $\hat{\beta}=(X^{\top}X)^{-1}X^{\top}Y$ using either the Cholesky or
-Gaussian elimination. **Challenge**: write efficient R code to carry out
-the OLS solution using either LU or Cholesky factorization.
+Gaussian elimination. 
 
-However, it turns out that the standard approach is to work with $X$
+However, for OLS, it turns out that the standard approach is to work with $X$
 using the QR decomposition rather than working with $X^{\top}X$; working
 with $X$ is more numerically stable, though in most situations without
 extreme collinearity, either of the approaches will be fine.
+
+We could also consider the GLS estimator, which accounts for dependence
+in the errors: $\hat{\beta}=(X^{\top}\Sigma^{-1}X)^{-1}X^{\top}\Sigma^{-1}Y$ 
+
+**Challenge**: write efficient R code to carry out
+the GLS solution using the Cholesky factorization.
+
 
 #### Numerical issues with eigendecompositions and Cholesky decompositions for positive definite matrices 
 
@@ -1110,7 +1123,7 @@ zero any linear combinations with very small variance. We can also use
 pivoting with the Cholesky and accumulate zeroes in the last $n-q$ rows
 (for cases where we try to take the square root of a negative number),
 corresponding to the columns of $A$ that are numerically linearly
-dependent. See the *pivot* argument to R's *chol()*.
+dependent. 
 
 ## QR decomposition
 
@@ -1184,7 +1197,7 @@ pretty quick unless $p$ is large since it is linear in $n$, so it may
 not be worth worrying too much about computational differences of the
 sort noted here.
 
-### Regression and the QR in R and Python
+### Regression and the QR in Python and R
 
 We can get the Q and R matrices easily in Python.
 
@@ -1204,13 +1217,13 @@ that we get the basis vectors for the regression, while adding the
 remaining columns gives us the full $n$-dimensional space of the
 observations.
 
-Regression in R uses the QR decomposition via *qr()*, which calls a
-Fortran function. *qr()* (and the Fortran functions that are called) is
+Regression in R uses the QR decomposition via `qr()`, which calls a
+Fortran function. `qr()` (and the Fortran functions that are called) is
 specifically designed to output quantities useful in fitting linear
 models. 
 
-In R, *qr()* returns the result as a list meant for use by other tools. R
-stores the $R$ matrix in the upper triangle of *\$qr*, while the lower
+In R, `qr()` returns the result as a list meant for use by other tools. R
+stores the $R$ matrix in the upper triangle of `\$qr`, while the lower
 triangle of *\$qr* and *\$aux* store the information for constructing
 $Q$ (this relates to the Householder-related vectors $u$ below). One can
 multiply by $Q$ using *qr.qy()* and by $Q^{\top}$ using *qr.qty()*. If
@@ -1457,8 +1470,7 @@ orthogonal matrix is either one or minus one.
 $|A|=|QR|=|Q||R|=\pm|R|$
 
 $|A^{\top}A|=|(QR)^{\top}QR|=|R^{\top}R|=|R_{1}^{\top}R_{1}|=|R_{1}|^{2}$\
-In R, the following will do it (on the log scale), since $R$ is stored
-in the upper triangle of the *\$qr* element.
+In Python, the following will do it (on the log scale).
 
 ```{python, eval=FALSE}
 Q,R = qr(A)
@@ -1755,7 +1767,7 @@ mat2 = sparse.csr_array((mat.data, mat.indices, mat.indptr))
 mat2.toarray()
 ```
 
-That's also how things are done in the *spam* package in R.```
+That's also how things are done in the `spam` package in R.
 
 We can do a fast matrix multiply, $x = Ab$, as follows in pseudo-code:
 
@@ -1874,9 +1886,9 @@ basic algorithm:
 
 -   Choose $x_{(0)}$ and define the residual, $r_{(0)}=b-Ax_{(0)}$ (the
     error on the scale of $b$) and the direction, $d_{0}=r_{(0)}$ and
-    set$k=0$.
+    set $k=0$.
 
--   Then iterate
+-   Then iterate:
 
     -   $\alpha_{k}=\frac{r_{(k)}^{\top}r_{(k)}}{d_{k}^{\top}Ad_{k}}$
         (choose step size so next error will be orthogonal to current
@@ -1908,7 +1920,7 @@ In general, CG is used for large sparse systems.
 
 See the [extensive description from
 Shewchuk](http://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf)
-for more details and for the figures shown in class, as well as the use
+for more details, as well as the use
 of CG when $A$ is not positive definite.
 
 #### Updating a solution
