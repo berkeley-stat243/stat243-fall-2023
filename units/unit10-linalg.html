@@ -658,7 +658,7 @@ A_{n1}B &amp; \cdots &amp; A_{nm}B
 <span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> e[<span class="dv">1</span>] <span class="op">@</span> ((evals <span class="op">**</span> <span class="fl">0.5</span>) <span class="op">*</span> np.random.normal(size <span class="op">=</span> <span class="dv">5</span>))</span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>y.<span class="bu">sum</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>-8.881784197001252e-16</code></pre>
+<pre><code>-2.220446049250313e-16</code></pre>
 </div>
 </div>
 <p>In the second order case, we have two non-identifiabilities: for the sum and for the linear component of the variation in <span class="math inline">\(y\)</span> (linear in the indices of <span class="math inline">\(y\)</span>).</p>
@@ -795,7 +795,7 @@ A_{n1}B &amp; \cdots &amp; A_{nm}B
 </div>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>sm.OLS(y, X1).fit().params</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>array([-3.61355412e+04,  3.61987534e+01, -8.91405553e-03])</code></pre>
+<pre><code>array([ 1.03931000e+04, -1.03449429e+01,  2.72550525e-03])</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>t2 <span class="op">=</span> t1 <span class="op">-</span> <span class="dv">2000</span>              <span class="co"># centered</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>X2 <span class="op">=</span> np.column_stack((np.ones(<span class="dv">21</span>), t2, t2 <span class="op">**</span> <span class="dv">2</span>))</span>
@@ -980,11 +980,11 @@ A_{n1}B &amp; \cdots &amp; A_{nm}B
 </ul></li>
 </ol>
 <p>We can then solve a system of equations as: <span class="math inline">\(U^{-1}(U^{\top-1}b)\)</span>.</p>
-<p>Confusingly, while numpy’s <code>cholesky</code> gives <span class="math inline">\(L = U^\top\)</span>, scipy can return either <span class="math inline">\(L\)</span> or <span class="math inline">\(U\)</span> but defaults to <span class="math inline">\(U\)</span>.</p>
+<p>Confusingly, while numpy’s <code>cholesky</code> gives <span class="math inline">\(L = U^\top\)</span>, scipy’s <code>cholesky</code> can return either <span class="math inline">\(L\)</span> or <span class="math inline">\(U\)</span> but defaults to <span class="math inline">\(U\)</span>.</p>
 <p>Here are two ways we can use the Cholesky to solve a system of equations:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>U <span class="op">=</span> sp.linalg.cholesky(A)</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>sp.linalg.solve_triangular(L.T, </span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>sp.linalg.solve_triangular(U, </span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>          sp.linalg.solve_triangular(U, b, lower<span class="op">=</span><span class="va">False</span>, trans<span class="op">=</span><span class="st">'T'</span>),</span>
 <span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>          lower<span class="op">=</span><span class="va">False</span>)</span>
 <span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a></span>
