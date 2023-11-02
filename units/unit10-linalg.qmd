@@ -1010,7 +1010,7 @@ diagonals to be positive). One algorithm for computing $U$ is:
 We can then solve a system of equations as: $U^{-1}(U^{\top-1}b)$.
 
 Confusingly, while numpy's `cholesky` gives $L = U^\top$, scipy's
-`choleskey` can return either $L$ or $U$ but defaults to $U$.
+`cholesky` can return either $L$ or $U$ but defaults to $U$.
 
 Here are two ways we can use the Cholesky to solve a system of equations:
 
