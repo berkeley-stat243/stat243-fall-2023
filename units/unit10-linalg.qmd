@@ -1,7 +1,7 @@
 ---
 title: "Numerical linear algebra"
 author: "Chris Paciorek"
-date: "2023-07-26"
+date: "2023-10-24"
 format:
   pdf:
     documentclass: article
@@ -18,11 +18,6 @@ execute:
   freeze: auto
 from: markdown+tex_math_single_backslash
 ---
-
-```{r, fake-setup, echo=FALSE}
-## For some reason we need an R chunk in the doc or get result seen in `error.log`.
-z <- 1
-```
 
 
 [PDF](./unit10-linalg.pdf){.btn .btn-primary}
@@ -179,18 +174,26 @@ them implicit. Ask me if it's not clear.
 
 ## Norms
 
-$\|x\|_{p}=(\sum_{i}|x_{i}|^{p})^{1/p}$ and the standard (Euclidean)
+For a vector, $\|x\|_{p}=(\sum_{i}|x_{i}|^{p})^{1/p}$ and the standard (Euclidean)
 norm is $\|x\|_{2}=\sqrt{\sum x_{i}^{2}}=\sqrt{x^{\top}x}$, just the
 length of the vector in Euclidean space, which we'll refer to as
-$\|x\|$, unless noted otherwise. One commonly used norm for a matrix is
+$\|x\|$, unless noted otherwise.
+
+One commonly used norm for a matrix is
 the Frobenius norm, $\|A\|_{F}=(\sum_{i,j}a_{ij}^{2})^{1/2}$.
 
-In this Unit, we'll make use of the **induced matrix norm**, which is
+In this Unit, we'll often make use of the **induced matrix norm**, which is
 defined relative to a corresponding vector norm, $\|\cdot\|$, as:
 $$\|A\|=\sup_{x\ne0}\frac{\|Ax\|}{\|x\|}$$ So we have
 $$\|A\|_{2}=\sup_{x\ne0}\frac{\|Ax\|_{2}}{\|x\|_{2}}=\sup_{\|x\|_{2}=1}\|Ax\|_{2}$$
 If you're not familiar with the supremum ("sup" above), you can just
-think of it as taking the maximum.
+think of it as taking the maximum. In the case of the 2-norm, the norm turns
+out to be the largest singular value in the singular value decomposition (SVD)
+of the matrix.
+
+We can interpret the norm of a matrix as the most that the matrix
+can stretch a vector when multiplying by the vector (relative to the
+length of the vector).
 
 A property of any legitimate matrix norm (including the induced norm) is
 that $\|AB\|\leq\|A\|\|B\|$. Also recall that norms must obey the triangle
@@ -205,8 +208,9 @@ $$\theta=\cos^{-1}\left(\frac{\langle x,y\rangle}{\sqrt{\langle x,x\rangle\langl
 ## Orthogonality
 
 Two vectors are orthogonal if $x^{\top}y=0$, in which case we say
-$x\perp y$. An **orthogonal matrix** is a matrix in which all of the
-columns are orthogonal to each other and normalized. Orthogonal matrices
+$x\perp y$. An **orthogonal matrix** is a square matrix in which all of the
+columns are orthogonal to each other and normalized. The same holds for
+the rows. Orthogonal matrices
 can be shown to have full rank. Furthermore if $A$ is orthogonal,
 $A^{\top}A=I$, so $A^{-1}=A^{\top}$. Given all this, the determinant of
 orthogonal $A$ is either 1 or -1. Finally the product of two orthogonal
@@ -270,11 +274,17 @@ $|A|=|A^{\top}|$, which can be seen using the QR decomposition for $A$
 and understanding properties of determinants of triangular matrices (in
 this case $R$) and orthogonal matrices (in this case $Q$).
 
+## Transposes and inverses
+
 For square, invertible matrices, we have that
 $(A^{-1})^{\top}=(A^{\top})^{-1}$. Why? Since we have
 $(AB)^{\top}=B^{\top}A^{\top}$, we have:
 $$A^{\top}(A^{-1})^{\top}=(A^{-1}A)^{\top}=I$$ so
 $(A^{\top})^{-1}=(A^{-1})^{\top}$.
+
+For two invertible matrices, we have that
+$(AB)^{-1} = B^{-1}A^{-1}$ since
+$B^{-1}A^{-1} AB = I$.
 
 #### Other matrix multiplications
 
@@ -437,6 +447,10 @@ on the basis vectors, with scaling based on the eigenvalues. So $y$ is
 produced as a linear combination of eigenvectors as basis vectors, with
 the variance attributable to the basis vectors determined by the
 eigenvalues.
+
+To go the other direction, we can project a vector $y$ onto the space 
+spanned by the eigenvectors: $w = (\Gamma^{\top}\Gamma)^{-1}\Gamma^{\top}y = \Gamma^{\top}y = \Lambda^{1/2}z$,
+where the simplification of course comes from $\Gamma$ being orthogonal.
 
 If $x^{\top}Ax\geq0$ then $A$ is nonnegative definite (also called
 positive semi-definite). In this case one or more eigenvalues can be
@@ -612,8 +626,8 @@ but the first might be better for row-major matrices (so might be how we
 would implement in C) and the second for column-major (so might be how
 we would implement in Fortran). 
 
-**Challenge**: check whether the second
-approach is faster in R. (Write the code just doing the outer loop and
+**Challenge**: check whether the first
+approach is faster in Python. (Write the code just doing the outer loop and
 doing the inner loop using vectorized calculation.)
 
 #### General computational issues
@@ -657,12 +671,15 @@ x = np.linalg.solve(A, b)
 
 bPerturbed = np.array([32.1, 22.9, 33.1, 30.9])
 xPerturbed = np.linalg.solve(A, bPerturbed)
+
+delta_b = bPerturbed - b
+delta_x = xPerturbed - x
 ```
 
 
 What's going on? Some manipulations with inequalities involving the
 induced matrix norm (for any chosen vector norm, but we might as well
-just think about the Euclidean norm) (see Gentle-CS Sec. 5.1) give
+just think about the Euclidean norm) (see Gentle-CS Sec. 5.1 or the derivation in class) give
 $$\frac{\|\delta x\|}{\|x\|}\leq\|A\|\|A^{-1}\|\frac{\|\delta b\|}{\|b\|}$$
 where we define the condition number w.r.t. inversion as
 $\mbox{cond}(A)\equiv\|A\|\|A^{-1}\|$. We'll generally work with the
@@ -673,19 +690,26 @@ the absolute value of the largest magnitude eigenvalue of $A$ and
 $\|A^{-1}\|_{2}$ that of the inverse of the absolute value of the
 smallest magnitude eigenvalue of $A$.
 
-We see in the code above that the large disparity in eigenvalues of $A$
+We see in the code below that the large disparity in eigenvalues of $A$
 leads to an effect predictable from our inequality above, with the
 condition number helping us find an upper bound.
 
 ```{python}
 e = np.linalg.eig(A)
 evals = e[0]
-norm2(x - xPerturbed)  ## delta x
-norm2(b - bPerturbed)  ## delta b
-norm2(x - xPerturbed)/norm2(x)
-(evals[0]/evals[2])*norm2(b - bPerturbed)/norm2(b)
-```
+print(evals)
 
+## relative perturbation in x much bigger than in b
+norm2(delta_x) / norm2(x)
+norm2(delta_b) / norm2(b)
+
+## ratio of relative perturbations
+(norm2(delta_x) / norm2(x)) / (norm2(delta_b) / norm2(b))
+
+## ratio of largest and smallest magnitude eigenvalues
+## confusingly evals[2] is the smallest, not evals[3]
+(evals[0]/evals[2])
+```
 
 The main use of these ideas for our purposes is in thinking about the
 numerical accuracy of a linear system solution (Gentle-NLA Sec 3.4). On
@@ -726,10 +750,18 @@ that centering and scaling the matrix columns makes a huge difference on
 the condition number
 
 ```{python}
+import statsmodels.api as sm
+
 t1 = np.arange(1990, 2011)  # naive covariate
 X1 = np.column_stack((np.ones(21), t1, t1 ** 2))
+
+beta = np.array([5, .1, .0001])
+y = X1 @ beta + np.random.normal(size = len(t1))
+
 e1 = np.linalg.eig(np.dot(X1.T, X1))
 np.sort(e1[0])[::-1]
+np.linalg.cond(np.dot(X1.T, X1))  # built-in!
+sm.OLS(y, X1).fit().params
 
 t2 = t1 - 2000              # centered
 X2 = np.column_stack((np.ones(21), t2, t2 ** 2))
@@ -744,9 +776,15 @@ with np.printoptions(suppress=True):
     np.sort(e3[0])[::-1]
 ```
 
+I haven't shown the OLS results for the transformed version
+of the problem because the transformations modify the true
+parameter values, so there is a bit of arithmetic to be done,
+but you should be able to verify that the second and third
+approaches give reasonable answers.
+
 
 The basic story is that simple strategies often solve the problem, and
-that you should be cognizant of the absolute and relative magnitudes
+that you should be aware of the absolute and relative magnitudes
 involved in your calculations.
 
 One rule of thumb is to try to work with numbers whose magnitude is
@@ -808,20 +846,21 @@ the remaining unknown in each row (each equation).
 How many multiplies and adds are done? Solving lower triangular systems
 is very similar and involves the same number of calculations.
 
-In R, *backsolve()* solves upper triangular systems and *forwardsolve()*
-solves lower triangular systems:
+In Scipy, we can use `linalg.solve_triangular` to solve triangular systems.
+The `trans` argument indicates whether to solve $Ax=b$ or $A^{\top}x=b$
+(so one wouldn't need to transpose before solving).
 
 ```{python}
 import scipy as sp
 np.random.seed(1)
 n = 20
 X = np.random.normal(size = (n,n))
-
 ## R has the `crossprod` function, which would be more efficient
 ## than having to transpose, but numpy doesn't seem to have an equivalent.
-X = X.T @ X
+A = X.T @ X  # produce a positive def. matrix 
+
 b = np.random.normal(size = n)
-L = np.linalg.cholesky(X) # L is upper-triangular
+L = np.linalg.cholesky(A) # L is lower-triangular
 U = L.T
 
 out1 = sp.linalg.solve_triangular(L, b, lower=True)
@@ -850,9 +889,9 @@ X = np.random.normal(size = (n,n))
 
 ## R has the `crossprod` function, which would be more efficient
 ## than having to transpose, but numpy doesn't seem to have an equivalent.
-X = X.T @ X
+A = X.T @ X
 b = np.random.normal(size = n)
-L = np.linalg.cholesky(X) # L is upper-triangular
+L = np.linalg.cholesky(A) # L is lower-triangular
 
 t0 = time.time()
 out1 = sp.linalg.solve_triangular(L, b, lower=True)
@@ -936,6 +975,23 @@ we know the matrix is non-negative definite, we just take the absolute
 value of $|U|$. So Gaussian elimination provides a fast stable way to
 find the determinant.
 
+## When would we explicitly invert a matrix?
+
+In some cases (as we discussed in class) you actually need the inverse as
+the output (e.g., for estimating standard errors). 
+
+But if you are just needing the inverse to multiply it by a vector or another
+matrix, you're better off
+using a decomposition. Basically, one can work out that the cost of computing
+the inverse and doing subsequent multiplication with it is rather more 
+than computing the decomposition and doing subsequent multiplications with it,
+regardless of how many columns there are in the matrix you are multiplying by.
+
+With numpy, that may mean computing the decomposition and then 
+carrying out the steps to do the multiplication using the decomposition
+or using `np.linalg.solve(A, B)` which, as mentioned above, uses the LU behind the scenes. 
+One would not do  `np.linalg.inv(A) @ B`.
+
 ## Cholesky decomposition
 
 When $A$ is p.d., we can use the Cholesky decomposition to solve a
@@ -953,18 +1009,19 @@ diagonals to be positive). One algorithm for computing $U$ is:
 
 We can then solve a system of equations as: $U^{-1}(U^{\top-1}b)$.
 
-Since numpy's `cholesky` gives $L = U^\top$, let's instead solve
-the system as: $L^{\top-1}(L^{-1}b)$, which
-in Python can be done in either of the following ways:
+Confusingly, while numpy's `cholesky` gives $L = U^\top$, scipy's
+`cholesky` can return either $L$ or $U$ but defaults to $U$.
+
+Here are two ways we can use the Cholesky to solve a system of equations:
 
 ```{python, eval=FALSE}
-L = sp.linalg.cholesky(A)
-sp.linalg.solve_triangular(L.T, 
-          sp.linalg.solve_triangular(L, b, lower=True),
+U = sp.linalg.cholesky(A)
+sp.linalg.solve_triangular(U, 
+          sp.linalg.solve_triangular(U, b, lower=False, trans='T'),
           lower=False)
 
-c, low = sp.linalg.cho_factor(A)
-sp.linalg.cho_solve((c, low), b)
+U, lower = sp.linalg.cho_factor(A)
+sp.linalg.cho_solve((U, lower), b)
 ```
 
 
@@ -981,7 +1038,7 @@ also a method for finding the Cholesky without square roots.
 The standard algorithm for generating $y\sim\mathcal{N}(0,A)$ is:
 
 ```{python, eval=FALSE}
-L = sp.linalg.cholesky(A)
+L = sp.linalg.cholesky(A, lower=True)
 y = L @ np.random.normal(size = n)
 ```
 
@@ -991,13 +1048,19 @@ be spent?
 If a regression design matrix, $X$, is full rank, then $X^{\top}X$ is
 positive definite, so we could find
 $\hat{\beta}=(X^{\top}X)^{-1}X^{\top}Y$ using either the Cholesky or
-Gaussian elimination. **Challenge**: write efficient R code to carry out
-the OLS solution using either LU or Cholesky factorization.
+Gaussian elimination. 
 
-However, it turns out that the standard approach is to work with $X$
+However, for OLS, it turns out that the standard approach is to work with $X$
 using the QR decomposition rather than working with $X^{\top}X$; working
 with $X$ is more numerically stable, though in most situations without
 extreme collinearity, either of the approaches will be fine.
+
+We could also consider the GLS estimator, which accounts for dependence
+in the errors: $\hat{\beta}=(X^{\top}\Sigma^{-1}X)^{-1}X^{\top}\Sigma^{-1}Y$ 
+
+**Challenge**: write efficient R code to carry out
+the GLS solution using the Cholesky factorization.
+
 
 #### Numerical issues with eigendecompositions and Cholesky decompositions for positive definite matrices 
 
@@ -1060,7 +1123,7 @@ zero any linear combinations with very small variance. We can also use
 pivoting with the Cholesky and accumulate zeroes in the last $n-q$ rows
 (for cases where we try to take the square root of a negative number),
 corresponding to the columns of $A$ that are numerically linearly
-dependent. See the *pivot* argument to R's *chol()*.
+dependent. 
 
 ## QR decomposition
 
@@ -1134,7 +1197,7 @@ pretty quick unless $p$ is large since it is linear in $n$, so it may
 not be worth worrying too much about computational differences of the
 sort noted here.
 
-### Regression and the QR in R and Python
+### Regression and the QR in Python and R
 
 We can get the Q and R matrices easily in Python.
 
@@ -1154,13 +1217,13 @@ that we get the basis vectors for the regression, while adding the
 remaining columns gives us the full $n$-dimensional space of the
 observations.
 
-Regression in R uses the QR decomposition via *qr()*, which calls a
-Fortran function. *qr()* (and the Fortran functions that are called) is
+Regression in R uses the QR decomposition via `qr()`, which calls a
+Fortran function. `qr()` (and the Fortran functions that are called) is
 specifically designed to output quantities useful in fitting linear
 models. 
 
-In R, *qr()* returns the result as a list meant for use by other tools. R
-stores the $R$ matrix in the upper triangle of *\$qr*, while the lower
+In R, `qr()` returns the result as a list meant for use by other tools. R
+stores the $R$ matrix in the upper triangle of `\$qr`, while the lower
 triangle of *\$qr* and *\$aux* store the information for constructing
 $Q$ (this relates to the Householder-related vectors $u$ below). One can
 multiply by $Q$ using *qr.qy()* and by $Q^{\top}$ using *qr.qty()*. If
@@ -1407,8 +1470,7 @@ orthogonal matrix is either one or minus one.
 $|A|=|QR|=|Q||R|=\pm|R|$
 
 $|A^{\top}A|=|(QR)^{\top}QR|=|R^{\top}R|=|R_{1}^{\top}R_{1}|=|R_{1}|^{2}$\
-In R, the following will do it (on the log scale), since $R$ is stored
-in the upper triangle of the *\$qr* element.
+In Python, the following will do it (on the log scale).
 
 ```{python, eval=FALSE}
 Q,R = qr(A)
@@ -1438,7 +1500,7 @@ Often we will have the factorization as a result of other parts of the
 computation, so we get the determinant for free.
 
 We can use `np.linalg.logdet()` or (definitely not recommended)
-`np.linalg.det() to calculate the determinant in Python.
+`np.linalg.det()` to calculate the determinant in Python.
 These functions use the LU decomposition.
 
 
@@ -1546,6 +1608,9 @@ where $u_{j}$ and $v_{j}$ are the columns of $U$ and $V$ and where $k$
 is the rank of $A$ (which is at most the minimum of $n$ and $m$ of
 course). The diagonal elements of $D$ are the singular values.
 
+That representation is as the sum of rank-one matrices (since
+each term is the scaled outer product of two vectors). 
+
 If $A$ is positive semi-definite, the eigendecomposition is an SVD.
 Furthermore, $A^{\top}A=VD^{2}V^{\top}$ and $AA^{\top}=UD^{2}U^{\top}$,
 so we can find the eigendecomposition of such matrices using the SVD of
@@ -1565,12 +1630,22 @@ a pseudo-inverse ($A^{+}=VD^{+}U^{\top})$.
 
 We can use the SVD to approximate $A$ by taking
 $A\approx\tilde{A}=\sum_{j=1}^{p}D_{jj}u_{j}v_{j}^{\top}$ for $p<m$.
-This approximation holds in terms of the Frobenius norm for
-$A-\tilde{A}$. As an example if we have a large image of dimension
+The Eckart-Minsky-Young theorem shows that the truncated SVD
+minimizes the Frobenius norm of $A-\tilde{A}$ over all possible rank-$p$ approximations.
+As an example if we have a large image of dimension
 $n\times m$, we could hold a compressed version by a rank-$p$
 approximation using the SVD. The SVD is used a lot in clustering
 problems. For example, the Netflix prize was won based on a variant of
 SVD (in fact all of the top methods used variants on SVD, I believe).
+
+Here's another way to think about the SVD in terms of transformations and bases.
+Applying the SVD to a vector, $ UDV^{top}x$, carries out the following steps:
+
+ - $V^{top}x$ expresses $x$ in terms of weights for the columns of $V$.
+ - Multiplying the result by $D$ scales/stretches the weights.
+ - Multiplying by $U$ produces the result, which is a weighted combination of columns of $U$, spanning the column-space of $U$.
+
+So applying the SVD transforms $x$ from the column space of $V$ to the column space of $U$.
 
 #### Computation
 
@@ -1650,12 +1725,15 @@ we've discussed in the parallelization unit, one way to speed up code
 that relies heavily on linear algebra is to make sure you have a BLAS
 library tuned to your machine. These include OpenBLAS (open source), Intel's MKL, AMD's ACML, and Apple's vecLib. 
 
-If you use Conda, numpy will generally be linked against MKL. With pip
+If you use Conda, numpy will generally be linked against MKL or OpenBLAS (this will
+depend on the locations online of the packages being installed, i.e., the *channel(s)* used). With pip,
+numpy will generally be linked against OpenBLAS.
 it's possible to install numpy so that it uses OpenBLAS.
 R can be linked to the shared object library file
 (*.so* file or *.dylib* on a Mac) for a fast BLAS. These BLAS
 libraries are also available in threaded versions that farm out the
 calculations across multiple cores or processors that share memory.
+More details are available in [this SCF documentation](https://statistics.berkeley.edu/computing/faqs/linear-algebra-and-parallelized-linear-algebra-using-blas).
 
 BLAS routines do vector operations (level 1), matrix-vector operations
 (level 2), and dense matrix-matrix operations (level 3). Often the name
@@ -1668,7 +1746,7 @@ factorizations, etc.
 ## Sparse matrices
 
 As an example of exploiting sparsity, we can use a standard format (CSR = compressed sparse row)
-in the Scipy sparse module:
+in the Scipy `sparse` module:
 
 Consider the matrix to be row-major and store
 the non-zero elements in order in an array called `data`. Then create a
@@ -1689,7 +1767,7 @@ mat2 = sparse.csr_array((mat.data, mat.indices, mat.indptr))
 mat2.toarray()
 ```
 
-That's also how things are done in the *spam* package in R.```
+That's also how things are done in the `spam` package in R.
 
 We can do a fast matrix multiply, $x = Ab$, as follows in pseudo-code:
 
@@ -1808,9 +1886,9 @@ basic algorithm:
 
 -   Choose $x_{(0)}$ and define the residual, $r_{(0)}=b-Ax_{(0)}$ (the
     error on the scale of $b$) and the direction, $d_{0}=r_{(0)}$ and
-    set$k=0$.
+    set $k=0$.
 
--   Then iterate
+-   Then iterate:
 
     -   $\alpha_{k}=\frac{r_{(k)}^{\top}r_{(k)}}{d_{k}^{\top}Ad_{k}}$
         (choose step size so next error will be orthogonal to current
@@ -1842,7 +1920,7 @@ In general, CG is used for large sparse systems.
 
 See the [extensive description from
 Shewchuk](http://www.cs.cmu.edu/~quake-papers/painless-conjugate-gradient.pdf)
-for more details and for the figures shown in class, as well as the use
+for more details, as well as the use
 of CG when $A$ is not positive definite.
 
 #### Updating a solution

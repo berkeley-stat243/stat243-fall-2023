@@ -367,6 +367,9 @@ of 3.25:
 bits(3.25)
 ```
 
+So that is $1.101 \times 2^{1024-1023} = 1\times 2^{1} + 1\times 2^{0} + 1\times 2^{-2}$, where the 2nd through 12th
+bits are $10000000000$, which code for $1\times 2^{10}=1024$.
+
 **Question**: Given a fixed number of bits for a number, what is the
 tradeoff between using bits for the $d$ part vs. bits for the $e$ part?
 
@@ -515,9 +518,20 @@ The spacing of possible computer numbers that have a magnitude of about
 1 leads us to another definition of *machine epsilon* (an alternative,
 but essentially equivalent definition to that given [previously](#machine-epsilon). 
 Machine epsilon tells us also about the relative spacing of
-numbers. First let's consider numbers of magnitude one. The difference
-between $1=1.00...00\times2^{0}$ and $1.000...01\times2^{0}$ is
-$\epsilon=1\times2^{-52}\approx2.2\times10^{-16}$. Machine epsilon gives
+numbers.
+
+First let's consider numbers of magnitude one. The next biggest number we can represent after  $1=1.00...00\times2^{0}$ is $1.000...01\times2^{0}$. The difference between those two numbers (i.e., the spacing) is
+$$
+\begin{aligned}
+\epsilon & = &0.00...01 \times 2^{0} \\
+ & =& 0 \times 2^{0} + 0 \times 2^{-1} + \cdots + 0\times 2^{-51} + 1\times2^{-52}\\
+ & =& 1\times2^{-52}\\
+ & \approx & 2.2\times10^{-16}.
+ \end{aligned}
+ $$
+
+
+Machine epsilon gives
 the *absolute spacing* for numbers near 1 and the *relative spacing* for
 numbers with a different order of magnitude and therefore a different
 absolute magnitude of the error in representing a real. The relative
