@@ -1639,9 +1639,9 @@ problems. For example, the Netflix prize was won based on a variant of
 SVD (in fact all of the top methods used variants on SVD, I believe).
 
 Here's another way to think about the SVD in terms of transformations and bases.
-Applying the SVD to a vector, $ UDV^{top}x$, carries out the following steps:
+Applying the SVD to a vector, $ UDV^{\top}x$, carries out the following steps:
 
- - $V^{top}x$ expresses $x$ in terms of weights for the columns of $V$.
+ - $V^{\top}x$ expresses $x$ in terms of weights for the columns of $V$.
  - Multiplying the result by $D$ scales/stretches the weights.
  - Multiplying by $U$ produces the result, which is a weighted combination of columns of $U$, spanning the column-space of $U$.
 
