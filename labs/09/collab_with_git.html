@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Zoey Vernon, Andrew Vaughn, James Duncan">
+<meta name="author" content="Zoey Vernon, Andrew Vaughn, James Duncan, Ahmed Eldeeb">
 <meta name="dcterms.date" content="2022-11-04">
 
 <title>Statistics 243 Fall 2023 - Collaboration with Git</title>
@@ -66,6 +66,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../../">
+<link href="../../labs/py_vs_R.html" rel="prev">
 <script src="../../site_libs/quarto-html/quarto.js"></script>
 <script src="../../site_libs/quarto-html/popper.min.js"></script>
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -100,7 +101,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-sidebar floating nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -213,6 +214,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../../labs/py_vs_R.html" rel="" target="">
  <span class="dropdown-text">Lab 7: R vs.&nbsp;Python</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../labs/09/collab_with_git.html" rel="" target="">
+ <span class="dropdown-text">Lab 9: Collaboration with Git</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -269,20 +274,82 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../../labs/09/collab_with_git.html">Lab 9: Collaboration with Git</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab0-setup.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 0: Setup</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab1-submission.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 1: Problem set submission</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab2-testing.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 2: Assertions, Exceptions, and Testing</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab3-debugging.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 3: Debugging</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/lab5-codereview.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 5: Code Reviews</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/06/scf.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 6: SCF and Parallel Computing</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/py_vs_R.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Lab 7: R vs.&nbsp;Python</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../../labs/09/collab_with_git.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Lab 9: Collaboration with Git</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a>
-  <ul class="collapse">
-  <li><a href="#warm-up-exercises-pair-introductions-reading" id="toc-warm-up-exercises-pair-introductions-reading" class="nav-link" data-scroll-target="#warm-up-exercises-pair-introductions-reading">Warm up exercises: Pair introductions &amp; reading</a></li>
-  </ul></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
   <li><a href="#some-terminology" id="toc-some-terminology" class="nav-link" data-scroll-target="#some-terminology">Some terminology</a></li>
   <li><a href="#some-review-of-key-commands-you-should-already-know" id="toc-some-review-of-key-commands-you-should-already-know" class="nav-link" data-scroll-target="#some-review-of-key-commands-you-should-already-know">Some review of key commands you should already know</a>
   <ul class="collapse">
@@ -327,7 +394,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Zoey Vernon, Andrew Vaughn, James Duncan </p>
+             <p>Zoey Vernon, Andrew Vaughn, James Duncan, Ahmed Eldeeb </p>
           </div>
   </div>
     
@@ -364,51 +431,18 @@ Objectives &amp; purpose
 <p>In our first section of the semester, we discussed how to use Git and GitHub. Now that you have a semester’s worth of experience using a remote repository, we’ll explore more advanced functionally of Git and GitHub today.</p>
 <p>In particular, we’ll practice with a number features that become most useful when collaborating with others in a GitHub repository. There is additional information about using Git for collaboration and various other features in the appendix at the end for those of you that are curious.</p>
 <p>We’ll work in pairs to practice collaboration with Git and how to fix issues that can arise when working in a shared Git repo.</p>
-<section id="warm-up-exercises-pair-introductions-reading" class="level2">
-<h2 class="anchored" data-anchor-id="warm-up-exercises-pair-introductions-reading">Warm up exercises: Pair introductions &amp; reading</h2>
-<p>We’ll start by learning a bit about each other and our previous experience with Git. Click to expand the blocks below.</p>
+<p>First, we’ll do some reading to get familiar with Git and GitHub’s main features that facilitate collaboration.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Exercise 0.a (~3 minutes)
+Exercise 0 (~10 minutes)
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<ol type="1">
-<li>Briefly introduce yourself to your pair (name / academic program).</li>
-<li>On your own, answer the following questions (yes / no):
-<ol type="a">
-<li>Did you have any experience using Git before this class? (y = 1 / n = 0)</li>
-<li>Have you ever used a shared GitHub repo for a collaborative project? (y = 1 / n = 0)</li>
-<li>Have you ever fixed a merge conflict? If you’re not sure, you can answer “no”. (y = 2 / n = 0)</li>
-</ol></li>
-<li>Tally your answers using the values I gave for each question so that you get a number between 0 and 4. (<em>NB: Your score carries NO judgment. After this course, each and every one of you will have a 4.</em>)</li>
-<li>Show your total to your pair.
-<ol type="a">
-<li>If you both have 0 or you both have 3 or above, please <strong>raise your hands and keep them raised</strong>. Don’t worry, the class will assume you have &gt;= 3!</li>
-<li>Otherwise, move on to the next section.</li>
-</ol></li>
-</ol>
-</div>
-</div>
-</div>
-<p>Next, we’ll do some reading to get familiar with Git and GitHub’s main features that facilitate collaboration.</p>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Exercise 0.b (~10 minutes)
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Before working on the rest of the pair exercises, we’ll read through the sections below. Much of the content is just examples of usage for different commands, so you can skim those examples and use them for reference when working on the exercises.</p>
 <p>If you finish reading before your pair, you can take care of Exercises 1 and 2 in the <a href="#pair-exercises">Pair exercises</a> section.</p>
@@ -416,12 +450,11 @@ Exercise 0.b (~10 minutes)
 </div>
 </div>
 </section>
-</section>
 <section id="some-terminology" class="level1">
 <h1>Some terminology</h1>
 <p>First, so we’re all on the same page, let’s get familiar with some terminology that will appear in the materials today.</p>
 <div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -430,10 +463,27 @@ Tracked and untracked files
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>In a given repository, you may have files that are in version control (tracked) alongside files that are not yet added (untracked). Typically, you track a previously untracked file by using <code>git add</code>. Once a file is tracked, it will remain in that state unless you explicitly tell Git to no longer track the file.</p>
 <p>Note that the <code>.gitignore</code> file helps us de-clutter Git outputs by letting Git know that what files or directories we <em>never</em> intend to track. But after you’ve tracked a file, if you later add it to <code>.gitignore</code></p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Staging
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>When you first track a file using <code>git add</code>, it also goes into the “staged” state, meaning that the file will be included in the next snapshot of your repo (AKA, the next “commit”).</p>
+<p>This is also the case when you modify a tracked file and then use <code>git add</code>. If, however, you make additional changes to the file before committing, those <strong>additional changes</strong> will be unstaged (but the previously added changes are still staged!).</p>
 </div>
 </div>
 </div>
@@ -443,14 +493,14 @@ Tracked and untracked files
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Staging
+The index
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>When you first track a file using <code>git add</code>, it also goes into the “staged” state, meaning that the file will be included in the next snapshot of your repo (AKA, the next “commit”).</p>
-<p>This is also the case when you modify a tracked file and then use <code>git add</code>. If, however, you make additional changes to the file before committing, those <strong>additional changes</strong> will be unstaged (but the previously added changes are still staged!).</p>
+<p>How does Git know what changes are staged or unstaged? By adding those changes to its index! This is what Git does when you use <code>git add</code>, allowing it prepare for the next commit and to notice any further changes you make before committing.</p>
+<p>So the index can be thought of as a collection of staged changes, which is converted to a commit when you use <code>git commit</code>.</p>
 </div>
 </div>
 </div>
@@ -460,28 +510,11 @@ Staging
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-The index
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<p>How does Git know what changes are staged or unstaged? By adding those changes to its index! This is what Git does when you use <code>git add</code>, allowing it prepare for the next commit and to notice any further changes you make before committing.</p>
-<p>So the index can be thought of as a collection of staged changes, which is converted to a commit when you use <code>git commit</code>.</p>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
 modified and unmodified files
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>After you commit changes to a file, the file in question switches to the “unmodified” state, and the index with staged changes is added to the commit history. In this state, using <code>git add</code> on the file has no effect.</p>
 <p>If you later edit that file, it goes into the “modified” state, and <code>git add</code> will do what you expect it to.</p>
@@ -500,7 +533,7 @@ modified and unmodified files
 <h1>Some review of key commands you should already know</h1>
 <p>When using Git for collaboration, you will often find that much of your workflow remains similar to how you used Git when working alone. That is, you will still use the following <strong>four key commands</strong> (click to expand):</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -509,7 +542,7 @@ Key command #1: <code>git status</code>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-8" class="callout-8-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><code>git status</code> is the most fundamental way to understand what is going on in your repo. You should use it often to remind yourself of the current state of things.</p>
 <p><strong>When to use</strong>: when starting or resuming work on a repo; prior to using <code>git add</code> to remind yourself what files have been modified or already staged; prior to using <code>git commit</code> to ensure you have staged all the files you want to include in your next snapshot.</p>
@@ -517,7 +550,7 @@ Key command #1: <code>git status</code>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -526,7 +559,7 @@ Key command #2: <code>git diff</code>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse">
+<div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The output from <code>git diff</code> demonstrates just how powerful Git really is. It can also be incredibly useful when editing existing code, because it shows both the state of the code before you made modifications alongside the modifications themselves. There have been many times where I’ve caught bugs in my code by inspecting <code>git diff</code> prior to committing my changes.</p>
 <p>Note that because <code>git diff</code> shows <em>changes</em> to tracked files, it only becomes useful after modifying a file that you’ve already staged at some prior point.</p>
@@ -536,7 +569,7 @@ Key command #2: <code>git diff</code>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -545,7 +578,7 @@ Key command #1: <code>git add</code>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div id="callout-9" class="callout-9-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>To this point, we’ve already said a good deal about <code>git add</code>. It stages changes in your for the next commit.</p>
 <p><strong>When to use</strong>: after making changes to a particular file or set of files; after making additional changes to a staged file or set of files; to prepare for the next commit.</p>
@@ -553,7 +586,7 @@ Key command #1: <code>git add</code>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -562,7 +595,7 @@ Key command #1: <code>git commit</code>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>We’ve already alluded to this command many times above as well. Use it to move staged changes into the repo’s commit history. Be sure to include a <em>succinct</em> and <em>informative</em> commit message so that your collaborators and your future self have a quick hint to understand the changes you made.</p>
 <p>It is better to make small commits for contained changes rather than a mega commit with a diverse set of functional modifications that touch a large portion of the code. For example, if you work linearly through your problem sets then it is better to commit after completing each individual problem or even sub-problem, rather than making a single commit when the full problem set is complete.</p>
@@ -996,6 +1029,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   }
 });
 </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../../labs/py_vs_R.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Lab 7: R vs.&nbsp;Python</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
 </div> <!-- /content -->
 
 
