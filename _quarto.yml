@@ -67,6 +67,8 @@ website:
           text: "Lab 6: SCF and Parallel Computing"
         - file: labs/py_vs_R.qmd
           text: "Lab 7: R vs. Python"
+        - file: labs/09/collab_with_git.md
+          text: "Lab 9: Collaboration with Git"
     - id: howtos
       title: "How tos"
       contents:

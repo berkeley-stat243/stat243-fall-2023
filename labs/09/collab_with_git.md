@@ -1,6 +1,6 @@
 ---
 title: "Collaboration with Git"
-author: "Zoey Vernon, Andrew Vaughn, James Duncan"
+author: "Zoey Vernon, Andrew Vaughn, James Duncan, Ahmed Eldeeb"
 date: "2022-11-04"
 format:
   pdf:
@@ -47,36 +47,11 @@ We'll work in pairs to practice collaboration with Git and how to fix issues
 that can arise when working in a shared Git repo.
 
 
-## Warm up exercises: Pair introductions & reading 
-
-We'll start by learning a bit about each other and our previous experience with
-Git. Click to expand the blocks below.
-
-:::{.callout-note collapse="true"}
-## Exercise 0.a (~3 minutes)
-
-1. Briefly introduce yourself to your pair (name / academic program).
-1. On your own, answer the following questions (yes / no):
-    a. Did you have any experience using Git before this class? (y = 1 / n = 0)
-    b. Have you ever used a shared GitHub repo for a collaborative project? (y =
-      1 / n = 0)
-    c. Have you ever fixed a merge conflict? If you're not sure, you
-      can answer "no". (y = 2 / n = 0)
-1. Tally your answers using the values I gave for each question so that you get
-   a number between 0 and 4. (_NB: Your score carries NO judgment. After this
-   course, each and every one of you will have a 4._)
-1. Show your total to your pair. 
-    a. If you both have 0 or you both have 3 or above, please **raise your hands
-      and keep them raised**. Don't worry, the class will assume you have >= 3!
-    b. Otherwise, move on to the next section.
-
-:::
-
-Next, we'll do some reading to get familiar with Git and GitHub's main features
+First, we'll do some reading to get familiar with Git and GitHub's main features
 that facilitate collaboration.
 
 :::{.callout-note collapse="true"}
-## Exercise 0.b (~10 minutes)
+## Exercise 0 (~10 minutes)
 
 Before working on the rest of the pair exercises, we'll read through the
 sections below. Much of the content is just examples of usage for different
