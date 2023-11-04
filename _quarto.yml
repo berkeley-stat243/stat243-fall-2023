@@ -50,6 +50,8 @@ website:
           text: "Unit 9 (Simulation)"
         - file: units/unit10-linalg.qmd
           text: "Unit 10 (Linear Algebra)"
+        - file: units/unit11-optim.qmd
+          text: "Unit 11 (Optimization)"
     - id: labs
       title: "Labs"
       contents:
