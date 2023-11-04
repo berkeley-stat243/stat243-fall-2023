@@ -342,7 +342,6 @@ def fpp(x, theta=1):
     return np.exp(x * theta) / ((1 + np.exp(x * theta)) ** 2)
 
 def make_plot(xs, xvals, fp, fpp, subplot, title):
-    plt.subplot(1, 3, subplot)
     plt.plot(xs, fp(xs), '-', label="f'(x)", color = 'grey')
     plt.plot(xs, fpp(xs), '--', label="f''(x)", color = 'grey')
     for i in range(len(xvals)):
@@ -367,8 +366,8 @@ for t in range(1,10):
 
 ## print(xvals)
 
-plt.figure(figsize=(10, 5))
 make_plot(xs, xvals, fp, fpp, 1, "converges quickly")
+plt.show()
 
 ## Ok starting point
 x0 = 2
@@ -380,7 +379,7 @@ for t in range(1,10):
 ## print(xvals)
 
 make_plot(xs, xvals, fp, fpp, 2, "converges")
-
+plt.show()
 
 ## Bad starting point
 
@@ -456,7 +455,7 @@ for t in range(1,10):
     xvals[t] = xvals[t-1] - fp(xvals[t-1]) / fpp(xvals[t-1])
 ## print(xvals)
 
-plt.figure(figsize=(10, 10))
+plt.figure(figsize=(10, 8))
 
 make_plot2(xs, xvals, f, fp, 1, title =
     ['uphill to local maximum, gradient view', 'uphill to local maximum, function view'])
@@ -1052,7 +1051,7 @@ direction.)
 
 
 
-```{r}
+```
 par(mai = c(.5,.4,.1,.4))
 f <- function(x){
 	x[1]^2/1000 + 4*x[1]*x[2]/1000 + 5*x[2]^2/1000
@@ -1081,6 +1080,8 @@ fields::image.plot(x1s, x2s, matrix(log(fx), 100, 100),
 	xlim = c(-5, 8), ylim = c(-5,2)) 
 lines(xvals) ## overlay optimization path
 ```
+
+![Path of steepest descent](steep-descent.png)
 
 If the contours are circular, steepest descent works well. Newton's
 method deforms elliptical contours based on the Hessian. Another way to
@@ -1231,9 +1232,9 @@ is that univariate root-finding/minimization is easy, often more stable
 than multivariate, and quick.
 
 However, Gauss-Seidel can zigzag, since you only take steps in one
-dimension at a time, as we see here.
+dimension at a time, as we see here. (Again the code is in R.)
 
-```{r}
+```
 f <- function(x){
 	return(x[1]^2/1000 + 4*x[1]*x[2]/1000 + 5*x[2]^2/1000)
 }
@@ -1262,6 +1263,7 @@ for(t in seq(2, nIt, by = 2)){
 lines(xvals)
 ```
 
+![Coordinate descent](gauss-seidel.png)
 
 In the notes for Unit 9 on linear algebra, I discussed the use of
 Gauss-Seidel to iteratively solve $Ax=b$ in situations where factorizing
@@ -1478,8 +1480,9 @@ it is the worst of all the points, so point 7 is a contraction of point
 2 giving the next set (1, 5, 7). Point 8 is then a reflection and point
 9 is a contraction of point 5.
 
+(Again some code in R.)
 
-```{r, fig.height=3}
+```
 f <- function(x, plot = TRUE, verbose = FALSE) {
     result <- x[1]^2/1000 + 4*x[1]*x[2]/1000 + 5*x[2]^2/1000
     if(verbose) print(result)
@@ -1509,6 +1512,8 @@ fields::image.plot(x1s, x2s, matrix(log(fx), 100, 100))
 init <- c(-0, 0)
 optim(init, f, method = "Nelder-Mead", verbose = FALSE)
 ```
+
+![Nelder-Mead](nelder-mead.png)
 
 Here's an [online graphical
 illustration](http://www.benfrederickson.com/numerical-optimization/) of
