@@ -1,0 +1,16 @@
+{
+  "hash": "85a447ec3ea6c0519e93a9b582fcc11d",
+  "result": {
+    "markdown": "---\ntitle: \"Simulation\"\nauthor: \"Chris Paciorek\"\ndate: \"2023-07-26\"\nformat:\n  pdf:\n    documentclass: article\n    margin-left: 30mm\n    margin-right: 30mm\n    toc: true\n  html:\n    theme: cosmo\n    css: ../styles.css\n    toc: true\n    code-copy: true\n    code-block-background: true\nexecute:\n  freeze: auto\nengine: knitr\n---\n\n::: {.cell}\n\n```{.bash .cell-code}\necho hello\n```\n\n\n::: {.cell-output .cell-output-stdout}\n```\nhello\n```\n:::\n:::\n\n::: {.cell}\n\n```{.r .cell-code}\nhist(rnorm(100))\n```\n\n::: {.cell-output-display}\n![](test_files/figure-pdf/unnamed-chunk-2-1.pdf){fig-pos='H'}\n:::\n:::\n\n\nSome text.",
+    "supporting": [
+      "test_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": null,
+    "postProcess": false
+  }
+}
