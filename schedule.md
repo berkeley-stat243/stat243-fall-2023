@@ -9,7 +9,8 @@ Submit your solutions on Gradescope and (for problem sets but not assignments) v
 | PS 3 [(HTML)](ps/ps3.html) [(PDF)](ps/ps3.pdf) [(code)](ps/ps3start.py) | Wednesday Sep. 27 | 10 am | 
 | PS 4 [(HTML)](ps/ps4.html) [(PDF)](ps/ps4.pdf) | Monday Oct. 9 | 10 am | 
 | PS 5 [(HTML)](ps/ps5.html) [(PDF)](ps/ps5.pdf) | Friday Oct. 27 | 10 am | 
-| PS 6 [(HTML)](ps/ps6.html) [(PDF)](ps/ps6.pdf) | Friday Nov. 3 | 10 am | 
+| PS 6 [(HTML)](ps/ps6.html) [(PDF)](ps/ps6.pdf) | Monday Nov. 6 | 10 am | 
+| PS 6 [(HTML)](ps/ps7.html) [(PDF)](ps/ps7.pdf) | Wednesday Nov. 15 | 10 am | 
 
 
 Problem set solutions need to follow the rules discussed in Lab 1 (Sep. 1) and documented [here](howtos/ps-submission).
