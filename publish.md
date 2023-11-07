@@ -14,9 +14,9 @@ To set up the website for a new course/year, one needs to run `quarto publish` f
 
 Notes:
 
-2023-11-06: I'm not sure how I ever get the figure files for the html into `units/unitX-foo_files/` in the `gh-pages` branch. I would think that the quarto publish action will copy these from `_freeze` but that doesn't seem to be the case. It looks like I may always end up manually adding these to `gh-pages`.  But it seems I also need to add `units/unitX-foo_files/` to the main branch or else when the GHA runs, the files are deleted from `gh-pages`.
+2023-10-25: Today (and on some past occasions), figures don't show up in the html because the relevant png files are not committed/being deleted from `units/unitX_files`. Manually adding to `gh-pages` works for a given commit but then later render/publish causes a `git rm` of the files. I think what may be the solution is to make sure not to do `git commit -am` if a `git rm` of the png files is staged in `main` to remove files from `units/unitX_files/figure-html`. Instead just use `git add` on the various files and `git commit -m`. May also need to `git restore` the files to be deleted so that later `git commit -am'` doesn't cause deletion.
 
-2023-10-25: Today (and on some past occasions), figures don't show up in the html because the relevant png files are not committed/being deleted from `units/unitX_files`. Manually adding to `gh-pages` works for a given commit but then later render/publish causes a `git rm` of the files. I think what may be the solution is to make sure not to do `git commit -am` if a `git rm` of the png files is staged. Instead just use `git add` on the various files and `git commit -m`. May also need to `git restore` the files to be deleted so that later `git commit -am'` doesn't cause deletion.
+Also it's not entirely clear if I need `units/unitX_files` in `main`.
 
 2023-09-07: GHA can fail with messages about `nbformat`. Can often fix by re-rendering the problematic qmd. I think this is happening when commits are made to a qmd without rendering that updates the freeze files. 
 
