@@ -1,0 +1,33 @@
+---
+title: "Simulation"
+author: "Chris Paciorek"
+date: "2023-07-26"
+format:
+  pdf:
+    documentclass: article
+    margin-left: 30mm
+    margin-right: 30mm
+    toc: true
+  html:
+    theme: cosmo
+    css: ../styles.css
+    toc: true
+    code-copy: true
+    code-block-background: true
+execute:
+  freeze: auto
+engine: knitr
+---
+
+
+
+```{bash}
+#| eval: true
+echo hello
+```
+
+```{r}
+hist(rnorm(100))
+```
+
+Some text.
