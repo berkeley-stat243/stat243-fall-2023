@@ -481,7 +481,12 @@ make_plot2(xs, xvals, f, fp, 3, title =
 x0 = 3.8 # good starting point
 fp(x0) 
 fpp(x0) 
-x1 = x0 - fp(x0)/fpp(x0) 
+x1 = x0 - fp(x0)/fpp(x0)   # going downhill
+
+xvals[0] = x0
+for t in range(1,10):
+    xvals[t] = xvals[t-1] - fp(xvals[t-1]) / fpp(xvals[t-1])
+## print(xvals)
 
 make_plot2(xs, xvals, f, fp, 5, title =
     ['better starting point, gradient view', 'better starting point, function view'])
