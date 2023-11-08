@@ -14,6 +14,8 @@ To set up the website for a new course/year, one needs to run `quarto publish` f
 
 Notes:
 
+2023-11-06: Update on the figure files. Try to get to a state where manually add them to `gh-pages` in `units/unitX_files` but that `quarto render` does not cause removal of files from `main` (check via `git status` before `git commit`). Do not commit `units/unitX_files` in the main `units` dir in `main`. Even with this, somehow the GHA and bot commit to `gh-pages` is causing deletion of the files from `gh-pages`. 
+
 2023-10-25: Today (and on some past occasions), figures don't show up in the html because the relevant png files are not committed/being deleted from `units/unitX_files`. Manually adding to `gh-pages` works for a given commit but then later render/publish causes a `git rm` of the files. I think what may be the solution is to make sure not to do `git commit -am` if a `git rm` of the png files is staged in `main` to remove files from `units/unitX_files/figure-html`. Instead just use `git add` on the various files and `git commit -m`. May also need to `git restore` the files to be deleted so that later `git commit -am'` doesn't cause deletion. Not clear how to avoid having `quarto render unitX.qmd` cause deletion of `units/unitX_files`
 
 Also it's not entirely clear if I need `units/unitX_files` in `main`.

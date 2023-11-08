@@ -604,17 +604,17 @@ this definition, but roughly speaking it has linear convergence
 at each step. Next we'll see that N-R has quadratic convergence
 ($\beta=2$), which is fast.
 
-To analyze convergence of N-R, consider a Taylor expansion of the
+To analyze convergence of N-R, we'll assume that $f^{\prime}(x)$ is twice continuously differentiable and consider a Taylor expansion of the
 gradient at the minimum, $x^{*}$, around the current value, $x_{t}$:
 $$f^{\prime}(x^{*})=f^{\prime}(x_{t})+(x^{*}-x_{t})f^{\prime\prime}(x_{t})+\frac{1}{2}(x^{*}-x_{t})^{2}f^{\prime\prime\prime}(\xi_{t})=0,$$
 for some $\xi_{t}\in[x^{*},x_{t}]$. Making use of the N-R update
 equation:
 $x_{t+1}=x_{t}-\frac{f^{\prime}(x_{t})}{f^{\prime\prime}(x_{t})}$ to
 substitute , and some algebra, we have
-$$\frac{|x^{*}-x_{t+1}|}{(x^{*}-x_{t})^{2}}=\frac{1}{2}\frac{f^{\prime\prime\prime}(\xi_{t})}{f^{\prime\prime}(x_{t})}.$$
-If the limit of the ratio on the right hand side exists and is equal to
+$$\frac{|x^{*}-x_{t+1}|}{(x^{*}-x_{t})^{2}}=\left| \frac{1}{2}\frac{f^{\prime\prime\prime}(\xi_{t})}{f^{\prime\prime}(x_{t})} \right|.$$
+If the limit of the ratio on the right hand side exists (note the assumption of twice continuous differentiability) and is equal to
 $c$:
-$$c=\lim_{x_{t}\to x^{*}}\frac{1}{2}\frac{f^{\prime\prime\prime}(\xi_{t})}{f^{\prime\prime}(x_{t})}=\frac{1}{2}\frac{f^{\prime\prime\prime}(x^{*})}{f^{\prime\prime}(x^{*})}$$
+$$c=\lim_{x_{t}\to x^{*}}\left|\frac{1}{2}\frac{f^{\prime\prime\prime}(\xi_{t})}{f^{\prime\prime}(x_{t})}\right|=\left|\frac{1}{2}\frac{f^{\prime\prime\prime}(x^{*})}{f^{\prime\prime}(x^{*})}\right|$$
 then we see that $\beta=2$.
 
 If $c$ were one, then we see that if we have $k$ digits of accuracy at
