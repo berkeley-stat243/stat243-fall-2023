@@ -611,7 +611,7 @@ for some $\xi_{t}\in[x^{*},x_{t}]$. Making use of the N-R update
 equation:
 $x_{t+1}=x_{t}-\frac{f^{\prime}(x_{t})}{f^{\prime\prime}(x_{t})}$ to
 substitute , and some algebra, we have
-$$\frac{|x^{*}-x_{t+1}|}{(x^{*}-x_{t})^{2}}=\left| \frac{1}{2}\frac{f^{\prime\prime\prime}(\xi_{t})}{f^{\prime\prime}(x_{t})} \right|.$$
+$$\frac{|\epsilon_{t+1}|}{|\epsilon_t|^{\beta}} = \frac{|x^{*}-x_{t+1}|}{(x^{*}-x_{t})^{2}}=\left| \frac{1}{2}\frac{f^{\prime\prime\prime}(\xi_{t})}{f^{\prime\prime}(x_{t})} \right|.$$
 If the limit of the ratio on the right hand side exists (note the assumption of twice continuous differentiability) and is equal to
 $c$:
 $$c=\lim_{x_{t}\to x^{*}}\left|\frac{1}{2}\frac{f^{\prime\prime\prime}(\xi_{t})}{f^{\prime\prime}(x_{t})}\right|=\left|\frac{1}{2}\frac{f^{\prime\prime\prime}(x^{*})}{f^{\prime\prime}(x^{*})}\right|$$
