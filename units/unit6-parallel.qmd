@@ -149,7 +149,7 @@ personal computer or a given node in a cluster.
 -   *threads*: multiple paths of execution within a single process; the
     operating system sees the threads as a single process, but one can think of them
     as 'lightweight' processes. Ideally when considering the processes
-    and their threads, we would the same number of cores as we have
+    and their threads, we would have the same number of cores available to our code as we have
     processes and threads combined.
 -   *forking*: child processes are spawned that are identical to the
     parent, but with different process IDs and their own memory. In some

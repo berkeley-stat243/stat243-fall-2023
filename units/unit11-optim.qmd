@@ -752,7 +752,7 @@ We'll use the famous Mauna Loa atmospheric carbon dioxide record.
 
 Let's suppose (I have no real reason to think this) that we
 think that the data can be well-represented by this nonlinear model:
-$$Y_{i}=\beta_{0}+\beta_{1}\exp(t_i/\beta_{2}+\epsilon_{i}.$$
+$$Y_{i}=\beta_{0}+\beta_{1}\exp(t_i/\beta_{2})+\epsilon_{i}.$$
 
 Some of the things we need to worry about with Newton's method in
 general about are (1) good starting values, (2) positive definiteness of
@@ -765,9 +765,11 @@ Cholesky decomposition of the Hessian to enforce positive definiteness
 by adding diagonal elements to $H_{f}$ as necessary.
 
 ```{python}
+import os
 import pandas as pd
 import statsmodels.api as sm
-data = pd.read_csv('co2_annmean_mlo.csv', header = 0, names = ['year','co2','unc'])
+data = pd.read_csv(os.path.join('..','data', 'co2_annmean_mlo.csv'),
+    header = 0, names = ['year','co2','unc'])
 
 plt.scatter(data.year, data.co2)
 plt.xlabel('year')
