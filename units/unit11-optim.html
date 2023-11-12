@@ -651,15 +651,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="unit11-optim_files/figure-html/cell-2-output-2.png" width="600" height="449"></p>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/tmp/ipykernel_1391300/3161030548.py:58: RuntimeWarning:
+<pre><code>/tmp/ipykernel_3661545/3161030548.py:58: RuntimeWarning:
 
 divide by zero encountered in double_scalars
 
-/tmp/ipykernel_1391300/3161030548.py:6: RuntimeWarning:
+/tmp/ipykernel_3661545/3161030548.py:6: RuntimeWarning:
 
 invalid value encountered in double_scalars
 
-/tmp/ipykernel_1391300/3161030548.py:10: RuntimeWarning:
+/tmp/ipykernel_3661545/3161030548.py:10: RuntimeWarning:
 
 invalid value encountered in double_scalars
 </code></pre>
@@ -905,29 +905,31 @@ invalid value encountered in double_scalars
 <h2 class="anchored" data-anchor-id="newton-raphson-newtons-method-1">Newton-Raphson (Newton’s method)</h2>
 <p>For multivariate <span class="math inline">\(x\)</span> we have the Newton-Raphson update <span class="math inline">\(x_{t+1}=x_{t}-f^{\prime\prime}(x_{t})^{-1}f^{\prime}(x_{t})\)</span>, or in our other notation, <span class="math display">\[x_{t+1}=x_{t}-H_{f}(x_{t})^{-1}\nabla f(x_{t}).\]</span></p>
 <p>Let’s consider a very simple example of nonlinear least squares. We’ll use the famous Mauna Loa atmospheric carbon dioxide record.</p>
-<p>Let’s suppose (I have no real reason to think this) that we think that the data can be well-represented by this nonlinear model: <span class="math display">\[Y_{i}=\beta_{0}+\beta_{1}\exp(t_i/\beta_{2}+\epsilon_{i}.\]</span></p>
+<p>Let’s suppose (I have no real reason to think this) that we think that the data can be well-represented by this nonlinear model: <span class="math display">\[Y_{i}=\beta_{0}+\beta_{1}\exp(t_i/\beta_{2})+\epsilon_{i}.\]</span></p>
 <p>Some of the things we need to worry about with Newton’s method in general about are (1) good starting values, (2) positive definiteness of the Hessian, and (3) avoiding errors in deriving the derivatives.</p>
 <p>A note on the positive definiteness: since the Hessian may not be positive definite (although it may well be, provided the function is approximately locally quadratic), one can consider modifying the Cholesky decomposition of the Hessian to enforce positive definiteness by adding diagonal elements to <span class="math inline">\(H_{f}\)</span> as necessary.</p>
 <div class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(<span class="st">'co2_annmean_mlo.csv'</span>, header <span class="op">=</span> <span class="dv">0</span>, names <span class="op">=</span> [<span class="st">'year'</span>,<span class="st">'co2'</span>,<span class="st">'unc'</span>])</span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>plt.scatter(data.year, data.co2)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'year'</span>)</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"CO2"</span>)</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">## Center years for better numerical behavior</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>data.year <span class="op">=</span> data.year <span class="op">-</span> np.mean(data.year)</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">### Linear fit - not a good model</span></span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> sm.add_constant(data.year)  </span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> sm.OLS(data.co2, X).fit()</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>plt.scatter(data.year, data.co2)</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>plt.plot(data.year, model.fittedvalues, <span class="st">'-'</span>)</span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(os.path.join(<span class="st">'..'</span>,<span class="st">'data'</span>, <span class="st">'co2_annmean_mlo.csv'</span>),</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    header <span class="op">=</span> <span class="dv">0</span>, names <span class="op">=</span> [<span class="st">'year'</span>,<span class="st">'co2'</span>,<span class="st">'unc'</span>])</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>plt.scatter(data.year, data.co2)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'year'</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">"CO2"</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co">## Center years for better numerical behavior</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>data.year <span class="op">=</span> data.year <span class="op">-</span> np.mean(data.year)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co">### Linear fit - not a good model</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> sm.add_constant(data.year)  </span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> sm.OLS(data.co2, X).fit()</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>plt.scatter(data.year, data.co2)</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>plt.plot(data.year, model.fittedvalues, <span class="st">'-'</span>)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="unit11-optim_files/figure-html/cell-7-output-1.png" width="593" height="429"></p>
 </div>
