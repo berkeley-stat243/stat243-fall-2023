@@ -16,6 +16,7 @@ Submit your solutions on Gradescope and (for problem sets but not assignments) v
 Problem set solutions need to follow the rules discussed in Lab 1 (Sep. 1) and documented [here](howtos/ps-submission).
 
 | Project | Date | Time | 
+|----|----|----|
 | Project [(HTML)](project/project.html) [(PDF)](project/project.pdf) | Friday Dec. 15 | 5 pm |
 
 | Assignment | Date | Time | 
