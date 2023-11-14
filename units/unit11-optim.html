@@ -651,15 +651,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="unit11-optim_files/figure-html/cell-2-output-2.png" width="600" height="449"></p>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/tmp/ipykernel_3661545/3161030548.py:58: RuntimeWarning:
+<pre><code>/tmp/ipykernel_565817/3161030548.py:58: RuntimeWarning:
 
 divide by zero encountered in double_scalars
 
-/tmp/ipykernel_3661545/3161030548.py:6: RuntimeWarning:
+/tmp/ipykernel_565817/3161030548.py:6: RuntimeWarning:
 
 invalid value encountered in double_scalars
 
-/tmp/ipykernel_3661545/3161030548.py:10: RuntimeWarning:
+/tmp/ipykernel_565817/3161030548.py:10: RuntimeWarning:
 
 invalid value encountered in double_scalars
 </code></pre>
@@ -993,7 +993,7 @@ invalid value encountered in double_scalars
 <span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>hess</span>
 <span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>np.linalg.eig(hess)[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="21">
+<div class="cell-output cell-output-display" data-execution_count="69">
 <pre><code>array([ 2.6369040e+02, -2.5794024e-03,  1.3906310e+01], dtype=float32)</code></pre>
 </div>
 </div>
@@ -1010,7 +1010,7 @@ invalid value encountered in double_scalars
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>hess <span class="op">=</span> deriv2(jnp.array([beta0_init, beta1_init, beta2_init]))</span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>np.linalg.eig(hess)[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="22">
+<div class="cell-output cell-output-display" data-execution_count="70">
 <pre><code>array([3.0403909e+02, 2.4109183e-01, 5.5710766e+01], dtype=float32)</code></pre>
 </div>
 </div>
@@ -1299,145 +1299,94 @@ optim(init, f, method = "Nelder-Mead", verbose = FALSE)</code></pre>
 <p>Scipy provides various useful optimization functions via <code>scipy.optimize</code>, including many of the algorithms discussed in this unit.</p>
 <ul>
 <li><code>minimize_scalar</code> implements golden section search (<code>golden</code>) and interpolation combined with golden section search (<code>brent</code>, akin to <code>optimize</code> in R).</li>
-<li><code>minimize</code> implements various methods for multivariate optimization including Nelder-Mead, BFGS and conjugate gradients (discussed a bit in Unit 9). You can choose which method you prefer and can try multiple methods. You can supply a gradient function for use with the Newton-related methods but it can also calculate numerical derivatives on the fly. You can have the BFGS implementation in <code>minimize</code> return the Hessian at the optimum (based on a numerical estimate), which then allows straighforward calculation of asymptotic variances based on the information matrix.</li>
+<li><code>minimize</code> implements various methods for multivariate optimization including Nelder-Mead and BFGS. You can choose which method you prefer and can try multiple methods. You can supply a gradient function for use with the Newton-related methods but it can also calculate numerical derivatives on the fly.</li>
 <li>One can provide a variety of nonlinear, linear, and simple bounds constraints as well, though certain types of constraints can only be used with certain algorithms.</li>
 </ul>
-<p>In the demo code (not shown here; see the source qmd file), we’ll work our way through a real example of optimizing a likelihood for some climate data on extreme precipitation.</p>
+<p>Here’s a very basic example of using <code>minimize</code> with the Mauna Loa CO2 example we saw earlier when hand-coding Newton-Raphson. Here we’ll include the unknown variance as an additional parameter so we have a full likelihood. And as mentioned previously, we could profile out <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\sigma^2\)</span>, but we won’t do that here so as to illustrate multivariate Newton-Raphson.</p>
 <div class="cell" data-execution_count="13">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>data_file <span class="op">=</span> os.path.join(<span class="st">'..'</span>, <span class="st">'data'</span>, <span class="st">'precipData.txt'</span>)</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>y_hundredths <span class="op">=</span> np.genfromtxt(data_file, missing_values <span class="op">=</span> <span class="st">'NA'</span>)  <span class="co"># precip in hundredths of inches</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>y_hundredths <span class="op">=</span> y_hundredths[<span class="op">~</span>np.isnan(y_hundredths)]</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> y_hundredths <span class="op">/</span> <span class="dv">100</span>  <span class="co"># precip now in inches</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>npy<span class="op">=</span><span class="dv">31</span><span class="op">+</span><span class="dv">28</span><span class="op">+</span><span class="dv">31</span> <span class="co"># number of days in winter season</span></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>cutoff <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> <span class="fl">25.4</span>  <span class="co"># Convert 1 mm to inches</span></span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>thresh <span class="op">=</span> np.percentile(y[y <span class="op">&gt;</span> cutoff], <span class="dv">98</span>,)</span>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> scipy.optimize <span class="im">import</span> minimize</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.read_csv(os.path.join(<span class="st">'..'</span>,<span class="st">'data'</span>, <span class="st">'co2_annmean_mlo.csv'</span>),</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    header <span class="op">=</span> <span class="dv">0</span>, names <span class="op">=</span> [<span class="st">'year'</span>,<span class="st">'co2'</span>,<span class="st">'unc'</span>])</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a><span class="co">## Center years for better numerical behavior</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>data.year <span class="op">=</span> data.year <span class="op">-</span> np.mean(data.year)</span>
 <span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a histogram of the data</span></span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>plt.figure(figsize<span class="op">=</span>(<span class="dv">12</span>, <span class="dv">6</span>))</span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>plt.hist(y, bins<span class="op">=</span><span class="dv">20</span>, edgecolor<span class="op">=</span><span class="st">'black'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Precipitation (inches)'</span>)</span>
-<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Frequency'</span>)</span>
-<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Histogram of All Data'</span>)</span>
-<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>plt.subplot(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>)</span>
-<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>plt.hist(y[y <span class="op">&gt;</span> thresh], bins<span class="op">=</span><span class="dv">20</span>, edgecolor<span class="op">=</span><span class="st">'black'</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span>
-<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Precipitation (inches)'</span>)</span>
-<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Frequency'</span>)</span>
-<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="ss">f'Histogram of Wet Days (Precip &gt; </span><span class="sc">{</span>np<span class="sc">.</span><span class="bu">round</span>(thresh,<span class="dv">2</span>)<span class="sc">}</span><span class="ss"> inches)'</span>)</span>
-<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
-<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a><span class="co"># Define objective (negative log-likelihood) function</span></span>
-<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pp_negloglik(par, y, thresh, npy):</span>
-<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a>    mu, sc, sh <span class="op">=</span> par</span>
-<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a>    uInd <span class="op">=</span> y <span class="op">&gt;</span> thresh</span>
-<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Invalid parameter values or data/parameter combos:</span></span>
-<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> sc <span class="op">&lt;=</span> <span class="dv">0</span>:</span>
-<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fl">1e6</span></span>
-<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="dv">1</span> <span class="op">+</span> ((sh <span class="op">*</span> (thresh <span class="op">-</span> mu)) <span class="op">/</span> sc) <span class="op">&lt;</span> <span class="dv">0</span>):</span>
-<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fl">1e6</span></span>
-<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> (y <span class="op">-</span> mu) <span class="op">/</span> sc</span>
-<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> <span class="dv">1</span> <span class="op">+</span> sh <span class="op">*</span> y</span>
-<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a>    </span>
-<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> np.<span class="bu">min</span>(y[uInd]) <span class="op">&lt;=</span> <span class="dv">0</span>:</span>
-<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="fl">1e6</span></span>
-<span id="cb21-46"><a href="#cb21-46" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
-<span id="cb21-47"><a href="#cb21-47" aria-hidden="true" tabindex="-1"></a>        ytmp <span class="op">=</span> y.copy()</span>
-<span id="cb21-48"><a href="#cb21-48" aria-hidden="true" tabindex="-1"></a>        ytmp[<span class="op">~</span>uInd] <span class="op">=</span> <span class="dv">1</span> <span class="co"># 'zeroes' out those below the threshold after applying the log in next line</span></span>
-<span id="cb21-49"><a href="#cb21-49" aria-hidden="true" tabindex="-1"></a>        </span>
-<span id="cb21-50"><a href="#cb21-50" aria-hidden="true" tabindex="-1"></a>        l <span class="op">=</span> np.<span class="bu">sum</span>(uInd <span class="op">*</span> np.log(sc)) <span class="op">+</span> np.<span class="bu">sum</span>(uInd <span class="op">*</span> np.log(ytmp) <span class="op">*</span> (<span class="dv">1</span> <span class="op">/</span> sh <span class="op">+</span> <span class="dv">1</span>)) <span class="op">+</span> <span class="op">\</span></span>
-<span id="cb21-51"><a href="#cb21-51" aria-hidden="true" tabindex="-1"></a>                   (<span class="bu">len</span>(y) <span class="op">/</span> npy) <span class="op">*</span> np.mean((<span class="dv">1</span> <span class="op">+</span> (sh <span class="op">*</span> (thresh <span class="op">-</span> mu)) <span class="op">/</span> sc) <span class="op">**</span> (<span class="op">-</span><span class="dv">1</span> <span class="op">/</span> sh))</span>
-<span id="cb21-52"><a href="#cb21-52" aria-hidden="true" tabindex="-1"></a>                   </span>
-<span id="cb21-53"><a href="#cb21-53" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> l</span>
-<span id="cb21-54"><a href="#cb21-54" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-55"><a href="#cb21-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-56"><a href="#cb21-56" aria-hidden="true" tabindex="-1"></a><span class="co"># Initial parameter values</span></span>
-<span id="cb21-57"><a href="#cb21-57" aria-hidden="true" tabindex="-1"></a>y_exc <span class="op">=</span> y[y <span class="op">&gt;</span> thresh]</span>
-<span id="cb21-58"><a href="#cb21-58" aria-hidden="true" tabindex="-1"></a>in2 <span class="op">=</span> np.sqrt(<span class="dv">6</span> <span class="op">*</span> np.var(y_exc)) <span class="op">/</span> np.pi</span>
-<span id="cb21-59"><a href="#cb21-59" aria-hidden="true" tabindex="-1"></a>in1 <span class="op">=</span> np.mean(y_exc) <span class="op">-</span> <span class="fl">0.57722</span> <span class="op">*</span> in2</span>
-<span id="cb21-60"><a href="#cb21-60" aria-hidden="true" tabindex="-1"></a>init0 <span class="op">=</span> [in1, in2, <span class="fl">0.1</span>]</span>
-<span id="cb21-61"><a href="#cb21-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-62"><a href="#cb21-62" aria-hidden="true" tabindex="-1"></a><span class="co"># Optimization using Nelder-Mead</span></span>
-<span id="cb21-63"><a href="#cb21-63" aria-hidden="true" tabindex="-1"></a>start_time <span class="op">=</span> time.time()</span>
-<span id="cb21-64"><a href="#cb21-64" aria-hidden="true" tabindex="-1"></a>fit1 <span class="op">=</span> minimize(pp_negloglik, init0, args<span class="op">=</span>(y, thresh, npy), method<span class="op">=</span><span class="st">'Nelder-Mead'</span>, options<span class="op">=</span>{<span class="st">'disp'</span>: <span class="va">True</span>})</span>
-<span id="cb21-65"><a href="#cb21-65" aria-hidden="true" tabindex="-1"></a>end_time <span class="op">=</span> time.time()</span>
-<span id="cb21-66"><a href="#cb21-66" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nelder-Mead Optimization:"</span>)</span>
-<span id="cb21-67"><a href="#cb21-67" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(fit1)</span>
-<span id="cb21-68"><a href="#cb21-68" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Execution Time:"</span>, end_time <span class="op">-</span> start_time, <span class="st">"seconds"</span>)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>beta2_init <span class="op">=</span> <span class="dv">50</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>implicit_covar <span class="op">=</span> np.exp(data.year<span class="op">/</span>beta2_init)</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> sm.add_constant(implicit_covar)</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> sm.OLS(data.co2, X).fit()</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>beta0_init, beta1_init <span class="op">=</span> model.params</span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> nll(params, data):</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># params[3] is log of sigma^2 to address constraint</span></span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>    n <span class="op">=</span> <span class="bu">len</span>(data.year)</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>    fitted <span class="op">=</span> params[<span class="dv">0</span>] <span class="op">+</span> params[<span class="dv">1</span>] <span class="op">*</span> np.exp(data.year <span class="op">/</span> params[<span class="dv">2</span>])</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> (n<span class="op">/</span><span class="dv">2</span>)<span class="op">*</span>params[<span class="dv">3</span>] <span class="op">+</span> <span class="fl">0.5</span> <span class="op">*</span> np.<span class="bu">sum</span>((data.co2 <span class="op">-</span> fitted)<span class="op">**</span><span class="dv">2</span>) <span class="op">/</span> np.exp(params[<span class="dv">3</span>])</span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>sigma2_init <span class="op">=</span> np.mean((data.co2<span class="op">-</span>model.fittedvalues)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb21-27"><a href="#cb21-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-28"><a href="#cb21-28" aria-hidden="true" tabindex="-1"></a>inits <span class="op">=</span> (beta0_init, beta1_init, beta2_init, np.log(sigma2_init))</span>
+<span id="cb21-29"><a href="#cb21-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-30"><a href="#cb21-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Optimization using Nelder-Mead</span></span>
+<span id="cb21-31"><a href="#cb21-31" aria-hidden="true" tabindex="-1"></a>start_time <span class="op">=</span> time.time()</span>
+<span id="cb21-32"><a href="#cb21-32" aria-hidden="true" tabindex="-1"></a>fit1 <span class="op">=</span> minimize(nll, inits, args<span class="op">=</span>(data), method<span class="op">=</span><span class="st">'Nelder-Mead'</span>, options<span class="op">=</span>{<span class="st">'disp'</span>: <span class="va">True</span>})</span>
+<span id="cb21-33"><a href="#cb21-33" aria-hidden="true" tabindex="-1"></a>end_time <span class="op">=</span> time.time()</span>
+<span id="cb21-34"><a href="#cb21-34" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Nelder-Mead Optimization:"</span>)</span>
+<span id="cb21-35"><a href="#cb21-35" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(fit1)</span>
+<span id="cb21-36"><a href="#cb21-36" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Execution Time:"</span>, end_time <span class="op">-</span> start_time, <span class="st">"seconds"</span>)</span>
+<span id="cb21-37"><a href="#cb21-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-38"><a href="#cb21-38" aria-hidden="true" tabindex="-1"></a><span class="co"># Optimization using BFGS</span></span>
+<span id="cb21-39"><a href="#cb21-39" aria-hidden="true" tabindex="-1"></a>start_time <span class="op">=</span> time.time()</span>
+<span id="cb21-40"><a href="#cb21-40" aria-hidden="true" tabindex="-1"></a>fit2 <span class="op">=</span> minimize(nll, inits, args<span class="op">=</span>(data), method<span class="op">=</span><span class="st">'BFGS'</span>, options<span class="op">=</span>{<span class="st">'disp'</span>: <span class="va">True</span>})</span>
+<span id="cb21-41"><a href="#cb21-41" aria-hidden="true" tabindex="-1"></a>end_time <span class="op">=</span> time.time()</span>
+<span id="cb21-42"><a href="#cb21-42" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">BFGS Optimization:"</span>)</span>
+<span id="cb21-43"><a href="#cb21-43" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(fit2)</span>
+<span id="cb21-44"><a href="#cb21-44" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Execution Time:"</span>, end_time <span class="op">-</span> start_time, <span class="st">"seconds"</span>)</span>
+<span id="cb21-45"><a href="#cb21-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-46"><a href="#cb21-46" aria-hidden="true" tabindex="-1"></a><span class="co">## IMPORTANT: `hess_inv` is just the final estimate from BFGS not</span></span>
+<span id="cb21-47"><a href="#cb21-47" aria-hidden="true" tabindex="-1"></a><span class="co">## a direct numerical estimate of the Hessian at the optimum.</span></span>
+<span id="cb21-48"><a href="#cb21-48" aria-hidden="true" tabindex="-1"></a><span class="co">## If you need the Hessian, calculate it directly, e.g, using `numdifftools`.</span></span>
+<span id="cb21-49"><a href="#cb21-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-50"><a href="#cb21-50" aria-hidden="true" tabindex="-1"></a><span class="co"># Different starting value (recall non-positive definite Hessian)</span></span>
+<span id="cb21-51"><a href="#cb21-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-52"><a href="#cb21-52" aria-hidden="true" tabindex="-1"></a>beta2_init <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb21-53"><a href="#cb21-53" aria-hidden="true" tabindex="-1"></a>implicit_covar <span class="op">=</span> np.exp(data.year<span class="op">/</span>beta2_init)</span>
+<span id="cb21-54"><a href="#cb21-54" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> sm.add_constant(implicit_covar)</span>
+<span id="cb21-55"><a href="#cb21-55" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> sm.OLS(data.co2, X).fit()</span>
+<span id="cb21-56"><a href="#cb21-56" aria-hidden="true" tabindex="-1"></a>beta0_init, beta1_init <span class="op">=</span> model.params</span>
+<span id="cb21-57"><a href="#cb21-57" aria-hidden="true" tabindex="-1"></a>sigma2_init <span class="op">=</span> np.mean((data.co2<span class="op">-</span>model.fittedvalues)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb21-58"><a href="#cb21-58" aria-hidden="true" tabindex="-1"></a>inits <span class="op">=</span> (beta0_init, beta1_init, beta2_init, np.log(sigma2_init))</span>
+<span id="cb21-59"><a href="#cb21-59" aria-hidden="true" tabindex="-1"></a>fit3 <span class="op">=</span> minimize(nll, inits, args<span class="op">=</span>(data), method<span class="op">=</span><span class="st">'BFGS'</span>, options<span class="op">=</span>{<span class="st">'disp'</span>: <span class="va">True</span>})</span>
+<span id="cb21-60"><a href="#cb21-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-61"><a href="#cb21-61" aria-hidden="true" tabindex="-1"></a>beta2_init <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb21-62"><a href="#cb21-62" aria-hidden="true" tabindex="-1"></a>implicit_covar <span class="op">=</span> np.exp(data.year<span class="op">/</span>beta2_init)</span>
+<span id="cb21-63"><a href="#cb21-63" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> sm.add_constant(implicit_covar)</span>
+<span id="cb21-64"><a href="#cb21-64" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> sm.OLS(data.co2, X).fit()</span>
+<span id="cb21-65"><a href="#cb21-65" aria-hidden="true" tabindex="-1"></a>beta0_init, beta1_init <span class="op">=</span> model.params</span>
+<span id="cb21-66"><a href="#cb21-66" aria-hidden="true" tabindex="-1"></a>sigma2_init <span class="op">=</span> np.mean((data.co2<span class="op">-</span>model.fittedvalues)<span class="op">**</span><span class="dv">2</span>)</span>
+<span id="cb21-67"><a href="#cb21-67" aria-hidden="true" tabindex="-1"></a>inits <span class="op">=</span> (beta0_init, beta1_init, beta2_init, np.log(sigma2_init))</span>
+<span id="cb21-68"><a href="#cb21-68" aria-hidden="true" tabindex="-1"></a>fit4 <span class="op">=</span> minimize(nll, inits, args<span class="op">=</span>(data), method<span class="op">=</span><span class="st">'BFGS'</span>, options<span class="op">=</span>{<span class="st">'disp'</span>: <span class="va">True</span>})</span>
 <span id="cb21-69"><a href="#cb21-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-70"><a href="#cb21-70" aria-hidden="true" tabindex="-1"></a><span class="co"># Optimization using BFGS</span></span>
-<span id="cb21-71"><a href="#cb21-71" aria-hidden="true" tabindex="-1"></a>start_time <span class="op">=</span> time.time()</span>
-<span id="cb21-72"><a href="#cb21-72" aria-hidden="true" tabindex="-1"></a>fit2 <span class="op">=</span> minimize(pp_negloglik, init0, args<span class="op">=</span>(y, thresh, npy), method<span class="op">=</span><span class="st">'BFGS'</span>, options<span class="op">=</span>{<span class="st">'disp'</span>: <span class="va">True</span>})</span>
-<span id="cb21-73"><a href="#cb21-73" aria-hidden="true" tabindex="-1"></a>end_time <span class="op">=</span> time.time()</span>
-<span id="cb21-74"><a href="#cb21-74" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"</span><span class="ch">\n</span><span class="st">BFGS Optimization:"</span>)</span>
-<span id="cb21-75"><a href="#cb21-75" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(fit2)</span>
-<span id="cb21-76"><a href="#cb21-76" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Execution Time:"</span>, end_time <span class="op">-</span> start_time, <span class="st">"seconds"</span>)</span>
-<span id="cb21-77"><a href="#cb21-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-78"><a href="#cb21-78" aria-hidden="true" tabindex="-1"></a>mle <span class="op">=</span> fit2.x</span>
-<span id="cb21-79"><a href="#cb21-79" aria-hidden="true" tabindex="-1"></a>var <span class="op">=</span> fit2.hess_inv</span>
-<span id="cb21-80"><a href="#cb21-80" aria-hidden="true" tabindex="-1"></a>se <span class="op">=</span> np.sqrt(np.diag(fit2.hess_inv))</span>
-<span id="cb21-81"><a href="#cb21-81" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-82"><a href="#cb21-82" aria-hidden="true" tabindex="-1"></a><span class="co"># Different starting values</span></span>
-<span id="cb21-83"><a href="#cb21-83" aria-hidden="true" tabindex="-1"></a>init1 <span class="op">=</span> [np.mean(y[y <span class="op">&gt;</span> thresh]), np.std(y[y <span class="op">&gt;</span> thresh]), <span class="op">-</span><span class="fl">0.1</span>]</span>
-<span id="cb21-84"><a href="#cb21-84" aria-hidden="true" tabindex="-1"></a>fit1a <span class="op">=</span> minimize(pp_negloglik, init1, args<span class="op">=</span>(y, thresh, npy), method<span class="op">=</span><span class="st">'Nelder-Mead'</span>, options<span class="op">=</span>{<span class="st">'disp'</span>: <span class="va">True</span>})</span>
-<span id="cb21-85"><a href="#cb21-85" aria-hidden="true" tabindex="-1"></a>fit2a <span class="op">=</span> minimize(pp_negloglik, init1, args<span class="op">=</span>(y, thresh, npy), method<span class="op">=</span><span class="st">'BFGS'</span>, options<span class="op">=</span>{<span class="st">'disp'</span>: <span class="va">True</span>})</span>
-<span id="cb21-86"><a href="#cb21-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-87"><a href="#cb21-87" aria-hidden="true" tabindex="-1"></a><span class="co"># Bad starting value for BFGS</span></span>
-<span id="cb21-88"><a href="#cb21-88" aria-hidden="true" tabindex="-1"></a>init2 <span class="op">=</span> [thresh, <span class="fl">0.01</span>, <span class="fl">.5</span>]</span>
-<span id="cb21-89"><a href="#cb21-89" aria-hidden="true" tabindex="-1"></a>fit1b <span class="op">=</span> minimize(pp_negloglik, init2, args<span class="op">=</span>(y, thresh, npy), method<span class="op">=</span><span class="st">'Nelder-Mead'</span>, options<span class="op">=</span>{<span class="st">'disp'</span>: <span class="va">True</span>})</span>
-<span id="cb21-90"><a href="#cb21-90" aria-hidden="true" tabindex="-1"></a>fit2b <span class="op">=</span> minimize(pp_negloglik, init2, args<span class="op">=</span>(y, thresh, npy), method<span class="op">=</span><span class="st">'BFGS'</span>, options<span class="op">=</span>{<span class="st">'disp'</span>: <span class="va">True</span>})</span>
-<span id="cb21-91"><a href="#cb21-91" aria-hidden="true" tabindex="-1"></a>fit2b.hess_inv</span>
-<span id="cb21-92"><a href="#cb21-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-93"><a href="#cb21-93" aria-hidden="true" tabindex="-1"></a><span class="co"># Data on a different scale</span></span>
-<span id="cb21-94"><a href="#cb21-94" aria-hidden="true" tabindex="-1"></a>y_exc2 <span class="op">=</span> y[y <span class="op">&gt;</span> thresh] <span class="op">*</span> <span class="dv">1000</span></span>
-<span id="cb21-95"><a href="#cb21-95" aria-hidden="true" tabindex="-1"></a>y2 <span class="op">=</span> y <span class="op">*</span> <span class="dv">1000</span></span>
-<span id="cb21-96"><a href="#cb21-96" aria-hidden="true" tabindex="-1"></a>thresh2 <span class="op">=</span> thresh <span class="op">*</span> <span class="dv">1000</span></span>
-<span id="cb21-97"><a href="#cb21-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-98"><a href="#cb21-98" aria-hidden="true" tabindex="-1"></a>init3 <span class="op">=</span> [np.mean(y_exc2), np.std(y_exc2), <span class="fl">0.1</span>]</span>
-<span id="cb21-99"><a href="#cb21-99" aria-hidden="true" tabindex="-1"></a>fit3 <span class="op">=</span> minimize(pp_negloglik, init3, args<span class="op">=</span>(y2, thresh2, npy), method<span class="op">=</span><span class="st">'Nelder-Mead'</span>, options<span class="op">=</span>{<span class="st">'disp'</span>: <span class="va">True</span>})</span>
-<span id="cb21-100"><a href="#cb21-100" aria-hidden="true" tabindex="-1"></a>fit4 <span class="op">=</span> minimize(pp_negloglik, init3, args<span class="op">=</span>(y2, thresh2, npy), method<span class="op">=</span><span class="st">'BFGS'</span>, options<span class="op">=</span>{<span class="st">'disp'</span>: <span class="va">True</span>})</span>
-<span id="cb21-101"><a href="#cb21-101" aria-hidden="true" tabindex="-1"></a>fit4.hess_inv</span>
-<span id="cb21-102"><a href="#cb21-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-103"><a href="#cb21-103" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot the objective function</span></span>
-<span id="cb21-104"><a href="#cb21-104" aria-hidden="true" tabindex="-1"></a>n_grid <span class="op">=</span> <span class="dv">30</span></span>
-<span id="cb21-105"><a href="#cb21-105" aria-hidden="true" tabindex="-1"></a>loc_vals <span class="op">=</span> np.linspace(<span class="dv">0</span>, <span class="dv">5</span>, n_grid)</span>
-<span id="cb21-106"><a href="#cb21-106" aria-hidden="true" tabindex="-1"></a>scale_vals <span class="op">=</span> np.linspace(<span class="fl">0.1</span>, <span class="dv">3</span>, n_grid)</span>
-<span id="cb21-107"><a href="#cb21-107" aria-hidden="true" tabindex="-1"></a>shape_vals <span class="op">=</span> np.linspace(<span class="op">-</span><span class="fl">0.3</span>, <span class="fl">0.3</span>, <span class="dv">16</span>)</span>
-<span id="cb21-108"><a href="#cb21-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-109"><a href="#cb21-109" aria-hidden="true" tabindex="-1"></a>loc_grid, scale_grid, shape_grid <span class="op">=</span> np.meshgrid(loc_vals, scale_vals, shape_vals, indexing<span class="op">=</span><span class="st">'ij'</span>)</span>
-<span id="cb21-110"><a href="#cb21-110" aria-hidden="true" tabindex="-1"></a>par_grid <span class="op">=</span> np.column_stack((loc_grid.ravel(), scale_grid.ravel(), shape_grid.ravel()))</span>
-<span id="cb21-111"><a href="#cb21-111" aria-hidden="true" tabindex="-1"></a>obj <span class="op">=</span> np.apply_along_axis(pp_negloglik, <span class="dv">1</span>, par_grid, y<span class="op">=</span>y, thresh<span class="op">=</span>thresh, npy<span class="op">=</span>npy)</span>
-<span id="cb21-112"><a href="#cb21-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-113"><a href="#cb21-113" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">4</span>, <span class="dv">4</span>, figsize<span class="op">=</span>(<span class="dv">14</span>, <span class="dv">10</span>))</span>
-<span id="cb21-114"><a href="#cb21-114" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, shape_value <span class="kw">in</span> <span class="bu">enumerate</span>(shape_vals):</span>
-<span id="cb21-115"><a href="#cb21-115" aria-hidden="true" tabindex="-1"></a>    ax <span class="op">=</span> axes[i <span class="op">//</span> <span class="dv">4</span>, i <span class="op">%</span> <span class="dv">4</span>]</span>
-<span id="cb21-116"><a href="#cb21-116" aria-hidden="true" tabindex="-1"></a>    obj_matrix <span class="op">=</span> np.array(obj[par_grid[:,<span class="dv">2</span>] <span class="op">==</span> shape_value]).reshape(n_grid, n_grid).T</span>
-<span id="cb21-117"><a href="#cb21-117" aria-hidden="true" tabindex="-1"></a>    im <span class="op">=</span> ax.imshow(obj_matrix, extent<span class="op">=</span>(<span class="dv">0</span>, <span class="dv">5</span>, <span class="fl">0.1</span>, <span class="dv">3</span>), cmap<span class="op">=</span><span class="st">'viridis'</span>, vmin<span class="op">=</span><span class="dv">40</span>, vmax<span class="op">=</span><span class="dv">80</span>, aspect<span class="op">=</span><span class="st">'auto'</span>, origin<span class="op">=</span><span class="st">'lower'</span>)</span>
-<span id="cb21-118"><a href="#cb21-118" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="ss">f"shape = </span><span class="sc">{</span>shape_value<span class="sc">:.2f}</span><span class="ss">"</span>)</span>
-<span id="cb21-119"><a href="#cb21-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-120"><a href="#cb21-120" aria-hidden="true" tabindex="-1"></a>fig.colorbar(im, ax<span class="op">=</span>axes, label<span class="op">=</span><span class="st">"Objective Function Value"</span>)</span>
-<span id="cb21-121"><a href="#cb21-121" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
-<span id="cb21-122"><a href="#cb21-122" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-123"><a href="#cb21-123" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb21-70"><a href="#cb21-70" aria-hidden="true" tabindex="-1"></a><span class="co"># Arbitrarily bad starting values</span></span>
+<span id="cb21-71"><a href="#cb21-71" aria-hidden="true" tabindex="-1"></a>inits <span class="op">=</span> (<span class="dv">10</span>, <span class="dv">0</span>, <span class="dv">10000</span>, <span class="fl">0.1</span>)</span>
+<span id="cb21-72"><a href="#cb21-72" aria-hidden="true" tabindex="-1"></a>fit5 <span class="op">=</span> minimize(nll, inits, args<span class="op">=</span>(data), method<span class="op">=</span><span class="st">'Nelder-Mead'</span>, options<span class="op">=</span>{<span class="st">'disp'</span>: <span class="va">True</span>})</span>
+<span id="cb21-73"><a href="#cb21-73" aria-hidden="true" tabindex="-1"></a>fit6 <span class="op">=</span> minimize(nll, inits, args<span class="op">=</span>(data), method<span class="op">=</span><span class="st">'BFGS'</span>, options<span class="op">=</span>{<span class="st">'disp'</span>: <span class="va">True</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
 </section>
 <section id="various-considerations-in-using-the-python-functions" class="level2">
 <h2 class="anchored" data-anchor-id="various-considerations-in-using-the-python-functions">Various considerations in using the Python functions</h2>
 <p>As we’ve seen, initial values are important both for avoiding divergence (e.g., in N-R), for increasing speed of convergence, and for helping to avoid local optima. So it is well worth the time to try to figure out a good starting value or multiple starting values for a given problem.</p>
-<p>Scaling can be important. One useful step is to make sure the problem is well-scaled, namely that a unit step in any parameter has a comparable change in the objective function, preferably approximately a unit change at the optimum. Basically if <span class="math inline">\(x_{j}\)</span> is varying at <span class="math inline">\(p\)</span> orders of magnitude smaller than the other <span class="math inline">\(x\)</span>s, we want to reparameterize to <span class="math inline">\(x_{j}^{*}=x_{j}\cdot10^{p}\)</span> and then convert back to the original scale after finding the answer. Or we may want to work on the log scale for some variables, reparameterizing as <span class="math inline">\(x_{j}^{*}=\log(x_{j})\)</span>.</p>
-<p>As far as I can see one needs to do this manually with <code>minimize</code> in Python but <code>optim()</code> in R allows you to supply scaling information through the <code>parscale</code> component of the <code>control</code> argument.</p>
-<p>If the function itself gives very large or small values near the solution, you may want to rescale the entire function to avoid calculations with very large or small numbers. This can avoid problems such as having apparent convergence because a gradient is near zero, simply because the scale of the function is small. In <code>optim()</code> in R, this can be controlled with the <code>fnscale</code> component of <code>control</code>.</p>
+<p>Scaling can be important. One useful step is to make sure the problem is well-scaled, namely that a unit step in any parameter has a comparable change in the objective function, preferably approximately a unit change at the optimum. Basically if <span class="math inline">\(x_{j}\)</span> is varying at <span class="math inline">\(p\)</span> orders of magnitude smaller than the other <span class="math inline">\(x\)</span>s, we want to reparameterize to <span class="math inline">\(\tilde{x}_{j}=x_{j}\cdot10^{p}\)</span> and then convert back to the original scale after finding the answer. Or we may want to work on the log scale for some variables, reparameterizing as <span class="math inline">\(\tilde{x}_{j}=\log(x_{j})\)</span>.</p>
+<p>If the function itself gives very large or small values near the solution, you may want to rescale the entire function to avoid calculations with very large or small numbers. This can avoid problems such as having apparent convergence because a gradient is near zero, simply because the scale of the function is small. When we use the log of a likelihood (primarily to avoid over/underflow), that often helps in this regard as well even if the function would not over/underflow.</p>
 <p><strong>Always</strong> consider your answer and make sure it makes sense, in particular that you haven’t ‘converged’ to an extreme value on the boundary of the space.</p>
 <p>Venables and Ripley suggest that it is often worth supplying analytic first derivatives rather than having a routine calculate numerical derivatives but not worth supplying analytic second derivatives. One possibility is using software such as Mathematica to do symbolic (i.e., analytic) differentiation and then writing code to implement the math of the result. Another is using software that can give derivatives using automatic differentiation such as <code>PyTorch</code>, <code>jax</code> and <code>tensorflow</code>. We saw an example of using Jax earlier in the unit.</p>
 <p>In general for software development it’s obviously worth putting more time into figuring out the best optimization approach and supplying derivatives. For a one-off analysis, you can try a few different approaches and assess sensitivity.</p>
