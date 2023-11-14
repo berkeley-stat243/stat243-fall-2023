@@ -1430,6 +1430,7 @@ xbar = np.mean(xs[:2], axis=0)
 plt.text(xs[2, 0], xs[2, 1], 'x[p+1]')
 plt.plot(xbar[0], xbar[1], 'ro')
 
+
 # Reflection
 xr = (1 + alpha) * xbar - alpha * xs[2]
 plt.plot(xr[0], xr[1], 'ro', marker='o', markersize=4, color='red')
@@ -1457,8 +1458,6 @@ plt.text(xc[0], xc[1], 'x[c]')
 plotseg(xc, 0, 'blue')
 plotseg(xc, 1, 'blue')
 plotseg(0, 1, 'blue')
-
-### HERE -  wrong purple point xs is wrong
 
 # Shrinkage
 xs[1,:] = delta * xs[1,:] + (1 - delta) * xs[0,:]
