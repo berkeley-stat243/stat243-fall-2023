@@ -1213,6 +1213,15 @@ randomly shuffles the data before starting SGD. Note that using subsets
 rather than individual observations is likely to be more effective as it
 can allow us to use optimized matrix/vector computations.
 
+One thing to note is that often one would scale the objective function
+(and therefore the gradient) by dividing by the number of observations.
+This of course doesn't change the
+optimum or the directions involved, but it does mean that the magnitude
+of the estimated gradient won't change with the batch size. And it means
+that the expected gradient is equal to the true gradient, rather than a scaled version
+of the true gradient.  
+
+
 How should one choose the step size, $\alpha_{t}$ (also called the
 learning rate)? One might think that as one gets close to the optimum,
 if one isn't careful, one might simply bounce around near the optimum in
@@ -1396,11 +1405,12 @@ hull.
 Convergence is assessed based on the sample variance of the function
 values at the points, the total of the norms of the differences between
 the points in the new and old simplexes, or the size of the simplex. In
-class we'll work through some demo code (not shown here) that
+class we'll work through some demo code (click below to show the code in the html version of this document) that
 illustrates the individual steps in an iteration of Nelder-Mead.
 
 ```{python}
-#| include: false
+#| code-fold: True
+#| eval: False
 
 alpha = 1
 gamma = 2
@@ -1629,7 +1639,6 @@ Scipy provides various useful optimization functions via `scipy.optimize`, inclu
 Here's a very basic example of using `minimize` with the Mauna Loa CO2 example we saw earlier when hand-coding Newton-Raphson. Here we'll include the unknown variance as an additional parameter so we have a full likelihood. And as mentioned previously, we could profile out $\beta_0$ and $\beta_1$ and $\sigma^2$, but we won't do that here so as to illustrate multivariate Newton-Raphson.
 
 ```{python}
-#| code-fold: True
 #| eval: False
 
 import os
