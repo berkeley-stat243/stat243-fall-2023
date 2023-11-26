@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Chris Paciorek">
+<meta name="dcterms.date" content="2023-11-26">
+
+<title>Statistics 243 Fall 2023 - Graphics</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../units/unit11-optim.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Statistics 243 Fall 2023</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html" rel="" target="">
+ <span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../syllabus.html" rel="" target="">
+ <span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../office_hours.html" rel="" target="">
+ <span class="menu-text">Office hours</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../schedule.html" rel="" target="">
+ <span class="menu-text">Schedule</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-units" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Units</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-units">    
+        <li>
+    <a class="dropdown-item" href="../units/unit1-intro.html" rel="" target="">
+ <span class="dropdown-text">Unit 1 (UNIX intro)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit2-dataTech.html" rel="" target="">
+ <span class="dropdown-text">Unit 2 (Data technologies)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit3-bash.html" rel="" target="">
+ <span class="dropdown-text">Unit 3 (Bash shell)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit4-goodPractices.html" rel="" target="">
+ <span class="dropdown-text">Unit 4 (Good practices)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit5-programming.html" rel="" target="">
+ <span class="dropdown-text">Unit 5 (Programming)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit6-parallel.html" rel="" target="">
+ <span class="dropdown-text">Unit 6 (Parallelization)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit7-bigData.html" rel="" target="">
+ <span class="dropdown-text">Unit 7 (Databases)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit8-numbers.html" rel="" target="">
+ <span class="dropdown-text">Unit 8 (Precision)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit9-sim.html" rel="" target="">
+ <span class="dropdown-text">Unit 9 (Simulation)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit10-linalg.html" rel="" target="">
+ <span class="dropdown-text">Unit 10 (Linear Algebra)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit11-optim.html" rel="" target="">
+ <span class="dropdown-text">Unit 11 (Optimization)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit12-graphics.html" rel="" target="">
+ <span class="dropdown-text">Unit 12 (Graphics)</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-labs" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">Labs</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-labs">    
+        <li>
+    <a class="dropdown-item" href="../labs/lab0-setup.html" rel="" target="">
+ <span class="dropdown-text">Lab 0: Setup</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/lab1-submission.html" rel="" target="">
+ <span class="dropdown-text">Lab 1: Problem set submission</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/lab2-testing.html" rel="" target="">
+ <span class="dropdown-text">Lab 2: Assertions, Exceptions, and Testing</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/lab3-debugging.html" rel="" target="">
+ <span class="dropdown-text">Lab 3: Debugging</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/lab5-codereview.html" rel="" target="">
+ <span class="dropdown-text">Lab 5: Code Reviews</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/06/scf.html" rel="" target="">
+ <span class="dropdown-text">Lab 6: SCF and Parallel Computing</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/py_vs_R.html" rel="" target="">
+ <span class="dropdown-text">Lab 7: R vs.&nbsp;Python</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/09/collab_with_git.html" rel="" target="">
+ <span class="dropdown-text">Lab 9: Collaboration with Git</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-how-tos" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+ <span class="menu-text">How tos</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-how-tos">    
+        <li>
+    <a class="dropdown-item" href="../howtos/accessingPython.html" rel="" target="">
+ <span class="dropdown-text">Accessing Python</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/accessingUnixCommandLine.html" rel="" target="">
+ <span class="dropdown-text">Accessing the Unix Command Line</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/gitInstall.html" rel="" target="">
+ <span class="dropdown-text">Installing Git</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/quartoInstall.html" rel="" target="">
+ <span class="dropdown-text">Installing Quarto</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/ps-submission.html" rel="" target="">
+ <span class="dropdown-text">Problem Set Submissions</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">Windows</li>
+        <li>
+    <a class="dropdown-item" href="../howtos/windowsAndLinux.html" rel="" target="">
+ <span class="dropdown-text">Installing the Linux Subsystem on Windows</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="https://edstem.org/us/courses/42474/discussion/" rel="" target="">
+ <span class="menu-text">Discussion</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://statistics.berkeley.edu/computing/training/tutorials" rel="" target="">
+ <span class="menu-text">Tutorials</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/berkeley-stat243/stat243-fall-2023" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+ <span class="menu-text"></span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools">
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../units/unit12-graphics.html">Unit 12 (Graphics)</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit1-intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unit 1 (UNIX intro)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit2-dataTech.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unit 2 (Data technologies)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit3-bash.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unit 3 (Bash shell)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit4-goodPractices.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unit 4 (Good practices)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit5-programming.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unit 5 (Programming)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit6-parallel.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unit 6 (Parallelization)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit7-bigData.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unit 7 (Databases)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit8-numbers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unit 8 (Precision)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit9-sim.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unit 9 (Simulation)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit10-linalg.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unit 10 (Linear Algebra)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit11-optim.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Unit 11 (Optimization)</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../units/unit12-graphics.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Unit 12 (Graphics)</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#good-practices-for-graphics" id="toc-good-practices-for-graphics" class="nav-link active" data-scroll-target="#good-practices-for-graphics">1. Good practices for graphics</a>
+  <ul class="collapse">
+  <li><a href="#best-practices" id="toc-best-practices" class="nav-link" data-scroll-target="#best-practices">Best practices</a></li>
+  <li><a href="#some-example-graphics" id="toc-some-example-graphics" class="nav-link" data-scroll-target="#some-example-graphics">Some example graphics</a></li>
+  </ul></li>
+  <li><a href="#graphics-devices" id="toc-graphics-devices" class="nav-link" data-scroll-target="#graphics-devices">2. Graphics devices</a></li>
+  <li><a href="#graphics-file-formats" id="toc-graphics-file-formats" class="nav-link" data-scroll-target="#graphics-file-formats">3. Graphics file formats</a>
+  <ul class="collapse">
+  <li><a href="#vectorized-vs.-rasterized-file-formats" id="toc-vectorized-vs.-rasterized-file-formats" class="nav-link" data-scroll-target="#vectorized-vs.-rasterized-file-formats">Vectorized vs.&nbsp;rasterized file formats</a></li>
+  <li><a href="#conversion-utilities" id="toc-conversion-utilities" class="nav-link" data-scroll-target="#conversion-utilities">Conversion utilities</a></li>
+  </ul></li>
+  <li><a href="#colors" id="toc-colors" class="nav-link" data-scroll-target="#colors">4. Colors</a>
+  <ul class="collapse">
+  <li><a href="#colors-in-r" id="toc-colors-in-r" class="nav-link" data-scroll-target="#colors-in-r">Colors in R</a></li>
+  <li><a href="#colorspaces" id="toc-colorspaces" class="nav-link" data-scroll-target="#colorspaces">Colorspaces</a></li>
+  <li><a href="#color-sequences" id="toc-color-sequences" class="nav-link" data-scroll-target="#color-sequences">Color sequences</a></li>
+  <li><a href="#overplotting-of-points" id="toc-overplotting-of-points" class="nav-link" data-scroll-target="#overplotting-of-points">Overplotting of points</a></li>
+  <li><a href="#colorblindness" id="toc-colorblindness" class="nav-link" data-scroll-target="#colorblindness">Colorblindness</a></li>
+  </ul></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="unit12-graphics.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Graphics</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Chris Paciorek </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 26, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<p><a href="./unit12-graphics.pdf" class="btn btn-primary">PDF</a></p>
+<p>This unit discusses some general concepts and principles of graphics, illustrated in some cases with R code.</p>
+<p>References:</p>
+<ul>
+<li>Adler</li>
+<li>Chambers</li>
+<li>Venables and Ripley, Modern Applied Statistics with S</li>
+<li>Murrell, <a href="http://uclibs.org/PID/110697">R Graphics</a></li>
+<li><a href="http://cran.r-project.org/doc/manuals/R-intro.html">R intro manual</a> (R-intro) on CRAN</li>
+<li>Hadley Wickham, ggplot2: Elegant Graphics for Data Analysis</li>
+</ul>
+<section id="good-practices-for-graphics" class="level1">
+<h1>1. Good practices for graphics</h1>
+<p>There are a number of principles that can be used in developing and critiquing graphics. Let’s skim over the principles and then think about them in the context of some examples, some of which show those principles being violated.</p>
+<section id="best-practices" class="level2">
+<h2 class="anchored" data-anchor-id="best-practices">Best practices</h2>
+<p>Here’s a list of some guidelines to consider in creating graphics.</p>
+<ol type="1">
+<li><p>Have a high density of information to space</p></li>
+<li><p>Show the data clearly: are the relationships and patterns that are clearly seen in the graph the ones you want to represent?</p></li>
+<li><p>Can you reorder groups or variables to better illustrate the key points?</p></li>
+<li><p>Strategies for going beyond two dimensions</p>
+<ol type="1">
+<li><p>Use color, but avoid if unnecessary (saves printing costs in journal articles, though that may not matter much anymore)</p></li>
+<li><p>Use varying symbol or line types</p></li>
+<li><p>Use multiple panel plots</p></li>
+</ol></li>
+<li><p>Avoid 3-d graphics unless they truly add information</p></li>
+<li><p>Multi-panel (trellis) plots (called “small multiples” when using the same scale/axes) is a key strategy</p></li>
+<li><p>Think carefully about your baseline (e.g., the lowest level on the y-axis)</p>
+<ol type="1">
+<li><p>Zero is often a good baseline</p></li>
+<li><p>Avoid stacked barplots (see demo code) and other plots with shifting baselines, as it’s hard to assess anything except the total and the baseline category.</p></li>
+</ol></li>
+<li><p>Studies indicate that humans have a hard time comparing areas, volumes, or angles, so try to avoid plots that represent data using any of these, including pie charts. Instead use position or length (horizontal is better than vertical) to display data values</p></li>
+<li><p>Label axes and include units</p></li>
+<li><p>Keep the ranges of axes (and other features) the same for multiple panels, when possible</p></li>
+<li><p>Use a legend where appropriate</p></li>
+<li><p>Jitter values if needed so that all the data points can be seen, but if you have too many points to avoid a lot of overplotting, use <a href="#overplotting-of-points">strategies discussed below</a>.</p></li>
+<li><p>Use vector graphics formats such as PDF or Postscript/EPS as these scale without pixelation when resized. Raster formats such as JPEG, PNG, and TIFF don’t rescale well and when they have high resolution also have large file sizes. See <a href="#graphics-file-formats">Section 3</a> for more details.</p></li>
+</ol>
+<p>Rob Hyndman has a <a href="http://robjhyndman.com/hyndsight/graphics/">list of 20 rules for good graphics</a>, including some of the ones above. There is also a list of guidelines in <a href="https://www.tandfonline.com/doi/full/10.1080/10618600.2014.989324">this article</a>.</p>
+</section>
+<section id="some-example-graphics" class="level2">
+<h2 class="anchored" data-anchor-id="some-example-graphics">Some example graphics</h2>
+<ol type="1">
+<li><p>This <a href="trafficking.jpeg">pie chart</a> circulating online is intended to raise awareness of human trafficking. What do you like or not like about the graphical presentation?</p></li>
+<li><p>This <a href="http://www.nytimes.com/interactive/2016/08/08/sports/olympics/history-olympic-dominance-charts.html">NY Times article</a> presents time-series graphics about how many Olympic medals have been won by different countries. What do you like or not like about the graphical approach?</p></li>
+<li><p>Consider <a href="https://academic.oup.com/view-large/figure/81018073/dyr146f2.gif">this scatterplot of life expectancy statistics</a> from <a href="https://academic.oup.com/ije/article/40/6/1703/801755">this article</a> on variation in lifespan in European countries in the International Journal of Epidemiology. What are you able to learn from this presentation of the data. What other ways could you plot the data to better illustrate patterns in the data?</p></li>
+<li><p>Here’s <a href="exampleGraphic.png">another online graphic</a>. What aspects of the graph could be improved? What aspects do you like?</p></li>
+<li><p>The file <em>shell.pdf</em> in the repository has an example of a crazy pie chart from an advertisement in the NY Times from December 2014.</p></li>
+<li><p>The article <em>wainer1984.pdf</em> in the repository is rather old but the ideas are still relevant and while the example figures are dated in terms of appearance, the same issues arise with more modern-looking graphics.</p></li>
+<li><p>The article <em>gelmanUnwin2013.pdf</em> in the repository presents a modern-day reinterpretation of a famous graphic from Florence Nightingale regarding causes of death in the British Army during the Crimean War in the 1850s.</p></li>
+<li><p>This <a href="https://www.r-bloggers.com/2021/07/improving-a-visualization/?utm_source=feedburner&amp;utm_medium=email&amp;utm_campaign=Feed%3A+RBloggers+%28R+bloggers%29%20">somewhat recent blog</a> post nicely discusses the process of improving a visualization regarding streaming services market share in 2020 vs.&nbsp;2021.</p></li>
+</ol>
+</section>
+</section>
+<section id="graphics-devices" class="level1">
+<h1>2. Graphics devices</h1>
+<p>Graphics are plotted on a <em>device</em>. In the old days when computer monitors were not high resolution or in color, this referred to a physical device, but nowadays this is a general term that denotes the context in which the plot is being made: typically on screen or as a file in a particular file format. The standard device in a UNIX environment is X11, basically a graphics window set up in the X11 windowing system. On-screen plotting is generally done with the software you are using (e.g., Python or R) interacting with a window manager for the operating system.</p>
+<p>Often one needs to iterate to get a plot to look good when printed to a file; in particular the aspect (width to height ratio), the margin sizes relative to the size of the core plot, and size of plotting symbols and text relative to the size of the plot. In other words, the relative sizes when seen in a graphics window on the screen may be very different when printed to a file.</p>
+</section>
+<section id="graphics-file-formats" class="level1">
+<h1>3. Graphics file formats</h1>
+<section id="vectorized-vs.-rasterized-file-formats" class="level2">
+<h2 class="anchored" data-anchor-id="vectorized-vs.-rasterized-file-formats">Vectorized vs.&nbsp;rasterized file formats</h2>
+<p><em>pdf</em> images are <em>vectorized</em>. What that means is that in general elements of the image are symbolic objects (such as points, text, symbols, line segments, etc.) and when an image is resized, the items rescale appropriately for the new size without losing resolution. In contrast, with a <em>rasterized</em> format such as <em>jpeg</em> or <em>png</em> or <em>tiff</em>, individual pixels are plotted, and when an image is rescaled, in particular enlarged, one is stuck with the resolution that one used in plotting the figure (i.e., one has the original pixels but if you zoom, you only show some of them, losing resolution).</p>
+<p>I strongly recommend using vectorized images in most situations. That said, one downside to vectorized images is that with a lot of points or line segments, they can be very large. And for 2-d images, rasterized formats do make some sense inherently, though the other features in the file (such as any text) is also rasterized.</p>
+</section>
+<section id="conversion-utilities" class="level2">
+<h2 class="anchored" data-anchor-id="conversion-utilities">Conversion utilities</h2>
+<p>UNIX has a lot of utilities for converting between image formats. Windows and Mac also have GUI-style programs for doing this.</p>
+<p>In UNIX, <code>pdftops</code> will convert pdf to postscript and with the optional argument <code>-eps</code> to encapsulated postscript, while <code>ps2epsi</code> will create encapsulated postscript. <code>gs</code> (Ghostscript) will do a lot of different manipulations of ps and pdf files, including converting to jpeg and other formats and merging and splitting pages of pdf files. Here are some examples of command-line calls from within a UNIX shell:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert from pdf to jpeg</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">gs</span> <span class="at">-dNOPAUSE</span> <span class="at">-r</span><span class="pp">[</span><span class="ss">xres</span><span class="pp">]</span><span class="at">x</span><span class="pp">[</span><span class="ss">yres</span><span class="pp">]</span> <span class="at">-sDEVICE</span><span class="op">=</span>jpeg <span class="at">-sOutputFile</span><span class="op">=</span>file.jpg file.pdf</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># extract pages from a pdf</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">gs</span> <span class="at">-sDEVICE</span><span class="op">=</span>pdfwrite <span class="at">-dNOPAUSE</span> <span class="at">-dQUIET</span> <span class="at">-dBATCH</span> <span class="at">-dFirstPage</span><span class="op">=</span>m <span class="dt">\</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  &nbsp;-dLastPage=n <span class="at">-sOutputFile</span><span class="op">=</span>out.pdf in.pdf </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># merge pdf files into one pdf</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">gs</span> <span class="at">-dNOPAUSE</span> <span class="at">-sDEVICE</span><span class="op">=</span>pdfwrite <span class="at">-sOUTPUTFILE</span><span class="op">=</span>out.pdf <span class="dt">\</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>   <span class="at">-dBATCH</span> in1.pdf&nbsp;in2.pdf in3.pdf </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="colors" class="level1">
+<h1>4. Colors</h1>
+<p>I haven’t converted this section to use Python, but the concepts are still relevant in Python or other languages.</p>
+<section id="colors-in-r" class="level2">
+<h2 class="anchored" data-anchor-id="colors-in-r">Colors in R</h2>
+<p>The default colors can be seen with <code>palette()</code>. Using <code>col=i</code> in a plot uses the ith element of the output of <code>palette()</code>. You can change the palette:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">palette</span>(<span class="fu">c</span>(“black”, “yellowgreen”, “purple”)<span class="st">`</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>See <code>colors()</code> for the colors available by name. You can also use RGB levels, discussed next.</p>
+</section>
+<section id="colorspaces" class="level2">
+<h2 class="anchored" data-anchor-id="colorspaces">Colorspaces</h2>
+<p>Colors live in a 3-dimensional space that can be parameterized in several ways. One standard parameterization is RGB, which is a set of three numbers indicating the intensity of red, green and blue. We can use RGB levels to specify colors in R.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10</span>); y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rgb</span>(<span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="dv">0</span>) <span class="co"># each number is specified on scale of [0, 1]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "#80BF00"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> <span class="fu">rgb</span>(<span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="unit12-graphics_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">col2rgb</span>(<span class="st">"yellowgreen"</span>) <span class="co"># on scale of {0,...,255}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      [,1]
+red    154
+green  205
+blue    50</code></pre>
+</div>
+</div>
+<p>Notice <code>rgb()</code> gives us back the color as a hexadecimal number (<code>#RRGGBB</code>), where each of <em>RR</em>, <em>GG</em>, and <em>BB</em> is 2-digit hexadecimal number (base 16) in the range 0 (00) to 255 (FF), so red is <code>#FF0000</code> (all red, no green, no blue). A string in this format can be used to specify colors and you’ll run across this in R if you work with colors.</p>
+<p>Another parameterization is HSV: <em>hue</em>, <em>saturation</em> (colorfulness metric), and <em>value</em> (brightness). Let’s see the demo code to see how colors vary as we change HSV values using <em>rainbow()</em>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">16</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="do">## rainbow varies hue while keeping s and v constant</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">pie</span>(<span class="fu">rep</span>(<span class="dv">1</span>, n), <span class="at">col =</span> <span class="fu">rainbow</span>(n, <span class="at">s =</span> .<span class="dv">5</span>))  <span class="co"># reduce saturation</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="fu">pie</span>(<span class="fu">rep</span>(<span class="dv">1</span>, n), <span class="at">col =</span> <span class="fu">rainbow</span>(n, <span class="at">v =</span> .<span class="dv">75</span>)) <span class="co"># reduce brightness</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="unit12-graphics_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>A parameterization that uses a more absolute measure of colorfulness than saturation is HCL (hue, chroma, luminance). In the example code below, none of the colors stands out more than the others, unlike the RGB or HSV (see above) based rainbows.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(colorspace)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">pie</span>(<span class="fu">rep</span>(<span class="dv">1</span>, n), <span class="at">col =</span> <span class="fu">rainbow_hcl</span>(n, <span class="at">c =</span> <span class="dv">70</span>, <span class="at">l =</span> <span class="dv">70</span>), <span class="at">main =</span> <span class="st">'HCL'</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">pie</span>(<span class="fu">rep</span>(<span class="dv">1</span>, n), <span class="at">col =</span> <span class="fu">rainbow</span>(n), <span class="at">main =</span> <span class="st">'RGB'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="unit12-graphics_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The <code>colorspace</code> package provides a lot of helpful tools for manipulating colors (including for <code>ggplot2</code> and <code>shiny</code>), including determining palettes for qualitative, sequential, and diverging values.</p>
+</section>
+<section id="color-sequences" class="level2">
+<h2 class="anchored" data-anchor-id="color-sequences">Color sequences</h2>
+<p>If we’re using color to illustrate a continuous range of values, we need a meaningful color sequence. To construct a continuous color set giving a sequence of colors you can use a variety of color schemes: <code>rainbow()</code>, <code>heat.colors()</code>, <code>terrain.colors()</code>, <code>topo.colors()</code>, <code>temp.colors()</code>, and (in the <code>fields</code> package), <code>tim.colors()</code>. (I know the Tim of <code>tim.colors</code>! He likes to fish.)</p>
+<p>The main thing to avoid is a sequence in which the colors do not appear to vary smoothly or in some cases may not even appear monotonic. Let’s examine a variety of the sequences:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fields) <span class="co"># includes image.plot(), which takes image() and adds a legend; also includes tim.colors</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: spam</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Spam version 2.9-1 (2022-08-07) is loaded.
+Type 'help( Spam)' or 'demo( spam)' for a short introduction 
+and overview of this package.
+Help for individual functions is also obtained by adding the
+suffix '.spam' to the function name, e.g. 'help( chol.spam)'.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'spam'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    backsolve, forwardsolve</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: viridis</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: viridisLite</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Try help(fields) to get started.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">20</span>; xs <span class="ot">&lt;-</span> ys <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>gr <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(xs, ys)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="fu">chol</span>(<span class="fu">exp</span>(<span class="sc">-</span><span class="fu">rdist</span>(gr)<span class="sc">/</span><span class="dv">6</span>))  </span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="do">## rainbow color sequence </span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">image.plot</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n, <span class="fu">matrix</span>(<span class="fu">crossprod</span>(U, <span class="fu">rnorm</span>(n<span class="sc">^</span><span class="dv">2</span>)), n, n),</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">col =</span> <span class="fu">rainbow</span>(<span class="dv">32</span>),</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">xlab =</span> <span class="st">''</span>, <span class="at">ylab =</span> <span class="st">''</span>, <span class="at">main =</span> <span class="st">'rainbow colors'</span>)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a><span class="do">## heat.colors</span></span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a><span class="fu">image.plot</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n, <span class="fu">matrix</span>(<span class="fu">crossprod</span>(U, <span class="fu">rnorm</span>(n<span class="sc">^</span><span class="dv">2</span>)), n, n),</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>                <span class="at">col =</span> <span class="fu">heat.colors</span>(<span class="dv">32</span>),</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>                <span class="at">xlab =</span> <span class="st">''</span>, <span class="at">ylab =</span> <span class="st">''</span>, <span class="at">main =</span> <span class="st">'heat colors'</span>)</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a><span class="do">## temp.colors</span></span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a>temp.colors <span class="ot">&lt;-</span> <span class="cf">function</span>(<span class="at">n=</span><span class="dv">25</span>){</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> <span class="fu">floor</span>(n<span class="sc">/</span><span class="dv">2</span>)</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>  blues <span class="ot">&lt;-</span> <span class="fu">hsv</span>(<span class="at">h=</span>.<span class="dv">65</span>, <span class="at">s=</span><span class="fu">seq</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="at">length=</span>m<span class="sc">+</span><span class="dv">1</span>)[<span class="dv">1</span><span class="sc">:</span>m])</span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true" tabindex="-1"></a>  reds <span class="ot">&lt;-</span> <span class="fu">hsv</span>(<span class="at">h=</span><span class="dv">0</span>, <span class="at">s=</span><span class="fu">seq</span>(<span class="dv">1</span>,<span class="dv">0</span>,<span class="at">length=</span>m<span class="sc">+</span><span class="dv">1</span>)[<span class="dv">1</span><span class="sc">:</span>m])</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">c</span>(blues,<span class="cf">if</span>(n<span class="sc">%%</span><span class="dv">2</span><span class="sc">!=</span><span class="dv">0</span>) <span class="st">"#FFFFFF"</span>, reds[m<span class="sc">:</span><span class="dv">1</span>])</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true" tabindex="-1"></a><span class="fu">image.plot</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n, <span class="fu">matrix</span>(<span class="fu">crossprod</span>(U, <span class="fu">rnorm</span>(n<span class="sc">^</span><span class="dv">2</span>)), n, n),</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true" tabindex="-1"></a>                <span class="at">col =</span> <span class="fu">temp.colors</span>(<span class="dv">33</span>), <span class="at">zlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">3.5</span>, <span class="fl">3.5</span>),</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true" tabindex="-1"></a>                <span class="at">xlab =</span> <span class="st">''</span>, <span class="at">ylab =</span> <span class="st">''</span>, <span class="at">main =</span> <span class="st">'temp colors'</span>)</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true" tabindex="-1"></a> <span class="do">## here I force zlim to be symmetric about zero and use an odd number (33) of levels so that the midpoint is white</span></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true" tabindex="-1"></a>           </span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true" tabindex="-1"></a><span class="do">## tim.colors</span></span>
+<span id="cb18-30"><a href="#cb18-30" aria-hidden="true" tabindex="-1"></a><span class="fu">image.plot</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n, <span class="fu">matrix</span>(<span class="fu">crossprod</span>(U, <span class="fu">rnorm</span>(n<span class="sc">^</span><span class="dv">2</span>)), n, n),</span>
+<span id="cb18-31"><a href="#cb18-31" aria-hidden="true" tabindex="-1"></a>                <span class="at">col =</span> <span class="fu">tim.colors</span>(<span class="dv">32</span>),</span>
+<span id="cb18-32"><a href="#cb18-32" aria-hidden="true" tabindex="-1"></a>                <span class="at">xlab =</span> <span class="st">''</span>, <span class="at">ylab =</span> <span class="st">''</span>, <span class="at">main =</span> <span class="st">'tim colors'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="unit12-graphics_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><code>temp.colors()</code> is a good blue-to-red “diverging” color scheme that emphasizes magnitudes around a central point, with two hues - one for each direction.</p>
+<p>The <code>RColorBrewer</code> package is good for choosing colors for unordered levels, sequential ordering, and two-way diverging color ordering and the <code>ColorBrewer</code> website provides recommendations. We’ll see an example in the section on mapping.</p>
+</section>
+<section id="overplotting-of-points" class="level2">
+<h2 class="anchored" data-anchor-id="overplotting-of-points">Overplotting of points</h2>
+<p>As a sidenote, if you have a scatterplot with many points that will overplot each other (as well as creating a huge file if using a vectorized format), consider the <code>scatterSmooth()</code> function as well as the <code>hexbin</code> package. The former creates a two-d density plots with outlying individual points included, while the latter creates an empirical two-d density by binning into hexagonal areas. A third approach is to have your color be partly transparent, so that overplotting results in darker colors. Note that this may not work on all devices. We can specify transparency level as either the 4th number in <code>rgb()</code> on a scale of 0 (transparent) to 1 (opaque - the default), or as a fourth hexadecimal number on the scale of 00 to FF (0 to 255); e.g., <code>#FF000080</code> would be half-transparent red, since 80 is one-half of FF in base 16.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(hexbin, <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10000</span>); y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">10000</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>))</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">main =</span> <span class="st">'naive'</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="fu">smoothScatter</span>(x, y, <span class="at">main =</span> <span class="st">'scatterSmooth'</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(x, y, <span class="at">col =</span> <span class="fu">rgb</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, .<span class="dv">1</span>), <span class="at">pch =</span> <span class="dv">16</span>, </span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">cex =</span> .<span class="dv">5</span>, <span class="at">main =</span> <span class="st">'transparency'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="unit12-graphics_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="960"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>bin <span class="ot">&lt;-</span> <span class="fu">hexbin</span>(x,y)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(bin, <span class="at">main =</span> <span class="st">'hexbin'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="unit12-graphics_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="colorblindness" class="level2">
+<h2 class="anchored" data-anchor-id="colorblindness">Colorblindness</h2>
+<p>One thing to be aware of is that 7-8% of men are color blind. As we see in the demo code, the standard result of this is to make it difficult to distinguish red and green, so one may want to avoid color schemes that have both of these in them. We can use <code>dichromat()</code> from the <code>dichromat</code> package to assess the effect of colorblindness on viewing of one’s images.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dichromat)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>showpal <span class="ot">&lt;-</span> <span class="cf">function</span>(colors){ <span class="co"># helper function to show colors</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(colors)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">plot</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="fu">rep</span>(<span class="dv">1</span>, n), <span class="at">col =</span> colors, <span class="at">pch =</span> <span class="dv">16</span>, <span class="at">cex =</span> <span class="dv">4</span>)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>() <span class="co"># close the graphics windows to clear out old color stuff</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>null device 
+          1 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>))</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">showpal</span>(<span class="fu">palette</span>()) <span class="co"># show default palette colors</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"># here's how those look with standard colorblindness</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="fu">showpal</span>(<span class="fu">dichromat</span>(<span class="fu">palette</span>()))  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>I like <code>fields::tim.colors()</code> for spatial images. How does it do in terms of color-blindness? Based on the images below, not too bad.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(fields, <span class="at">quietly =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">20</span>; xs <span class="ot">&lt;-</span> ys <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span>n</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>gr <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(xs, ys);</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>U <span class="ot">&lt;-</span> <span class="fu">chol</span>(<span class="fu">exp</span>(<span class="sc">-</span><span class="fu">rdist</span>(gr)<span class="sc">/</span><span class="dv">6</span>)) </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>vals <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">crossprod</span>(U, <span class="fu">rnorm</span>(n<span class="sc">^</span><span class="dv">2</span>)), n, n)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="do">## how does tim.colors fair with color-blindness?</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="fu">image.plot</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n, vals, <span class="at">col =</span> <span class="fu">tim.colors</span>(<span class="dv">32</span>),</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>                <span class="at">xlab =</span> <span class="st">''</span>, <span class="at">ylab =</span> <span class="st">''</span>, <span class="at">main =</span> <span class="st">'ordinary vision'</span>) </span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="fu">image.plot</span>(<span class="dv">1</span><span class="sc">:</span>n, <span class="dv">1</span><span class="sc">:</span>n, vals,</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">col =</span> <span class="fu">dichromat</span>(<span class="fu">tim.colors</span>(<span class="dv">32</span>)),  <span class="co"># actually not too bad</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">''</span>, <span class="at">ylab =</span> <span class="st">''</span>, <span class="at">main =</span> <span class="st">'colorblind vision'</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="unit12-graphics_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../units/unit11-optim.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Unit 11 (Optimization)</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
