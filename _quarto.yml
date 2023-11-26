@@ -52,6 +52,8 @@ website:
           text: "Unit 10 (Linear Algebra)"
         - file: units/unit11-optim.qmd
           text: "Unit 11 (Optimization)"
+        - file: units/unit12-graphics.qmd
+          text: "Unit 12 (Graphics)"
     - id: labs
       title: "Labs"
       contents:
