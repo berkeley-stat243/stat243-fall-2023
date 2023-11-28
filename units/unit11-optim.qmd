@@ -2203,15 +2203,15 @@ improve the objective function.
 
 ## General system, equality constraints
 
-Suppose we have an objective function $f(x)$ and we have equality
+Suppose we have an objective function $f(x)$ and we have $q$ equality
 constraints, $Ax=b$. We can manipulate this into an unconstrained
 problem. The null space of $A$ is the set of $\delta$ s.t. $A\delta=0$.
 So if we start with a candidate $x_{c}$ s.t. $Ax_{c}=b$ (e.g., by using
 the pseudo inverse, $A^{+}b$), we can form all other candidates (a
 candidate is an $x$ s.t. $Ax=b$) as $x=x_{c}+\delta=x_{c}+Bz$ where $B$
 is a set of column basis functions for the null space of $A$ and
-$z\in\Re^{p-m}$. Consider $h(z)=f(x_{c}+Bz)$ and note that $h$ is a
-function of $p-m$ rather than $p$ inputs. Namely, we are working in a
+$z\in\Re^{p-q}$. Consider $h(z)=f(x_{c}+Bz)$ and note that $h$ is a
+function of $p-q$ rather than $p$ inputs. Namely, we are working in a
 reduced dimension space with no constraints. If we assume
 differentiability of $f$, we can express
 $\nabla h(z)=B^{\top}\nabla f(x_{c}+Bz)$ and
