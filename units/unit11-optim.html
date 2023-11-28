@@ -662,15 +662,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="unit11-optim_files/figure-html/cell-2-output-2.png" width="600" height="449"></p>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>/tmp/ipykernel_1590216/3161030548.py:58: RuntimeWarning:
+<pre><code>/tmp/ipykernel_274099/3161030548.py:58: RuntimeWarning:
 
 divide by zero encountered in double_scalars
 
-/tmp/ipykernel_1590216/3161030548.py:6: RuntimeWarning:
+/tmp/ipykernel_274099/3161030548.py:6: RuntimeWarning:
 
 invalid value encountered in double_scalars
 
-/tmp/ipykernel_1590216/3161030548.py:10: RuntimeWarning:
+/tmp/ipykernel_274099/3161030548.py:10: RuntimeWarning:
 
 invalid value encountered in double_scalars
 </code></pre>
@@ -1004,7 +1004,7 @@ invalid value encountered in double_scalars
 <span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>hess</span>
 <span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>np.linalg.eig(hess)[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="42">
+<div class="cell-output cell-output-display" data-execution_count="20">
 <pre><code>array([ 2.6369040e+02, -2.5794024e-03,  1.3906310e+01], dtype=float32)</code></pre>
 </div>
 </div>
@@ -1021,7 +1021,7 @@ invalid value encountered in double_scalars
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>hess <span class="op">=</span> deriv2(jnp.array([beta0_init, beta1_init, beta2_init]))</span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>np.linalg.eig(hess)[<span class="dv">0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="43">
+<div class="cell-output cell-output-display" data-execution_count="21">
 <pre><code>array([3.0403909e+02, 2.4109183e-01, 5.5710766e+01], dtype=float32)</code></pre>
 </div>
 </div>
@@ -1551,7 +1551,7 @@ g_{t}(\theta) &amp; = \sum_{i=1}^{n}\sqrt{r_{i}(\theta_{t})^{2}}+\frac{1}{2}\sum
 </section>
 <section id="general-system-equality-constraints" class="level2">
 <h2 class="anchored" data-anchor-id="general-system-equality-constraints">General system, equality constraints</h2>
-<p>Suppose we have an objective function <span class="math inline">\(f(x)\)</span> and we have equality constraints, <span class="math inline">\(Ax=b\)</span>. We can manipulate this into an unconstrained problem. The null space of <span class="math inline">\(A\)</span> is the set of <span class="math inline">\(\delta\)</span> s.t. <span class="math inline">\(A\delta=0\)</span>. So if we start with a candidate <span class="math inline">\(x_{c}\)</span> s.t. <span class="math inline">\(Ax_{c}=b\)</span> (e.g., by using the pseudo inverse, <span class="math inline">\(A^{+}b\)</span>), we can form all other candidates (a candidate is an <span class="math inline">\(x\)</span> s.t. <span class="math inline">\(Ax=b\)</span>) as <span class="math inline">\(x=x_{c}+\delta=x_{c}+Bz\)</span> where <span class="math inline">\(B\)</span> is a set of column basis functions for the null space of <span class="math inline">\(A\)</span> and <span class="math inline">\(z\in\Re^{p-m}\)</span>. Consider <span class="math inline">\(h(z)=f(x_{c}+Bz)\)</span> and note that <span class="math inline">\(h\)</span> is a function of <span class="math inline">\(p-m\)</span> rather than <span class="math inline">\(p\)</span> inputs. Namely, we are working in a reduced dimension space with no constraints. If we assume differentiability of <span class="math inline">\(f\)</span>, we can express <span class="math inline">\(\nabla h(z)=B^{\top}\nabla f(x_{c}+Bz)\)</span> and <span class="math inline">\(H_{h}(z)=B^{\top}H_{f}(x_{c}+Bz)B\)</span>. Then we can use unconstrained methods to find the point at which <span class="math inline">\(\nabla h(z)=0\)</span>.</p>
+<p>Suppose we have an objective function <span class="math inline">\(f(x)\)</span> and we have <span class="math inline">\(q\)</span> equality constraints, <span class="math inline">\(Ax=b\)</span>. We can manipulate this into an unconstrained problem. The null space of <span class="math inline">\(A\)</span> is the set of <span class="math inline">\(\delta\)</span> s.t. <span class="math inline">\(A\delta=0\)</span>. So if we start with a candidate <span class="math inline">\(x_{c}\)</span> s.t. <span class="math inline">\(Ax_{c}=b\)</span> (e.g., by using the pseudo inverse, <span class="math inline">\(A^{+}b\)</span>), we can form all other candidates (a candidate is an <span class="math inline">\(x\)</span> s.t. <span class="math inline">\(Ax=b\)</span>) as <span class="math inline">\(x=x_{c}+\delta=x_{c}+Bz\)</span> where <span class="math inline">\(B\)</span> is a set of column basis functions for the null space of <span class="math inline">\(A\)</span> and <span class="math inline">\(z\in\Re^{p-q}\)</span>. Consider <span class="math inline">\(h(z)=f(x_{c}+Bz)\)</span> and note that <span class="math inline">\(h\)</span> is a function of <span class="math inline">\(p-q\)</span> rather than <span class="math inline">\(p\)</span> inputs. Namely, we are working in a reduced dimension space with no constraints. If we assume differentiability of <span class="math inline">\(f\)</span>, we can express <span class="math inline">\(\nabla h(z)=B^{\top}\nabla f(x_{c}+Bz)\)</span> and <span class="math inline">\(H_{h}(z)=B^{\top}H_{f}(x_{c}+Bz)B\)</span>. Then we can use unconstrained methods to find the point at which <span class="math inline">\(\nabla h(z)=0\)</span>.</p>
 <p>How do we find <span class="math inline">\(B\)</span>? One option is to use the <span class="math inline">\(p-m\)</span> columns of <span class="math inline">\(V\)</span> in the SVD of <span class="math inline">\(A\)</span> that correspond to singular values that are zero. A second option is to take the QR decomposition of <span class="math inline">\(A^{\top}\)</span>. Then <span class="math inline">\(B\)</span> is the columns of <span class="math inline">\(Q_{2}\)</span>, where these are the columns of the (non-skinny) Q matrix corresponding to the rows of <span class="math inline">\(R\)</span> that are zero.</p>
 <p>For more general (nonlinear) equality constraints, <span class="math inline">\(g_{i}(x)=b_{i}\)</span>, <span class="math inline">\(i=1,\ldots,q\)</span>, we can use the Lagrange multiplier approach to define a new objective function, <span class="math display">\[L(x,\lambda)=f(x)+\lambda^{\top}(g(x)-b)\]</span> for which, if we set the derivative (with respect to both <span class="math inline">\(x\)</span> and the Lagrange multiplier vector, <span class="math inline">\(\lambda\)</span>) equal to zero, we have a critical point of the original function and we respect the constraints.</p>
 <p>An example occurs with quadratic programming, under the simplification of affine equality constraints (quadratic programming in general optimizes a quadratic function under affine inequality constraints - i.e., constraints of the form <span class="math inline">\(Ax-b\preceq0\)</span>). For example we might solve a least squares problem subject to linear equality constraints, <span class="math inline">\(f(x)=\frac{1}{2}x^{\top}Qx+m^{\top}x+c\)</span> s.t. <span class="math inline">\(Ax=b\)</span>, where <span class="math inline">\(Q\)</span> is positive semi-definite. The Lagrange multiplier approach gives the objective function <span class="math display">\[L(x,\lambda)=\frac{1}{2}x^{\top}Qx+m^{\top}x+c+\lambda^{\top}(Ax-b)\]</span> and differentiating gives the equations <span class="math display">\[\begin{aligned}
