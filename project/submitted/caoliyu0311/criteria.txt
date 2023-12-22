@@ -1,0 +1,72 @@
+Grade: 87
+
+Overall: There is some good exploration of the problem here, but the interface is very unfriendly to the user and prevented me from doing a full assessment by running my tests. 
+
+## ease of accessing package, help, tests:
+
+Not clear how to run the code. How do I provide the outcome/dependent variable and the covariates/independent variables? There are no examples in the help or in the writeup and from the Test and Example code I can't tell what is going on.
+
+## main help page (select):
+
+Hard to interpret given use of OOP. Needs to make more clear how to use the package.
+No examples.
+
+## quality of user interface (function arguments, flexibility):
+
+Not clear how to provide X and Y. Is Y always the first column? If so, that is far too inflexible.
+
+Having the user have to create a function that uses the dataset as a global variable and then passing that function as the first argument is not a good interface. You need to have your function take X and Y from the user. 
+
+No apparent ability to fit a GLM.
+
+## performance on my tests:
+
+Can't run my tests as the package doesn't provide sufficiently easy way for me to provide my chosen X and Y. I ran out of time grading this as I tried to figure out what was going on.
+
+performance on baseball known
+performance on baseball full
+performance on big-p
+
+## testing
+
+Good variety of tests.
+
+Tests pass; one warning.
+
+Not clear what Testing_GA_SELECT.py is or why the package code needs to be copied into it.
+
+overall_test.py doesn't seem to be a pytest test.
+
+## writeup (including examples):
+
+Needs to have an introduction and overview - instead it dives immediately into the file structure and details.
+
+Custom functions not really explained.
+
+Good variety of examples.
+
+Ridge regression is not a model selection tool, so I'm not sure what the goal of the comparison to ridge regression is.
+
+You somewhat misunderstood the goal of using Lasso. The idea is to use the Lasso to determine potentially good models and then to fit those models using OLS to see if the GA found models better than found by the Lasso. 
+
+Screenshots are not a particularly good way to convey textual information.
+
+Good to see that you explored different values for the GA settings.
+
+## code efficiency
+
+I wasn't able to run the code before I ran out of time to grade the project.
+
+## code organization/clarity/elegance:
+
+Ok.
+
+Not clear why you import all the helper functions.
+
+## code comments/formatting:
+
+Defining "Y" and "y" is confusing and "Y" is an uninformative name. `x2y` is poorly-named - not clear what it does. 
+
+## equality of workload:
+
+Good.
