@@ -1,0 +1,61 @@
+Grade: 90
+
+Overall: Generally solid, but some important limitations noted below.
+
+## ease of accessing package, help, tests:
+
+The writeup (or help) should make clear how to use the package. `help(GA.GA)` is not sufficient to know how to use the package. I had to hunt around to figure it out.
+
+## main help page (select):
+
+Ok, but given use of OOP, the lack of examples makes it hard to see how to use package.
+
+`gene_operator` is not sufficiently explained, nor is `model_type`. Not clear how or if one can use GLMs. Limited flexibility.
+
+## quality of user interface (function arguments, flexibility):
+
+You should give the user an easy way to get the best model, not just dump all the output on them and expect them to figure it out. This is really not user-friendly. It took me a while to figure out that I could use show_summary and even that doesn't make it easy to extract the variables that are the best set of variables.
+
+What is the meaning of non-binary chromosomes?
+
+Should provide a way to turn off the verbose output.
+
+## performance on my tests:
+
+performance on baseball known: finds the best model;   22 sec.
+performance on baseball full: finds an ok model, but not particularly good;   40 sec.
+performance on big-p: I didn't get a chance to extract the variables to be able to assess performance; 1500 sec.
+
+## testing
+
+I would have liked to see more unit tests for correctness of the various GA operator functions.
+
+Test file is hard to read in terms of understanding what the tests do.
+
+Tests pass.
+
+## writeup (including examples):
+
+I don't understand what you are doing with different distributions for the initialization. The chromosomes should just be arrays of binary values, indicating which predictors are in the model and which are not.
+
+Having a convergence criterion is a good idea, but it would be more natural to assess whether better models are being found over the course of the generations or whether the optimization seems to have found the best. Asking the user to provide a threshold on the numerical value seems less direct given the goal is model selection.
+
+You somewhat misunderstood the point of the Lasso. The goal is to use Lasso to determine one or more candidate models (i.e., set of included variables) and then assess AIC from fitting OLS to that model and compare to the GA-selected model.
+
+No assessment on simulated data and limited evaluation of the results on the additional real datasets.
+
+## code efficiency
+
+Somewhat slow.
+
+## code organization/clarity/elegance:
+
+Fine.
+
+## code comments/formatting:
+
+Good.
+
+## equality of workload:
+
+Fine.
