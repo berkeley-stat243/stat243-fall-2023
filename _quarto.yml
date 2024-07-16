@@ -3,6 +3,7 @@ project:
 
 website:
   title: "Statistics 243 Fall 2023"
+  google-analytics: G-HDRQ54H0R2
   page-navigation: true
   navbar:
     left:
