@@ -1,0 +1,1789 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.54">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Luke Miratrix">
+<meta name="dcterms.date" content="2024-07-16">
+
+<title>A Quick Guide to Conducting a Simulation Study – Statistics 243 Fall 2023</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-HDRQ54H0R2"></script>
+
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HDRQ54H0R2', { 'anonymize_ip': true});
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Statistics 243 Fall 2023</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../syllabus.html"> 
+<span class="menu-text">Syllabus</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../office_hours.html"> 
+<span class="menu-text">Office hours</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../schedule.html"> 
+<span class="menu-text">Schedule</span></a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-units" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Units</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-units">    
+        <li>
+    <a class="dropdown-item" href="../units/unit1-intro.html">
+ <span class="dropdown-text">Unit 1 (UNIX intro)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit2-dataTech.html">
+ <span class="dropdown-text">Unit 2 (Data technologies)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit3-bash.html">
+ <span class="dropdown-text">Unit 3 (Bash shell)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit4-goodPractices.html">
+ <span class="dropdown-text">Unit 4 (Good practices)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit5-programming.html">
+ <span class="dropdown-text">Unit 5 (Programming)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit6-parallel.html">
+ <span class="dropdown-text">Unit 6 (Parallelization)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit7-bigData.html">
+ <span class="dropdown-text">Unit 7 (Databases)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit8-numbers.html">
+ <span class="dropdown-text">Unit 8 (Precision)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit9-sim.html">
+ <span class="dropdown-text">Unit 9 (Simulation)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit10-linalg.html">
+ <span class="dropdown-text">Unit 10 (Linear Algebra)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit11-optim.html">
+ <span class="dropdown-text">Unit 11 (Optimization)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../units/unit12-graphics.html">
+ <span class="dropdown-text">Unit 12 (Graphics)</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-labs" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Labs</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-labs">    
+        <li>
+    <a class="dropdown-item" href="../labs/lab0-setup.html">
+ <span class="dropdown-text">Lab 0: Setup</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/lab1-submission.html">
+ <span class="dropdown-text">Lab 1: Problem set submission</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/lab2-testing.html">
+ <span class="dropdown-text">Lab 2: Assertions, Exceptions, and Testing</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/lab3-debugging.html">
+ <span class="dropdown-text">Lab 3: Debugging</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/lab5-codereview.html">
+ <span class="dropdown-text">Lab 5: Code Reviews</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/06/scf.html">
+ <span class="dropdown-text">Lab 6: SCF and Parallel Computing</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/py_vs_R.html">
+ <span class="dropdown-text">Lab 7: R vs.&nbsp;Python</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../labs/09/collab_with_git.html">
+ <span class="dropdown-text">Lab 9: Collaboration with Git</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-how-tos" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">How tos</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-how-tos">    
+        <li>
+    <a class="dropdown-item" href="../howtos/accessingPython.html">
+ <span class="dropdown-text">Accessing Python</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/accessingUnixCommandLine.html">
+ <span class="dropdown-text">Accessing the Unix Command Line</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/gitInstall.html">
+ <span class="dropdown-text">Installing Git</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/quartoInstall.html">
+ <span class="dropdown-text">Installing Quarto</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../howtos/ps-submission.html">
+ <span class="dropdown-text">Problem Set Submissions</span></a>
+  </li>  
+        <li><hr class="dropdown-divider"></li>
+        <li class="dropdown-header">Windows</li>
+        <li>
+    <a class="dropdown-item" href="../howtos/windowsAndLinux.html">
+ <span class="dropdown-text">Installing the Linux Subsystem on Windows</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="https://edstem.org/us/courses/42474/discussion/"> 
+<span class="menu-text">Discussion</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="https://statistics.berkeley.edu/computing/training/tutorials"> 
+<span class="menu-text">Tutorials</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/berkeley-stat243/stat243-fall-2023"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview">Overview</a></li>
+  <li><a href="#simulation-1-the-performance-of-the-t-test" id="toc-simulation-1-the-performance-of-the-t-test" class="nav-link" data-scroll-target="#simulation-1-the-performance-of-the-t-test">Simulation 1: the performance of the <span class="math inline">\(t\)</span>-test</a></li>
+  <li><a href="#simulation-2-the-power-and-validity-of-neymans-ate-estimate" id="toc-simulation-2-the-power-and-validity-of-neymans-ate-estimate" class="nav-link" data-scroll-target="#simulation-2-the-power-and-validity-of-neymans-ate-estimate">Simulation 2: The Power and Validity of Neyman’s ATE Estimate</a>
+  <ul class="collapse">
+  <li><a href="#step-1-write-a-function-for-a-specific-simulation-given-specific-parameters." id="toc-step-1-write-a-function-for-a-specific-simulation-given-specific-parameters." class="nav-link" data-scroll-target="#step-1-write-a-function-for-a-specific-simulation-given-specific-parameters.">Step 1: Write a function for a specific simulation given specific parameters.</a>
+  <ul class="collapse">
+  <li><a href="#running-our-single-trial-more-than-once" id="toc-running-our-single-trial-more-than-once" class="nav-link" data-scroll-target="#running-our-single-trial-more-than-once">Running our single trial more than once</a></li>
+  </ul></li>
+  <li><a href="#step-2-make-a-dataframe-of-all-experimental-combinations-desired" id="toc-step-2-make-a-dataframe-of-all-experimental-combinations-desired" class="nav-link" data-scroll-target="#step-2-make-a-dataframe-of-all-experimental-combinations-desired">Step 2: Make a dataframe of all experimental combinations desired</a></li>
+  <li><a href="#step-3-explore-results" id="toc-step-3-explore-results" class="nav-link" data-scroll-target="#step-3-explore-results">Step 3: Explore results</a>
+  <ul class="collapse">
+  <li><a href="#visualizing-experimental-results" id="toc-visualizing-experimental-results" class="nav-link" data-scroll-target="#visualizing-experimental-results">Visualizing experimental results</a></li>
+  <li><a href="#looking-at-main-effects" id="toc-looking-at-main-effects" class="nav-link" data-scroll-target="#looking-at-main-effects">Looking at main effects</a></li>
+  </ul></li>
+  <li><a href="#addendum-saving-more-details" id="toc-addendum-saving-more-details" class="nav-link" data-scroll-target="#addendum-saving-more-details">Addendum: Saving more details</a>
+  <ul class="collapse">
+  <li><a href="#getting-results-ready-for-analysis" id="toc-getting-results-ready-for-analysis" class="nav-link" data-scroll-target="#getting-results-ready-for-analysis">Getting results ready for analysis</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#simulation-3-comparing-estimators-for-the-mean-via-simulation" id="toc-simulation-3-comparing-estimators-for-the-mean-via-simulation" class="nav-link" data-scroll-target="#simulation-3-comparing-estimators-for-the-mean-via-simulation">Simulation 3: Comparing Estimators for the Mean via Simulation</a></li>
+  <li><a href="#extension-the-bias-variance-tradeoff" id="toc-extension-the-bias-variance-tradeoff" class="nav-link" data-scroll-target="#extension-the-bias-variance-tradeoff">Extension: The Bias-variance tradeoff</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">A Quick Guide to Conducting a Simulation Study</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Luke Miratrix </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 16, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview" class="level1">
+<h1>Overview</h1>
+<p>The code in this document is a series of case studies of simple simulation studies where we examine such things as the behavior of the simple difference-in-means for detecting treatment effect in a randomized experiment.</p>
+<p>The primary purpose of this document is to illustrate how one might generate functions to conduct a simulation given a specific set of parameters, and then build on such functions to explore a range of parameter settings in what we would call multi-factor simulation experiments.</p>
+<p>This script shows how you can streamline this using a few useful R functions in order to get nice and tidy code with nice and tidy simulation results.</p>
+<p>The first simulation study presented looks at the <span class="math inline">\(t\)</span>-test under violations of the normality assumption. The second is, essentially, a power analysis. Here we have a single estimator and we are evaluating how it works in a variety of cicumstances. In the third simulation we compare different estimators via simulation by showing a simulation comparing the mean, trimmed mean and median for estimating the center of a distribution.</p>
+<p>This script relies on the <code>tidyverse</code> package, which needs to be loaded.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>( tidyverse )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We use methods from the “tidyverse” for cleaner code and some nice shortcuts. (see the R for Data Science textbook for more on this).</p>
+<p><strong>Technical note</strong>: This script was compiled from a simple <code>.R</code> file. If you are reading the raw file you will notice some “<code>#+</code>” which indicate directives to R code blocks (chunks) in the knitr (R markdown) world. This impacts how the code is run and displayed when turning the R file into a pdf to read. The comments beginning with “<code>#'</code>” are interpreted as markdown when the document is complied in RStudio as a notebook via <code>knitr:spin()</code> to make the pretty tutorial pdf.</p>
+</section>
+<section id="simulation-1-the-performance-of-the-t-test" class="level1">
+<h1>Simulation 1: the performance of the <span class="math inline">\(t\)</span>-test</h1>
+<p>We will start with a simulation study to examine the coverage of the lowly one-sample <span class="math inline">\(t\)</span>-test. <em>Coverage</em> is the chance of a confidence interval capturing the true parameter value. Let’s first look at our test on some fake data:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make fake data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">rnorm</span>( <span class="dv">10</span>, <span class="at">mean=</span><span class="dv">3</span>, <span class="at">sd=</span><span class="dv">1</span> )</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># conduct the test</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>tt <span class="ot">=</span> <span class="fu">t.test</span>( dat )</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>tt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  dat
+t = 9.6235, df = 9, p-value = 4.92e-06
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ 2.082012 3.361624
+sample estimates:
+mean of x 
+ 2.721818 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># examine the results</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>tt<span class="sc">$</span>conf.int</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.082012 3.361624
+attr(,"conf.level")
+[1] 0.95</code></pre>
+</div>
+</div>
+<p>For us, we have a true mean of 3. Did we capture it? To find out, we use <code>findInterval()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">findInterval</span>( <span class="dv">3</span>, tt<span class="sc">$</span>conf.int )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+</div>
+<p><code>findInterval()</code> checks to see where the first number lies relative to the range given in the second argument. E.g.,</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">findInterval</span>( <span class="dv">1</span>, <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">30</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">findInterval</span>( <span class="dv">25</span>, <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">30</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">findInterval</span>( <span class="dv">40</span>, <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">30</span>) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2</code></pre>
+</div>
+</div>
+<p>So, for us, <code>findInterval == 1</code> means we got it! Packaging the above gives us the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make fake data</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">rnorm</span>( <span class="dv">10</span>, <span class="at">mean=</span><span class="dv">3</span>, <span class="at">sd=</span><span class="dv">1</span> )</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="co"># conduct the test</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>tt <span class="ot">=</span> <span class="fu">t.test</span>( dat )</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>tt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    One Sample t-test
+
+data:  dat
+t = 7.4137, df = 9, p-value = 4.044e-05
+alternative hypothesis: true mean is not equal to 0
+95 percent confidence interval:
+ 1.905361 3.578720
+sample estimates:
+mean of x 
+ 2.742041 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># evaluate the results</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">findInterval</span>( <span class="dv">3</span>, tt<span class="sc">$</span>conf.int ) <span class="sc">==</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<p>The above shows the canonical form of a single simulation trial: make the data, analyze the data, decide how well we did.</p>
+<p>Now let’s look at coverage by doing the above many, many times and seeing how often we capture the true parameter:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>rps <span class="ot">=</span> <span class="fu">replicate</span>( <span class="dv">1000</span>, {</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">=</span> <span class="fu">rnorm</span>( <span class="dv">10</span> )</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    tt <span class="ot">=</span> <span class="fu">t.test</span>( dat )</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">findInterval</span>( <span class="dv">0</span>, tt<span class="sc">$</span>conf.int )</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>( rps )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>rps
+  0   1   2 
+ 27 957  16 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>( rps <span class="sc">==</span> <span class="dv">1</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.957</code></pre>
+</div>
+</div>
+<p>We got about 95% coverage, which is good news. We can also assess <em>simulation uncertainty</em> by recognizing that our simulation results are an i.i.d. sample of the infinite possible simulation runs. We analyze this sample to see a range for our true coverage.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>hits <span class="ot">=</span> <span class="fu">as.numeric</span>( rps <span class="sc">==</span> <span class="dv">1</span> )</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.test</span>( <span class="fu">sum</span>(hits), <span class="fu">length</span>(hits), <span class="at">p =</span> <span class="fl">0.95</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    1-sample proportions test with continuity correction
+
+data:  sum(hits) out of length(hits), null probability 0.95
+X-squared = 0.88947, df = 1, p-value = 0.3456
+alternative hypothesis: true p is not equal to 0.95
+95 percent confidence interval:
+ 0.9420144 0.9683505
+sample estimates:
+    p 
+0.957 </code></pre>
+</div>
+</div>
+<p>We have no evidence that our coverage is not what it should be: 95%.</p>
+<p>Things working out should hardly be surprising. The <span class="math inline">\(t\)</span>-test is designed for normal data and we generated normal data. In other words, our test is following theory when we meet our assumptions. Now let’s look at an exponential distribution to see what happens when we don’t have normally distributed data. We are simulating to see what happens when we voilate our assumptions behind the <span class="math inline">\(t\)</span>-test. Here, the true mean is 1 (the mean of a standard exponential is 1).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>rps <span class="ot">=</span> <span class="fu">replicate</span>( <span class="dv">1000</span>, {</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    dat <span class="ot">=</span> <span class="fu">rexp</span>( <span class="dv">10</span> )</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    tt <span class="ot">=</span> <span class="fu">t.test</span>( dat )</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">findInterval</span>( <span class="dv">1</span>, tt<span class="sc">$</span>conf.int )</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="fu">table</span>( rps )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>rps
+  0   1   2 
+  3 905  92 </code></pre>
+</div>
+</div>
+<p>Our interval is often entirely too low and very rarely does our interval miss because it is entirely too high. Furthermore, our average coverage is not 95% as it should be:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>( rps <span class="sc">==</span> <span class="dv">1</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.905</code></pre>
+</div>
+</div>
+<p>Again, to take simulation uncertainty into account we do a proportion test. Here we have a confidence interval of our true coverage under our model misspecification:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>hits <span class="ot">=</span> <span class="fu">as.numeric</span>( rps <span class="sc">==</span> <span class="dv">1</span> )</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prop.test</span>( <span class="fu">sum</span>(hits), <span class="fu">length</span>(hits) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    1-sample proportions test with continuity correction
+
+data:  sum(hits) out of length(hits), null probability 0.5
+X-squared = 654.48, df = 1, p-value &lt; 2.2e-16
+alternative hypothesis: true p is not equal to 0.5
+95 percent confidence interval:
+ 0.8847051 0.9221104
+sample estimates:
+    p 
+0.905 </code></pre>
+</div>
+</div>
+<p>Our coverage is <em>too low</em>. Our <span class="math inline">\(t\)</span>-test based confidence interval is missing the true value (1) more than it should.</p>
+<p>Finally, we want to examine how the coverage changes as the sample size varies. So let’s do a one-factor experiment, with the factor being sample size. I.e., we will conduct the above simulation for a variety of sample sizes and see how coverage changes.</p>
+<p>We first make a function, wrapping up our <em>specific, single-scenario</em> simulation into a bundle so we can call it under a variety of different scenarios.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>run.experiment <span class="ot">=</span> <span class="cf">function</span>( n ) {</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    rps <span class="ot">=</span> <span class="fu">replicate</span>( <span class="dv">10000</span>, {</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>        dat <span class="ot">=</span> <span class="fu">rexp</span>( n )</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>        tt <span class="ot">=</span> <span class="fu">t.test</span>( dat )</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">findInterval</span>( <span class="dv">1</span>, tt<span class="sc">$</span>conf.int )</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    })</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mean</span>( rps <span class="sc">==</span> <span class="dv">1</span> )</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we run <code>run.experiment</code> for different <span class="math inline">\(n\)</span>. We do this with <code>map_dbl()</code>, which takes a list and calls a function for each value in the list (See R for DS, Chapter 21.5).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">=</span> <span class="fu">c</span>( <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">40</span>, <span class="dv">80</span>, <span class="dv">160</span>, <span class="dv">320</span>, <span class="dv">740</span> )</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>cover <span class="ot">=</span> <span class="fu">map_dbl</span>( ns, run.experiment )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Make a data.frame of our results and plot:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">=</span> <span class="fu">data.frame</span>( <span class="at">n =</span> ns, <span class="at">coverage=</span>cover )</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>( res, <span class="fu">aes</span>( <span class="at">x=</span>n, <span class="at">y=</span><span class="dv">100</span><span class="sc">*</span>coverage ) ) <span class="sc">+</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>( <span class="at">size=</span><span class="dv">4</span> ) <span class="sc">+</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>( <span class="at">yintercept=</span><span class="dv">95</span>, <span class="at">col=</span><span class="st">"red"</span> ) <span class="sc">+</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_log10</span>( <span class="at">breaks=</span>ns ) <span class="sc">+</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>( <span class="at">title=</span><span class="st">"Coverage rates for t-test on exponential data"</span>,</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">x =</span> <span class="st">"n (sample size)"</span>, <span class="at">y =</span> <span class="st">"coverage (%)"</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="simulation_tutorial_miratrix_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="480"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Note the plot is on a log scale for the x-axis.</p>
+<p>So far we have done a very simple simulation to assess how well a statistical method works in a given circumstance. We have run a single factor experiment, systematically varying the sample size to examine how the behavior of our estimator changes. In this case, we find that coverage is poor for small sample sizes, and still a bit low for higher sample sizes is well. The overall framework is to repeatidly do the following:</p>
+<ul>
+<li>Generate data according to some decided upon data generation process (DGP). This is our model.</li>
+<li>Analyze data according to some other process (and possibly some other assumed model).</li>
+<li>Assess whether the analysis “worked” by some measure of working (such as coverage).</li>
+</ul>
+<p>We next extend this general simulation framework to look at how to very multiple things at once. This is called a multifactor experiment.</p>
+</section>
+<section id="simulation-2-the-power-and-validity-of-neymans-ate-estimate" class="level1">
+<h1>Simulation 2: The Power and Validity of Neyman’s ATE Estimate</h1>
+<p>The way to build a simulation experiment is to first write code to run a specific simulation for a specific scenario. Once that is working, we will re-use the code to systematically explore a variety of scenarios so we can see how things change as scenario changes. Next I would build up this system.</p>
+<p>For our running example we are going to look at a randomized experiment. We will assume the treatment and control groups are normally distributed with two different means. We will generate a random data set, estimate the treatment effect by taking the difference in means and calculating the associated standard error, and generating a <span class="math inline">\(p\)</span>-value using the normal approximation. (As we will see, this is not a good idea for small sample size since we should be using a <span class="math inline">\(t\)</span>-test style approach.)</p>
+<section id="step-1-write-a-function-for-a-specific-simulation-given-specific-parameters." class="level2">
+<h2 class="anchored" data-anchor-id="step-1-write-a-function-for-a-specific-simulation-given-specific-parameters.">Step 1: Write a function for a specific simulation given specific parameters.</h2>
+<p>Our function will generate two groups of the given sizes, one treatment and one control, and then calculate the difference in means. It will then test this difference using the normal approximation.</p>
+<p>The function also calculates and returns the effect size as the treatment effect divided by the control standard deviation (useful for understanding power, shown later on).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>run.one <span class="ot">=</span> <span class="cf">function</span>( nC, nT, sd, tau, <span class="at">mu =</span> <span class="dv">5</span> ) {</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    Y0 <span class="ot">=</span> mu <span class="sc">+</span> <span class="fu">rnorm</span>( nC, <span class="at">sd=</span>sd )</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    Y1 <span class="ot">=</span> mu <span class="sc">+</span> tau <span class="sc">+</span> <span class="fu">rnorm</span>( nT, <span class="at">sd=</span>sd )</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    tau.hat <span class="ot">=</span> <span class="fu">mean</span>( Y1 ) <span class="sc">-</span> <span class="fu">mean</span>( Y0 )</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>    SE.hat <span class="ot">=</span> <span class="fu">sqrt</span>( <span class="fu">var</span>( Y0 ) <span class="sc">/</span> ( nC ) <span class="sc">+</span> <span class="fu">var</span>( Y1 ) <span class="sc">/</span> ( nT ) )</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>    z <span class="ot">=</span> tau.hat <span class="sc">/</span> SE.hat</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a>    pv <span class="ot">=</span> <span class="dv">2</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pnorm</span>( <span class="fu">abs</span>( z ) ))</span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>( <span class="at">tau.hat =</span> tau.hat, <span class="at">ES =</span> tau <span class="sc">/</span> sd, <span class="at">SE.hat =</span> SE.hat, <span class="at">z=</span>z, <span class="at">p.value=</span>pv )</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>A single run will generate a data set, analyze it, and give us back a variety of results as a list.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">run.one</span>( <span class="at">nT=</span><span class="dv">5</span>, <span class="at">nC=</span><span class="dv">10</span>, <span class="at">sd=</span><span class="dv">1</span>, <span class="at">tau=</span><span class="fl">0.5</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  tau.hat        ES    SE.hat         z   p.value 
+0.3187272 0.5000000 0.5640718 0.5650472 0.5720417 </code></pre>
+</div>
+</div>
+<section id="running-our-single-trial-more-than-once" class="level3">
+<h3 class="anchored" data-anchor-id="running-our-single-trial-more-than-once">Running our single trial more than once</h3>
+<p>The following code borrows a useful function from the older plyr package (you may need to install it). It is a version of <code>replicate()</code> that runs a chunk of code a given number of times. The difference is that <code>rdply</code> returns everything as a data frame! Sweet!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>eres <span class="ot">&lt;-</span> plyr<span class="sc">::</span><span class="fu">rdply</span>( <span class="dv">500</span>, <span class="fu">run.one</span>( <span class="at">nC=</span><span class="dv">10</span>, <span class="at">nT=</span><span class="dv">10</span>, <span class="at">sd=</span><span class="dv">1</span>, <span class="at">tau=</span><span class="fl">0.5</span> ) )</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Each row is a simulation run:</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>( eres )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  .n     tau.hat  ES    SE.hat           z    p.value
+1  1  0.03565861 0.5 0.5436805  0.06558743 0.94770630
+2  2  0.73871786 0.5 0.6121659  1.20672812 0.22753687
+3  3  0.97355745 0.5 0.4254996  2.28803390 0.02213555
+4  4  0.07412129 0.5 0.4580875  0.16180597 0.87145865
+5  5  0.63297817 0.5 0.5876732  1.07709211 0.28143912
+6  6 -0.62589126 0.5 0.4107228 -1.52387750 0.12753931</code></pre>
+</div>
+</div>
+<p>We then summarize our results with the <code>dplyr</code> <code>summarise</code> function. Our summarization calculates the average treatment effect estimate <code>E.tau.hat</code>, the average Standard Error estimate <code>E.SE.hat</code>, the average Effect Size <code>ES</code>, and the power <code>power</code> (defined as the percent of time we reject at alpha=0.05, i.e., the percent of times our <span class="math inline">\(p\)</span>-value was less than our 0.05 threshold):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>eres <span class="sc">%&gt;%</span> <span class="fu">summarise</span>( <span class="at">E.tau.hat =</span> <span class="fu">mean</span>( tau.hat ),</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">E.SE.hat =</span> <span class="fu">mean</span>( SE.hat ),</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">ES =</span> <span class="fu">mean</span>( ES ),</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>                    <span class="at">power =</span> <span class="fu">mean</span>( p.value <span class="sc">&lt;=</span> <span class="fl">0.05</span> ) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  E.tau.hat  E.SE.hat  ES power
+1 0.4739842 0.4403337 0.5 0.218</code></pre>
+</div>
+</div>
+<p>We bundle the above into a function that runs our single trial multiple times and summarizes the results:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>run.experiment <span class="ot">=</span> <span class="cf">function</span>( nC, nT, sd, tau, <span class="at">mu =</span> <span class="dv">5</span>, <span class="at">R =</span> <span class="dv">500</span> ) {</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    eres <span class="ot">=</span> plyr<span class="sc">::</span><span class="fu">rdply</span>( R, <span class="fu">run.one</span>( nC, nT, sd, tau, mu ) )</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    eres <span class="sc">%&gt;%</span> <span class="fu">summarise</span>( <span class="at">E.tau.hat =</span> <span class="fu">mean</span>( tau.hat ),</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>                        <span class="at">E.SE.hat =</span> <span class="fu">mean</span>( SE.hat ),</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>                        <span class="at">ES =</span> <span class="fu">mean</span>( ES ),</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>                        <span class="at">power =</span> <span class="fu">mean</span>( p.value <span class="sc">&lt;=</span> <span class="fl">0.05</span> ) ) <span class="sc">%&gt;%</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mutate</span>( <span class="at">nC=</span>nC, <span class="at">nT=</span>nT, <span class="at">sd=</span>sd, <span class="at">tau=</span>tau, <span class="at">mu=</span>mu, <span class="at">R=</span>R )</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Our function also adds in the details of the simulation (the parameters we passed to the <code>run.one()</code> call).</p>
+<p>Test our function to see what we get:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="fu">run.experiment</span>( <span class="dv">10</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="fl">0.5</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  E.tau.hat E.SE.hat  ES power nC nT sd tau mu   R
+1 0.4502374 0.610235 0.5 0.188 10  3  1 0.5  5 500</code></pre>
+</div>
+</div>
+<p>Key point: We want a dataframe back from <code>run.experiment()</code>, because, after calling <code>run.experiment()</code> many times, we are going to stack the results up to make one long dataframe of results. Happily the <code>dplyr</code> package gives us dataframes so this is not a problem here.</p>
+</section>
+</section>
+<section id="step-2-make-a-dataframe-of-all-experimental-combinations-desired" class="level2">
+<h2 class="anchored" data-anchor-id="step-2-make-a-dataframe-of-all-experimental-combinations-desired">Step 2: Make a dataframe of all experimental combinations desired</h2>
+<p>We use the above to run a <em>multi-factor simulation experiment</em>. We are going to vary four factors: control group size, treatment group size, standard deviation of the units, and the treatment effect.</p>
+<p>We first set up the levels we want to have for each of our factors (these are our <em>simulation parameters</em>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>nC <span class="ot">=</span> <span class="fu">c</span>( <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">10</span>, <span class="dv">50</span>, <span class="dv">500</span> )</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>nT <span class="ot">=</span> <span class="fu">c</span>( <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">10</span>, <span class="dv">50</span>, <span class="dv">500</span> )</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>sds <span class="ot">=</span> <span class="fu">c</span>( <span class="dv">1</span>, <span class="dv">2</span> )</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>tau <span class="ot">=</span> <span class="fu">c</span>( <span class="dv">0</span>, <span class="fl">0.5</span>, <span class="dv">1</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We then, using <code>expand.grid()</code> generate a dataframe of all combinations of our factors.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>experiments <span class="ot">=</span> <span class="fu">expand.grid</span>( <span class="at">nC=</span>nC, <span class="at">nT=</span>nT, <span class="at">sd=</span>sds, <span class="at">tau=</span>tau )</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>( experiments )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   nC nT sd tau
+1   2  2  1   0
+2   4  2  1   0
+3   7  2  1   0
+4  10  2  1   0
+5  50  2  1   0
+6 500  2  1   0</code></pre>
+</div>
+</div>
+<p>See what we get? One row will correspond to a single experimental run. Note how the parameters we would pass to <code>run.experiment()</code> correspond to the columns of our dataset.</p>
+<p>Also, is easy to end up running a lot of experiments!</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>( experiments )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 216</code></pre>
+</div>
+</div>
+<p>We next run an experiment for each row of our dataframe of experiment factor combinations using the <code>pmap_df()</code> function which will, for each row in our dataframe, call <code>run.experiment()</code>, passing one parameter taken from each column of our dataframe.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>exp.res <span class="ot">&lt;-</span> experiments <span class="sc">%&gt;%</span> <span class="fu">pmap_df</span>( run.experiment, <span class="at">R=</span><span class="dv">500</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>R=500</code> after <code>run.experiment</code> passes the <em>same</em> parameter of <span class="math inline">\(R=500\)</span> to each run (we run the same number of trials for each experiment).</p>
+<p>Here is a peek at our results:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>( exp.res )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      E.tau.hat  E.SE.hat ES power  nC nT sd tau mu   R
+1  0.0000598309 0.9138789  0 0.188   2  2  1   0  5 500
+2 -0.0358514878 0.7805718  0 0.156   4  2  1   0  5 500
+3 -0.0605595823 0.7064492  0 0.174   7  2  1   0  5 500
+4  0.0256802497 0.6883931  0 0.166  10  2  1   0  5 500
+5 -0.0157874621 0.6087964  0 0.268  50  2  1   0  5 500
+6  0.0230332225 0.5541778  0 0.316 500  2  1   0  5 500</code></pre>
+</div>
+</div>
+<p>At this point you should save your simulation results to a file. This is especially true if the simulation happens to be quite time-intensive to run. Usually a csv file is sufficient.</p>
+<p>We save using the tidyverse writing command; see “R for Data Science” textbook, 11.5.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>( exp.res, <span class="st">"simulation_results.csv"</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="step-3-explore-results" class="level2">
+<h2 class="anchored" data-anchor-id="step-3-explore-results">Step 3: Explore results</h2>
+<p>Once your simulation is run, you want to evaluate the results. One would often put this code into a seperate ‘.R’ file that loads this saved file to start. This allows for easily changing how one analyzes an experiment without re-running the entire thing.</p>
+<section id="visualizing-experimental-results" class="level3">
+<h3 class="anchored" data-anchor-id="visualizing-experimental-results">Visualizing experimental results</h3>
+<p>Plotting is always a good way to vizualize simulation results. Here we make our tau and ES into factors, so <code>ggplot</code> behaves, and then plot all our experiments as two rows based on one factor (<code>sd</code>) with the columns being another (<code>nT</code>). (This style of plotting a bunch of small plots is called “many multiples” and is beloved by Tufte.) Within each plot we have the x-axis for one factor (<code>nC</code>) and multiple lines for the final factor (<code>tau</code>). The <span class="math inline">\(y\)</span>-axis is our outcome of interest, power. We add a 0.05 line to show when we are rejecting at rates above our nominal <span class="math inline">\(\alpha\)</span>. This plot shows the relationship of 5 variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>exp.res <span class="ot">=</span> <span class="fu">read_csv</span>( <span class="st">"simulation_results.csv"</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Rows: 216 Columns: 10
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+dbl (10): E.tau.hat, E.SE.hat, ES, power, nC, nT, sd, tau, mu, R
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>exp.res <span class="ot">=</span> exp.res <span class="sc">%&gt;%</span> <span class="fu">mutate</span>( <span class="at">tau =</span> <span class="fu">as.factor</span>( tau ),</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>                              <span class="at">ES =</span> <span class="fu">as.factor</span>( ES ) )</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>( exp.res, <span class="fu">aes</span>( <span class="at">x=</span>nC, <span class="at">y=</span>power, <span class="at">group=</span>tau, <span class="at">col=</span>tau ) ) <span class="sc">+</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_grid</span>( sd <span class="sc">~</span> nT, <span class="at">labeller=</span>label_both ) <span class="sc">+</span></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>( <span class="at">yintercept=</span><span class="fl">0.05</span>, <span class="at">col=</span><span class="st">"black"</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="simulation_tutorial_miratrix_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Note:</strong> We are seeing elevated rejection rates under the null for small and even moderate sample size! We can zoom in on specific simulations run, to get some more detail such as estimated power under the null for larger groups. Here we check and we are seeing rejection rates of around 0.05, which is what we want.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>( exp.res, tau<span class="sc">==</span><span class="dv">0</span>, nT <span class="sc">&gt;=</span> <span class="dv">50</span>, nC <span class="sc">&gt;=</span> <span class="dv">50</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 8 × 10
+  E.tau.hat E.SE.hat ES    power    nC    nT    sd tau      mu     R
+      &lt;dbl&gt;    &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt; &lt;dbl&gt;
+1   0.0136    0.200  0     0.05     50    50     1 0         5   500
+2   0.00293   0.148  0     0.056   500    50     1 0         5   500
+3  -0.0108    0.148  0     0.05     50   500     1 0         5   500
+4  -0.00485   0.0634 0     0.034   500   500     1 0         5   500
+5  -0.00697   0.399  0     0.032    50    50     2 0         5   500
+6  -0.0152    0.295  0     0.046   500    50     2 0         5   500
+7  -0.0104    0.295  0     0.042    50   500     2 0         5   500
+8   0.00524   0.127  0     0.05    500   500     2 0         5   500</code></pre>
+</div>
+</div>
+<p>We can get fancy and look at rejection rate (power under <code>tau = 0</code>) as a function of both nC and nT using a contour-style plot:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>exp.res.rej <span class="ot">&lt;-</span> exp.res <span class="sc">%&gt;%</span> <span class="fu">filter</span>( tau <span class="sc">==</span> <span class="dv">0</span> ) <span class="sc">%&gt;%</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>( nC, nT ) <span class="sc">%&gt;%</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>( <span class="at">power =</span> <span class="fu">mean</span>( power ) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'nC'. You can override using the `.groups`
+argument.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>exp.res.rej <span class="ot">=</span> <span class="fu">mutate</span>( exp.res.rej, <span class="at">power =</span> <span class="fu">round</span>( power <span class="sc">*</span> <span class="dv">100</span> ) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>( <span class="fu">filter</span>( exp.res.rej ), <span class="fu">aes</span>( <span class="at">x=</span>nC, <span class="at">y=</span>nT ) ) <span class="sc">+</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_contour</span>( <span class="fu">aes</span>( <span class="at">z=</span>power ), <span class="at">col=</span><span class="st">"darkgrey"</span> ) <span class="sc">+</span></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_log10</span>() <span class="sc">+</span> <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_tile</span>( <span class="fu">aes</span>( <span class="at">fill=</span>power ) ) <span class="sc">+</span></span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_gradient</span>( <span class="at">trans=</span><span class="st">"log"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="simulation_tutorial_miratrix_files/figure-html/plotResults-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Admittidly, this plot needs some work to really show the areas with rejection rates of well above 0.05. But we see that small tx or co groups are both bad here.</p>
+</section>
+<section id="looking-at-main-effects" class="level3">
+<h3 class="anchored" data-anchor-id="looking-at-main-effects">Looking at main effects</h3>
+<p>We can ignore a factor and just look at another. This is looking at the <strong>main effect</strong> or <strong>marginal effect</strong> of the factor.</p>
+<p>The easy way to do this is to let <code>ggplot</code> smooth our individual points on a plot. Be sure to also plot the individual points to see variation, however.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>( exp.res, <span class="fu">aes</span>( <span class="at">x=</span>nC, <span class="at">y=</span>power, <span class="at">group=</span>tau, <span class="at">col=</span>tau ) ) <span class="sc">+</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_grid</span>( sd <span class="sc">~</span> ., <span class="at">labeller=</span>label_both ) <span class="sc">+</span></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_jitter</span>( <span class="at">width=</span><span class="fl">0.02</span>, <span class="at">height=</span><span class="dv">0</span> ) <span class="sc">+</span></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>( <span class="at">se =</span> <span class="cn">FALSE</span> ) <span class="sc">+</span></span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_log10</span>( <span class="at">breaks=</span>nC) <span class="sc">+</span></span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>( <span class="at">yintercept=</span><span class="fl">0.05</span>, <span class="at">col=</span><span class="st">"black"</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="simulation_tutorial_miratrix_files/figure-html/plotPool-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Note how we see our individual runs that we marginalize over.</p>
+<p>To look at our main effects we can also summarize our results, averaging our experimental runs across other factor levels. For example, in the code below we average over the different treatment group sizes and standard deviations, and plot the marginalized results.</p>
+<p>To marginalize, we group by the things we want to keep. <code>summarise()</code> then averages over the things we want to get rid of.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>exp.res.sum <span class="ot">=</span> exp.res <span class="sc">%&gt;%</span> <span class="fu">group_by</span>( nC, tau ) <span class="sc">%&gt;%</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>( <span class="at">power =</span> <span class="fu">mean</span>( power ) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'nC'. You can override using the `.groups`
+argument.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>( exp.res.sum )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+# Groups:   nC [2]
+     nC tau   power
+  &lt;dbl&gt; &lt;fct&gt; &lt;dbl&gt;
+1     2 0     0.211
+2     2 0.5   0.245
+3     2 1     0.339
+4     4 0     0.118
+5     4 0.5   0.180
+6     4 1     0.307</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>( exp.res.sum, <span class="fu">aes</span>( <span class="at">x=</span>nC, <span class="at">y=</span>power, <span class="at">group=</span>tau, <span class="at">col=</span>tau ) ) <span class="sc">+</span></span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_log10</span>( <span class="at">breaks=</span>nC) <span class="sc">+</span></span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>( <span class="at">yintercept=</span><span class="fl">0.05</span>, <span class="at">col=</span><span class="st">"black"</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="simulation_tutorial_miratrix_files/figure-html/plotCollapse-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can try to get clever and look at other aspects of our experimental runs. The above suggests that the smaller of the two groups is dictating things going awry, in terms of elevated rejection rates under the null. We can also look at things in terms of some other more easily interpretable parameter (here we switch to effect size instead of raw treatment effect).</p>
+<p>Given this, we might decide to look at total sample size or the smaller of the two groups sample size and make plots that way (we are also subsetting to just the <code>sd=1</code> cases as there is nothing interesting in both, really):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>exp.res <span class="ot">&lt;-</span> exp.res <span class="sc">%&gt;%</span> <span class="fu">mutate</span>( <span class="at">n =</span> nC <span class="sc">+</span> nT,</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a>                               <span class="at">n.min =</span> <span class="fu">pmin</span>( nC, nT ) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>( <span class="fu">filter</span>( exp.res, sd<span class="sc">==</span><span class="dv">1</span> ), <span class="fu">aes</span>( <span class="at">x=</span>n, <span class="at">y=</span>power, <span class="at">group=</span>ES, <span class="at">col=</span>ES ) ) <span class="sc">+</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_jitter</span>( <span class="at">width=</span><span class="fl">0.05</span>, <span class="at">height=</span><span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>( <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>( <span class="at">yintercept=</span><span class="fl">0.05</span>, <span class="at">col=</span><span class="st">"black"</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="simulation_tutorial_miratrix_files/figure-html/plotA-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>( <span class="fu">filter</span>( exp.res, sd<span class="sc">==</span><span class="dv">1</span> ), <span class="fu">aes</span>( <span class="at">x=</span>n.min, <span class="at">y=</span>power, <span class="at">group=</span>ES, <span class="at">col=</span>ES ) ) <span class="sc">+</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_jitter</span>( <span class="at">width=</span><span class="fl">0.05</span>, <span class="at">height=</span><span class="dv">0</span>) <span class="sc">+</span></span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>( <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_log10</span>() <span class="sc">+</span></span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>( <span class="at">yintercept=</span><span class="fl">0.05</span>, <span class="at">col=</span><span class="st">"black"</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="simulation_tutorial_miratrix_files/figure-html/plotB-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Note the few observations out in the high <code>n.min</code> region for the second plot—this plot is a bit strange in that the different levels along the x-axis are assymetric with respect to each other. It is not balanced.</p>
+</section>
+</section>
+<section id="addendum-saving-more-details" class="level2">
+<h2 class="anchored" data-anchor-id="addendum-saving-more-details">Addendum: Saving more details</h2>
+<p>Our <code>exp.res</code> dataframe from above has all our simulations, one simulation per row, with our measured outcomes. This is ideally all we need to analyze.</p>
+<p>That being said, sometimes we might want to use a lot of disk space and keep much more. In particular, each row of <code>exp.res</code> corresponds to the summary of a whole collection of individual runs. We might instead store all of these runs.</p>
+<p>To do this we just take the summarizing step out of our <code>run.experiment()</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb70"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>run.experiment.raw <span class="ot">=</span> <span class="cf">function</span>( nC, nT, sd, tau, <span class="at">mu =</span> <span class="dv">5</span>, <span class="at">R =</span> <span class="dv">500</span> ) {</span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>    eres <span class="ot">=</span> plyr<span class="sc">::</span><span class="fu">rdply</span>( R, <span class="fu">run.one</span>( nC, nT, sd, tau, mu ) )</span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a>    eres <span class="ot">&lt;-</span> <span class="fu">mutate</span>( eres, <span class="at">nC=</span>nC, <span class="at">nT=</span>nT, <span class="at">sd=</span>sd, <span class="at">tau=</span>tau, <span class="at">mu=</span>mu, <span class="at">R=</span>R )</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a>    eres</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Each call to <code>run.experiment.raw()</code> gives one row per run. We replicate our simulation parameters for each row.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu">run.experiment.raw</span>( <span class="dv">10</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="fl">0.5</span>, <span class="at">R=</span><span class="dv">4</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  .n     tau.hat  ES    SE.hat          z    p.value nC nT sd tau mu R
+1  1 -0.07554637 0.5 0.6436651 -0.1173690 0.90656761 10  3  1 0.5  5 4
+2  2  0.35434190 0.5 0.2658501  1.3328637 0.18257653 10  3  1 0.5  5 4
+3  3  0.74320939 0.5 0.7667972  0.9692385 0.33242621 10  3  1 0.5  5 4
+4  4  1.46389038 0.5 0.8585763  1.7050207 0.08819057 10  3  1 0.5  5 4</code></pre>
+</div>
+</div>
+<p>The advantage of this is we can then generate new outcome measures, as they occur to us, later on. The disadvantage is this result file will be <span class="math inline">\(R\)</span> times as many rows as the older file, which can get quite, quite large.</p>
+<p>But disk space is cheap! Here we run the same experiment with our more complete storage. Note how the <code>pmap_df</code> stacks the multiple rows from each run, giving us everything nicely bundled up:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>exp.res.full <span class="ot">&lt;-</span> experiments <span class="sc">%&gt;%</span> <span class="fu">pmap_df</span>( run.experiment.raw, <span class="at">R=</span><span class="dv">500</span> )</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>( exp.res.full )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  .n    tau.hat ES    SE.hat          z    p.value nC nT sd tau mu   R
+1  1  1.3499219  0 0.6935041  1.9465232 0.05159192  2  2  1   0  5 500
+2  2  0.1328264  0 0.6912747  0.1921470 0.84762704  2  2  1   0  5 500
+3  3  0.6294022  0 0.4767536  1.3201833 0.18677382  2  2  1   0  5 500
+4  4 -0.5046979  0 0.7914141 -0.6377166 0.52365819  2  2  1   0  5 500
+5  5 -0.4000069  0 0.3771614 -1.0605724 0.28888426  2  2  1   0  5 500
+6  6  1.4912099  0 0.5933181  2.5133397 0.01195941  2  2  1   0  5 500</code></pre>
+</div>
+</div>
+<p>We end up with a lot more rows:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>( exp.res.full )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 108000</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>( exp.res )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 216</code></pre>
+</div>
+</div>
+<p>We next save our results:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>( exp.res.full, <span class="st">"simulation_results_full.csv"</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Compare the file sizes: one is several k, the other is around 12 megabytes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="fu">file.size</span>(<span class="st">"simulation_results.csv"</span>) <span class="sc">/</span> <span class="dv">1024</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 13.4541</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="fu">file.size</span>(<span class="st">"simulation_results_full.csv"</span>) <span class="sc">/</span> <span class="dv">1024</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 10556.33</code></pre>
+</div>
+</div>
+<section id="getting-results-ready-for-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="getting-results-ready-for-analysis">Getting results ready for analysis</h3>
+<p>If we generated raw results then we need to collapse them by experimental run before analyzing our results so we can explore the trends across the experiments. We do this by borrowing the summarise code from inside <code>run.experiment()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a>exp.res.sum <span class="ot">&lt;-</span> exp.res.full <span class="sc">%&gt;%</span></span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>( nC, nT, sd, tau, mu ) <span class="sc">%&gt;%</span></span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>( <span class="at">R =</span> <span class="fu">n</span>(),</span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">E.tau.hat =</span> <span class="fu">mean</span>( tau.hat ),</span>
+<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a>               <span class="at">SE =</span> <span class="fu">sd</span>( tau.hat ),</span>
+<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a>               <span class="at">E.SE.hat =</span> <span class="fu">mean</span>( SE.hat ),</span>
+<span id="cb84-7"><a href="#cb84-7" aria-hidden="true" tabindex="-1"></a>               <span class="at">ES =</span> <span class="fu">mean</span>( ES ),</span>
+<span id="cb84-8"><a href="#cb84-8" aria-hidden="true" tabindex="-1"></a>               <span class="at">power =</span> <span class="fu">mean</span>( p.value <span class="sc">&lt;=</span> <span class="fl">0.05</span> ) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'nC', 'nT', 'sd', 'tau'. You can override
+using the `.groups` argument.</code></pre>
+</div>
+</div>
+<p>Note how I added an extra estimation of the true <span class="math inline">\(SE\)</span>, just because I could! This is an easier fix, sometimes, than running all the simulations again after changing the <code>run.experiment()</code> method.</p>
+<p>The results of summarizing during the simulation vs.&nbsp;after as we just did leads to the same place, however, although the order of rows in our final dataset are different (and we have a tibble instead of a data.frame, a consequence of using the <code>tidyverse</code>, but this is not something to worry about):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb86"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>( exp.res.sum )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 11
+# Groups:   nC, nT, sd, tau [6]
+     nC    nT    sd   tau    mu     R E.tau.hat    SE E.SE.hat    ES power
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;int&gt;     &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     2     2     1   0       5   500   -0.0603 0.927    0.899  0    0.164
+2     2     2     1   0.5     5   500    0.544  0.996    0.879  0.5  0.25 
+3     2     2     1   1       5   500    1.10   0.990    0.910  1    0.324
+4     2     2     2   0       5   500    0.0924 1.89     1.77   0    0.168
+5     2     2     2   0.5     5   500    0.552  1.98     1.76   0.25 0.202
+6     2     2     2   1       5   500    0.907  1.98     1.75   0.5  0.232</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb88"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>( exp.res.sum )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 216</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb90"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>( exp.res )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 216</code></pre>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="simulation-3-comparing-estimators-for-the-mean-via-simulation" class="level1">
+<h1>Simulation 3: Comparing Estimators for the Mean via Simulation</h1>
+<p>The above ideas readily extend to when we wish to compare different forms of estimator for estimating the same thing. We still generate data, evaluate it, and see how well our evaluation works. The difference is we now evaluate it multiple ways, storing how the different ways work.</p>
+<p>For our simple working example we are going to compare estimation of the center of a symmetric distribution via mean, trimmed mean, and median (so the mean and median are the same).</p>
+<p>We are going to break this down into lots of functions to show the general framework. This framework can readily be extended to more complicated simulation studies.</p>
+<p>For our data-generation function we will use the scaled <span class="math inline">\(t\)</span>-distribution so the standard deviation will always be 1 but we will have different fatness of tails (high chance of outliers):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb92"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb92-1"><a href="#cb92-1" aria-hidden="true" tabindex="-1"></a>gen.data <span class="ot">=</span> <span class="cf">function</span>( n, df0 ) {</span>
+<span id="cb92-2"><a href="#cb92-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">rt</span>( n, <span class="at">df=</span>df0 ) <span class="sc">/</span> <span class="fu">sqrt</span>( df0 <span class="sc">/</span> (df0<span class="dv">-2</span>) )</span>
+<span id="cb92-3"><a href="#cb92-3" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The variance of a <span class="math inline">\(t\)</span> is <span class="math inline">\(df/(df-2)\)</span>, so if we divide our observations by the square root of this, we will standardize them so they have unit variance. See, the standard deviation is 1 (up to random error, and as long as df0 &gt; 2)!:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>( <span class="fu">gen.data</span>( <span class="dv">100000</span>, <span class="at">df0 =</span> <span class="dv">3</span> ) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9707252</code></pre>
+</div>
+</div>
+<p>We next define the parameter we want (this, the mean, is what we are trying to estimate):</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">=</span> <span class="dv">0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Our analysis methods bundled in a function. We return a vector of the three estimates:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a>analyze.data <span class="ot">=</span> <span class="cf">function</span>( data ) {</span>
+<span id="cb96-2"><a href="#cb96-2" aria-hidden="true" tabindex="-1"></a>    mn <span class="ot">=</span> <span class="fu">mean</span>( data )</span>
+<span id="cb96-3"><a href="#cb96-3" aria-hidden="true" tabindex="-1"></a>    md <span class="ot">=</span> <span class="fu">median</span>( data )</span>
+<span id="cb96-4"><a href="#cb96-4" aria-hidden="true" tabindex="-1"></a>    mn.tr <span class="ot">=</span> <span class="fu">mean</span>( data, <span class="at">trim=</span><span class="fl">0.1</span> )</span>
+<span id="cb96-5"><a href="#cb96-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">data.frame</span>( <span class="at">mean =</span> mn, <span class="at">trim.mean=</span>mn.tr, <span class="at">median=</span>md )</span>
+<span id="cb96-6"><a href="#cb96-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s test:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb97"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb97-1"><a href="#cb97-1" aria-hidden="true" tabindex="-1"></a>dt <span class="ot">=</span> <span class="fu">gen.data</span>( <span class="dv">100</span>, <span class="dv">3</span> )</span>
+<span id="cb97-2"><a href="#cb97-2" aria-hidden="true" tabindex="-1"></a><span class="fu">analyze.data</span>( dt )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        mean   trim.mean      median
+1 -0.0662128 -0.02265389 -0.00342853</code></pre>
+</div>
+</div>
+<p>To evaluate, do a bunch of times, and assess results. Let’s start by looking at a specific case. We generate 1000 datasets of size 10, and estimate the center using our three different estimators.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a>raw.exps <span class="ot">&lt;-</span> plyr<span class="sc">::</span><span class="fu">rdply</span>( <span class="dv">1000</span>, {</span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a>    dt <span class="ot">=</span> <span class="fu">gen.data</span>( <span class="at">n=</span><span class="dv">10</span>, <span class="at">df0=</span><span class="dv">5</span> )</span>
+<span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">analyze.data</span>( dt )</span>
+<span id="cb99-4"><a href="#cb99-4" aria-hidden="true" tabindex="-1"></a>} )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We now have 1000 estimates for each of our estimators:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>( raw.exps )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  .n       mean  trim.mean     median
+1  1 -0.3643085 -0.3161528 -0.1821785
+2  2  0.2208693  0.2720500  0.1476562
+3  3 -0.2015714 -0.1972242 -0.2469177
+4  4 -0.4957721 -0.4494758 -0.5001300
+5  5  0.2356779  0.2288045  0.2512351
+6  6 -0.7343158 -0.8612693 -0.8897607</code></pre>
+</div>
+</div>
+<p>We then want to assess estimator performance for each estimator. We first write a function to calculate what we want from 1000 estimates:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a>estimator.quality <span class="ot">=</span> <span class="cf">function</span>( estimates, mu ) {</span>
+<span id="cb102-2"><a href="#cb102-2" aria-hidden="true" tabindex="-1"></a>    RMSE <span class="ot">=</span> <span class="fu">sqrt</span>( <span class="fu">mean</span>( (estimates <span class="sc">-</span> mu)<span class="sc">^</span><span class="dv">2</span> ) )</span>
+<span id="cb102-3"><a href="#cb102-3" aria-hidden="true" tabindex="-1"></a>    bias <span class="ot">=</span> <span class="fu">mean</span>( estimates <span class="sc">-</span> mu )</span>
+<span id="cb102-4"><a href="#cb102-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>( <span class="at">RMSE=</span>RMSE, <span class="at">bias=</span>bias, <span class="at">SE=</span><span class="fu">sd</span>( estimates ) )</span>
+<span id="cb102-5"><a href="#cb102-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb102-6"><a href="#cb102-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb102-7"><a href="#cb102-7" aria-hidden="true" tabindex="-1"></a><span class="fu">estimator.quality</span>( raw.exps<span class="sc">$</span>mean, mu )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       RMSE        bias          SE 
+ 0.32752456 -0.01001258  0.32753529 </code></pre>
+</div>
+</div>
+<p>We now borrow another oldie-but-goodie from the <code>plyr</code> package. The function <code>ldply</code> is a transforming function that takes a list (<code>l</code>) and for everything in the list calls a given function. It packs up the results as a dataframe (<code>d</code>). For the record, <code>llply</code> would return everything as a list, <code>ddply</code> would take a dataframe and return a dataframe, and so forth. For us, <code>raw.exps[-1]</code> is a list of vectors, i.e., all the columns (except the first) of our dataframe of simulations. (Remember that a dataframe is a list of the variables in the dataframe.)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a>plyr<span class="sc">::</span><span class="fu">ldply</span>( raw.exps[<span class="sc">-</span><span class="dv">1</span>], estimator.quality, <span class="at">mu =</span> mu, <span class="at">.id =</span> <span class="st">"estimator"</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  estimator      RMSE        bias        SE
+1      mean 0.3275246 -0.01001258 0.3275353
+2 trim.mean 0.3022328 -0.01145742 0.3021667
+3    median 0.3224429 -0.02024546 0.3219677</code></pre>
+</div>
+</div>
+<p>Note the <code>mu = 0</code> line after estimator.quality. We can pass extra arguments to the function by putting them after the function name. The function will take as its first argument the elements from the <code>raw.exps[-1]</code> list.</p>
+<p>Aside: There is probably a nice way to do this in the <code>dplyr</code> package, but I don’t know what it is.</p>
+<p>To continue, we pack up the above into a function, as usual. Our function takes our two parameters of sample size and degrees of freedom, and returns a data frame of results.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb106"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb106-1"><a href="#cb106-1" aria-hidden="true" tabindex="-1"></a>one.run <span class="ot">=</span> <span class="cf">function</span>( n, df0 ) {</span>
+<span id="cb106-2"><a href="#cb106-2" aria-hidden="true" tabindex="-1"></a>    raw.exps <span class="ot">&lt;-</span> plyr<span class="sc">::</span><span class="fu">rdply</span>( <span class="dv">1000</span>, {</span>
+<span id="cb106-3"><a href="#cb106-3" aria-hidden="true" tabindex="-1"></a>        dt <span class="ot">=</span> <span class="fu">gen.data</span>( <span class="at">n=</span>n, <span class="at">df0=</span>df0 )</span>
+<span id="cb106-4"><a href="#cb106-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">analyze.data</span>( dt )</span>
+<span id="cb106-5"><a href="#cb106-5" aria-hidden="true" tabindex="-1"></a>    } )</span>
+<span id="cb106-6"><a href="#cb106-6" aria-hidden="true" tabindex="-1"></a>    rs <span class="ot">&lt;-</span> plyr<span class="sc">::</span><span class="fu">ldply</span>( raw.exps[<span class="sc">-</span><span class="dv">1</span>], estimator.quality, <span class="at">mu =</span> <span class="dv">0</span>, <span class="at">.id =</span> <span class="st">"estimator"</span> )</span>
+<span id="cb106-7"><a href="#cb106-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb106-8"><a href="#cb106-8" aria-hidden="true" tabindex="-1"></a>    rs</span>
+<span id="cb106-9"><a href="#cb106-9" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Our function will take our two parameters, run a simulation, and give us the results. We see here that none of our estimators are particularly biased and the trimmed mean has, possibly, the smallest RMSE, although it is a close call.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="fu">one.run</span>( <span class="dv">10</span>, <span class="dv">5</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  estimator      RMSE         bias        SE
+1      mean 0.3123910  0.008551253 0.3124302
+2 trim.mean 0.2907892  0.004243402 0.2909037
+3    median 0.3108435 -0.005310858 0.3109537</code></pre>
+</div>
+</div>
+<p>Ok, now we want to see how sample size impacts our different estimators. If we also vary degrees of freedom we have a <em>three</em>-factor experiment, where one of the factors is our estimator itself. We are going to use a new clever trick. As before, we use <code>pmap()</code>, but now we store the entire dataframe of results we get back from our function in a new column of our original dataframe. See R for DS, Chapter 25.3. This trick works best if we have everything as a <code>tibble</code> which is basically a dataframe that prints a lot nicer and doesn’t try to second-guess what you are up to all the time.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">=</span> <span class="fu">c</span>( <span class="dv">10</span>, <span class="dv">50</span>, <span class="dv">250</span>, <span class="dv">1250</span> )</span>
+<span id="cb109-2"><a href="#cb109-2" aria-hidden="true" tabindex="-1"></a>dfs <span class="ot">=</span> <span class="fu">c</span>( <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">15</span>, <span class="dv">30</span> )</span>
+<span id="cb109-3"><a href="#cb109-3" aria-hidden="true" tabindex="-1"></a>lvls <span class="ot">=</span> <span class="fu">expand.grid</span>( <span class="at">n=</span>ns, <span class="at">df=</span>dfs )</span>
+<span id="cb109-4"><a href="#cb109-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb109-5"><a href="#cb109-5" aria-hidden="true" tabindex="-1"></a><span class="co"># So it stores our dataframe results in our lvls data properly.</span></span>
+<span id="cb109-6"><a href="#cb109-6" aria-hidden="true" tabindex="-1"></a>lvls <span class="ot">=</span> <span class="fu">as_tibble</span>(lvls)</span>
+<span id="cb109-7"><a href="#cb109-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb109-8"><a href="#cb109-8" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> lvls <span class="sc">%&gt;%</span> <span class="fu">mutate</span>( <span class="at">results =</span> <span class="fu">pmap</span>( lvls, one.run ) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We have stored our results (a bunch of dataframes) in our main matrix of simulation runs.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb110"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb110-1"><a href="#cb110-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>( results )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+      n    df results     
+  &lt;dbl&gt; &lt;dbl&gt; &lt;list&gt;      
+1    10     3 &lt;df [3 × 4]&gt;
+2    50     3 &lt;df [3 × 4]&gt;
+3   250     3 &lt;df [3 × 4]&gt;
+4  1250     3 &lt;df [3 × 4]&gt;
+5    10     5 &lt;df [3 × 4]&gt;
+6    50     5 &lt;df [3 × 4]&gt;</code></pre>
+</div>
+</div>
+<p>The unnest() function will unpack our dataframes and put everything together, all nice like. See (hard to read) R for DS Chapter 25.4.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb112"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb112-1"><a href="#cb112-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">unnest</span>( results )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: `cols` is now required when using `unnest()`.
+ℹ Please use `cols = c(results)`.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb114"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a>results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 48 × 6
+       n    df estimator   RMSE      bias     SE
+   &lt;dbl&gt; &lt;dbl&gt; &lt;fct&gt;      &lt;dbl&gt;     &lt;dbl&gt;  &lt;dbl&gt;
+ 1    10     3 mean      0.306  -0.0120   0.306 
+ 2    10     3 trim.mean 0.252  -0.00971  0.252 
+ 3    10     3 median    0.256  -0.00554  0.256 
+ 4    50     3 mean      0.140  -0.00332  0.140 
+ 5    50     3 trim.mean 0.105   0.000498 0.105 
+ 6    50     3 median    0.114   0.00123  0.114 
+ 7   250     3 mean      0.0648 -0.00331  0.0647
+ 8   250     3 trim.mean 0.0473 -0.00244  0.0473
+ 9   250     3 median    0.0500 -0.00130  0.0500
+10  1250     3 mean      0.0291 -0.000686 0.0291
+# ℹ 38 more rows</code></pre>
+</div>
+</div>
+<p>And plot:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>( results, <span class="fu">aes</span>(<span class="at">x=</span>n, <span class="at">y=</span>RMSE, <span class="at">col=</span>estimator) ) <span class="sc">+</span></span>
+<span id="cb116-2"><a href="#cb116-2" aria-hidden="true" tabindex="-1"></a>            <span class="fu">facet_wrap</span>( <span class="sc">~</span> df, <span class="at">nrow=</span><span class="dv">1</span> ) <span class="sc">+</span></span>
+<span id="cb116-3"><a href="#cb116-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb116-4"><a href="#cb116-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">scale_x_log10</span>( <span class="at">breaks=</span>ns )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="simulation_tutorial_miratrix_files/figure-html/unnamed-chunk-49-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The above doesn’t show differences clearly because all the RMSE goes to zero. It helps to log our outcome, or otherwise rescale. The logging version shows differences are relatively constant given changing sample size.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>( results, <span class="fu">aes</span>(<span class="at">x=</span>n, <span class="at">y=</span>RMSE, <span class="at">col=</span>estimator) ) <span class="sc">+</span></span>
+<span id="cb117-2"><a href="#cb117-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>( <span class="sc">~</span> df, <span class="at">nrow=</span><span class="dv">1</span> ) <span class="sc">+</span></span>
+<span id="cb117-3"><a href="#cb117-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb117-4"><a href="#cb117-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_log10</span>( <span class="at">breaks=</span>ns ) <span class="sc">+</span></span>
+<span id="cb117-5"><a href="#cb117-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_y_log10</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="simulation_tutorial_miratrix_files/figure-html/unnamed-chunk-50-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Better is to rescale using our knowledge of standard errors. If we scale by the square root of sample size, we should get horizontal lines. We now clearly see the trends.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">mutate</span>( results, <span class="at">scaleRMSE =</span> RMSE <span class="sc">*</span> <span class="fu">sqrt</span>(n) )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb119"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>( results, <span class="fu">aes</span>(<span class="at">x=</span>n, <span class="at">y=</span>scaleRMSE, <span class="at">col=</span>estimator) ) <span class="sc">+</span></span>
+<span id="cb119-2"><a href="#cb119-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>( <span class="sc">~</span> df, <span class="at">nrow=</span><span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb119-3"><a href="#cb119-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb119-4"><a href="#cb119-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_log10</span>( <span class="at">breaks=</span>ns )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="simulation_tutorial_miratrix_files/figure-html/unnamed-chunk-52-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Overall, we see the scaled error of the mean it is stable across the different distributions. The trimmed mean is a real advantage when the degrees of freedom are small. We are cropping outliers that destabilize our estimate which leads to great wins. As the distribution grows more normal, this is no longer an advantage and we get closer to the mean in terms of performance. Here we are penalized slightly bye having dropped 10% of our data, so the standard errors will be slightly larger.</p>
+<p>The median is not able to take advantage of the nuances of a data set because it is entirely determined by the middle value. When outliers cause real concern, this cost is minimal. When outliers are not a concern, the median is just worse.</p>
+<p>Overall, the trimmed mean seems an excellent choice: in the presence of outliers it is far more stable than the mean, and when there are no outliers the cost of using it is small.</p>
+<p>In terms of thinking about designing simulation studies, we see clear visual displays of simulation results can tell very clear stories. Eschew complicated tables with lots of numbers.</p>
+</section>
+<section id="extension-the-bias-variance-tradeoff" class="level1">
+<h1>Extension: The Bias-variance tradeoff</h1>
+<p>We can use the above simulation to examine these same estimators when we the median is not the same as the mean. Say we want the mean of a distribution, but have systematic outliers. If we just use the median, or trimmed mean, we might have bias if the outliers tend to be on one side or another. For example, consider the exponential distribution:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb120"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a>nums <span class="ot">=</span> <span class="fu">rexp</span>( <span class="dv">100000</span> )</span>
+<span id="cb120-2"><a href="#cb120-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>( nums )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9961883</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb122"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb122-1"><a href="#cb122-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>( nums, <span class="at">trim=</span><span class="fl">0.1</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.8281408</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb124"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="fu">median</span>( nums )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6887303</code></pre>
+</div>
+</div>
+<p>Our trimming, etc., is <em>biased</em> if we think of our goal as estimating the mean. But if the trimmed estimators are much more stable, we might still wish to use them. Let’s find out.</p>
+<p>Let’s generate a mixture distribution, just for fun. It will have a nice normal base with some extreme outliers. We will make sure the overall mean, including the outliers, is always 1, however. (So our target, <span class="math inline">\(\mu\)</span> is now 1, not 0.)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb126"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a>gen.dat <span class="ot">=</span> <span class="cf">function</span>( n, <span class="at">prob.outlier =</span> <span class="fl">0.05</span> ) {</span>
+<span id="cb126-2"><a href="#cb126-2" aria-hidden="true" tabindex="-1"></a>    nN <span class="ot">=</span> <span class="fu">rbinom</span>( <span class="dv">1</span>, n, prob.outlier )</span>
+<span id="cb126-3"><a href="#cb126-3" aria-hidden="true" tabindex="-1"></a>    nrm <span class="ot">=</span> <span class="fu">rnorm</span>( n <span class="sc">-</span> nN, <span class="at">mean=</span><span class="fl">0.5</span>, <span class="at">sd=</span><span class="dv">1</span> )</span>
+<span id="cb126-4"><a href="#cb126-4" aria-hidden="true" tabindex="-1"></a>    outmean <span class="ot">=</span> (<span class="dv">1</span> <span class="sc">-</span> (<span class="dv">1</span><span class="sc">-</span>prob.outlier)<span class="sc">/</span><span class="dv">2</span>) <span class="sc">/</span> prob.outlier</span>
+<span id="cb126-5"><a href="#cb126-5" aria-hidden="true" tabindex="-1"></a>    outs <span class="ot">=</span> <span class="fu">rnorm</span>( nN, <span class="at">mean=</span>outmean, <span class="at">sd=</span><span class="dv">10</span> )</span>
+<span id="cb126-6"><a href="#cb126-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">c</span>( nrm, outs )</span>
+<span id="cb126-7"><a href="#cb126-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s look at our distribution</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb127"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb127-1"><a href="#cb127-1" aria-hidden="true" tabindex="-1"></a>Y <span class="ot">=</span> <span class="fu">gen.dat</span>( <span class="dv">10000000</span>, <span class="at">prob.outlier =</span> <span class="fl">0.05</span> )</span>
+<span id="cb127-2"><a href="#cb127-2" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>( Y )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.9982636</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb129"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb129-1"><a href="#cb129-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>( Y )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 3.264725</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb131"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb131-1"><a href="#cb131-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>( Y, <span class="at">breaks=</span><span class="dv">30</span>, <span class="at">col=</span><span class="st">"grey"</span>, <span class="at">prob=</span><span class="cn">TRUE</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="simulation_tutorial_miratrix_files/figure-html/unnamed-chunk-56-1.png" class="img-fluid figure-img" width="384"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We steal the code from above, modifying it slightly for our new function and changing our target parameter from 0 to 1:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb132"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a>one.run.exp <span class="ot">=</span> <span class="cf">function</span>( n ) {</span>
+<span id="cb132-2"><a href="#cb132-2" aria-hidden="true" tabindex="-1"></a>    raw.exps <span class="ot">&lt;-</span> plyr<span class="sc">::</span><span class="fu">rdply</span>( <span class="dv">1000</span>, {</span>
+<span id="cb132-3"><a href="#cb132-3" aria-hidden="true" tabindex="-1"></a>        dt <span class="ot">=</span> <span class="fu">gen.dat</span>( <span class="at">n=</span>n )</span>
+<span id="cb132-4"><a href="#cb132-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">analyze.data</span>( dt )</span>
+<span id="cb132-5"><a href="#cb132-5" aria-hidden="true" tabindex="-1"></a>    } )</span>
+<span id="cb132-6"><a href="#cb132-6" aria-hidden="true" tabindex="-1"></a>    rs <span class="ot">&lt;-</span> plyr<span class="sc">::</span><span class="fu">ldply</span>( raw.exps[<span class="sc">-</span><span class="dv">1</span>], estimator.quality, <span class="at">mu =</span> <span class="dv">1</span>, <span class="at">.id =</span> <span class="st">"estimator"</span> )</span>
+<span id="cb132-7"><a href="#cb132-7" aria-hidden="true" tabindex="-1"></a>    rs</span>
+<span id="cb132-8"><a href="#cb132-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb132-9"><a href="#cb132-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb132-10"><a href="#cb132-10" aria-hidden="true" tabindex="-1"></a>res <span class="ot">=</span> <span class="fu">one.run.exp</span>( <span class="dv">100</span> )</span>
+<span id="cb132-11"><a href="#cb132-11" aria-hidden="true" tabindex="-1"></a>res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  estimator      RMSE         bias        SE
+1      mean 0.3389828 -0.009172976 0.3390283
+2 trim.mean 0.4563278 -0.442502881 0.1115289
+3    median 0.4762054 -0.458272445 0.1295173</code></pre>
+</div>
+</div>
+<p>And for our experiment we vary the sample size</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb134"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb134-1"><a href="#cb134-1" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">=</span> <span class="fu">c</span>( <span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">40</span>, <span class="dv">80</span>, <span class="dv">160</span>, <span class="dv">320</span> )</span>
+<span id="cb134-2"><a href="#cb134-2" aria-hidden="true" tabindex="-1"></a>lvls <span class="ot">=</span> <span class="fu">tibble</span>( <span class="at">n=</span>ns )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb135"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> lvls <span class="sc">%&gt;%</span> <span class="fu">mutate</span>( <span class="at">results =</span> <span class="fu">pmap</span>( lvls, one.run.exp ) ) <span class="sc">%&gt;%</span> <span class="fu">unnest</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: `cols` is now required when using `unnest()`.
+ℹ Please use `cols = c(results)`.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb137"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb137-1"><a href="#cb137-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>( results )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 5
+      n estimator  RMSE    bias    SE
+  &lt;dbl&gt; &lt;fct&gt;     &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+1    10 mean      1.01  -0.0364 1.01 
+2    10 trim.mean 0.651 -0.374  0.533
+3    10 median    0.595 -0.456  0.382
+4    20 mean      0.712 -0.0582 0.710
+5    20 trim.mean 0.527 -0.445  0.283
+6    20 median    0.560 -0.483  0.284</code></pre>
+</div>
+</div>
+<p>Here we are going to plug multiple outcomes. Often with the simulation study we are interested in different measures of performance. For us, we want to know the standard error, bias, and overall error (RMSE). To plot this we first gather our outcomes to make a long form dataframe of results:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb139"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb139-1"><a href="#cb139-1" aria-hidden="true" tabindex="-1"></a>res2 <span class="ot">=</span> <span class="fu">gather</span>( results, RMSE, bias, SE, <span class="at">key=</span><span class="st">"Measure"</span>,<span class="at">value=</span><span class="st">"value"</span> )</span>
+<span id="cb139-2"><a href="#cb139-2" aria-hidden="true" tabindex="-1"></a>res2 <span class="ot">=</span> <span class="fu">mutate</span>( res2, <span class="at">Measure =</span> <span class="fu">factor</span>( Measure, <span class="at">levels=</span><span class="fu">c</span>(<span class="st">"SE"</span>,<span class="st">"bias"</span>,<span class="st">"RMSE"</span> )))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And then we plot, making a facet for each outcome of interest:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb140"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb140-1"><a href="#cb140-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>( res2, <span class="fu">aes</span>(<span class="at">x=</span>n, <span class="at">y=</span>value, <span class="at">col=</span>estimator) ) <span class="sc">+</span></span>
+<span id="cb140-2"><a href="#cb140-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_grid</span>( . <span class="sc">~</span> Measure ) <span class="sc">+</span></span>
+<span id="cb140-3"><a href="#cb140-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_hline</span>( <span class="at">yintercept=</span><span class="dv">0</span>, <span class="at">col=</span><span class="st">"darkgrey"</span> ) <span class="sc">+</span></span>
+<span id="cb140-4"><a href="#cb140-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb140-5"><a href="#cb140-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_x_log10</span>( <span class="at">breaks=</span>ns ) <span class="sc">+</span></span>
+<span id="cb140-6"><a href="#cb140-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">labs</span>( <span class="at">y=</span><span class="st">""</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="simulation_tutorial_miratrix_files/figure-html/unnamed-chunk-60-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We see how different estimators have different biases and different uncertainties. The bias is negative for our trimmed estimators because we are losing the big outliers above and so getting answers that are too low.</p>
+<p>The RMSE captures the trade-off in terms of what estimator gives the lowest overall <em>error</em>. For this distribution, the mean wins as the sample size increases because the bias basically stays the same and the SE drops. But for smaller samples the trimming is superior. The median (essentially trimming 50% above and below) is overkill and has too much negative bias.</p>
+<p>From a simulation study point of view, notice how we are looking at three different qualities of our estimators. Some people really care about bias, some care about RMSE. By presenting all results we are transparent about how the different estimators operate.</p>
+<p>Next steps would be to also examine the associated estimated standard errors for the estimators, seeing if these estimates of estimator uncertainty are good or poor. This leads to investigation of coverage rates and similar.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/berkeley-stat243\.github\.io\/stat243-fall-2023\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

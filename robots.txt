@@ -1,1 +1,1 @@
-Sitemap: https://github.com/berkeley-stat243/stat243-fall-2023/sitemap.xml
+Sitemap: https://berkeley-stat243.github.io/stat243-fall-2023/sitemap.xml

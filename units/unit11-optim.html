@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.5.54">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Chris Paciorek">
 <meta name="dcterms.date" content="2023-11-03">
 
-<title>Statistics 243 Fall 2023 - Optimization</title>
+<title>Optimization – Statistics 243 Fall 2023</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -24,7 +24,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -35,7 +35,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -83,7 +83,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -92,14 +98,51 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
 }</script>
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-HDRQ54H0R2"></script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script type="text/javascript">
+
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-HDRQ54H0R2', { 'anonymize_ip': true});
+</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
@@ -108,198 +151,198 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Statistics 243 Fall 2023</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html" rel="" target="">
- <span class="menu-text">Home</span></a>
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">Home</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../syllabus.html" rel="" target="">
- <span class="menu-text">Syllabus</span></a>
+    <a class="nav-link" href="../syllabus.html"> 
+<span class="menu-text">Syllabus</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../office_hours.html" rel="" target="">
- <span class="menu-text">Office hours</span></a>
+    <a class="nav-link" href="../office_hours.html"> 
+<span class="menu-text">Office hours</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../schedule.html" rel="" target="">
- <span class="menu-text">Schedule</span></a>
+    <a class="nav-link" href="../schedule.html"> 
+<span class="menu-text">Schedule</span></a>
   </li>  
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-units" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-units" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Units</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-units">    
         <li>
-    <a class="dropdown-item" href="../units/unit1-intro.html" rel="" target="">
+    <a class="dropdown-item" href="../units/unit1-intro.html">
  <span class="dropdown-text">Unit 1 (UNIX intro)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../units/unit2-dataTech.html" rel="" target="">
+    <a class="dropdown-item" href="../units/unit2-dataTech.html">
  <span class="dropdown-text">Unit 2 (Data technologies)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../units/unit3-bash.html" rel="" target="">
+    <a class="dropdown-item" href="../units/unit3-bash.html">
  <span class="dropdown-text">Unit 3 (Bash shell)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../units/unit4-goodPractices.html" rel="" target="">
+    <a class="dropdown-item" href="../units/unit4-goodPractices.html">
  <span class="dropdown-text">Unit 4 (Good practices)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../units/unit5-programming.html" rel="" target="">
+    <a class="dropdown-item" href="../units/unit5-programming.html">
  <span class="dropdown-text">Unit 5 (Programming)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../units/unit6-parallel.html" rel="" target="">
+    <a class="dropdown-item" href="../units/unit6-parallel.html">
  <span class="dropdown-text">Unit 6 (Parallelization)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../units/unit7-bigData.html" rel="" target="">
+    <a class="dropdown-item" href="../units/unit7-bigData.html">
  <span class="dropdown-text">Unit 7 (Databases)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../units/unit8-numbers.html" rel="" target="">
+    <a class="dropdown-item" href="../units/unit8-numbers.html">
  <span class="dropdown-text">Unit 8 (Precision)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../units/unit9-sim.html" rel="" target="">
+    <a class="dropdown-item" href="../units/unit9-sim.html">
  <span class="dropdown-text">Unit 9 (Simulation)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../units/unit10-linalg.html" rel="" target="">
+    <a class="dropdown-item" href="../units/unit10-linalg.html">
  <span class="dropdown-text">Unit 10 (Linear Algebra)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../units/unit11-optim.html" rel="" target="">
+    <a class="dropdown-item" href="../units/unit11-optim.html">
  <span class="dropdown-text">Unit 11 (Optimization)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../units/unit12-graphics.html" rel="" target="">
+    <a class="dropdown-item" href="../units/unit12-graphics.html">
  <span class="dropdown-text">Unit 12 (Graphics)</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-labs" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-labs" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">Labs</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-labs">    
         <li>
-    <a class="dropdown-item" href="../labs/lab0-setup.html" rel="" target="">
+    <a class="dropdown-item" href="../labs/lab0-setup.html">
  <span class="dropdown-text">Lab 0: Setup</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../labs/lab1-submission.html" rel="" target="">
+    <a class="dropdown-item" href="../labs/lab1-submission.html">
  <span class="dropdown-text">Lab 1: Problem set submission</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../labs/lab2-testing.html" rel="" target="">
+    <a class="dropdown-item" href="../labs/lab2-testing.html">
  <span class="dropdown-text">Lab 2: Assertions, Exceptions, and Testing</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../labs/lab3-debugging.html" rel="" target="">
+    <a class="dropdown-item" href="../labs/lab3-debugging.html">
  <span class="dropdown-text">Lab 3: Debugging</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../labs/lab5-codereview.html" rel="" target="">
+    <a class="dropdown-item" href="../labs/lab5-codereview.html">
  <span class="dropdown-text">Lab 5: Code Reviews</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../labs/06/scf.html" rel="" target="">
+    <a class="dropdown-item" href="../labs/06/scf.html">
  <span class="dropdown-text">Lab 6: SCF and Parallel Computing</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../labs/py_vs_R.html" rel="" target="">
+    <a class="dropdown-item" href="../labs/py_vs_R.html">
  <span class="dropdown-text">Lab 7: R vs.&nbsp;Python</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../labs/09/collab_with_git.html" rel="" target="">
+    <a class="dropdown-item" href="../labs/09/collab_with_git.html">
  <span class="dropdown-text">Lab 9: Collaboration with Git</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-how-tos" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-how-tos" role="link" data-bs-toggle="dropdown" aria-expanded="false">
  <span class="menu-text">How tos</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-how-tos">    
         <li>
-    <a class="dropdown-item" href="../howtos/accessingPython.html" rel="" target="">
+    <a class="dropdown-item" href="../howtos/accessingPython.html">
  <span class="dropdown-text">Accessing Python</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../howtos/accessingUnixCommandLine.html" rel="" target="">
+    <a class="dropdown-item" href="../howtos/accessingUnixCommandLine.html">
  <span class="dropdown-text">Accessing the Unix Command Line</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../howtos/gitInstall.html" rel="" target="">
+    <a class="dropdown-item" href="../howtos/gitInstall.html">
  <span class="dropdown-text">Installing Git</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../howtos/quartoInstall.html" rel="" target="">
+    <a class="dropdown-item" href="../howtos/quartoInstall.html">
  <span class="dropdown-text">Installing Quarto</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="../howtos/ps-submission.html" rel="" target="">
+    <a class="dropdown-item" href="../howtos/ps-submission.html">
  <span class="dropdown-text">Problem Set Submissions</span></a>
   </li>  
         <li><hr class="dropdown-divider"></li>
         <li class="dropdown-header">Windows</li>
         <li>
-    <a class="dropdown-item" href="../howtos/windowsAndLinux.html" rel="" target="">
+    <a class="dropdown-item" href="../howtos/windowsAndLinux.html">
  <span class="dropdown-text">Installing the Linux Subsystem on Windows</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="https://edstem.org/us/courses/42474/discussion/" rel="" target="">
- <span class="menu-text">Discussion</span></a>
+    <a class="nav-link" href="https://edstem.org/us/courses/42474/discussion/"> 
+<span class="menu-text">Discussion</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://statistics.berkeley.edu/computing/training/tutorials" rel="" target="">
- <span class="menu-text">Tutorials</span></a>
+    <a class="nav-link" href="https://statistics.berkeley.edu/computing/training/tutorials"> 
+<span class="menu-text">Tutorials</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/berkeley-stat243/stat243-fall-2023" rel="" target=""><i class="bi bi-github" role="img" aria-label="GitHub">
+    <a class="nav-link" href="https://github.com/berkeley-stat243/stat243-fall-2023"> <i class="bi bi-github" role="img" aria-label="GitHub">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
+          </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
 </div>
-          </div> <!-- /navcollapse -->
       </div> <!-- /container-fluid -->
     </nav>
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../units/unit11-optim.html">Unit 11 (Optimization)</a></li></ol></nav>
-      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-      </a>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../units/unit11-optim.html">Unit 11 (Optimization)</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
     </div>
   </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
@@ -377,7 +420,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </ul>
     </div>
 </nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
         <nav id="TOC" role="doc-toc" class="toc-active">
@@ -474,7 +517,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
+
 </header>
+
 
 <p><a href="./unit11-optim.pdf" class="btn btn-primary">PDF</a></p>
 <p>References:</p>
@@ -656,10 +701,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="unit11-optim_files/figure-html/cell-2-output-1.png" width="600" height="449"></p>
+<div>
+<figure class="figure">
+<p><img src="unit11-optim_files/figure-html/cell-2-output-1.png" width="600" height="449" class="figure-img"></p>
+</figure>
+</div>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="unit11-optim_files/figure-html/cell-2-output-2.png" width="600" height="449"></p>
+<div>
+<figure class="figure">
+<p><img src="unit11-optim_files/figure-html/cell-2-output-2.png" width="600" height="449" class="figure-img"></p>
+</figure>
+</div>
 </div>
 <div class="cell-output cell-output-stderr">
 <pre><code>/tmp/ipykernel_274099/3161030548.py:58: RuntimeWarning:
@@ -676,7 +729,11 @@ invalid value encountered in double_scalars
 </code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="unit11-optim_files/figure-html/cell-2-output-4.png" width="600" height="449"></p>
+<div>
+<figure class="figure">
+<p><img src="unit11-optim_files/figure-html/cell-2-output-4.png" width="600" height="449" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -771,7 +828,11 @@ invalid value encountered in double_scalars
 <span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="unit11-optim_files/figure-html/cell-3-output-1.png" width="830" height="597"></p>
+<div>
+<figure class="figure">
+<p><img src="unit11-optim_files/figure-html/cell-3-output-1.png" width="830" height="597" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -822,7 +883,11 @@ invalid value encountered in double_scalars
 <span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'x2'</span>)</span>
 <span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="unit11-optim_files/figure-html/cell-4-output-1.png" width="588" height="523"></p>
+<div>
+<figure class="figure">
+<p><img src="unit11-optim_files/figure-html/cell-4-output-1.png" width="588" height="523" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
@@ -942,10 +1007,18 @@ invalid value encountered in double_scalars
 <span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="unit11-optim_files/figure-html/cell-7-output-1.png" width="593" height="429"></p>
+<div>
+<figure class="figure">
+<p><img src="unit11-optim_files/figure-html/cell-7-output-1.png" width="593" height="429" class="figure-img"></p>
+</figure>
+</div>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="unit11-optim_files/figure-html/cell-7-output-2.png" width="575" height="411"></p>
+<div>
+<figure class="figure">
+<p><img src="unit11-optim_files/figure-html/cell-7-output-2.png" width="575" height="411" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>We need some starting values. Having centered the year variable, <span class="math inline">\(\beta_2\)</span> seems plausibly like it would be order of magnitude of 10, which is about the magnitude of the year values.</p>
@@ -966,7 +1039,11 @@ invalid value encountered in double_scalars
 <span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>plt.plot(data.year, fit(beta), <span class="st">'-'</span>)</span>
 <span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="unit11-optim_files/figure-html/cell-8-output-1.png" width="575" height="411"></p>
+<div>
+<figure class="figure">
+<p><img src="unit11-optim_files/figure-html/cell-8-output-1.png" width="575" height="411" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>That’s not great. How about changing the scale of beta2 more?</p>
@@ -984,7 +1061,11 @@ invalid value encountered in double_scalars
 <span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<p><img src="unit11-optim_files/figure-html/cell-9-output-1.png" width="575" height="411"></p>
+<div>
+<figure class="figure">
+<p><img src="unit11-optim_files/figure-html/cell-9-output-1.png" width="575" height="411" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Let’s get derivative information using automatic differentation (the algorithmic implementation of the chain rule for derivatives also used in gradient descent in deep learning, as well as various other contexts). We’ll use Jax, but PyTorch or Tensorflow are other options. We need to use the Jax versions of various numpy operations in order to be able to get the derivatives.</p>
@@ -1058,7 +1139,11 @@ invalid value encountered in double_scalars
 30.442455</code></pre>
 </div>
 <div class="cell-output cell-output-display">
-<p><img src="unit11-optim_files/figure-html/cell-12-output-2.png" width="575" height="411"></p>
+<div>
+<figure class="figure">
+<p><img src="unit11-optim_files/figure-html/cell-12-output-2.png" width="575" height="411" class="figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>That looks pretty good, but the lack of positive definiteness/sensitivity to starting values should make us cautious. That said, in this case we can visually assess the fit and see that it looks pretty good.</p>
@@ -1137,7 +1222,7 @@ lines(xvals) ## overlay optimization path</code></pre>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="steep-descent.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Path of steepest descent</figcaption>
+<figcaption>Path of steepest descent</figcaption>
 </figure>
 </div>
 <p>If the contours are circular, steepest descent works well. Newton’s method deforms elliptical contours based on the Hessian. Another way to think about this is that steepest descent does not take account of the rate of change in the gradient, while Newton’s method does.</p>
@@ -1205,7 +1290,7 @@ lines(xvals)</code></pre>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="gauss-seidel.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Coordinate descent</figcaption>
+<figcaption>Coordinate descent</figcaption>
 </figure>
 </div>
 <p>In the notes for Unit 9 on linear algebra, I discussed the use of Gauss-Seidel to iteratively solve <span class="math inline">\(Ax=b\)</span> in situations where factorizing <span class="math inline">\(A\)</span> (which of course is <span class="math inline">\(O(n^{3})\)</span>) is too computationally expensive.</p>
@@ -1248,7 +1333,7 @@ lines(xvals)</code></pre>
 </ol>
 <p>Convergence is assessed based on the sample variance of the function values at the points, the total of the norms of the differences between the points in the new and old simplexes, or the size of the simplex. In class we’ll work through some demo code (click below to show the code in the html version of this document) that illustrates the individual steps in an iteration of Nelder-Mead.</p>
 <div class="cell" data-execution_count="12">
-<details>
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>alpha <span class="op">=</span> <span class="dv">1</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>gamma <span class="op">=</span> <span class="dv">2</span></span>
@@ -1354,7 +1439,7 @@ optim(init, f, method = "Nelder-Mead", verbose = FALSE)</code></pre>
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
 <p><img src="nelder-mead.png" class="img-fluid figure-img"></p>
-<figcaption class="figure-caption">Nelder-Mead</figcaption>
+<figcaption>Nelder-Mead</figcaption>
 </figure>
 </div>
 <p>Here’s an <a href="http://www.benfrederickson.com/numerical-optimization/">online graphical illustration</a> of Nelder-Mead.</p>
@@ -1660,18 +1745,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -1703,11 +1777,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
-  function tippyHover(el, contentFn) {
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp("https:\/\/berkeley-stat243\.github\.io\/stat243-fall-2023\/");
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1717,8 +1830,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1730,7 +1852,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1774,6 +2019,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1799,6 +2045,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1860,17 +2132,18 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../units/unit10-linalg.html" class="pagination-link">
+      <a href="../units/unit10-linalg.html" class="pagination-link" aria-label="Unit 10 (Linear Algebra)">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Unit 10 (Linear Algebra)</span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../units/unit12-graphics.html" class="pagination-link">
+      <a href="../units/unit12-graphics.html" class="pagination-link" aria-label="Unit 12 (Graphics)">
         <span class="nav-page-text">Unit 12 (Graphics)</span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
 </div> <!-- /content -->
+
 
 
 
