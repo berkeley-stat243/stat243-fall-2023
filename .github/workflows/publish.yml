@@ -27,6 +27,10 @@ jobs:
           # version: 0.9.600
 
       # add software dependencies here
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages:
+            any::rmarkdown
 
       # publish to GitHub Pages
 
