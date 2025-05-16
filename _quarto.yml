@@ -103,3 +103,5 @@ format:
     toc: true
     code-copy: true
     code-block-background: true
+    include-in-header:
+      file: siteimprove.html
